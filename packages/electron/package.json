@@ -1,0 +1,62 @@
+{
+  "name": "electron-tmp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "electron-starter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=development electron .",
+    "build:mwl": "cross-env NODE_ENV=production electron-builder -m"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "electron": "^4.0.8",
+    "electron-builder": "^20.38.5"
+  },
+  "build": {
+    "appId": "org.autoEdit2.autoEdit2-electron",
+    "asar": false,
+    "directories": {
+      "buildResources": "assets"
+    },
+    "files": [
+      "**/*",
+      "build/**",
+      "!config/",
+      "!assets/",
+      "!spec/",
+      "!project_page/",
+      "!vendor/",
+      "!docs/",
+      "!dist/",
+      "!icons/",
+      "node_modules/**/*",
+      "node_modules/ffmpeg-static-electron/bin/${os}/${arch}/ffmpeg",
+      "node_modules/ffmpeg-static-electron/index.js",
+      "node_modules/ffmpeg-static-electron/package.json",
+      "node_modules/ffprobe-static-electron/bin/${os}/${arch}/ffmpeg",
+      "node_modules/ffprobe-static-electron/index.js",
+      "node_modules/ffprobe-static-electron/package.json"
+    ],
+    "copyright": "2019 BBC - Pietro Passarelli",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "files": [
+        "!node_modules/ffmpeg-static-electron/bin/win${/*}",
+        "!node_modules/ffmpeg-static-electron/bin/linux${/*}",
+        "!node_modules/ffprobe-static-electron/bin/win${/*}",
+        "!node_modules/ffprobe-static-electron/bin/linux${/*}"
+      ],
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    }
+  }
+}

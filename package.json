@@ -1,0 +1,13 @@
+{
+  "name": "digital-paper-edit",
+  "version": "1.0.0",
+  "description": "A boilerplate proof of concept for a modular architecture with  - React - Express - Electron",
+  "main": "index.js",
+  "scripts": {
+    "start:server": "node ./packages/backend/index.js",
+    "start:react": "npm start ./packages/react-app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
