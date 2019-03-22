@@ -1,6 +1,8 @@
 # Digital Paper Edit
 
-A boilerplate proof of concept for a modular architecture with
+---> _Work in progress_ <--
+
+<!-- Proof of concept for a modular architecture with
 
 - React
 - Express
@@ -9,7 +11,7 @@ A boilerplate proof of concept for a modular architecture with
 To be able to deploy one code base as
 
 - Desktop app for Mac, win and linux (with auto update)
-- Web app
+- Web app -->
 
 <!-- ## Brief of the project
  _One liner + link to confluence page_
@@ -36,15 +38,16 @@ See the `Makefile`
 
 <!-- `cd` into the individual repository inside [`./packages`](./packages) and npm start, or see respective README and package.json for how deal with each. -->
 
-in root of project 
+in root of project start the server, express.
 
-```
-make react-start
-```
-
-and in another terminal
 ```
 make server-start
+```
+
+
+and in another terminal, start the client react app.
+```
+make react-start
 ```
 
 ## System Architecture
