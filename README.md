@@ -34,6 +34,21 @@ With submodules included, it's roughly 300MB so might take a little bit to downl
 
 See the `Makefile`
 
+in root of project
+```
+make react-install
+```
+
+and 
+```
+make server-install
+```
+
+if you want to develop for electron also do 
+```
+make electron-install
+```
+
 ## Usage
 
 <!-- `cd` into the individual repository inside [`./packages`](./packages) and npm start, or see respective README and package.json for how deal with each. -->
@@ -49,6 +64,14 @@ and in another terminal, start the client react app.
 ```
 make react-start
 ```
+
+
+additionally to develop for electron also run 
+```
+make electron-start
+```
+
+CEP panel, tbc soon.
 
 ## System Architecture
 
@@ -99,9 +122,11 @@ TBC
 ---
 
 # TODO
-- [ ] `.gitignore`, various `node_modules` folders + `dist` folder for electron and `build` folder for react
+- [x] `.gitignore`, various `node_modules` folders + `dist` folder for electron and `build` folder for react
 - [ ] way to deal with `node_modules` repetitions
-
-
 - [ ] TravisCI deploy for electron cross platform into github releases
 - [ ] add auto update module using github releases
+- [ ] figure out how to use and if necessary to use, yarn and lerna for mono repo 
+- [ ] figure out how to setup monorepo for npm publishing of individual modules, name spacing etc..
+- [ ] figure out where/how to handle configs (eg server and db details for production and development)
+- [ ] figure out how to have dev, staging and live enviroment.
