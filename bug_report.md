@@ -1,8 +1,15 @@
-## User Story / Context
-|As a ...|I want ...|So that ...|
-|-|-|-|
-|<Who>|<What>|<Why>|
-  
+## Bug description
+<Description of bug - include problem statement>
+
+### Steps to reproduce
+1. 
+
+### Screenshots
+<If applicable, add screenshots to help explain your problem.>
+
+### Expected behaviour
+<A clear and concise description of what you expected to happen.>
+
 ## Acceptance Criteria
 - <Criteria to satisfy the PR Issue>
   
