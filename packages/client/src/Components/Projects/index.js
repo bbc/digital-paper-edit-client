@@ -28,21 +28,7 @@ class Projects extends Component {
   }
 
   componentDidMount = () => {
-    // TODO: add user id in request?
-    // TODO: add end point url in config
-    // TODO: move fetch into a API class - to handle electron backend switch
-    // fetch('http://localhost:5000/api/projects', { mode: 'cors' })
-    //   .then(res => res.json())
-    //   .then((json) => {
-    //     // add a display property for component cards search
-    //     const tmpList = json.projects.map((item) => {
-    //       item.display = true;
-
-    //       return item;
-    //     });
-    //     this.setState({ projectsList: tmpList });
-    //   });
-
+    // TODO: do we need to add user id in request?
     Api.getProjects().then((projectsList) => {
       console.log('tmpList', projectsList);
       if (projectsList) {
@@ -107,8 +93,6 @@ class Projects extends Component {
                   link: `/projects/${ project.id }/paperedits`
                 }
               ] }
-              // description={ 'test' } - optional
-              // TODO: Add links
             />
             );
           } else {
@@ -149,7 +133,6 @@ class Projects extends Component {
               aria-label="search"
               aria-describedby="search"
             />
-
             <InputGroup.Append>
               <InputGroup.Text id="basic-addon2">
                 <FontAwesomeIcon icon={ faSearch } />
@@ -165,14 +148,11 @@ class Projects extends Component {
             <Col className="d-none d-sm-block">
               <CustomFooter />
             </Col>
-
             <Col className="d-lg-block d-md-block">
               <CustomFooter />
             </Col>
           </Row>
-
         </Container>
-
       );
     }
 }

@@ -6,7 +6,6 @@ import { Redirect } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
@@ -40,12 +39,9 @@ class NewProject extends Component {
     };
 
     Api.createProject(tmpProject).then((response) => {
-      console.log('tmpList', response);
       if (response.status === 'ok') {
         // show message or redirect
-        console.log('Success');
         this.setState({ redirect: true });
-        // TODO: redirect
       }
     });
   }

@@ -17,15 +17,17 @@
 
 
 const express = require('express');
+const bodyParser = require('body-parser');
 const url = require('url');
-const app = express()
+const app = express();
+app.use(bodyParser.json());
 const port = 5000;
 
 // Dummy data to mock the server 
-const  kaldiTranscript = require('./sample-data/kaldi-transcript.json')
+const kaldiTranscript = require('./sample-data/kaldi-transcript.json')
 const sampleProjects = require('./sample-data/projects.sample.json');
-const sampleTranscripts = require('./sample-data/projects.sample.json');
-const samplePaperEdits = require('./sample-data/projects.sample.json');
+const sampleTranscripts = require('./sample-data/transcripts.sample.json');
+const samplePaperEdits = require('./sample-data/paper-edits.sample.json');
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -51,42 +53,41 @@ app.get('/', (req, res) => {
     res.json({response: results})
 })
 
-// An api endpoint that returns a short list of items
-// app.get(`/api/getList`, (req,res) => {
-//     var list = ["item1", "item2", "item3"];
-//     res.json(list);
-//     console.log('Sent list of items');
-// });
-
 /**
  * Projects
  */
 
- // get projects
+// get projects
 app.get(`/api/projects`, (req,res) => {
     res.json(sampleProjects);
     console.log('/api/projects');
 });
 
 // get individual project
-app.get(`/api/projects/1`, (req,res) => {
-//    TODO: add id param
-    // res.json();
-    console.log('/api/projects/1');
+// https://expressjs.com/en/api.html#req
+app.get('/api/projects/:id', (req,res) => {
+    const tmpProject ={}
+    tmpProject.project = sampleProjects.projects[parseInt(req.params.id)];
+    tmpProject.project.transcripts = sampleTranscripts.transcripts;
+    tmpProject.project.paperedits = samplePaperEdits.paperedits;
+    res.json(tmpProject);
+    console.log(`/api/projects/${req.params.id}`);
 });
 
 // Create a new project
 app.post(`/api/projects`, (req,res) => {
+    // TODO: save to db 
+    console.log('reqx ',req.body)
     // TODO: send project ID?     
     res.status(200).json({status:"ok"})
     console.log('/api/projects - post');
 });
 
 // edit 
-app.put(`/api/projects/1/edit`, (req,res) => {
+app.put(`/api/projects/:id/edit`, (req,res) => {
     //    TODO: add id param
     // res.json();
-    console.log('/api/projects/1/edit');
+    console.log(`/api/projects/${req.params.id}/edit`);
 });
 
  /**
@@ -98,7 +99,7 @@ app.put(`/api/projects/1/edit`, (req,res) => {
  * Transcripts
  */
 // TODO: add projectId 
-app.get(`/api/projects/1/transcripts`, (req,res) => {
+app.get(`/api/projects/:id/transcripts`, (req,res) => {
    
     res.json(sampleTranscripts);
     console.log('Sent list of Transcripts');
@@ -128,14 +129,14 @@ app.get(`/api/projects/1/transcripts/1/annotations`, (req,res) => {
  * Paper-edits
  */
 // TODO: id of project 
-app.get(`/api/projects/1/paperedits`, (req,res) => {
+app.get(`/api/projects/:id/paperedits`, (req,res) => {
    
     res.json(samplePaperEdits);
     console.log('Sent list of Paperedits');
 });
 
 // TODO: id of project and paper edit
-app.get(`/api/projects/1/paperedits/1`, (req,res) => {
+app.get(`/api/projects/:id/paperedits/1`, (req,res) => {
     res.json({
             id: 1,
             title: 'Paperedit title One',
