@@ -81,5 +81,3 @@ cep-panel-build: react-build cep-panel-assemble
 	@echo "Adobe CEP Panel build"
 	@echo "Adobe CEP Panel - packaging and code signing for distribution"
 	# node ./package/cep/scripts/sign-and-package-adobe-panel.js
-
-

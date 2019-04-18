@@ -13,8 +13,10 @@ class Api {
   getProjectUrl(id) {
     return `${ process.env.REACT_APP_SERVER_URL }/api/projects/${ id }`;
   }
-
   // Projects URL create
+  createProjectUrl() {
+    return `${ process.env.REACT_APP_SERVER_URL }/api/projects`;
+  }
 
   // Projects URL update
 
@@ -76,8 +78,46 @@ class Api {
     }
     // TODO: CEP + error handling
   }
+
+  createProject(data) {
+    return postData(this.createProjectUrl(), data)
+      .then((data) => {
+        // console.log(JSON.stringify(data));
+        return data;
+      }) // JSON-string from `response.json()` call
+      .catch((error) => {
+        console.error(error);
+
+        return error;
+      });
+  }
 }
 
+/**
+ * Helper function tto wrap fetch post request
+ * https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Supplying_request_options
+ * @param {string} url - API end point
+ * @param {object} data - json data to send
+ */
+function postData(url = '', data = {}) {
+  // Default options are marked with *
+  return fetch(url, {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, cors, *same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json',
+      // "Content-Type": "application/x-www-form-urlencoded",
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrer: 'no-referrer', // no-referrer, *client
+    body: JSON.stringify(data), // body data type must match "Content-Type" header
+  })
+    .then((response) => {
+      return response.json();
+    }); // parses JSON response into native Javascript objects
+}
 // https://www.sitepoint.com/javascript-design-patterns-singleton/
 const instance = new Api();
 Object.freeze(instance);

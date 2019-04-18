@@ -16,12 +16,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-const express = require('express')
+const express = require('express');
+const url = require('url');
 const app = express()
 const port = 5000;
 
+// Dummy data to mock the server 
 const  kaldiTranscript = require('./sample-data/kaldi-transcript.json')
-
+const sampleProjects = require('./sample-data/projects.sample.json');
+const sampleTranscripts = require('./sample-data/projects.sample.json');
+const samplePaperEdits = require('./sample-data/projects.sample.json');
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -30,81 +34,59 @@ app.use(function(req, res, next) {
   });
 
   
-app.get('/', (req, res) => res.json({response:'Hello World!'}))
-
+// list all available rotues
+app.get('/', (req, res) => {
+    const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    const results = [];
+    // https://stackoverflow.com/questions/14934452/how-to-get-all-registered-routes-in-express/14934933
+    app._router.stack.forEach(function(r){
+        if (r.route && r.route.path){
+            results.push({ 
+              path: r.route.path, 
+              url: url.resolve(fullUrl, r.route.path),
+              methods: r.route.methods 
+            })
+        }
+      })
+    res.json({response: results})
+})
 
 // An api endpoint that returns a short list of items
-app.get(`/api/getList`, (req,res) => {
-    var list = ["item1", "item2", "item3"];
-    res.json(list);
-    console.log('Sent list of items');
-});
-
-
-
+// app.get(`/api/getList`, (req,res) => {
+//     var list = ["item1", "item2", "item3"];
+//     res.json(list);
+//     console.log('Sent list of items');
+// });
 
 /**
  * Projects
  */
+
+ // get projects
 app.get(`/api/projects`, (req,res) => {
-    
-    res.json({
-        projects:[
-            {
-                id: 1,
-                title: 'Project title One',
-                description: 'Project one description'
-            },
-            {
-                id: 2,
-                title: 'Project title Two',
-                description: 'Project Two description brexit'
-            },
-            {
-                id: 3,
-                title: 'Project title 3',
-                description: 'Project 3 description brexit'
-            },
-            {
-                id: 4,
-                title: 'Project title 4',
-                description: 'Project four description'
-            },
-            {
-                id: 5,
-                title: 'Project title 5',
-                description: 'Project 5 description'
-            },
-            {
-                id: 6,
-                title: 'Project title 6',
-                description: 'Project 6 description'
-            },
-            {
-                id: 7,
-                title: 'Project title 7',
-                description: 'Project 7 description'
-            },
-            {
-                id: 8,
-                title: 'Project title 8',
-                description: 'Project 8 description'
-            }
-        ]
-    });
+    res.json(sampleProjects);
     console.log('/api/projects');
 });
 
+// get individual project
 app.get(`/api/projects/1`, (req,res) => {
 //    TODO: add id param
-    res.json(kaldiTranscript);
+    // res.json();
     console.log('/api/projects/1');
 });
 
-app.post(`/api/projects/1/new`, (req,res) => {
-    // TODO:     
-    res.json({kaldiTranscript});
-    console.log('/api/projects/1/new');
+// Create a new project
+app.post(`/api/projects`, (req,res) => {
+    // TODO: send project ID?     
+    res.status(200).json({status:"ok"})
+    console.log('/api/projects - post');
+});
+
+// edit 
+app.put(`/api/projects/1/edit`, (req,res) => {
+    //    TODO: add id param
+    // res.json();
+    console.log('/api/projects/1/edit');
 });
 
  /**
@@ -118,24 +100,7 @@ app.post(`/api/projects/1/new`, (req,res) => {
 // TODO: add projectId 
 app.get(`/api/projects/1/transcripts`, (req,res) => {
    
-    res.json({
-        transcripts:[ 
-        {
-            id: 1,
-            title: 'Transcript title One',
-            description: 'Transcript one description'
-        },
-        {
-            id: 2,
-            title: 'Transcript title Two',
-            description: 'Transcript Two description brexit'
-        },
-        {
-            id: 3,
-            title: 'Transcript title 3',
-            description: 'Transcript 3 description brexit'
-        }
-    ]});
+    res.json(sampleTranscripts);
     console.log('Sent list of Transcripts');
 });
 
@@ -165,39 +130,7 @@ app.get(`/api/projects/1/transcripts/1/annotations`, (req,res) => {
 // TODO: id of project 
 app.get(`/api/projects/1/paperedits`, (req,res) => {
    
-    res.json({
-        paperedits:[ 
-        {
-            id: 1,
-            title: 'Paperedit title One',
-            description: 'Paperedit one description'
-        },
-        {
-            id: 2,
-            title: 'Paperedit title Two',
-            description: 'Paperedit Two description brexit'
-        },
-        {
-            id: 3,
-            title: 'Paperedit title 3',
-            description: 'Paperedit 3 description brexit'
-        },
-        {
-            id: 4,
-            title: 'Paperedit title 4',
-            description: 'Paperedit 4 description'
-        },
-        {
-            id: 5,
-            title: 'Paperedit title 5',
-            description: 'Paperedit 5 description '
-        },
-        {
-            id: 6,
-            title: 'Paperedit title 6',
-            description: 'Paperedit 6 description '
-        }
-    ]});
+    res.json(samplePaperEdits);
     console.log('Sent list of Paperedits');
 });
 
