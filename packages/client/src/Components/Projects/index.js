@@ -15,6 +15,8 @@ import CustomCard from '../lib/CustomCard/index.js';
 
 import CustomFooter from '../lib/CustomFooter/index.js';
 
+import Api from '../../Api/index.js';
+
 import './index.module.css';
 
 class Projects extends Component {
@@ -29,17 +31,30 @@ class Projects extends Component {
     // TODO: add user id in request?
     // TODO: add end point url in config
     // TODO: move fetch into a API class - to handle electron backend switch
-    fetch('http://localhost:5000/api/projects', { mode: 'cors' })
-      .then(res => res.json())
-      .then((json) => {
+    // fetch('http://localhost:5000/api/projects', { mode: 'cors' })
+    //   .then(res => res.json())
+    //   .then((json) => {
+    //     // add a display property for component cards search
+    //     const tmpList = json.projects.map((item) => {
+    //       item.display = true;
+
+    //       return item;
+    //     });
+    //     this.setState({ projectsList: tmpList });
+    //   });
+
+    Api.getProjects().then((projectsList) => {
+      console.log('tmpList', projectsList);
+      if (projectsList) {
         // add a display property for component cards search
-        const tmpList = json.projects.map((item) => {
+        const tmpList = projectsList.map((item) => {
           item.display = true;
 
           return item;
         });
         this.setState({ projectsList: tmpList });
-      });
+      }
+    });
   }
 
     // TODO: could be moved in utils

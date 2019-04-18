@@ -15,7 +15,7 @@ class NewTranscript extends Component {
       transcriptJson: null,
       projectId: this.props.match.params.projectId
     };
-    console.log(process.env);
+    // console.log(process.env);
   }
 
   // //...

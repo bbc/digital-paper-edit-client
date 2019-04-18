@@ -18,11 +18,11 @@ class CustomCard extends Component {
 
   render() {
     let links;
-    console.log(this.props);
+    // console.log(this.props);
     if (this.props.links !== undefined && this.props.links.length !== 0) {
-      links = this.props.links.map((item) => {
+      links = this.props.links.map((item, index) => {
         return (
-          <LinkContainer to={ item.link }>
+          <LinkContainer to={ item.link } key={ item + '_' + index }>
             <Card.Link>{item.name}</Card.Link>
           </LinkContainer>
         );

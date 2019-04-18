@@ -24,13 +24,13 @@ class Project extends Component {
 
   }
 
-  //   componentDidMount = () =>{
+  // componentDidMount = () => {
   //     fetch('http://localhost:5000/api/1/transcripts/1', { mode: 'cors' })
   //     .then(res => res.json())
   //     .then((json)=>{
   //       this.setState({transcriptJson: json})
   //     })
-  //   }
+  // }
 
   render() {
     // let projects;
