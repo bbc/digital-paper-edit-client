@@ -19,7 +19,7 @@ class NewProject extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
+      title: 'Test',
       description: '',
       validated: false,
       redirect: false
