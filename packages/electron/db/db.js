@@ -34,5 +34,9 @@ DB.getProjects = ()=>{
 
 }
 
+DB.test =()=> {
+  console.log('db');
+}
+
 // export default DB;
 module.exports = DB;
