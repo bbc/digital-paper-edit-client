@@ -21,7 +21,8 @@ class NewProject extends Component {
       title: 'Test',
       description: '',
       validated: false,
-      redirect: false
+      redirect: false,
+      newProjectId: null
     };
   }
 
@@ -41,7 +42,7 @@ class NewProject extends Component {
     Api.createProject(tmpProject).then((response) => {
       if (response.status === 'ok') {
         // show message or redirect
-        this.setState({ redirect: true });
+        this.setState({ redirect: true, newProjectId: response.projectId });
       }
     });
   }
@@ -55,8 +56,8 @@ class NewProject extends Component {
   }
 
   renderRedirect = () => {
-    if (this.state.redirect) {
-      return <Redirect to='/projects/1' />;
+    if (this.state.redirect && this.state.newProjectId) {
+      return <Redirect to={ `/projects/${ this.state.newProjectId }` } />;
     }
   }
 

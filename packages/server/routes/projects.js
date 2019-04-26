@@ -18,7 +18,7 @@ module.exports = (app) => {
         console.log('req',req.body)
         // TODO: send project ID?     
         console.log('projects','post','/api/projects ');
-        res.status(201).json({status:"ok"})
+        res.status(201).json({status:"ok", projectId: 2 })
         
     });
 
