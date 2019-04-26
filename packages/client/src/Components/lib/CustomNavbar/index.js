@@ -4,6 +4,10 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { LinkContainer } from 'react-router-bootstrap';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFlask } from '@fortawesome/free-solid-svg-icons';
+// import './index.module.css';
+
 // import './index.module.css';
 
 class CustomNavbar extends Component {
@@ -44,9 +48,11 @@ class CustomNavbar extends Component {
 
     return (
       <Navbar collapseOnSelect expand={ 'md' } bg="light" variant="light" fixed="top" >
+        <FontAwesomeIcon icon={ faFlask } />&nbsp;&nbsp;
         <LinkContainer to="/">
           <Navbar.Brand >{process.env.REACT_APP_NAME}</Navbar.Brand>
         </LinkContainer>
+
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">

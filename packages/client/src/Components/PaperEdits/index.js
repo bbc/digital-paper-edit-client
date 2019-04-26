@@ -78,11 +78,12 @@ class PaperEdits extends Component {
             id={ paperEdit.id }
             title={ paperEdit.title }
             subtitle={ paperEdit.description }
-            links={ [
-              {
-                name: 'Edit',
-                link: `/projects/${ this.state.projectId }/paperedits/${ paperEdit.id }`
-              } ] }
+            showLink={ `/projects/${ this.state.projectId }/paperedits/${ paperEdit.id }` }
+            // links={ [
+            //   {
+            //     name: 'Edit',
+            //     link: `/projects/${ this.state.projectId }/paperedits/${ paperEdit.id }`
+            //   } ] }
           // description={ 'test' } - optional
           // TODO: Add links
           />
@@ -123,9 +124,12 @@ class PaperEdits extends Component {
             {
               name: 'New Paper Edit',
               link: `/projects/${ this.state.projectId }/paperedits/new`
+            },
+            {
+              name: 'Users',
+              link: `/projects/${ this.state.projectId }/users`
             }
-          ]
-          }
+          ] }
         />
         <br/>
 
@@ -137,7 +141,7 @@ class PaperEdits extends Component {
           {
             // TODO: need to get project name
             // TODO: if using project name, only use first x char and add ...
-            name: 'Project',
+            name: 'Project:',
             link: `/projects/${ this.state.projectId }`
           },
           {

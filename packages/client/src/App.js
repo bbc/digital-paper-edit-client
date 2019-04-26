@@ -5,11 +5,12 @@ import Home from './Components/Home';
 import Projects from './Components/Projects/index.js';
 import Project from './Components/Projects/Project.js';
 import newProject from './Components/Projects/NewProject.js';
+import Users from './Components/Users/index.js';
 
 import Transcripts from './Components/Transcripts/index.js';
 import Transcript from './Components/Transcripts/Transcript.js';
 import NewTranscript from './Components/Transcripts/NewTranscript.js';
-import TranscriptAnnotate from './Components/Transcripts/TranscriptAnnotate.js';
+import TranscriptAnnotate from './Components/Transcripts/TranscriptAnnotate/index.js';
 
 import PaperEdits from './Components/PaperEdits/index.js';
 import PaperEdit from './Components/PaperEdits/PaperEdit.js';
@@ -27,6 +28,7 @@ class App extends Component {
     };
 
   }
+  // eslint-disable-next-line class-methods-use-this
   render() {
     return (
       <HashRouter>
@@ -35,6 +37,8 @@ class App extends Component {
           <Route exact path="/projects/new" component={ newProject } />
           <Route exact path="/projects" component={ Projects } />
           <Route exact path="/projects/:projectId" component={ Project } />
+          <Route exact path="/projects/:projectId/edit" component={ newProject } />
+          <Route exact path="/projects/:projectId/users" component={ Users } />
 
           <Route exact path="/projects/:projectId/transcripts/new" component={ NewTranscript } />
           <Route exact path="/projects/:projectId/transcripts" component={ Transcripts } />

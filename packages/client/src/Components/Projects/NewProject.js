@@ -84,7 +84,7 @@ class NewProject extends Component {
         <CustomBreadcrumb
           items={ [
             {
-              name: 'Project',
+              name: 'Projects',
               link: '/projects'
             },
             {

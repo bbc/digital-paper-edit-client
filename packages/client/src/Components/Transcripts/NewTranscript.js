@@ -57,6 +57,10 @@ class NewTranscript extends Component {
             {
               name: 'New Paper Edit',
               link: `/projects/${ this.state.projectId }/paperedits/new`
+            },
+            {
+              name: 'Users',
+              link: `/projects/${ this.state.projectId }/users`
             }
           ] }
         />
@@ -70,7 +74,7 @@ class NewTranscript extends Component {
             },
             {
               // TODO: need to get project name
-              name: 'Project',
+              name: 'Project:',
               link: `/projects/${ this.state.projectId }`
             },
             {

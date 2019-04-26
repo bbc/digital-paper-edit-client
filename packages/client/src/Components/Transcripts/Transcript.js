@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './index.module.css';
-
+// import './index.module.css';
+// import styles from './Transcript.module.css';
 // TODO: perhaps import TranscriptEditor on componentDidMount(?) to defer the load for later
 // https://facebook.github.io/create-react-app/docs/code-splitting
 import { TranscriptEditor } from '@bbc/react-transcript-editor';
@@ -10,6 +10,7 @@ import Row from 'react-bootstrap/Row';
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 // import CustomFooter from '../lib/CustomFooter/index.js';
+import Api from '../../Api/index.js';
 
 class Transcript extends Component {
   constructor(props) {
@@ -17,18 +18,22 @@ class Transcript extends Component {
     this.state = {
       projectId: this.props.match.params.projectId,
       transcriptJson: null,
-      title:null,
-      url: null
+      url: null,
+      projectTitle: ''
     };
 
   }
 
   componentDidMount = () => {
-    // TODO get id from props match
-    fetch('http://localhost:5000/api/projects/1/transcripts/1', { mode: 'cors' })
-      .then(res => res.json())
-      .then((json) => {
-        this.setState({ transcriptJson: json.transcript, title: json.title, url: json.url });
+    Api.getTranscript(this.state.projectId, this.state.transcriptId)
+      // TODO: add error handling
+      .then(json => {
+        console.log('json', json);
+        this.setState({
+          projectTitle: json.projectTitle,
+          transcriptJson: json.transcript,
+          url: json.url
+        });
       });
   }
 
@@ -61,6 +66,10 @@ class Transcript extends Component {
             {
               name: 'New Paper Edit',
               link: `/projects/${ this.state.projectId }/paperedits/new`
+            },
+            {
+              name: 'Users',
+              link: `/projects/${ this.state.projectId }/users`
             }
           ]
 
@@ -78,8 +87,8 @@ class Transcript extends Component {
           {
             // TODO: need to get project name?
             // TODO: is this needed?
-            name: 'Project Name',
-            // link: `/projects/${ this.state.projectId }`
+            name: `Project: ${ this.state.projectTitle }`,
+            link: `/projects/${ this.state.projectId }`
           },
           {
             name: 'Transcripts',
@@ -87,10 +96,10 @@ class Transcript extends Component {
           },
           {
             // TODO: transcript name
-            name: `${ this.state.title }`//'Transcript'
+            name: `${ this.state.projectTitle }`//'Transcript'
           },
           {
-            name: 'Edit'
+            name: 'Correct'
           }
           ] }
         />
@@ -101,10 +110,10 @@ class Transcript extends Component {
             // TODO: move url server side
             mediaUrl={ this.state.url }// string url to media file - audio or video
             isEditable={ true }// se to true if you want to be able to edit the text
-            sttJsonType={ 'bbckaldi' }// the type of STT Json transcript supported.
+            sttJsonType={ 'digitalpaperedit' }// the type of STT Json transcript supported.
             //  TODO: check if name has changed in latest version
-            title={ this.state.title }
-            fileName={ this.state.title }// optional*
+            title={ this.state.projectTitle }
+            fileName={ this.state.projectTitle }// optional*
           />}
         {/* </Row> */}
 

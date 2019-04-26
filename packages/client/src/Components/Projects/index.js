@@ -30,7 +30,6 @@ class Projects extends Component {
   componentDidMount = () => {
     // TODO: do we need to add user id in request?
     Api.getProjects().then((projectsList) => {
-      console.log('tmpList', projectsList);
       if (projectsList) {
         // add a display property for component cards search
         const tmpList = projectsList.map((item) => {
@@ -40,6 +39,7 @@ class Projects extends Component {
         });
         this.setState({ projectsList: tmpList });
       }
+      // TODO: some error handling
     });
   }
 
@@ -69,6 +69,24 @@ class Projects extends Component {
       });
     }
 
+    handleDelete = (id) => {
+      console.log('handleDelete', id);
+      const tmpNewList = this.state.projectsList.filter(function( obj ) {
+        return obj.id !== id;
+      });
+      // TODO: API + server side request for delete
+      // on successful then update state
+      Api.deleteProject(id).then((res) => {
+        if (res.status === 'ok') {
+          this.setState({
+            projectsList: tmpNewList
+          });
+        } else {
+          // TODO: some error handling, error message saying something went wrong
+        }
+      });
+    }
+
     render() {
       let projects;
       if ( this.state.projectsList !== null) {
@@ -77,13 +95,12 @@ class Projects extends Component {
             return ( <CustomCard
               key={ project.id }
               id={ project.id }
+              projectId={ project.id }
               title={ project.title }
               subtitle={ project.description }
+              handleDelete={ this.handleDelete }
+              showLink={ `/projects/${ project.id }` }
               links={ [
-                {
-                  name: 'Show',
-                  link: `/projects/${ project.id }`
-                },
                 {
                   name: 'Transcripts',
                   link: `/projects/${ project.id }/transcripts`
@@ -91,7 +108,12 @@ class Projects extends Component {
                 {
                   name: 'Paper-Edits',
                   link: `/projects/${ project.id }/paperedits`
+                },
+                {
+                  name: 'Users',
+                  link: `/projects/${ project.id }/users`
                 }
+
               ] }
             />
             );

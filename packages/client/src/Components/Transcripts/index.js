@@ -15,6 +15,7 @@ import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomCard from '../lib/CustomCard/index.js';
 
 import CustomFooter from '../lib/CustomFooter/index.js';
+import Api from '../../Api/index.js';
 
 import './index.module.css';
 
@@ -23,7 +24,8 @@ class Transcripts extends Component {
     super(props);
     this.state = {
       transcriptsList: null,
-      projectId: this.props.match.params.projectId
+      projectId: this.props.match.params.projectId,
+      projectTitle: ''
     };
   }
 
@@ -31,20 +33,38 @@ class Transcripts extends Component {
     // TODO: add user id in request?
     // TODO: add end point url in config
     // TODO: move fetch into a API class - to handle electron backend switch
-    fetch('http://localhost:5000/api/projects/1/transcripts', { mode: 'cors' })
-      .then(res => res.json())
-      .then((json) => {
+    // fetch('http://localhost:5000/api/projects/1/transcripts', { mode: 'cors' })
+    //   .then(res => res.json())
+    //   .then((json) => {
+    //     console.log(json);
+    //     // add a display property for component cards search
+    //     const tmpList = json.transcripts.map((item) => {
+    //       item.display = true;
+
+    //       return item;
+    //     });
+    //     this.setState({ transcriptsList: tmpList, projectTitle: json.projectTitle });
+    //   });
+
+    Api.getTranscripts(this.state.projectId)
+      // TODO: add error handling
+      .then(json => {
+        console.log(json);
         // add a display property for component cards search
         const tmpList = json.transcripts.map((item) => {
           item.display = true;
 
           return item;
         });
-        this.setState({ transcriptsList: tmpList });
+        this.setState({
+          projectTitle: json.projectTitle,
+          transcriptsList: tmpList
+        });
       });
   }
 
     // TODO: could be moved in utils
+    // TODO: if moved, then search across client side code to remove duplicate
     includesText = (textOne, textTwo) => {
       return textOne.toLowerCase().trim().includes(textTwo.toLowerCase().trim());
     }
@@ -77,12 +97,13 @@ class Transcripts extends Component {
           if (transcript.display) {
             return ( <CustomCard
               key={ transcript.id }
-              id={ transcript.id }
+              transcriptId={ transcript.id }
+              projectId={ this.state.projectId }
               title={ transcript.title }
               subtitle={ transcript.description }
               links={ [
                 {
-                  name: 'Edit',
+                  name: 'Correct',
                   link: `/projects/${ this.state.projectId }/transcripts/${ transcript.id }`
                 },
                 {
@@ -129,6 +150,10 @@ class Transcripts extends Component {
               {
                 name: 'New Paper Edit',
                 link: `/projects/${ this.state.projectId }/paperedits/new`
+              },
+              {
+                name: 'Users',
+                link: `/projects/${ this.state.projectId }/users`
               }
             ]
             }
@@ -145,7 +170,7 @@ class Transcripts extends Component {
             {
               // TODO: need to get project name
               // TODO: if using project name, only use first x char and add ...
-              name: 'Project',
+              name: `Project: ${ this.state.projectTitle }`,
               link: `/projects/${ this.state.projectId }`
             },
             {

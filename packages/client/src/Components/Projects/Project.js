@@ -25,10 +25,7 @@ class Project extends Component {
 
   componentDidMount = () => {
     Api.getProject(this.state.projectId).then((tmpProject) => {
-      console.log(tmpProject);
-      // if (tmpProject) {
       this.setState({ project: tmpProject });
-      // }
     });
   }
 
@@ -60,6 +57,10 @@ class Project extends Component {
             {
               name: 'New Paper Edit',
               link: `/projects/${ this.state.projectId }/paperedits/new`
+            },
+            {
+              name: 'Users',
+              link: `/projects/${ this.state.projectId }/users`
             }
           ]
           }
@@ -76,57 +77,28 @@ class Project extends Component {
           }
           ] }
         />
-        {/* Desktop  */}
-        {/* https://getbootstrap.com/docs/4.0/utilities/display/#hiding-elements */}
-        {/* <div className="d-none d-sm-block"> */}
         <Row>
           <Col xs={ 12 } sm={ 6 } md={ 6 } lg={ 6 } xl={ 6 }>
-
             <LinkContainer to={ `/projects/${ this.state.projectId }/transcripts` }>
               <Button variant="outline-primary" size="lg" block>Transcripts</Button>
-              {/* <h2 className="text-center">Transcripts</h2> */}
             </LinkContainer>
-
             <br/>
-            {/* TODO: Transcripts list */}
-            {/* <section style={ { height: '75vh', overflow: 'scroll' } }>
-              {this.state.project ? JSON.stringify(this.state.project.transcripts) : ''}
-
-            </section> */}
           </Col>
           <Col xs={ 12 } sm={ 6 } md={ 6 } lg={ 6 } xl={ 6 }>
-
             <LinkContainer to={ `/projects/${ this.state.projectId }/paperedits` }>
               <Button variant="outline-primary" size="lg" block>Paper-Edits</Button>
-              {/*  <h2 className="text-center">Paper-Edits</h2>*/}
             </LinkContainer>
-
-            {/* TODO: Paper-edits list  */}
-            {/* <section style={ { height: '75vh', overflow: 'scroll' } }>
-              {this.state.project ? JSON.stringify(this.state.project.transcripts) : ''}
-
-            </section> */}
+            <br/>
           </Col>
         </Row>
-        {/* </div> */}
 
-        {/* Mobile */}
-        {/* <div className="d-block d-sm-none">
-          <Tabs defaultActiveKey="transcript" id="uncontrolled-tab-example" >
-            <Tab eventKey="transcript" title="Transcript">
-              <h2> Transcript </h2>
-              <section style={ { height: '75vh', overflow: 'scroll' } }>
-
-              </section>
-            </Tab>
-            <Tab eventKey="paper-edit" title="Paper edit">
-              <h2> Paper edit </h2>
-              <section style={ { height: '75vh', overflow: 'scroll' } }>
-
-              </section>
-            </Tab>
-          </Tabs>;
-        </div> */}
+        <Row>
+          <Col xs={ 12 } sm={ 12 } md={ 12 } lg={ 12 } xl={ 12 }>
+            <LinkContainer to={ `/projects/${ this.state.projectId }/users` }>
+              <Button variant="outline-primary" size="lg" block>Users</Button>
+            </LinkContainer>
+          </Col>
+        </Row>
 
         <Row>
           <Col >

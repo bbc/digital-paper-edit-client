@@ -4,7 +4,11 @@ import './index.module.css';
 import { TranscriptEditor } from '@bbc/react-transcript-editor';
 
 import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Nav from 'react-bootstrap/Nav';
+import Tab from 'react-bootstrap/Tab';
+
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
@@ -14,7 +18,9 @@ class Transcript extends Component {
     super(props);
     this.state = {
       transcriptJson: null,
-      title: null
+      title: null,
+      projectId:  this.props.match.params.projectId,
+      projectTitle: ''
     };
 
   }
@@ -24,7 +30,7 @@ class Transcript extends Component {
     fetch('http://localhost:5000/api/projects/1/paperedits/1', { mode: 'cors' })
       .then(res => res.json())
       .then((json) => {
-        this.setState({ paperEditJson: json.paperEdit, title: json.title });
+        this.setState({ paperEditJson: json.paperEdit, title: json.title, projectTitle: json.projectTitle });
       });
   }
 
@@ -32,7 +38,40 @@ class Transcript extends Component {
     return (
       <Container fluid={ true }>
 
-        <CustomNavbar/>
+        <CustomNavbar
+          links={ [
+            {
+              // TODO: add project name
+              name: 'Projects',
+              link: '/projects'
+            },
+            {
+              name: 'New Projects',
+              link: '/projects/new'
+            },
+            {
+              name: 'Transcripts',
+              link: `/projects/${ this.state.projectId }/transcripts`
+            },
+            {
+              name: 'New Transcripts',
+              link: `/projects/${ this.state.projectId }/transcripts/new`
+            },
+            {
+              name: 'Paper Edits',
+              link: `/projects/${ this.state.projectId }/paperedits`
+            },
+            {
+              name: 'New Paper Edit',
+              link: `/projects/${ this.state.projectId }/paperedits/new`
+            },
+            {
+              name: 'Users',
+              link: `/projects/${ this.state.projectId }/users`
+            }
+          ]
+          }
+        />
         <br/>
 
         {/* <CustomBreadcrumb /> */}
@@ -45,8 +84,8 @@ class Transcript extends Component {
           {
             // TODO: need to get project name?
             // TODO: is this needed?
-            name: 'Project',
-            // link: `/projects/${ this.state.projectId }`
+            name: `Project: ${ this.state.projectTitle }`,
+            link: `/projects/${ this.state.projectId }`
           },
           {
             name: 'PaperEdits',
@@ -58,7 +97,56 @@ class Transcript extends Component {
           ] }
         />
 
-        <h1>Paper Edit: {this.state.title}</h1>
+        <Container fluid={ true }>
+          <Row>
+            <Col xs={ 12 } sm={ 7 } md={ 7 } lg={ 7 } xl={ 7 }>
+              {/* Search across transcripts could be here? */}
+              {/* TODO: separate component for multi transcript view? */}
+              <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+                <Row>
+                  <Col sm={ 3 }>
+                    <Nav variant="pills" className="flex-column">
+                      <Nav.Item>
+                        {/* TODO: CSS to truncat lenght of transcript name to
+                        to avoid overflow same as title name in @bbc/react-transcript-editor */}
+                        <Nav.Link eventKey="first" title="Transcript 1">Transcript 1</Nav.Link>
+                      </Nav.Item>
+                      <Nav.Item>
+                        <Nav.Link eventKey="second" title="Transcript 2">Transcript 2</Nav.Link>
+                      </Nav.Item>
+                    </Nav>
+                  </Col>
+                  <Col sm={ 9 } >
+                    <Tab.Content>
+                      <Tab.Pane eventKey="first" >
+                      Transcript 1
+                        {/* Preview video - HTML5 Video element or  @bbc/react-transcript-editor/VideoPlayer */}
+                        {/* Media control - HTML5 default or @bbc/react-transcript-editor/MediaPlayer */}
+                        {/* Search Bar - from TranscriptAnnotate component  */}
+                        {/* Text -  from TranscriptAnnotate component */}
+                      </Tab.Pane>
+                      <Tab.Pane eventKey="second">
+                        Transcript 2
+                      </Tab.Pane>
+                    </Tab.Content>
+                  </Col>
+                </Row>
+              </Tab.Container>
+            </Col>
+            <Col xs={ 12 } sm={ 5 } md={ 5 } lg={ 5 } xl={ 5 }>
+            Canvas
+              {/* Canvas preview  */}
+              {/* Media Control - if separate from Canvas Preview */}
+              {/* Program script - Headings */}
+              {/* Program script - Voice over */}
+              {/* Program script - Paragraphs (speaker, timecode, word timed text)
+              - show transcript title it belongs to,
+              as well as any labels paragraph might have? */}
+            </Col>
+          </Row>
+
+        </Container>
+
         <CustomFooter />
       </Container>
     );
