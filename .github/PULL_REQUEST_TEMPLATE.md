@@ -1,12 +1,3 @@
----
-name: Pull request
-about: Describe this issue template's purpose here.
-title: ''
-labels: ''
-assignees: pietrop
-
----
-
 **Is your Pull Request request related to another [issue](https://github.com/bbc/react-transcript-editor/issues) in this repository ?**      
 <!-- _If so please link to other issues and PRs as appropriate_ -->
 
