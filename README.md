@@ -196,14 +196,3 @@ See [LICENCE](./LICENCE.md)
 _Despite using React and DraftJs, the BBC is not promoting any Facebook products or other commercial interest._
 
 
-<!-- ---
-
-# TODO
-- [x] `.gitignore`, various `node_modules` folders + `dist` folder for electron and `build` folder for react
-- [ ] way to deal with `node_modules` repetitions
-- [ ] TravisCI deploy for electron cross platform into github releases
-- [ ] add auto update module using github releases
-- [ ] figure out how to use and if necessary to use, yarn and lerna for mono repo 
-- [ ] figure out how to setup monorepo for npm publishing of individual modules, name spacing etc..
-- [ ] figure out where/how to handle configs (eg server and db details for production and development)
-- [ ] figure out how to have dev, staging and live enviroment. -->
