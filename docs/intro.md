@@ -26,5 +26,5 @@ Program post-production Steps, for Audio/Video - documentary
 
 *Sometime these steps overlap
 
-This is the process for crafting a story mostly out of audio or video interviews.  See [domain Knowledge  - Paper-editing](https://docs.google.com/document/d/17F9Qd3e0n-Ji9ESP4CzA5GfCiu2VcuuSdFcDD-4CUGo/edit#heading=h.ne7f93gnbo7n) for more background info.
+This is the process for crafting a story mostly out of audio or video interviews.  See [domain Knowledge  - Paper-editing](./guides/domain-knowledge.md) for more background info.
 
