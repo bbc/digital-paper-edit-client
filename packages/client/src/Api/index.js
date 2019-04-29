@@ -34,6 +34,10 @@ class Api {
   /**
    * Transcripts URL
    */
+
+  createTranscriptUrl(projectId) {
+    return `${ process.env.REACT_APP_SERVER_URL }/api/projects/${ projectId }/transcripts`;
+  }
   // eslint-disable-next-line class-methods-use-this
   // get transcripts index
   getTranscriptsUrl(projectId) {
@@ -131,10 +135,31 @@ class Api {
   }
 
   //new
+  createTranscript(projectId, data) {
+    return postData(this.createTranscriptUrl(projectId), data)
+      .then((data) => {
+        // console.log(JSON.stringify(data));
+        return data;
+      }) // JSON-string from `response.json()` call
+      .catch((error) => {
+        console.error(error);
+
+        return error;
+      });
+  }
 
   // show
   getTranscript(projectId, transcriptId) {
     return fetch(this.getTranscriptUrl(projectId, transcriptId), { mode: 'cors' })
+      .then(res => res.json())
+      .then((json) => {
+        return json;
+      });
+  }
+
+  // delete
+  deleteTranscript(projectId, transcriptId) {
+    return fetch(this.getTranscriptUrl(projectId, transcriptId), { mode: 'cors', method: 'DELETE' })
       .then(res => res.json())
       .then((json) => {
         return json;

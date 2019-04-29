@@ -17,6 +17,8 @@ import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import CustomNavbar from './lib/CustomNavbar/index.js';
 import CustomFooter from './lib/CustomFooter/index.js';
 
+{/* <Button intent="success" text="button content" onClick={incrementCounter} /> */}
+
 class Home extends Component {
 //   constructor(props) {
 //     super(props);
@@ -68,7 +70,6 @@ class Home extends Component {
             </ButtonToolbar>
           </p>
         </Jumbotron>
-
         <CustomFooter />
       </Container>
     );

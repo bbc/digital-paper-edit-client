@@ -1,29 +1,25 @@
-import React, { Component } from 'react';
-import Nav from 'react-bootstrap/Nav';
+import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
-import { LinkContainer } from 'react-router-bootstrap';
-
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import labsLogo from '../../../img/labsLogo.png';
 
-// import './index.module.css';
+function CustomFooter() {
+  const footer = <Navbar collapseOnSelect expand={ 'md' } bg="light" variant="light" fixed="bottom" className='justify-content-center'>
+    <small><img src={ labsLogo } style={ { height: '2em' } } alt="Labs Logo" /> This is a prototype from <a href="http://bbcnewslabs.co.uk/" target="_blank">BBC News Labs</a></small>
+  </Navbar>;
 
-class CustomFooter extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       transcriptJson: null
-//     }
+  return (
 
-  //   }
-
-  render() {
-    return (
-      <Navbar collapseOnSelect expand={ 'md' } bg="light" variant="light" fixed="bottom" >
-        <small><img src={ labsLogo } style={ { height: '2em' } } alt="Labs Logo" /> This is a prototype from <a href="http://bbcnewslabs.co.uk/" target="_blank">BBC News Labs</a></small>
-      </Navbar>
-
-    );
-  }
+    <Row>
+      <Col className="d-none d-sm-block">
+        {footer}
+      </Col>
+      <Col className="d-lg-block d-md-block">
+        {footer}
+      </Col>
+    </Row>
+  );
 }
 
 export default CustomFooter;

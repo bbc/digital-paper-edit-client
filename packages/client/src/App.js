@@ -8,9 +8,10 @@ import newProject from './Components/Projects/NewProject.js';
 import Users from './Components/Users/index.js';
 
 import Transcripts from './Components/Transcripts/index.js';
-import Transcript from './Components/Transcripts/Transcript.js';
+import TranscriptShow from './Components/Transcripts/show.js';
 import NewTranscript from './Components/Transcripts/NewTranscript.js';
 import TranscriptAnnotate from './Components/Transcripts/TranscriptAnnotate/index.js';
+import TranscriptCorrect from './Components/Transcripts/TranscriptCorrect.js';
 
 import PaperEdits from './Components/PaperEdits/index.js';
 import PaperEdit from './Components/PaperEdits/PaperEdit.js';
@@ -19,6 +20,7 @@ import NewPaperEdit from './Components/PaperEdits/NewPaperEdit.js';
 // import UserManual from './Components/UserManual';
 
 import './App.css';
+// import Transcript from './Components/PaperEdits/PaperEdit.js';
 
 class App extends Component {
   constructor(props) {
@@ -39,21 +41,16 @@ class App extends Component {
           <Route exact path="/projects/:projectId" component={ Project } />
           <Route exact path="/projects/:projectId/edit" component={ newProject } />
           <Route exact path="/projects/:projectId/users" component={ Users } />
-
           <Route exact path="/projects/:projectId/transcripts/new" component={ NewTranscript } />
           <Route exact path="/projects/:projectId/transcripts" component={ Transcripts } />
-          <Route exact path="/projects/:projectId/transcripts/:trascriptId" component={ Transcript } />
-
-          <Route exact path="/projects/:projectId/transcripts/:trascriptId/annotate" component={ TranscriptAnnotate } />
-
+          <Route exact path="/projects/:projectId/transcripts/:transcriptId" component={ TranscriptShow } />
+          <Route exact path="/projects/:projectId/transcripts/:transcriptId/correct" component={ TranscriptCorrect } />
+          <Route exact path="/projects/:projectId/transcripts/:transcriptId/annotate" component={ TranscriptAnnotate } />
           <Route exact path="/projects/:projectId/paperedits/new" component={ NewPaperEdit } />
           <Route exact path="/projects/:projectId/paperedits" component={ PaperEdits } />
           <Route exact path="/projects/:projectId/paperedits/:papereditId" component={ PaperEdit } />
-
           {/* <Route exact path="/user-manual" component={ UserManual } /> */}
-
           {/* Guide route --> user manual  */}
-
           {/* Help route  */}
         </Switch>
       </HashRouter>

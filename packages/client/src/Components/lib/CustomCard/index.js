@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
-import { LinkContainer } from 'react-router-bootstrap';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
+import Spinner from 'react-bootstrap/Spinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import styles from './index.module.css';
+import { faTrash, faCheck, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 class CustomCard extends Component {
 
   handleDelete = () => {
@@ -21,49 +21,75 @@ class CustomCard extends Component {
   }
 
   render() {
-    let links;
-    if (this.props.links !== undefined && this.props.links.length !== 0) {
-      links = this.props.links.map((item, index) => {
-        return (
-          <LinkContainer to={ item.link } key={ item + '_' + index }>
-            <Card.Link className={ styles.cardLink }>
-              <Button variant="outline-primary" size="sm">
-                {item.name}
-              </Button>
-            </Card.Link>
-          </LinkContainer>
-        );
-      });
+    let borderStatus;
+    // let showBtn = <a href={ `#${ this.props.showLink() }` }>  Show btn</a>;
+    let title = <a href={ `#${ this.props.showLink() }` }>  {this.props.title}</a>;
+    if (this.props.status && this.props.status === 'info') {
+      title = this.props.title;
+      // showBtn = <a href={ `#${ this.props.showLink() }` }>  Show btn Disabled</a>;
+    }
+    if (this.props.status && this.props.status === 'danger') {
+      title = this.props.title;
+      // showBtn = <a href={ `#${ this.props.showLink() }` }>  Show btn Disabled</a>;
+      borderStatus = 'danger';
     }
 
     return (
-      <Card style={ { width: '100%', marginBottom: '1em' } }>
-
+      <Card border={ borderStatus }style={ { width: '100%', marginBottom: '1em' } }>
         <Card.Body>
-          <Card.Title>
-            {this.props.showLink ? (
-              <LinkContainer to={ this.props.showLink }>
-                {/* <Button variant="outline-primary" size="sm">
-                <FontAwesomeIcon icon={ faCaretRight } />
-              </Button> */}
-                <a>{this.props.title}</a>
-              </LinkContainer>) : <span>{this.props.title} </span>}
+          <Row>
+            <Col xs={ 10 } sm={ 11 } md={ 11 } ld={ 11 } xl={ 11 }>
+              <Card.Title>
+                {/* { (this.props.border? & this.props.border === 'secondary' )
+                || (this.props.border && this.props.border === 'danger') ?
+                  this.props.title
+                  : <a href={ `#${ this.props.showLink() }` }>  {this.props.title}</a> } */}
+                {title}
+              </Card.Title>
+            </Col>
+            <Col xs={ 2 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
+              <Card.Link >
+                <Button onClick={ this.handleDelete } variant="outline-secondary" size="sm">
+                  <FontAwesomeIcon icon={ faTrash } />
+                </Button>
+              </Card.Link>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={ 10 } sm={ 11 } md={ 11 } ld={ 11 } xl={ 11 }>
+              <Card.Subtitle className="mb-2 text-muted">{this.props.subtitle}</Card.Subtitle>
+            </Col>
+            <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
+              {this.props.status && this.props.status === 'info' ?
+                <Button variant="info" size="sm" disabled>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                </Button> : ''}
+              {this.props.status && this.props.status === 'danger' ?
+                <Button variant="danger" size="sm" disabled>
+                  <FontAwesomeIcon icon={ faExclamationCircle } />
+                </Button> : ''}
+              {this.props.status && this.props.status === 'success' ?
+                <Button variant="success" size="sm" disabled>
+                  <FontAwesomeIcon icon={ faCheck } />
+                </Button> : ''}
+            </Col>
+          </Row>
 
-          </Card.Title>
-
-          <Card.Subtitle className="mb-2 text-muted">{this.props.subtitle}</Card.Subtitle>
           <Card.Text>
-            {this.props.description}
+            <Row>
+              <Col xs={ 10 } sm={ 11 } md={ 11 } ld={ 11 } xl={ 11 }>
+                {this.props.description}
+              </Col>
+            </Row>
           </Card.Text>
-          {links}
-          <Card.Link >
-            <Button onClick={ this.handleDelete } variant="outline-danger" size="sm">
-              <FontAwesomeIcon icon={ faTrash } />
-            </Button>
-          </Card.Link>
         </Card.Body>
       </Card>
-
     );
   }
 }
