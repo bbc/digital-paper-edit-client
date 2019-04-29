@@ -6,13 +6,12 @@ import { faSearch, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
-import Form from 'react-bootstrap/Form';
-
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
-import CustomCard from '../lib/CustomCard/index.js';
+import CustomUserCard from '../lib/CustomUserCard/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
-
+import navbarLinks from '../lib/custom-navbar-links';
+import includesText from '../../Util/includes-text';
 import './index.module.css';
 
 class Users extends Component {
@@ -21,9 +20,11 @@ class Users extends Component {
     this.state = {
       projectId: this.props.match.params.projectId,
       projectTitle: '',
-      users: [
-        { id:1, name: 'Example 1', description: 'example.1@bbc.co.uk', display: true },
-        { id:1, name: 'Example 2', description: 'example.2@bbc.co.uk', display: true }
+      usersList: [
+        { id:0, name: 'Example 1', email: 'example.1@bbc.co.uk', display: true, partOfProject: true },
+        { id:1, name: 'Example 2', email: 'example.2@bbc.co.uk', display: true, partOfProject: false },
+        { id:2, name: 'Example 3', email: 'example.3@bbc.co.uk', display: true, partOfProject: true },
+        { id:3, name: 'Example 4', email: 'example.4@bbc.co.uk', display: true, partOfProject: false },
       ]
     };
 
@@ -41,15 +42,17 @@ class Users extends Component {
 
   // TODO: could be moved in utils
   // TODO: if moved, then search across client side code to remove duplicate
-  includesText = (textOne, textTwo) => {
-    return textOne.toLowerCase().trim().includes(textTwo.toLowerCase().trim());
-  }
+  // includesText = (textOne, textTwo) => {
+  //   return textOne.toLowerCase().trim().includes(textTwo.toLowerCase().trim());
+  // }
 
   handleSearch = (e) => {
     const searchText = e.target.value;
-    const results = this.state.users.filter((user) => {
-      if (this.includesText(user.name, searchText)
-      || this.includesText(user.description, searchText)
+
+    const results = this.state.usersList.filter((user) => {
+      console.log(searchText, user.name, user.email);
+      if (includesText(user.name, searchText)
+      || includesText(user.email, searchText)
       ) {
         user.display = true;
 
@@ -62,32 +65,67 @@ class Users extends Component {
     });
 
     this.setState({
-      users: results
+      usersList: results
     });
+  }
+
+  handleAddUserToProject = (userId) => {
+    alert('add user ' + userId);
+    // TODO: Call API
+    const users = this.state.usersList;
+    const userTmp = users.map((u) => {
+      if (u.id === userId) {
+        u.partOfProject = true;
+      }
+
+      return u;
+    });
+    this.setState({
+      usersList: userTmp
+    });
+
+  }
+
+  handleRemoveUserToProject= (userId) => {
+    alert('remove user ' + userId);
+    //eslint-disable-next-line
+    // const confirmationPrompt = confirm("Click OK if you wish to delete, cancel if you don't");
+    // if (confirmationPrompt === true) {
+    //   if (this.props.handleDelete) {
+    //     this.props.handleDelete(this.props.id);
+    //   }
+    // } else {
+    //   alert('All is good, it was not deleted');
+    // }
+    // TODO: Call API
+    const users = this.state.usersList;
+    const userTmp = users.map((u) => {
+      if (u.id === userId) {
+        u.partOfProject = false;
+      }
+
+      return u;
+    });
+    this.setState({
+      usersList: userTmp
+    });
+
   }
 
   render() {
 
     let users;
     // if ( this.state.transcriptsList !== null) {
-    users = this.state.users.map((user) => {
+    users = this.state.usersList.map((user) => {
       if (user.display) {
-        return ( <CustomCard
+        return ( <CustomUserCard
           key={ user.id }
-          transcriptId={ user.id }
-          projectId={ this.state.projectId }
-          title={ user.name }
-          subtitle={ user.description }
-          links={ [
-            {
-              name: <><FontAwesomeIcon icon={ faUserPlus } /></>,
-              link: `/projects/${ this.state.projectId }/users/${ user.id }/add`
-            }
-          //   {
-          //     name: 'Annotate',
-          //     link: `/projects/${ this.state.projectId }/transcripts/${ transcript.id }/annotate`
-          //   }
-          ] }
+          userId={ user.id }
+          userName={ user.name }
+          userEmail={ user.email }
+          partOfProject={ user.partOfProject }
+          handleAddUserToProject={ this.handleAddUserToProject }
+          handleRemoveUserToProject={ this.handleRemoveUserToProject }
         />
         );
       } else {
@@ -101,37 +139,7 @@ class Users extends Component {
     return (
       <Container>
         <CustomNavbar
-          links={ [
-            {
-              name: 'Projects',
-              link: '/projects'
-            },
-            {
-              name: 'New Projects',
-              link: '/projects/new'
-            },
-            {
-              name: 'Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts`
-            },
-            {
-              name: 'New Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts/new`
-            },
-            {
-              name: 'Paper Edits',
-              link: `/projects/${ this.state.projectId }/paperedits`
-            },
-            {
-              name: 'New Paper Edit',
-              link: `/projects/${ this.state.projectId }/paperedits/new`
-            },
-            {
-              name: 'Users',
-              link: `/projects/${ this.state.projectId }/users`
-            }
-          ]
-          }
+          links={ navbarLinks(this.state.projectId) }
         />
         <br/>
         <CustomBreadcrumb
