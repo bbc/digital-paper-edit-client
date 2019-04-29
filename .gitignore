@@ -101,3 +101,26 @@ packages/electron/build/
 .env.development.local
 .env.test.local
 .env.production.local
+
+#ignore all video files
+*.wmv
+*.mpg
+*.mpeg
+*.mp4
+*.mov
+*.flv
+*.avi
+*.ogv
+*.ogg
+*.webm
+
+#ignore audio file
+*.wav
+*.mp3
+
+#ingore subtitles files
+*.srt
+*.sbv
+*.vtt
+*.ttml
+*.itt
