@@ -1,27 +1,18 @@
 import React, { Component } from 'react';
-import './index.module.css';
-
-import Button from 'react-bootstrap/Button';
-import { LinkContainer } from 'react-router-bootstrap';
-import InputGroup from 'react-bootstrap/InputGroup';
-import FormControl from 'react-bootstrap/FormControl';
-import Container from 'react-bootstrap/Container';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-
-// import Container from 'react-bootstrap/Container';
-import CustomNavbar from '../lib/CustomNavbar/index.js';
-import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
-import CustomCard from '../lib/CustomCard/index.js';
-import CustomFooter from '../lib/CustomFooter/index.js';
+import { faFolder, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
+import ListPageTemplate from '../lib/ListPageTemplate/index.js';
+import Api from '../../Api/index.js';
+import navbarLinks from '../lib/custom-navbar-links';
+import './index.module.css';
 
 class PaperEdits extends Component {
   constructor(props) {
     super(props);
     this.state = {
       paperEditsList: null,
-      projectId: this.props.match.params.projectId
+      projectId: this.props.match.params.projectId,
+      projectTitle: ''
     };
 
   }
@@ -38,145 +29,64 @@ class PaperEdits extends Component {
 
           return item;
         });
+        // projectTitle
         this.setState({ paperEditsList: tmpList });
       });
   }
 
-    // TODO: could be moved in utils
-    includesText = (textOne, textTwo) => {
-      return textOne.toLowerCase().trim().includes(textTwo.toLowerCase().trim());
-    }
-
-  handleSearch = (e) => {
-    const searchText = e.target.value;
-    const results = this.state.paperEditsList.filter((transcript) => {
-      if (this.includesText(transcript.title, searchText)
-      || this.includesText(transcript.description, searchText)
-      ) {
-        transcript.display = true;
-
-        return transcript;
-      } else {
-        transcript.display = false;
-
-        return transcript;
-      }
-    });
-
-    this.setState({
-      paperEditsList: results
-    });
+  handleDelete = (id) => {
+    // TODO: API + server side request for delete
+    // on successful then update state
+    // Api.deletePaperedit(id).then((res) => {
+    //   if (res.status === 'ok') {
+    //     const tmpNewList = this.state.paperEditsList.filter(function( obj ) {
+    //       return obj.id !== id;
+    //     });
+    //     this.setState({
+    //       paperEditsList: tmpNewList
+    //     });
+    //   } else {
+    //     // TODO: some error handling, error message saying something went wrong
+    //   }
+    // });
   }
 
+  getShowLinkForCard = (id) => {
+    return `/projects/${ this.state.projectId }/paperedits/${ id }`;
+  }
+
+  linkToNew = () => {
+    return `/projects/${ this.state.projectId }/paperedits/new`;
+  };
+
   render() {
-    let paperedits;
-    if ( this.state.paperEditsList !== null) {
-      paperedits = this.state.paperEditsList.map((paperEdit) => {
-        if (paperEdit.display) {
-          return ( <CustomCard
-            key={ paperEdit.id }
-            id={ paperEdit.id }
-            title={ paperEdit.title }
-            subtitle={ paperEdit.description }
-            showLink={ `/projects/${ this.state.projectId }/paperedits/${ paperEdit.id }` }
-            // links={ [
-            //   {
-            //     name: 'Edit',
-            //     link: `/projects/${ this.state.projectId }/paperedits/${ paperEdit.id }`
-            //   } ] }
-          // description={ 'test' } - optional
-          // TODO: Add links
-          />
-          );
-        } else {
-          return null;
-        }
-      })
-        .filter((paperEdit) => {
-          return paperEdit !== null;
-        });
-    }
 
     return (
-      <Container>
-        <CustomNavbar
-          links={ [
-            {
-              name: 'Projects',
-              link: '/projects'
-            },
-            {
-              name: 'New Projects',
-              link: '/projects/new'
-            },
-            {
-              name: 'Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts`
-            },
-            {
-              name: 'New Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts/new`
-            },
-            {
-              name: 'Paper Edits',
-              link: `/projects/${ this.state.projectId }/paperedits`
-            },
-            {
-              name: 'New Paper Edit',
-              link: `/projects/${ this.state.projectId }/paperedits/new`
-            },
-            {
-              name: 'Users',
-              link: `/projects/${ this.state.projectId }/users`
-            }
-          ] }
-        />
-        <br/>
-
-        <CustomBreadcrumb
-          items={ [ {
+      <ListPageTemplate
+        itemsList={ this.state.paperEditsList }
+        handleDelete={ this.handleDelete }
+        modelName={ 'paperedits' }
+        getShowLinkForCard={ this.getShowLinkForCard }
+        linkToNew={ this.linkToNew }
+        // showLink for customCard?
+        navbarLinks={ navbarLinks(this.state.projectId) }
+        breadCrumbItems={
+          [ {
             name: 'Projects',
             link: '/projects'
           },
           {
             // TODO: need to get project name
             // TODO: if using project name, only use first x char and add ...
-            name: 'Project:',
+            name: `Project: ${ this.state.projectTitle }`,
             link: `/projects/${ this.state.projectId }`
           },
           {
-            name: 'PaperEdits'
+            name: 'Paper Edits'
           }
-          ] }
-        />
-
-        {/* <LinkContainer to={ `/projects/${ this.state.projectId }/paperEdits/new` }>
-          <Button variant="primary">New PaperEdit</Button>
-        </LinkContainer> */}
-
-        {/* <br/> <br/> */}
-
-        <InputGroup className="mb-3">
-          <FormControl
-            onChange={ this.handleSearch }
-            placeholder="Search for Paper Edit by title or description"
-            aria-label="search"
-            aria-describedby="search"
-          />
-
-          <InputGroup.Append>
-            <InputGroup.Text id="basic-addon2">
-              <FontAwesomeIcon icon={ faSearch } />
-            </InputGroup.Text>
-          </InputGroup.Append>
-        </InputGroup>
-
-        <section style={ { height: '75vh', overflow: 'scroll' } }>
-          {paperedits}
-        </section>
-
-        <CustomFooter />
-      </Container>
+          ]
+        }
+      />
     );
   }
 }

@@ -12,6 +12,7 @@ import Tab from 'react-bootstrap/Tab';
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
+import navbarLinks from '../lib/custom-navbar-links';
 
 class Transcript extends Component {
   constructor(props) {
@@ -39,38 +40,7 @@ class Transcript extends Component {
       <Container fluid={ true }>
 
         <CustomNavbar
-          links={ [
-            {
-              // TODO: add project name
-              name: 'Projects',
-              link: '/projects'
-            },
-            {
-              name: 'New Projects',
-              link: '/projects/new'
-            },
-            {
-              name: 'Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts`
-            },
-            {
-              name: 'New Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts/new`
-            },
-            {
-              name: 'Paper Edits',
-              link: `/projects/${ this.state.projectId }/paperedits`
-            },
-            {
-              name: 'New Paper Edit',
-              link: `/projects/${ this.state.projectId }/paperedits/new`
-            },
-            {
-              name: 'Users',
-              link: `/projects/${ this.state.projectId }/users`
-            }
-          ]
-          }
+          links={ navbarLinks(this.state.projectId) }
         />
         <br/>
 
