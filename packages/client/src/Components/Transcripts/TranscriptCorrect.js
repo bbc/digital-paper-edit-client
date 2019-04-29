@@ -7,21 +7,27 @@ import { TranscriptEditor } from '@bbc/react-transcript-editor';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+import { LinkContainer } from 'react-router-bootstrap';
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 // import CustomFooter from '../lib/CustomFooter/index.js';
 import Api from '../../Api/index.js';
+import navbarLinks from '../lib/custom-navbar-links';
 
-class Transcript extends Component {
+class TranscriptCorrect extends Component {
   constructor(props) {
     super(props);
     this.state = {
       projectId: this.props.match.params.projectId,
+      transcriptId: this.props.match.params.transcriptId,
       transcriptJson: null,
       url: null,
-      projectTitle: ''
+      projectTitle: '',
+      transcriptTitle: ''
     };
-
+    this.transcriptEditorRef = React.createRef();
   }
 
   componentDidMount = () => {
@@ -31,10 +37,19 @@ class Transcript extends Component {
         console.log('json', json);
         this.setState({
           projectTitle: json.projectTitle,
+          transcriptTitle: json.transcriptTitle,
           transcriptJson: json.transcript,
           url: json.url
         });
       });
+  }
+
+  saveToServer = () => {
+    // TODO: add Api call to save content of
+    alert('save to server');
+
+    const { data, ext } = this.transcriptEditorRef.current.getEditorContent('digitalpaperedit');
+    console.log(data, ext);
   }
 
   render() {
@@ -42,67 +57,45 @@ class Transcript extends Component {
       <Container fluid={ true }>
 
         <CustomNavbar
-          links={ [
-            {
-              name: 'Projects',
-              link: '/projects'
-            },
-            {
-              name: 'New Projects',
-              link: '/projects/new'
-            },
-            {
-              name: 'Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts`
-            },
-            {
-              name: 'New Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts/new`
-            },
-            {
-              name: 'Paper Edits',
-              link: `/projects/${ this.state.projectId }/paperedits`
-            },
-            {
-              name: 'New Paper Edit',
-              link: `/projects/${ this.state.projectId }/paperedits/new`
-            },
-            {
-              name: 'Users',
-              link: `/projects/${ this.state.projectId }/users`
-            }
-          ]
-
-          }
+          links={ navbarLinks(this.state.projectId) }
         />
         <br/>
 
-        {/* <CustomBreadcrumb /> */}
-
-        <CustomBreadcrumb
-          items={ [ {
-            name: 'Projects',
-            link: '/projects'
-          },
-          {
-            // TODO: need to get project name?
-            // TODO: is this needed?
-            name: `Project: ${ this.state.projectTitle }`,
-            link: `/projects/${ this.state.projectId }`
-          },
-          {
-            name: 'Transcripts',
-            link:`/projects/${ this.state.projectId }/transcripts`
-          },
-          {
-            // TODO: transcript name
-            name: `${ this.state.projectTitle }`//'Transcript'
-          },
-          {
-            name: 'Correct'
-          }
-          ] }
-        />
+        <Row>
+          <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
+            <CustomBreadcrumb
+              items={ [ {
+                name: 'Projects',
+                link: '/projects'
+              },
+              {
+                // TODO: need to get project name?
+                // TODO: is this needed?
+                name: `Project: ${ this.state.projectTitle }`,
+                link: `/projects/${ this.state.projectId }`
+              },
+              {
+                name: 'Transcripts',
+                link:`/projects/${ this.state.projectId }/transcripts`
+              },
+              {
+                // TODO: transcript name
+                link:`/projects/${ this.state.projectId }/transcripts/${ this.state.transcriptId }`,
+                name: `${ this.state.transcriptTitle }`//'Transcript'
+              },
+              {
+                name: 'Correct'
+              }
+              ] }
+            />
+          </Col>
+          <Col xs={ 12 } sm={ 3 } md={ 3 } ld={ 3 } xl={ 3 }>
+            <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
+            Save
+            </Button>
+            <br/>
+          </Col>
+        </Row>
         {/* <Row> */}
         {this.state.transcriptJson !== null &&
           <TranscriptEditor
@@ -114,6 +107,7 @@ class Transcript extends Component {
             //  TODO: check if name has changed in latest version
             title={ this.state.projectTitle }
             fileName={ this.state.projectTitle }// optional*
+            ref={ this.transcriptEditorRef }
           />}
         {/* </Row> */}
 
@@ -123,4 +117,4 @@ class Transcript extends Component {
   }
 }
 
-export default Transcript;
+export default TranscriptCorrect;

@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Collapse from 'react-bootstrap/Collapse';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHighlighter,
@@ -25,6 +26,7 @@ import LabelsList from './LabelsList/index.js';
 import Paragraphs from './Paragraphs/index.js';
 import SearchBar from './SearchBar/index.js';
 import Api from '../../../Api/index.js';
+import navbarLinks from '../../lib/custom-navbar-links';
 
 class TranscriptAnnotate extends Component {
   constructor(props) {
@@ -37,7 +39,7 @@ class TranscriptAnnotate extends Component {
       projectTitle: '',
       transcriptJson: null,
       // TODO: rename title to Transcript Title
-      title: '',
+      transcriptTitle: '',
       url: null,
       mediaDuration: '00:00:00:00',
       currentTime: 0,
@@ -89,7 +91,7 @@ class TranscriptAnnotate extends Component {
         this.setState({
           projectTitle: json.projectTitle,
           transcriptJson: json.transcript,
-          title: json.title,
+          transcriptTitle: json.transcriptTitle,
           url: json.url,
           labelsOptions: json.labels
         });
@@ -181,6 +183,11 @@ class TranscriptAnnotate extends Component {
     });
   }
 
+  saveToServer = () => {
+    // TODO API call save annotations to server
+    alert('save to server');
+  }
+
   render() {
     // TODO: change API to return transcript json already in this format
     // + with list of speaker labels
@@ -191,6 +198,8 @@ class TranscriptAnnotate extends Component {
         transcriptJson={ this.state.transcriptJson }
         searchString={ this.state.searchString }
         showParagraphsMatchingSearch={ this.state.showParagraphsMatchingSearch }
+        handleTimecodeClick={ this.handleTimecodeClick }
+        handleWordClick={ this.handleWordClick }
       />;
     }
 
@@ -224,69 +233,51 @@ class TranscriptAnnotate extends Component {
         </style>
 
         <CustomNavbar
-          links={ [
-            {
-              name: 'Projects',
-              link: '/projects'
-            },
-            {
-              name: 'New Projects',
-              link: '/projects/new'
-            },
-            {
-              name: 'Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts`
-            },
-            {
-              name: 'New Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts/new`
-            },
-            {
-              name: 'Paper Edits',
-              link: `/projects/${ this.state.projectId }/paperedits`
-            },
-            {
-              name: 'New Paper Edit',
-              link: `/projects/${ this.state.projectId }/paperedits/new`
-            },
-            {
-              name: 'Users',
-              link: `/projects/${ this.state.projectId }/users`
-            }
-          ] }
+          links={ navbarLinks(this.state.projectId) }
         />
         <br />
-        <CustomBreadcrumb
-          items={ [
-            {
-              name: 'Projects',
-              link: '/projects'
-            },
-            {
-              // TODO: need to get project name?
-              // TODO: is this needed?
-              name: `Project: ${ this.state.projectTitle }`,
-              link: `/projects/${ this.state.projectId }`
-            },
-            {
-              name: 'Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts`
-            },
-            {
-              // Note: There is no individual transcript page only transcript index, annotate, and correct
-              name: `${ this.state.projectTitle }`
-            },
-            {
-              name: 'Annotate'
-            }
-          ] }
-        />
+        <Row>
+          <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
+            <CustomBreadcrumb
+              items={ [
+                {
+                  name: 'Projects',
+                  link: '/projects'
+                },
+                {
+                  // TODO: need to get project name?
+                  // TODO: is this needed?
+                  name: `Project: ${ this.state.projectTitle }`,
+                  link: `/projects/${ this.state.projectId }`
+                },
+                {
+                  name: 'Transcripts',
+                  link: `/projects/${ this.state.projectId }/transcripts`
+                },
+                {
+                  // Note: There is no individual transcript page only transcript index, annotate, and correct
+                  name: `${ this.state.transcriptTitle }`,
+                  link: `/projects/${ this.state.projectId }/transcripts/${ this.state.transcriptId }`
+                },
+                {
+                  name: 'Annotate'
+                }
+              ] }
+            />
+          </Col>
+          <Col xs={ 12 } sm={ 3 } md={ 3 } ld={ 3 } xl={ 3 }>
+            <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
+            Save
+            </Button>
+            <br/>
+          </Col>
+        </Row>
         <Row>
           {/* TODO: add  @bbc/react-transcript-editor/MediaPlayer and connect it to the rest of the page */}
           {/* Player controls: <code>MediaPlayer</code> */}
           <Col xs={ 12 } sm={ 12 } md={ 12 } lg={ 12 } xl={ 12 }>
             <MediaPlayer
-              title={ this.state.title ? this.state.title : '' }
+              title={ this.state.transcriptTitle ? this.state.transcriptTitle : '' }
               mediaDuration={ this.state.mediaDuration }
               hookSeek={ foo => (this.setCurrentTime = foo) }// <--
               hookPlayMedia={ foo => (this.playMedia = foo) }// <--

@@ -4,10 +4,10 @@ import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
+import Collapse from 'react-bootstrap/Collapse';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSearch,
@@ -116,23 +116,74 @@ class LabelsList extends Component {
       </ListGroup.Item>);
     });
 
-    const labelsList = (<ListGroup style={ { height: '30vh', overflow: 'scroll' } }>{labelsListOptions}</ListGroup>);
+    const labelsList = (<ListGroup style={ { height: '30vh', overflow: 'scroll' } }>{labelsListOptions}
+      {/* <ListGroup.Item key={ 'btn_new' }>
+        <CreateNewLabelModal
+          onNewLabelCreated={ this.handleNewLabelCreated }
+        />
+      </ListGroup.Item> */}
+    </ListGroup>);
 
     return (<>
+
+      {/* <Button variant="outline-dark"
+        onClick={ () => {
+          this.setState((state) => {return { labelsListOpen: !state.labelsListOpen };});
+        } } block
+      >
+        <Nav justify variant="pills">
+          <Nav.Item>
+            <FontAwesomeIcon icon={ faTags } /> Labels
+          </Nav.Item>
+
+          <Nav.Item>
+            <FontAwesomeIcon icon={ this.state.labelsListOpen ? faAngleDown : faAngleUp } />
+          </Nav.Item>
+        </Nav>
+      </Button>
+
+      <Collapse in={ this.state.labelsListOpen }>
+        { labelsList }
+      </Collapse> */}
+
+      {/*
+      <Card.Footer className="text-muted">
+          <CreateNewLabelModal
+            onNewLabelCreated={ this.handleNewLabelCreated }
+          />
+        </Card.Footer>
+         */}
+
       <Card>
-        <Card.Header onClick={ () => {this.setState((state) => {return { labelsListOpen: !state.labelsListOpen };});} }>
+        {/* <Button variant="outline-primary"
+          onClick={ () => {
+            this.setState((state) => {return { labelsListOpen: !state.labelsListOpen };});
+          } } block
+        >
           <Nav justify variant="pills">
             <Nav.Item>
-              {/* <Col xs={ 9 }> */}
               <FontAwesomeIcon icon={ faTags } /> Labels
             </Nav.Item>
-            {/* </Col> */}
-            {/* <Col xs={ 3 }> */}
+
             <Nav.Item>
               <FontAwesomeIcon icon={ this.state.labelsListOpen ? faAngleDown : faAngleUp } />
             </Nav.Item>
           </Nav>
-          {/* </Col> */}
+        </Button> */}
+
+        <Card.Header
+          variant="outline-primary"
+          onClick={ () => {this.setState((state) => {return { labelsListOpen: !state.labelsListOpen };});} }>
+          <Nav justify variant="pills">
+            <Nav.Item>
+              <FontAwesomeIcon icon={ faTags } /> Labels
+            </Nav.Item>
+
+            <Nav.Item>
+              <FontAwesomeIcon icon={ this.state.labelsListOpen ? faAngleDown : faAngleUp } />
+            </Nav.Item>
+          </Nav>
+
         </Card.Header>
 
         {this.state.labelsListOpen ? <> { labelsList }

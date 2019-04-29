@@ -9,6 +9,21 @@ import styles from './index.module.css';
 
 class Paragraphs extends Component {
 
+  // for accassibility, being able to
+  // move with tabs and press enter on
+  // timecode to start playing from that point
+  handleKeyDownTimecodes =(e) => {
+    if (e.key === 'Enter') {
+      this.props.handleTimecodeClick(e);
+    }
+  }
+
+  handleKeyDownWords =(e) => {
+    if (e.key === 'Enter') {
+      this.props.handleWordClick(e);
+    }
+  }
+
   render() {
     let text;
     // TODO: change API end point to return transcript already formatted like this
@@ -74,7 +89,8 @@ class Paragraphs extends Component {
               <span
                 style={ { cursor: 'pointer', width: '100%' } }
                 data-start={ paragraph[0].start } className={ 'timecode' }
-                tabIndex="0">
+                tabIndex="0"
+                onKeyDown={ this.handleKeyDownTimecodes }>
                 { shortTimecode(paragraph[0].start) }
               </span>
             </Col>
@@ -93,6 +109,7 @@ class Paragraphs extends Component {
                     tabIndex="0"
                     role="button"
                     aria-pressed="false"
+                    onKeyDown={ this.handleKeyDownWords }
                   >
                     {word.text}{' '}
                   </span>
