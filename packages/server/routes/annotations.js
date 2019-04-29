@@ -30,6 +30,7 @@ module.exports = (app) => {
             annotations: sampleAnnotations,
             // TODO: Annotations returns transcript as well?
             transcript: sampleTranscript,
+            transcriptTitle: 'Ted Talk Kate',
             url: 'https://download.ted.com/talks/KateDarling_2018S-950k.mp4', 
             labels: sampleLabels
         };

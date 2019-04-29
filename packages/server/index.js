@@ -3,8 +3,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const url = require('url');
 const app = express();
+const router = express.Router()
 app.use(bodyParser.json());
 const port = 5000;
+
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
