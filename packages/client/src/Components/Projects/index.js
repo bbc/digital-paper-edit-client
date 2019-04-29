@@ -1,23 +1,8 @@
 import React, { Component } from 'react';
-import Container from 'react-bootstrap/Container';
-// import { LinkContainer } from 'react-router-bootstrap';
-import InputGroup from 'react-bootstrap/InputGroup';
-import FormControl from 'react-bootstrap/FormControl';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-
-import CustomNavbar from '../lib/CustomNavbar/index.js';
-import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
-import CustomCard from '../lib/CustomCard/index.js';
-
-import CustomFooter from '../lib/CustomFooter/index.js';
-
+import { faFolder, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
+import ListPageTemplate from '../lib/ListPageTemplate/index.js';
 import Api from '../../Api/index.js';
-
-import './index.module.css';
 
 class Projects extends Component {
   constructor(props) {
@@ -29,10 +14,11 @@ class Projects extends Component {
 
   componentDidMount = () => {
     // TODO: do we need to add user id in request?
-    Api.getProjects().then((projectsList) => {
-      if (projectsList) {
+    Api.getProjects().then((itemsList) => {
+      console.log('itemsList::', itemsList);
+      if (itemsList) {
         // add a display property for component cards search
-        const tmpList = projectsList.map((item) => {
+        const tmpList = itemsList.map((item) => {
           item.display = true;
 
           return item;
@@ -43,140 +29,61 @@ class Projects extends Component {
     });
   }
 
-    // TODO: could be moved in utils
-    includesText = (textOne, textTwo) => {
-      return textOne.toLowerCase().trim().includes(textTwo.toLowerCase().trim());
-    }
-
-    handleSearch = (e) => {
-      const searchText = e.target.value;
-      const results = this.state.projectsList.filter((project) => {
-        if (this.includesText(project.title, searchText)
-        || this.includesText(project.description, searchText)
-        ) {
-          project.display = true;
-
-          return project;
-        } else {
-          project.display = false;
-
-          return project;
-        }
-      });
-
-      this.setState({
-        projectsList: results
-      });
-    }
-
-    handleDelete = (id) => {
-      console.log('handleDelete', id);
-      const tmpNewList = this.state.projectsList.filter(function( obj ) {
-        return obj.id !== id;
-      });
-      // TODO: API + server side request for delete
-      // on successful then update state
-      Api.deleteProject(id).then((res) => {
-        if (res.status === 'ok') {
-          this.setState({
-            projectsList: tmpNewList
-          });
-        } else {
-          // TODO: some error handling, error message saying something went wrong
-        }
-      });
-    }
-
-    render() {
-      let projects;
-      if ( this.state.projectsList !== null) {
-        projects = this.state.projectsList.map((project) => {
-          if (project.display) {
-            return ( <CustomCard
-              key={ project.id }
-              id={ project.id }
-              projectId={ project.id }
-              title={ project.title }
-              subtitle={ project.description }
-              handleDelete={ this.handleDelete }
-              showLink={ `/projects/${ project.id }` }
-              links={ [
-                {
-                  name: 'Transcripts',
-                  link: `/projects/${ project.id }/transcripts`
-                },
-                {
-                  name: 'Paper-Edits',
-                  link: `/projects/${ project.id }/paperedits`
-                },
-                {
-                  name: 'Users',
-                  link: `/projects/${ project.id }/users`
-                }
-
-              ] }
-            />
-            );
-          } else {
-            return null;
-          }
-        })
-          .filter((project) => {
-            return project !== null;
-          });
+  handleDelete = (id) => {
+    // TODO: API + server side request for delete
+    // on successful then update state
+    Api.deleteProject(id).then((res) => {
+      if (res.status === 'ok') {
+        const tmpNewList = this.state.projectsList.filter(function( obj ) {
+          return obj.id !== id;
+        });
+        this.setState({
+          projectsList: tmpNewList
+        });
+      } else {
+        // TODO: some error handling, error message saying something went wrong
       }
+    });
+  }
 
-      return (
-        <Container>
-          <CustomNavbar
-            links={ [
-              {
-                name: 'Projects',
-                link: '/projects'
-              },
-              {
-                name: 'New Project',
-                link: '/projects/new',
-              }
-            ] }
-          />
-          <br/>
-          <CustomBreadcrumb
-            items={ [ {
-              name: 'Projects'
-            }
-            ] }
-          />
+  // To be able to do REST for cards for - Projects, transcripts, paperedits
+  getShowLinkForCard = (id) => {
+    return `/projects/${ id }`;
+  }
 
-          <InputGroup className="mb-3">
-            <FormControl
-              onChange={ this.handleSearch }
-              placeholder="Search for project title or description"
-              aria-label="search"
-              aria-describedby="search"
-            />
-            <InputGroup.Append>
-              <InputGroup.Text id="basic-addon2">
-                <FontAwesomeIcon icon={ faSearch } />
-              </InputGroup.Text>
-            </InputGroup.Append>
-          </InputGroup>
+  linkToNew = () => {
+    return `/projects/new`;
+  };
 
-          <section style={ { height: '75vh', overflow: 'scroll' } }>
-            {projects}
-          </section>
+  render() {
 
-          <Row>
-            <Col className="d-none d-sm-block">
-              <CustomFooter />
-            </Col>
-            <Col className="d-lg-block d-md-block">
-              <CustomFooter />
-            </Col>
-          </Row>
-        </Container>
-      );
-    }
+    return (
+      <ListPageTemplate
+        itemsList={ this.state.projectsList }
+        handleDelete={ this.handleDelete }
+        modelName={ 'projects' }
+        getShowLinkForCard={ this.getShowLinkForCard }
+        linkToNew={ this.linkToNew }
+        // showLink for customCard?
+        navbarLinks={ [
+          {
+            name:   <span> <FontAwesomeIcon icon={ faFolder } />  Projects</span>,
+            link: '/projects'
+          },
+          {
+            name:  <span> <FontAwesomeIcon icon={ faFolderPlus } />  NewProject</span>,
+            link: '/projects/new',
+          }
+        ] }
+        breadCrumbItems={
+          [ {
+            name: 'Projects'
+          }
+          ]
+        }
+      />
+    );
+  }
 }
 
 export default Projects;
