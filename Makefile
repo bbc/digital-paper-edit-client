@@ -5,38 +5,38 @@
 # all: react-start server-start
 
 # React
-react-install:
+install-react:
 	@echo "React npm install"
 	cd ./packages/client && npm install
 
-react-start:
+start-react:
 	@echo "React start"
 	cd ./packages/client && npm start
 
-react-build: react-install
+build-react: react-install
 	@echo "React build"
 	cd ./packages/client && npm run build
 
 # Server
-server-install:
+install-server:
 	@echo "Server install"
 	cd ./packages/server && npm install
 
-server-start:
+start-server:
 	@echo "Server start"
 	cd ./packages/server && npm start
 
 # Electron
-electron-install:
+install-electron:
 	@echo "electron install"
 	cd ./packages/electron && npm install
 
-electron-start:
+start-electron:
 	@echo "electron start"
 	# need to start react-start in seprate build
 	cd ./packages/electron && npm start
 
-electron-build: react-build
+build-electron: react-build
 	@echo "Electron build"
 	# does areact-build
 	# clears build folder inside of electron
@@ -48,7 +48,7 @@ electron-build: react-build
 	cd ./packages/electron && npm run build:mwl
 
 # Adobe CEP Panel 
-cept-panel-setup:
+setup-cep-panel:
 	@echo "Setting Premiere debug mode to accept unsigned extensions"
 	defaults write com.adobe.CSXS.5 PlayerDebugMode 1
 	defaults write com.adobe.CSXS.6 PlayerDebugMode 1
@@ -56,7 +56,7 @@ cept-panel-setup:
 	defaults write com.adobe.CSXS.8 PlayerDebugMode 1
 	@echo "Done, please restart your computer"
 
-cep-panel-assemble:
+assemble-cep-panel:
 	@echo "Adobe CEP Panel - Assemble relevant files"
 	# TODO: clear directory  ./packages/cep/build and recreate 
 	rm -rf ./packages/cep/build
@@ -69,7 +69,7 @@ cep-panel-assemble:
 	# &&  sync-files ./package.json adobe-panel-build/package.json 
 	# && sync-files node_modules  adobe-panel-build/node_modules
 
-cep-panel-start: cep-panel-assemble
+start-cep-panel: cep-panel-assemble
 	@echo "Adobe CEP Panel start"
 	@echo "make directory for Adobe CEP extensions if not present"
 	mkdir -p ~/Library/Application\ Support/Adobe/CEP/extensions/
@@ -77,7 +77,7 @@ cep-panel-start: cep-panel-assemble
 	cd ./packages/cep/build && cp -R $PWD ~/Library/Application\ Support/Adobe/CEP/extensions/autoedit2-panel
 	# sync-files adobe-panel-src ~/Library/Application\\ Support/Adobe/CEP/extensions/autoedit2-panel
 	
-cep-panel-build: react-build cep-panel-assemble
+build-cep-panel: react-build cep-panel-assemble
 	@echo "Adobe CEP Panel build"
 	@echo "Adobe CEP Panel - packaging and code signing for distribution"
 	# node ./package/cep/scripts/sign-and-package-adobe-panel.js

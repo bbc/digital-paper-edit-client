@@ -42,6 +42,10 @@ require('./routes/transcripts.js')(app);
 require('./routes/labels.js')(app);
 require('./routes/annotations.js')(app);
 require('./routes/users.js')(app);
+// TODO: status should probably not always return ok?
+// eg if server is failing/crashed should return something else
+// so that the instance can be terminated? or is not necessary to do this explicitly?
+require('./routes/status.js')(app);
 
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
