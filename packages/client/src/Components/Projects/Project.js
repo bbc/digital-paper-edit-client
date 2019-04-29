@@ -3,14 +3,11 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Tabs from 'react-bootstrap/Tabs';
-import Tab from 'react-bootstrap/Tab';
 import Button from 'react-bootstrap/Button';
-
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
-
+import navbarLinks from '../lib/custom-navbar-links';
 import Api from '../../Api/index.js';
 
 class Project extends Component {
@@ -18,52 +15,29 @@ class Project extends Component {
     super(props);
     this.state = {
       projectId: this.props.match.params.projectId,
-      project: null
+      project: null,
+      projectTitle: ''
     };
 
   }
 
   componentDidMount = () => {
     Api.getProject(this.state.projectId).then((tmpProject) => {
-      this.setState({ project: tmpProject });
+      console.log(tmpProject);
+      this.setState({ project: tmpProject,
+        projectTitle: tmpProject.title,
+        projectDescription: tmpProject.description
+      });
     });
   }
 
   render() {
+    console.log(navbarLinks(this.state.projectId));
+
     return (
       <Container>
         <CustomNavbar
-          links={ [
-            {
-              name: 'Projects',
-              link: '/projects'
-            },
-            {
-              name: 'New Projects',
-              link: '/projects/new'
-            },
-            {
-              name: 'Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts`
-            },
-            {
-              name: 'New Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts/new`
-            },
-            {
-              name: 'Paper Edits',
-              link: `/projects/${ this.state.projectId }/paperedits`
-            },
-            {
-              name: 'New Paper Edit',
-              link: `/projects/${ this.state.projectId }/paperedits/new`
-            },
-            {
-              name: 'Users',
-              link: `/projects/${ this.state.projectId }/users`
-            }
-          ]
-          }
+          links={ navbarLinks(this.state.projectId) }
         />
         <br/>
         <CustomBreadcrumb
@@ -73,39 +47,36 @@ class Project extends Component {
           },
           {
             // TODO: project title
-            name: `${ this.state.project ? this.state.project.title : '' }`
+            name: `${ this.state.project ? this.state.projectTitle : '' }`
           }
           ] }
         />
         <Row>
-          <Col xs={ 12 } sm={ 6 } md={ 6 } lg={ 6 } xl={ 6 }>
+          <Col xs={ 12 } sm={ 4 } md={ 4 } lg={ 4 } xl={ 4 }>
             <LinkContainer to={ `/projects/${ this.state.projectId }/transcripts` }>
               <Button variant="outline-primary" size="lg" block>Transcripts</Button>
             </LinkContainer>
             <br/>
           </Col>
-          <Col xs={ 12 } sm={ 6 } md={ 6 } lg={ 6 } xl={ 6 }>
+          <Col xs={ 12 } sm={ 4 } md={ 4 } lg={ 4 } xl={ 4 }>
             <LinkContainer to={ `/projects/${ this.state.projectId }/paperedits` }>
               <Button variant="outline-primary" size="lg" block>Paper-Edits</Button>
             </LinkContainer>
             <br/>
           </Col>
-        </Row>
-
-        <Row>
-          <Col xs={ 12 } sm={ 12 } md={ 12 } lg={ 12 } xl={ 12 }>
+          <Col xs={ 12 } sm={ 4 } md={ 4 } lg={ 4 } xl={ 4 }>
             <LinkContainer to={ `/projects/${ this.state.projectId }/users` }>
               <Button variant="outline-primary" size="lg" block>Users</Button>
             </LinkContainer>
           </Col>
         </Row>
-
-        <Row>
-          <Col >
-            <CustomFooter />
+        <Row >
+          <Col xs={ 12 } sm={ 12 } md={ 12 } lg={ 12 } xl={ 12 }>
+            <h1>{this.state.projectTitle}</h1>
+            <p>{this.state.projectDescription}</p>
           </Col>
         </Row>
-
+        <CustomFooter />
       </Container>
     );
   }

@@ -6,19 +6,21 @@ import { Redirect } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFolder, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
 
 import Api from '../../Api/index.js';
 
-import './index.module.css';
-
 class NewProject extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'Test',
+      // TODO: Tmp title text for debugging, remove for production
+      // replace with ''
+      title: 'Test Project 9',
       description: '',
       validated: false,
       redirect: false,
@@ -62,7 +64,6 @@ class NewProject extends Component {
   }
 
   render() {
-    const { validated } = this.state;
 
     return (
       <Container>
@@ -71,12 +72,12 @@ class NewProject extends Component {
         <CustomNavbar
           links={ [
             {
-              name: 'Projects',
+              name:   <span> <FontAwesomeIcon icon={ faFolder } />  Projects</span>,
               link: '/projects'
             },
             {
-              name: 'New Project',
-              link: '/projects/new'
+              name:  <span> <FontAwesomeIcon icon={ faFolderPlus } />  NewProject</span>,
+              link: '/projects/new',
             }
           ] }
         />
@@ -96,7 +97,7 @@ class NewProject extends Component {
 
         <Form
           noValidate
-          validated={ validated }
+          validated={ this.state.validated }
           onSubmit={ e => this.handleSubmit(e) }
         >
           <Form.Group controlId="formBasicEmail">
@@ -119,6 +120,7 @@ class NewProject extends Component {
             <Form.Label>Description </Form.Label>
             <Form.Control
               // required
+              // as="textarea" rows="3"
               type="text"
               placeholder="Enter a project description"
               value={ this.state.description }
