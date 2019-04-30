@@ -12,7 +12,6 @@ import CustomUserCard from '../lib/CustomUserCard/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
 import includesText from '../../Util/includes-text';
-import './index.module.css';
 
 class Users extends Component {
   constructor(props) {
@@ -137,7 +136,7 @@ class Users extends Component {
     // }
 
     return (
-      <Container>
+      <Container style={ { marginBottom: '5em' } }>
         <CustomNavbar
           links={ navbarLinks(this.state.projectId) }
         />
