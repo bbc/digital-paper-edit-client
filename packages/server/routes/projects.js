@@ -56,9 +56,13 @@ module.exports = (app) => {
     });
 
     // edit 
-    app.put(`/api/projects/:projectId/edit`, (req,res) => {
+    app.put(`/api/projects/:projectId`, (req,res) => {
         // TODO: db
-        console.log('projects','put',`/api/projects/${req.params.projectId}/edit`);
+        // to access data 
+        // req.body.title
+        // req.body.id || req.params.projectId
+        // req.body.description
+        console.log('projects','put',`/api/projects/${req.params.projectId}/edit`, req.body);
         res.status(200).json({status: "ok"});
     });
 

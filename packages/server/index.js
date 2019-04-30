@@ -3,10 +3,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const url = require('url');
 const app = express();
-const router = express.Router()
-app.use(bodyParser.json());
-const port = 5000;
+const router = express.Router();
 
+// https://stackoverflow.com/questions/24543847/req-body-empty-on-posts
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+const port = 5000;
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");

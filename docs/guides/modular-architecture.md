@@ -14,13 +14,13 @@
 
 <table>
 <tr>
-    <td>Client</td>
-    <td>Server</td>
-    <td>Services and functionalities</td>
-    <td>Database  </td>
+    <th>Client</th>
+    <th>Server</th>
+    <th>Services and functionalities</th>
+    <th>Database  </th>
   </tr>
   <tr>
-    <td colspan="4"> <b>Web app (Front End + Back End) + mobile responsive</b></td>
+    <th colspan="4"> <b>Web app (Front End + Back End) + mobile responsive</b></th>
   </tr>
   <tr>
     <td>React</td>
@@ -29,7 +29,7 @@
     <td>AWS +postgreSQL  </td>
   </tr>
    <tr>
-    <td colspan="4"><b>Electron</b></td>
+    <th colspan="4"><b>Electron</b></th>
   </tr>
   <tr>
     <td>React</td>
@@ -38,7 +38,7 @@
     <td>SQLite</td>
   </tr>
   <tr>
-    <td colspan="4"><b>Adobe CEP</b></td>
+    <th colspan="4"><b>Adobe CEP</b></th>
   </tr>
   <tr>
     <td>React</td>

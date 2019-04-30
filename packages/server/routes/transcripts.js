@@ -95,27 +95,45 @@ module.exports = (app) => {
     });
 
     // show
+    // exposes route + one query param option to get transcript data without transcript json
+    // http://localhost:5000/api/projects/1/transcripts/1
+    // http://localhost:5000/api/projects/1/transcripts/1?transcriptJson=false
     app.get(`/api/projects/:projectId/transcripts/:transcriptId`, (req,res) => {
         const projectId = req.params.projectId;
         const transcriptId = req.params.transcriptId;
-       // TODO: change this 
-        console.log('transcripts','get',`/api/projects/${projectId}/transcripts/${transcriptId}`);
-        res.status(200).json({
+        console.log('query',req.query);
+        const sampleTranscript2 = {
             projectTitle: 'Sample Project',
             transcriptTitle: 'Ted Talk Kate', 
             description: 'some optional description', 
             transcript: sampleTranscript,
             url: 'https://download.ted.com/talks/KateDarling_2018S-950k.mp4'
-        });
+        }
+        console.log('true', req.query.transcriptJson)
+
+        // `transcriptJson=false` doesn't return the transcriptJson
+        // if param is set to true or not specified then it returns it
+        if(req.query.transcriptJson && req.query.transcriptJson.toString() ==='false'){
+            console.log('true', req.query.transcriptJson)
+            // TODO: get title of transcript from DB
+           delete sampleTranscript2.transcript
+        }
+       // TODO: change this 
+        console.log('transcripts','get',`/api/projects/${projectId}/transcripts/${transcriptId}`);
+        res.status(200).json(sampleTranscript2);
        
     });
 
      // edit 
-     app.put(`/api/projects/:projectId/transcripts/:transcriptId/edit`, (req,res) => {
+     app.put(`/api/projects/:projectId/transcripts/:transcriptId`, (req,res) => {
         const projectId = req.params.projectId;
         const transcriptId = req.params.transcriptId;
+        // to access data 
+        // req.body.title
+        // req.body.id || req.params.projectId
+        // req.body.description
         res.status(200).json({status:"ok"})
-        console.log('transcripts','edit',`/api/projects/${projectId}/transcripts/${transcriptId}/edit`);
+        console.log('transcripts','edit',`/api/projects/${projectId}/transcripts/${transcriptId}`,req.body);
     });
 
     // delete 
