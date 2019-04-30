@@ -8,8 +8,6 @@ import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
 
-import './index.module.css';
-
 class NewPaperEdit extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +28,7 @@ class NewPaperEdit extends Component {
 
   render() {
     return (
-      <Container>
+      <Container style={ { marginBottom: '5em' } }>
         {/* TODO: import navbar */}
         <CustomNavbar
           links={ [

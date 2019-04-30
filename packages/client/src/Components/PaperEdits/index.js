@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
+import {
+  faPen,
+  faSave,
+  faFolderOpen,
+  faFolder,
+  faFolderPlus,
+  faFileAlt,
+  faFile,
+  faTasks,
+  faCut,
+  faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 import ListPageTemplate from '../lib/ListPageTemplate/index.js';
 import Api from '../../Api/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
-import './index.module.css';
 
 class PaperEdits extends Component {
   constructor(props) {
@@ -63,6 +72,7 @@ class PaperEdits extends Component {
 
     return (
       <ListPageTemplate
+        icon={ <FontAwesomeIcon icon={ faCut } /> }
         itemsList={ this.state.paperEditsList }
         handleDelete={ this.handleDelete }
         modelName={ 'paperedits' }
