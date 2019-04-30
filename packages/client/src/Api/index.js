@@ -1,3 +1,4 @@
+import querystring from 'querystring';
 import { isBrowser, isElectron, whichJsEnv } from '../Util/which-js-env/index.js';
 import postData from './post-data.js';
 
@@ -23,7 +24,7 @@ class Api {
   // Projects URL update
   // eslint-disable-next-line class-methods-use-this
   updateProjectUrl(id) {
-    return `${ process.env.REACT_APP_SERVER_URL }/api/projects/${ id }/edit`;
+    return `${ process.env.REACT_APP_SERVER_URL }/api/projects/${ id }`;
   }
   // Projects URL  delete
   // eslint-disable-next-line class-methods-use-this
@@ -46,8 +47,10 @@ class Api {
 
   // get Transcript show
   // eslint-disable-next-line class-methods-use-this
-  getTranscriptUrl(projectId, transcriptId) {
-    return `${ process.env.REACT_APP_SERVER_URL }/api/projects/${ projectId }/transcripts/${ transcriptId }`;
+  getTranscriptUrl(projectId, transcriptId, queryParamsOptions) {
+    const queryParams = queryParamsOptions ? `?${ querystring.stringify(queryParamsOptions) }` : '';
+
+    return `${ process.env.REACT_APP_SERVER_URL }/api/projects/${ projectId }/transcripts/${ transcriptId }${ queryParams }`;
   }
 
   // delete Transcript
@@ -106,11 +109,18 @@ class Api {
       });
   }
 
-  updateProject(id) {
-    return fetch(this.getProjectUrl(id), { mode: 'cors', method: 'PUT' })
+  updateProject(id, data) {
+    return fetch(this.getProjectUrl(id), {
+      mode: 'cors',
+      method: 'PUT',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
       .then(res => res.json())
       .then((json) => {
-        return json.project;
+        return json;
       });
   }
 
@@ -149,8 +159,24 @@ class Api {
   }
 
   // show
-  getTranscript(projectId, transcriptId) {
-    return fetch(this.getTranscriptUrl(projectId, transcriptId), { mode: 'cors' })
+  getTranscript(projectId, transcriptId, queryParamsOptions) {
+    return fetch(this.getTranscriptUrl(projectId, transcriptId, queryParamsOptions), { mode: 'cors' })
+      .then(res => res.json())
+      .then((json) => {
+        return json;
+      });
+  }
+
+  // update
+  updateTranscript(projectId, transcriptId, queryParamsOptions, data) {
+    return fetch(this.getTranscriptUrl(projectId, transcriptId, queryParamsOptions), {
+      mode: 'cors',
+      method: 'PUT',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
       .then(res => res.json())
       .then((json) => {
         return json;
