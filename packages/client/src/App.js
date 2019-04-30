@@ -14,7 +14,7 @@ import TranscriptAnnotate from './Components/Transcripts/TranscriptAnnotate/inde
 import TranscriptCorrect from './Components/Transcripts/TranscriptCorrect.js';
 
 import PaperEdits from './Components/PaperEdits/index.js';
-import PaperEdit from './Components/PaperEdits/PaperEdit.js';
+import PaperEdit from './Components/PaperEdits/PaperEdit';
 import NewPaperEdit from './Components/PaperEdits/NewPaperEdit.js';
 
 // import UserManual from './Components/UserManual';

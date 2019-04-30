@@ -1,5 +1,7 @@
 # https://opensource.com/article/18/8/what-how-makefile
-.PHONY: all react-install react-start react-build server-start electron-start electron-build cept-panel-setup cep-panel-assemble cep-panel-start cep-panel-build
+.PHONY: all install-react start-react build-react test-react\
+start-server start-electron build-electron \
+setup-cept-panel assemble-cep-panel start-cep-panel build-cep-panel 
 # .ONESHELL:
 
 # all: react-start server-start
@@ -13,6 +15,10 @@ start-react:
 	@echo "React start"
 	cd ./packages/client && npm start
 
+test-react:
+	@echo "React start"
+	cd ./packages/client && npm test
+
 build-react: react-install
 	@echo "React build"
 	cd ./packages/client && npm run build
@@ -25,6 +31,10 @@ install-server:
 start-server:
 	@echo "Server start"
 	cd ./packages/server && npm start
+
+test-server:
+	@echo "Test Server - no tests yet start"
+	# cd ./packages/client && npm test:watch
 
 # Electron
 install-electron:
