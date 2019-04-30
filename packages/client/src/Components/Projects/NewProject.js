@@ -30,7 +30,7 @@ class NewProject extends Component {
 
   handleSubmit(event) {
     const form = event.currentTarget;
-    if (form.checkValidity() === false) {
+    if (!form.checkValidity()) {
       event.preventDefault();
       event.stopPropagation();
     }
@@ -66,7 +66,7 @@ class NewProject extends Component {
   render() {
 
     return (
-      <Container>
+      <Container style={ { marginBottom: '5em' } }>
         {this.renderRedirect()}
         {/* TODO: import navbar */}
         <CustomNavbar

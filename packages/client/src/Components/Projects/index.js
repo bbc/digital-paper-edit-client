@@ -59,6 +59,7 @@ class Projects extends Component {
 
     return (
       <ListPageTemplate
+        icon={ <FontAwesomeIcon icon={ faFolder } /> }
         itemsList={ this.state.projectsList }
         handleDelete={ this.handleDelete }
         modelName={ 'projects' }
