@@ -40,11 +40,7 @@ class CustomCard extends Component {
           <Row>
             <Col xs={ 10 } sm={ 11 } md={ 11 } ld={ 11 } xl={ 11 }>
               <Card.Title>
-                {/* { (this.props.border? & this.props.border === 'secondary' )
-                || (this.props.border && this.props.border === 'danger') ?
-                  this.props.title
-                  : <a href={ `#${ this.props.showLink() }` }>  {this.props.title}</a> } */}
-                {title}
+                {this.props.icon ? this.props.icon : ''} {title}
               </Card.Title>
             </Col>
             <Col xs={ 2 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>

@@ -77,6 +77,7 @@ class ListPageTemplate extends Component {
 
           if (item.display) {
             return ( <CustomCard
+              icon={ this.props.icon }
               key={ 'key__' + item.id }
               id={ item.id }
               projectId={ item.id }
@@ -147,7 +148,7 @@ class ListPageTemplate extends Component {
       }
 
       return (
-        <Container>
+        <Container style={ { marginBottom: '5em' } }>
           <CustomNavbar
             links={ this.props.navbarLinks }
           />

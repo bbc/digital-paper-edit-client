@@ -16,7 +16,7 @@ class CustomUserCard extends Component {
           <Row>
             <Col xs={ 10 } sm={ 11 } md={ 11 } ld={ 11 } xl={ 11 }>
               <Card.Title>
-                {this.props.userName}
+                <FontAwesomeIcon icon={ faUser } /> {this.props.userName}
               </Card.Title>
             </Col>
             <Col xs={ 2 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
