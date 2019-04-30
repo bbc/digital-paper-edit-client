@@ -37,6 +37,7 @@ class PaperEdit extends Component {
     fetch('http://localhost:5000/api/projects/1/paperedits/1', { mode: 'cors' })
       .then(res => res.json())
       .then((json) => {
+        console.log(json);
         this.setState({ paperEditJson: json.paperEdit, title: json.title, projectTitle: json.projectTitle });
       });
     console.log(this.props.match.params);

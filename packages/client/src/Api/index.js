@@ -50,7 +50,7 @@ class Api {
   getTranscriptUrl(projectId, transcriptId, queryParamsOptions) {
     const queryParams = queryParamsOptions ? `?${ querystring.stringify(queryParamsOptions) }` : '';
 
-    return `${ process.env.REACT_APP_SERVER_URL }/api/projects/${ projectId }/transcripts/${ transcriptId }${ queryParams }`;
+    return `${ process.env.REACT_APP_SERVER_URL }/api/projects/${ projectId }/transcripts/${ transcriptId }${ queryParams }`.trim();
   }
 
   // delete Transcript

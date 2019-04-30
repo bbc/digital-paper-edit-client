@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { progressBarFetch, setOriginalFetch, ProgressBar } from 'react-fetch-progressbar';
+// import { progressBarFetch, setOriginalFetch, ProgressBar } from 'react-fetch-progressbar';
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
@@ -11,8 +11,8 @@ import Api from '../../Api/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
 import './index.module.css';
 
-setOriginalFetch(window.fetch);
-window.fetch = progressBarFetch;
+// setOriginalFetch(window.fetch);
+// window.fetch = progressBarFetch;
 
 class NewTranscript extends Component {
   constructor(props) {
@@ -115,7 +115,7 @@ class NewTranscript extends Component {
   render() {
     return (
       <>
-        <Container style={ { marginBottom: '5em' } } fluid>
+        {/* <Container style={ { marginBottom: '5em' } } fluid>
           <ProgressBar style={ {
             position: 'absolute',
             top: '0',
@@ -126,7 +126,7 @@ class NewTranscript extends Component {
             height: '10px',
           } } />
 
-        </Container>
+        </Container> */}
 
         <Container>
           {this.renderRedirect()}

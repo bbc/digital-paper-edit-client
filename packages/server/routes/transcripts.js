@@ -1,6 +1,5 @@
 // Dummy data to mock the server 
 const path = require('path');
-const kaldiTranscript = require('../sample-data/kaldi-transcript.json')
 const sampleProjects = require('../sample-data/projects.sample.json');
 const sampleTranscripts = require('../sample-data/transcripts.sample.json');
 const sampleTranscript = require('../sample-data/transcript.sample.json');
@@ -128,6 +127,7 @@ module.exports = (app) => {
      app.put(`/api/projects/:projectId/transcripts/:transcriptId`, (req,res) => {
         const projectId = req.params.projectId;
         const transcriptId = req.params.transcriptId;
+        console.log(req.body)
         // to access data 
         // req.body.title
         // req.body.id || req.params.projectId

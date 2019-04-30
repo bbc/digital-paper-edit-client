@@ -16,6 +16,7 @@ import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import Api from '../../Api/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
 import CustomFooter from '../lib/CustomFooter/index.js';
+import CustomAlert from '../lib/CustomAlert/index.js';
 
 class TranscriptCorrect extends Component {
   constructor(props) {
@@ -26,7 +27,8 @@ class TranscriptCorrect extends Component {
       transcriptJson: null,
       url: null,
       projectTitle: '',
-      transcriptTitle: ''
+      transcriptTitle: '',
+      savedNotification: null
     };
     this.transcriptEditorRef = React.createRef();
   }
@@ -50,7 +52,32 @@ class TranscriptCorrect extends Component {
     alert('save to server');
 
     const { data, ext } = this.transcriptEditorRef.current.getEditorContent('digitalpaperedit');
-    console.log(data, ext);
+    const queryParamsOptions = false;
+    Api.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, data).then((response) => {
+      if (response.status === 'ok') {
+      // show message or redirect
+        console.log('updated');
+        // this.setState({ redirect: true, newProjectId: response.projectId });
+        this.setState({
+          savedNotification: <CustomAlert
+            dismissable={ true }
+            variant={ 'success' }
+            heading={ 'Transcript saved' }
+            message={ <p>Transcript: <b>{this.state.transcriptTitle}</b> has been saved</p> }
+          />
+        });
+      }
+    }).catch((e) => {
+      console.error('error saving transcript:: ', e);
+      this.setState({
+        savedNotification: <CustomAlert
+          dismissable={ true }
+          variant={ 'danger' }
+          heading={ 'Error saving transcript' }
+          message={ <p>There was an error trying to save this transcript: <b>{this.state.transcriptTitle}</b></p> }
+        />
+      });
+    });
   }
 
   render() {
@@ -97,6 +124,7 @@ class TranscriptCorrect extends Component {
             <br/>
           </Col>
         </Row>
+        {this.state.savedNotification}
         {/* <Row> */}
         {this.state.transcriptJson !== null &&
           <TranscriptEditor

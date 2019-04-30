@@ -6,7 +6,10 @@ const app = express();
 const router = express.Router();
 
 // https://stackoverflow.com/questions/24543847/req-body-empty-on-posts
-app.use(bodyParser.json())
+// https://github.com/expressjs/body-parser#limit
+// > Controls the maximum request body size. If this is a number, then the value specifies the number of bytes; if it is a string, the value is passed to the bytes library for parsing. Defaults to '100kb'.
+app.use(bodyParser.json( { limit: '50MB' } ));
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -14,7 +17,7 @@ const port = 5000;
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
 });
