@@ -204,7 +204,7 @@ class TranscriptAnnotate extends Component {
     }
 
     return (
-      <Container fluid={ true } style={ { backgroundColor: '#f9f9f9' } }>
+      <Container fluid={ true } style={ { backgroundColor: '#f9f9f9', marginBottom: '5em' } }>
         <style scoped>
           {`.timecode:hover{
                 text-decoration: underline;

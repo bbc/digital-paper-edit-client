@@ -115,7 +115,7 @@ class NewTranscript extends Component {
   render() {
     return (
       <>
-        <Container fluid>
+        <Container style={ { marginBottom: '5em' } } fluid>
           <ProgressBar style={ {
             position: 'absolute',
             top: '0',

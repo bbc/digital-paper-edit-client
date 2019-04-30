@@ -1,4 +1,14 @@
 import React, { Component } from 'react';
+import { faPen,
+  faSave,
+  faFolderOpen,
+  faFolderPlus,
+  faFileAlt,
+  faFile,
+  faTasks,
+  faCut,
+  faUsers } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ListPageTemplate from '../lib/ListPageTemplate/index.js';
 import Api from '../../Api/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
@@ -60,6 +70,7 @@ class Transcripts extends Component {
   render() {
     return (
       <ListPageTemplate
+        icon={ <FontAwesomeIcon icon={ faFileAlt } /> }
         itemsList={ this.state.transcriptsList }
         handleDelete={ this.handleDelete }
         modelName={ 'transcripts' }

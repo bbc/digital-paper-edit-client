@@ -15,6 +15,7 @@ import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 // import CustomFooter from '../lib/CustomFooter/index.js';
 import Api from '../../Api/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
+import CustomFooter from '../lib/CustomFooter/index.js';
 
 class TranscriptCorrect extends Component {
   constructor(props) {
@@ -54,7 +55,7 @@ class TranscriptCorrect extends Component {
 
   render() {
     return (
-      <Container fluid={ true }>
+      <Container style={ { marginBottom: '5em' } } fluid>
 
         <CustomNavbar
           links={ navbarLinks(this.state.projectId) }
@@ -111,7 +112,7 @@ class TranscriptCorrect extends Component {
           />}
         {/* </Row> */}
 
-        {/* <CustomFooter /> */}
+        <CustomFooter />
       </Container>
     );
   }
