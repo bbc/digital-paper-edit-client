@@ -3,7 +3,6 @@
 // Error codes https://codeburst.io/know-your-http-status-a-cheat-sheet-for-http-status-codes-5fb43863e589
 
 // Dummy data to mock the server 
-const kaldiTranscript = require('../sample-data/kaldi-transcript.json')
 const sampleProjects = require('../sample-data/projects.sample.json');
 const sampleTranscripts = require('../sample-data/transcripts.sample.json');
 const samplePaperEdits = require('../sample-data/paper-edits.sample.json');
