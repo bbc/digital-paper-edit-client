@@ -71,7 +71,7 @@ Pros:
 * Reduced cost of execution
 * Improved application resiliency
 * Decouple server architecture to code
-* Idempotent
+* [Idempotent](https://en.wikipedia.org/wiki/Idempotence)
 
 Cons:
 
