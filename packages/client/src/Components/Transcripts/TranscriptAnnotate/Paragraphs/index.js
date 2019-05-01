@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover';
+import Button from 'react-bootstrap/Button';
 import { shortTimecode } from '@bbc/react-transcript-editor/timecodeConverter';
 
 import styles from './index.module.css';
@@ -69,7 +71,20 @@ class Paragraphs extends Component {
       paragraphDisplayPreference.borderColor = 'lightgray';
       paragraphDisplayPreference.padding = '0.5em';
 
+      const popover = (
+        <Popover id="popover-basic" title="Popover right">
+          And here's some <strong>amazing</strong> content. It's very engaging. right?
+        </Popover>
+      );
+
+      const Example = (words) => (
+        <OverlayTrigger trigger="click" placement="right" overlay={ popover }>
+          <Button variant="success" size="sm">Click me to see</Button>
+        </OverlayTrigger>
+      );
+
       return (
+
         <div
           style={ this.props.showParagraphsMatchingSearch ? paragraphDisplayPreference : {} }
           className="paragraph"
@@ -80,7 +95,7 @@ class Paragraphs extends Component {
             <Col xs={ 8 } sm={ 8 } md={ 3 } lg={ 3 } xl={ 2 }>
               <span className={ [ styles.speaker, styles.unselectable ].join(' ') }
                 tabIndex="0"
-              >Speaker Long Name</span>
+              >Speaker Long Name   </span>
             </Col>
             <Col xs={ 4 } sm={ 4 } md={ 2 } lg={ 2 } xl={ 1 }
               style={ { padding: '0em', textAlign: 'center' } }
@@ -94,11 +109,14 @@ class Paragraphs extends Component {
                 { shortTimecode(paragraph[0].start) }
               </span>
             </Col>
+            {/* <Example/> */}
             <Col xs={ 12 } sm={ 12 } md={ 7 } lg={ 7 } xl={ 9 } >
               {paragraph.map(word => {
                 return (
                   <span
-                    className={ 'words' }
+                    className={ [ 'words'
+                      // , styles.highlightedWord
+                    ].join(' ') }
                     data-start={ word.start }
                     // TODO: make/Use helper function in Util - removePunctuation
                     data-text={ word.text

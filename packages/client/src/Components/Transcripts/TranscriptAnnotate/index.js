@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Dropdown from 'react-bootstrap/Dropdown';
 import Collapse from 'react-bootstrap/Collapse';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -55,17 +56,6 @@ class TranscriptAnnotate extends Component {
       showParagraphsMatchingSearch: false, //
       // TODO: this needs to be called using API
       labelsOptions: [
-        // { id:0, value: 'orange', label: 'Default', color: 'orange', description: 'A default label' },
-        // { id:0, value: 'ocean', label: 'Politics 2', color: '#00B8D9', description: 'Test description' },
-        // { id:1, value: 'blue', label: 'Economics', color: '#0052CC', description: '' },
-        // { id:2, value: 'purple', label: 'Introduction', color: '#5243AA', description: '' },
-        // { id:3, value: 'red', label: 'Brexit', color: '#FF5630', description: '' },
-        // { id:4, value: 'orange', label: 'Conclusion', color: '#FF8B00', description: '' },
-        // { id:5, value: 'yellow', label: 'Europe', color: '#FFC400', description: '' },
-        // { id:6, value: 'green', label: 'Ritual', color: '#36B37E', description: '' },
-        // { id:7, value: 'forest', label: 'Gifts', color: '#00875A', description: '' },
-        // { id:8, value: 'slate', label: 'Computer vision', color: '#253858', description: '' },
-        // { id:9, value: 'silver', label: 'Open Source', color: '#666666', description: '' }
       ],
       // TODO: combine with transcript + timecodes
       speakersOptions : [
@@ -319,7 +309,7 @@ class TranscriptAnnotate extends Component {
 
             {/* Highlight Btn? */}
             <br/>
-            <ButtonGroup style={ { width: '100%' } } size="sm">
+            {/* <ButtonGroup style={ { width: '100%' } } size="sm">
               <Button variant="outline-primary" onClick={ this.handleShow } >
           Highlight <FontAwesomeIcon icon={ faHighlighter } />
               </Button>
@@ -327,7 +317,25 @@ class TranscriptAnnotate extends Component {
                 <FontAwesomeIcon icon={ faQuestionCircle } />
               </Button>
 
-            </ButtonGroup>
+            </ButtonGroup> */}
+
+            <Dropdown as={ ButtonGroup } style={ { width: '100%' } } >
+              <Button variant="outline-primary"> Highlight <FontAwesomeIcon icon={ faHighlighter } /></Button>
+              <Dropdown.Toggle split variant="outline-primary" id="dropdown-split-basic" />
+              <Dropdown.Menu>
+                {this.state.labelsOptions.map((label) => {
+                  return (
+                    <Dropdown.Item key={ label.id } hred="#/action-2">
+                      <Row>
+                        <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } style={ { backgroundColor: label.color } }></Col>
+                        <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }>{label.label}</Col>
+                      </Row>
+                    </Dropdown.Item>
+                  );
+                })}
+              </Dropdown.Menu>
+            </Dropdown>
+
             <Form.Text className="text-muted">
             TODO: some instructions on how to Highlight
             </Form.Text>
