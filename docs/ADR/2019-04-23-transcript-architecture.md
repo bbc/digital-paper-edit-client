@@ -135,6 +135,26 @@ only IP address based authentication.
 
 Both options will have the advantages of:
 
+<<<<<<< HEAD
+* being maintainable,
+* being transparent
+* being transferable
+* using existing pipelines
+  * It will have the benefits of using Cosmos, which means we will automatically
+have cert-based security and ELBs. We will also have a solid CI process around
+the project, including transparency around deployment issues.
+
+Both options will have the disadvantages of:
+
+* Initial learning curve around Cosmos (need to understand RHE7).
+* Extra files for Cosmos will be in an opensource repository, which will require
+  additional documentation and security checking.
+* Cost of AWS - not entirely sure how much it will be right now, but it will be
+  a minimum of 4 instances running in ``t2.small` for Option 1, and 2
+  `t2.small` instances for Option 2, plus lambda executions as well as SQS and
+  S3.
+* Locking in with AWS.
+=======
 * maintainable,
 * transferable
 * using existing pipelines
@@ -142,6 +162,7 @@ Both options will have the advantages of:
 Both options will have the disadvantages of:
 
 * Initial 
+>>>>>>> a7c87c0... Adding ADR draft for transcript architecture
 
 ### Option 1
 
@@ -162,9 +183,17 @@ test integration locally with Lambdas and Gateways.
 #### Advantages
 
 * Cheaper as there isn't a full instance running - Lambda.
+<<<<<<< HEAD
+* Better for the environment (less operational CO2 cost)
+=======
 * Better for the environment
+>>>>>>> a7c87c0... Adding ADR draft for transcript architecture
 
 #### Disadvantages
 
 * There could be a timeout issue for Lambda
+<<<<<<< HEAD
+* Difficulty in debugging due to Lambda
+=======
 * Difficulty in debugging
+>>>>>>> a7c87c0... Adding ADR draft for transcript architecture
