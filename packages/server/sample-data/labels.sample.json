@@ -7,13 +7,6 @@
       "description": "A default label"
     },
     {
-      "id": 0,
-      "value": "politics",
-      "label": "Politics",
-      "color": "#00B8D9",
-      "description": "Test description"
-    },
-    {
       "id": 1,
       "value": "economics",
       "label": "Economics",
@@ -75,5 +68,12 @@
       "label": "Open Source",
       "color": "#666666",
       "description": ""
+    },
+    {
+      "id": 10,
+      "value": "politics",
+      "label": "Politics",
+      "color": "#00B8D9",
+      "description": "Test description"
     }
   ]

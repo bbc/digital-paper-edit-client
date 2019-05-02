@@ -29,6 +29,8 @@ import SearchBar from './SearchBar/index.js';
 import Api from '../../../Api/index.js';
 import navbarLinks from '../../lib/custom-navbar-links';
 
+import getTimeFromUserWordsSelection from './get-user-selection.js';
+
 class TranscriptAnnotate extends Component {
   constructor(props) {
     super(props);
@@ -47,6 +49,7 @@ class TranscriptAnnotate extends Component {
       timecodeOffset: 0,
       searchString: '',
       sentenceToSearchCSS: '',
+      sentenceToSearchCSSInHighlights: '',
       wordsToSearchCSS: '',
       showTextSearchPreferences: false, //
       showLabelsSearchPreferences: false, //
@@ -54,6 +57,20 @@ class TranscriptAnnotate extends Component {
       selectedOptionLabelSearch: null,
       selectedOptionSpeakerSearch: null,
       showParagraphsMatchingSearch: false, //
+      annotations: [
+        {
+          'start':14.38,
+          'end': 18.14,
+          'labelId': 0,
+          'note': 'optional example text description for an annotation'
+        },
+        {
+          'start': 50.58,
+          'end': 51.65,
+          'labelId': 0,
+          'note': 'optional example text description for an annotation'
+        }
+      ],
       // TODO: this needs to be called using API
       labelsOptions: [
       ],
@@ -111,7 +128,7 @@ class TranscriptAnnotate extends Component {
       const searchString = e.target.value;
       this.setState({ searchString: searchString.toLowerCase() });
       //  "debounce" to optimise
-      onlyCallOnce(this.hilightWords(searchString), 500);
+      onlyCallOnce(this.highlightWords (searchString), 500);
     }
     // if empty string reset
     else if (e.target.value === '') {
@@ -127,12 +144,25 @@ class TranscriptAnnotate extends Component {
   // eg 'a day not so long ago' it will also highlight all the occurrences of 'a'
   // and other words in the sentence
   // there might be a way to narrow down with CSS selector
-  hilightWords = searchString => {
+  highlightWords = searchString => {
     const listOfSearchWords = searchString.toLowerCase().trim().split(' ');
     const pCSS = `.paragraph[data-paragraph-text*="${ listOfSearchWords.join(' ') }"]`;
 
     const wordsToSearchCSS = listOfSearchWords.map((searchWord, index) => {
-      let res = `${ pCSS } > div > div> span.words[data-text="${ searchWord
+      let res = `${ pCSS } > div > div > span.words[data-text="${ searchWord
+        .toLowerCase()
+        .trim() }"]`;
+      if (index < listOfSearchWords.length - 1) {
+        // console.log(index, listOfSearchWords.length);
+        res += ', ';
+      }
+
+      return res;
+    });
+    // Need to add an extra span to search annotation hilights
+    // TODO: refactor to make more DRY
+    const wordsToSearchCSSInHighlights = listOfSearchWords.map((searchWord, index) => {
+      let res = `${ pCSS } > div > div > span >span.words[data-text="${ searchWord
         .toLowerCase()
         .trim() }"]`;
       if (index < listOfSearchWords.length - 1) {
@@ -143,7 +173,8 @@ class TranscriptAnnotate extends Component {
       return res;
     });
     this.setState({
-      sentenceToSearchCSS: wordsToSearchCSS.join(' ')
+      sentenceToSearchCSS: wordsToSearchCSS.join(' '),
+      sentenceToSearchCSSInHighlights: wordsToSearchCSSInHighlights.join(' ')
     });
   };
 
@@ -178,13 +209,45 @@ class TranscriptAnnotate extends Component {
     alert('save to server');
   }
 
+  handleAnnotation = (e) => {
+    console.log(e.target.dataset);
+    const element = e.target;
+    window.element = element;
+    const selection = getTimeFromUserWordsSelection();
+    // console.log(selection);
+    if (selection) {
+      this.setState((state) => {
+        const { annotations } = state;
+        if (element.id && element.id === 'defaultHighlightBtn') {
+          selection.labelId = 0;
+        }
+        else {
+          selection.labelId = element.dataset.labelId;
+        }
+        selection.start = parseFloat(selection.start);
+        selection.end = parseFloat(selection.end);
+        // selection.note = '';
+        selection.note = 'Default text for optional note';
+        // selection.note = prompt('some optional note');
+        console.log(selection);
+
+        return {
+          annotations: [ ...annotations, selection ]
+        };
+      });
+    }
+
+  }
+
   render() {
     // TODO: change API to return transcript json already in this format
     // + with list of speaker labels
     let text;
-    console.log('this.state.transcriptJson', this.state.transcriptJson);
+    // console.log('this.state.transcriptJson', this.state.transcriptJson);
     if (this.state.transcriptJson) {
       text = <Paragraphs
+        labelsOptions={ this.state.labelsOptions }
+        annotations={ this.state.annotations }
         transcriptJson={ this.state.transcriptJson }
         searchString={ this.state.searchString }
         showParagraphsMatchingSearch={ this.state.showParagraphsMatchingSearch }
@@ -206,6 +269,7 @@ class TranscriptAnnotate extends Component {
         <style scoped>
           {/* This effects the styling of the Paragraph component */}
           {`${ this.state.sentenceToSearchCSS } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
+          {`${ this.state.sentenceToSearchCSSInHighlights } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
         </style>
         <style scoped>
           {`/* https://stackoverflow.com/questions/7492062/css-overflow-scroll-always-show-vertical-scroll-bar 
@@ -307,28 +371,17 @@ class TranscriptAnnotate extends Component {
               onLabelsUpdated={ this.onLabelsUpdated }
             />
 
-            {/* Highlight Btn? */}
             <br/>
-            {/* <ButtonGroup style={ { width: '100%' } } size="sm">
-              <Button variant="outline-primary" onClick={ this.handleShow } >
-          Highlight <FontAwesomeIcon icon={ faHighlighter } />
-              </Button>
-              <Button variant="outline-primary" onClick={ this.handleShow } >
-                <FontAwesomeIcon icon={ faQuestionCircle } />
-              </Button>
-
-            </ButtonGroup> */}
-
             <Dropdown as={ ButtonGroup } style={ { width: '100%' } } >
-              <Button variant="outline-primary"> Highlight <FontAwesomeIcon icon={ faHighlighter } /></Button>
-              <Dropdown.Toggle split variant="outline-primary" id="dropdown-split-basic" />
-              <Dropdown.Menu>
+              <Button variant="outline-primary" id="defaultHighlightBtn" onClick={ this.handleAnnotation } > Highlight <FontAwesomeIcon icon={ faHighlighter } /></Button>
+              <Dropdown.Toggle split variant="outline-primary" id="dropdown-split-basic" data-lable-id={ 0 }/>
+              <Dropdown.Menu onClick={ this.handleAnnotation }>
                 {this.state.labelsOptions.map((label) => {
                   return (
-                    <Dropdown.Item key={ label.id } hred="#/action-2">
+                    <Dropdown.Item key={ `label_id_${ label.id }` } data-label-id={ label.id } >
                       <Row>
-                        <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } style={ { backgroundColor: label.color } }></Col>
-                        <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }>{label.label}</Col>
+                        <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } style={ { backgroundColor: label.color } } data-label-id={ label.id }></Col>
+                        <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } data-label-id={ label.id }>{label.label}</Col>
                       </Row>
                     </Dropdown.Item>
                   );
@@ -337,9 +390,9 @@ class TranscriptAnnotate extends Component {
             </Dropdown>
 
             <Form.Text className="text-muted">
-            TODO: some instructions on how to Highlight
+            Select some text in the transcript then click the highlight button.
+              <br/>You can choose btween default or custom labels to categorise your annotations.
             </Form.Text>
-            {/* end Highlight Btn? */}
 
           </Col>
           <Col xs={ 12 } sm={ 9 } md={ 9 } lg={ 9 } xl={ 9 }>

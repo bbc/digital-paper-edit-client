@@ -19,7 +19,7 @@ test-react:
 	@echo "React start"
 	cd ./packages/client && npm test
 
-build-react: react-install
+build-react: install-react
 	@echo "React build"
 	cd ./packages/client && npm run build
 
@@ -46,7 +46,7 @@ start-electron:
 	# need to start react-start in seprate build
 	cd ./packages/electron && npm start
 
-build-electron: react-build
+build-electron: build-react
 	@echo "Electron build"
 	# does areact-build
 	# clears build folder inside of electron
@@ -87,7 +87,7 @@ start-cep-panel: cep-panel-assemble
 	cd ./packages/cep/build && cp -R $PWD ~/Library/Application\ Support/Adobe/CEP/extensions/autoedit2-panel
 	# sync-files adobe-panel-src ~/Library/Application\\ Support/Adobe/CEP/extensions/autoedit2-panel
 	
-build-cep-panel: react-build cep-panel-assemble
+build-cep-panel: build-react assemble-cep-panel
 	@echo "Adobe CEP Panel build"
 	@echo "Adobe CEP Panel - packaging and code signing for distribution"
 	# node ./package/cep/scripts/sign-and-package-adobe-panel.js

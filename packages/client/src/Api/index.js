@@ -2,7 +2,9 @@ import querystring from 'querystring';
 import { isBrowser, isElectron, whichJsEnv } from '../Util/which-js-env/index.js';
 import postData from './post-data.js';
 
-window.DB = () => {console.log('in react test ');};
+// TODO: To use different DB to connect ot Electron
+// window.DB = () => {console.log('in react test ');};
+
 class Api {
   /**
    * Projects URL

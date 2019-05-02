@@ -6,8 +6,16 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import Button from 'react-bootstrap/Button';
 import { shortTimecode } from '@bbc/react-transcript-editor/timecodeConverter';
-
+import splitParagraphByAnnotation from './split-paragraph-by-annotation.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faPen,
+  faTrashAlt
+} from '@fortawesome/free-solid-svg-icons';
+import Words from './Words.js';
 import styles from './index.module.css';
+import removePunctuation from '../../../../Util/remove-punctuation/index.js';
+import CustomAnnotationPopover from './CustomAnnotationPopover.js';
 
 class Paragraphs extends Component {
 
@@ -32,7 +40,7 @@ class Paragraphs extends Component {
     // and not in Kaldi format
     const words = this.props.transcriptJson.words.map(word => {
       return {
-        index: word.index,
+        index: word.id,
         start: word.start,
         end: word.end,
         text: word.text
@@ -56,12 +64,9 @@ class Paragraphs extends Component {
     text = paragraphs.map((paragraph, index) => {
       const paragraphText = paragraph
         .map(word => {
-          return word.text;
+          return removePunctuation(word.text);
         })
-        .join(' ')
-        // TODO: make helper function in Util - removePunctuation
-        .replace(/\.|\?|\!|\,|\;/, '')
-        .toLowerCase() ;
+        .join(' ');
 
       // TODO: handle/refactor search/Display to add support for filter results by speaker and labels
       const paragraphDisplayPreference = !paragraphText.includes(this.props.searchString.toLowerCase()) ? { display: 'none' } : { };
@@ -71,17 +76,80 @@ class Paragraphs extends Component {
       paragraphDisplayPreference.borderColor = 'lightgray';
       paragraphDisplayPreference.padding = '0.5em';
 
-      const popover = (
-        <Popover id="popover-basic" title="Popover right">
-          And here's some <strong>amazing</strong> content. It's very engaging. right?
-        </Popover>
-      );
+      // TODO: something around parafraph, start and end time, included or overlappng in labels start and end time
+      // to do the filtering
 
-      const Example = (words) => (
-        <OverlayTrigger trigger="click" placement="right" overlay={ popover }>
-          <Button variant="success" size="sm">Click me to see</Button>
-        </OverlayTrigger>
-      );
+      class CustomOverlayTrigger extends Component {
+        render() {
+          const label = this.props.labelsOptions.find((label) => {
+            return label.id === 2;
+          });
+
+          return (
+            <OverlayTrigger trigger="click" placement="bottom"
+              overlay={
+                <Popover id="popover-basic">
+                  <Row>
+                    {/* TODO: should/could have a select to change the label + listener to save
+            As well as cross to delete it */}
+                    <Col md={ 1 } style={ { backgroundColor: label.color, marginLeft:'1em' } }></Col>
+                    <Col >
+                      {JSON.stringify( label)}
+                    </Col>
+                    <Col md={ 1 } style={ { marginRight:'1em' } }>
+                      <FontAwesomeIcon icon={ faTrashAlt } />
+                    </Col>
+                  </Row>
+                  <hr/>
+          A user note about this annotaiton, optional
+                  <br/>
+                  <FontAwesomeIcon icon={ faPen } />
+                </Popover>
+              }
+            >
+              <span className={ [ 'highlight', styles.highlightedWord ].join(' ') }>{this.props.words}</span>
+            </OverlayTrigger>
+          );
+        }
+      }
+
+      const annotation = {
+        'start':14.38,
+        'end': 18.14,
+        'labelId': 0,
+        'note': 'optional example text description for an annotation'
+      };
+      // this.state.annotations
+      const paragraphSplitByAnnotation = splitParagraphByAnnotation(annotation, paragraph);
+      // <Example text="some text" />;
+      // console.log('paragraph:: ', JSON.stringify(paragraph, null, 2));
+      let paragraphElement;
+      if (paragraphSplitByAnnotation) {
+
+        const before = <Words
+          paragraph={ paragraphSplitByAnnotation.before }
+          handleKeyDownWords={ this.handleKeyDownWords }
+        />;
+
+        const annotations = <Words
+          paragraph={ paragraphSplitByAnnotation.annotations }
+          handleKeyDownWords={ this.handleKeyDownWords }
+        />;
+
+        const after = <Words
+          paragraph={ paragraphSplitByAnnotation.after }
+          handleKeyDownWords={ this.handleKeyDownWords }
+        />;
+
+        paragraphElement = [ before, <CustomOverlayTrigger labelsOptions={ this.props.labelsOptions } words={ annotations }/>, after ];
+      }
+      // if there are no annotations in this paragraph
+      else {
+        paragraphElement = <Words
+          paragraph={ paragraph }
+          handleKeyDownWords={ this.handleKeyDownWords }
+        />;
+      }
 
       return (
 
@@ -111,28 +179,7 @@ class Paragraphs extends Component {
             </Col>
             {/* <Example/> */}
             <Col xs={ 12 } sm={ 12 } md={ 7 } lg={ 7 } xl={ 9 } >
-              {paragraph.map(word => {
-                return (
-                  <span
-                    className={ [ 'words'
-                      // , styles.highlightedWord
-                    ].join(' ') }
-                    data-start={ word.start }
-                    // TODO: make/Use helper function in Util - removePunctuation
-                    data-text={ word.text
-                      .replace(/\.|\?|\!|\,|\;/, '')
-                      .toLowerCase() }
-                    data-end={ word.end }
-                    key={ 'key_' + word.index + '_' + word.end }
-                    tabIndex="0"
-                    role="button"
-                    aria-pressed="false"
-                    onKeyDown={ this.handleKeyDownWords }
-                  >
-                    {word.text}{' '}
-                  </span>
-                );
-              })}
+              {paragraphElement}
             </Col>
           </Row>
         </div>

@@ -3,12 +3,12 @@
         "start": 635.42,
         "end": 637.72,
         "labelId": 3,
-        "description": "optional example text description for an annotation"
+        "note": "optional example text description for an annotation"
       },
       {
         "start": 735.42,
         "end": 737.72,
         "labelId": 3,
-        "description": "optional example text description for an annotation"
+        "note": "optional example text description for an annotation"
       }
 ]

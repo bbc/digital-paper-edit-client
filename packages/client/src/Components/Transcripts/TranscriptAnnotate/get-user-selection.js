@@ -7,7 +7,7 @@
 /**
  * TODO: at the moment only works for selections within a paragraph
  * @param {*} e - browser event
- * @returns - an object with start and end time
+ * @returns - an object with start and end time - eg {stat: "23.03", end: "39.61"}
  */
 function getTimeFromUserWordsSelection(e) {
   // https://stackoverflow.com/questions/11300590/how-to-captured-selected-text-range-in-ios-after-text-selection-expansion
@@ -21,7 +21,7 @@ function getTimeFromUserWordsSelection(e) {
     if (words.length !== 0) {
 
       return {
-        stat: words[0].dataset.start,
+        start: words[0].dataset.start,
         end: words[words.length - 1].dataset.end
       };
     }
