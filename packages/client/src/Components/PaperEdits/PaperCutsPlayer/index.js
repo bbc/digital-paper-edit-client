@@ -2,9 +2,10 @@
 import React from 'react';
 import VideoContext from 'videocontext';
 
-const getCanvas = (width, height) => {
+const getCanvas = (ref, width, height) => {
   return (
     <canvas
+      ref={ ref }
       className="video-canvas"
       width={ width }
       height={ height }
@@ -23,8 +24,12 @@ class PaperCutsPlayer extends React.PureComponent {
 
     super(props);
     this.playlist = playlist;
-    this.canvas = getCanvas(width, height);
-    this.videoCtx = new VideoContext(this.canvas);
+    this.canvasRef = React.createRef();
+    this.canvas = getCanvas(this.canvasRef, width, height);
+  }
+
+  componentDidMount() {
+    this.videoCtx = new VideoContext(this.canvasRef.current);
   }
 
   connect() {
