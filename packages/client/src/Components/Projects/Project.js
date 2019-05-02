@@ -25,7 +25,6 @@ class Project extends Component {
     super(props);
     this.state = {
       projectId: this.props.match.params.projectId,
-      project: null,
       title: '',
       description: '',
       formDisabled: true,
@@ -34,12 +33,14 @@ class Project extends Component {
   }
 
   componentDidMount = () => {
-    const tmpProject = ApiRouter.getProject(this.state.projectId);
-    this.setState({
-      project: tmpProject,
-      title: tmpProject.title,
-      description: tmpProject.description
+    const tmpProject = ApiRouter.getProject(this.state.projectId).then(tmpProject => {
+
+      this.setState({
+        title: tmpProject.title,
+        description: tmpProject.description
+      });
     });
+
   };
 
   handleTitleChange = event => {
@@ -119,7 +120,7 @@ class Project extends Component {
             },
             {
               // TODO: project title
-              name: `${ this.state.project ? this.state.title : '' }`
+              name: `${ this.state.title ? this.state.title : '' }`
             }
           ] }
         />
