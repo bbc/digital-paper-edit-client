@@ -39,6 +39,16 @@ class Project extends Component {
         title: tmpProject.title,
         description: tmpProject.description
       });
+    }).catch((e) => {
+      console.log('error:::: ', e);
+      this.setState({
+        savedNotification: <CustomAlert
+          dismissable={ true }
+          variant={ 'danger' }
+          heading={ 'Error could not contact the server' }
+          message={ <p>There was an error trying to get this transcript from the server</p> }
+        />
+      });
     });
 
   };
