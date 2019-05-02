@@ -16,11 +16,8 @@ const validateRESTMethod = (method) => {
 
 };
 
-const getCorsConfig = (method, data = {}) => {
-  let corsConfig = {
-    method: method,
-    mode: 'cors'
-  };
+const getCorsConfig = (method, data = {}, applicationType) => {
+  let corsConfig;
 
   if (method === 'PUT') {
     corsConfig = {
@@ -32,26 +29,47 @@ const getCorsConfig = (method, data = {}) => {
       }
     };
   } else if (method === 'POST') {
+
     corsConfig = {
       method: method,
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
+      // TODO: commenting all of these settings out as with those on file upload doesn't work :man-shrugging: . Needs further investigation.
+      // mode: 'no-cors',
+      // cache: 'no-cache',
+      // credentials: 'same-origin',
+      // headers: {
+      //   'Content-Type': 'application/json'
+      // },
+      // redirect: 'follow',
+      // referrer: 'no-referrer',
+      // NOTE: Form data contains a file, so should not be stringified
+      // body: data
+    };
+    // if sending data as a json file
+    if (applicationType === 'json') {
+      corsConfig.headers = {
         'Content-Type': 'application/json'
-      },
-      redirect: 'follow',
-      referrer: 'no-referrer',
-      body: JSON.stringify(data)
+      };
+      corsConfig.body = JSON.stringify(data);
+    }
+    // if sending something else like a video or audio file in form body
+    else {
+      corsConfig.body = data;
+    }
+  }
+  else {
+    corsConfig = {
+      method: method,
+      mode: 'cors'
     };
   }
 
   return corsConfig;
 };
 
-async function corsFetch(url, method = 'GET', data = {}) {
+async function corsFetch(url, method = 'GET', data = {}, applicationType) {
   validateRESTMethod(method);
-  const corsConfig = getCorsConfig(method, data);
+  const corsConfig = getCorsConfig(method, data, applicationType);
+  console.log(url, JSON.stringify(corsConfig, null, 2));
 
   return await fetch(url, corsConfig);
 }

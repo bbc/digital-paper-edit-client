@@ -9,6 +9,7 @@ import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
 import ApiWrapper from '../../ApiWrapper/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
+import CustomAlert from '../lib/CustomAlert/index.js';
 import './index.module.css';
 
 // setOriginalFetch(window.fetch);
@@ -27,7 +28,8 @@ class TranscriptForm extends Component {
       mediaFileSelected: false,
       title: '',
       description: '',
-      formData: null
+      formData: null,
+      savedNotification: null
     };
     // console.log(process.env);
   }
@@ -62,25 +64,34 @@ class TranscriptForm extends Component {
 
     formData.append('title', this.state.title);
     formData.append('description', this.state.description);
-    // TODO: probably restrict to just one file
-    // files.forEach((file, i) => {
-    //   formData.append(i, file);
-    // });
-    // formData.append(0, file);
 
-    // formData.append('title', this.state.title);
-    // formData.append('description', this.state.description);
-
-    // Move to API.js
-
+    // TODO: do you need a try catch?
     try {
-      const createdTranscript = ApiWrapper.createTranscript(this.state.projectId, this.state.formData);
-      this.setState({
-        uploading: false,
-        uploadCompleted: true,
-        redirect: true,
-        newTranscriptId: createdTranscript.transcriptId
-      });
+      ApiWrapper.createTranscript(this.state.projectId, this.state.formData)
+        .then(response => {
+          console.log('response ', response);
+          // show message or redirect
+          this.setState({
+            uploading: false,
+            uploadCompleted: true,
+            redirect: true,
+            newTranscriptId: response.transcriptId
+          });
+
+        }).catch((e) => {
+          console.log('error:::: ', e);
+          this.setState({
+            uploading: false,
+            redirect: false,
+            savedNotification: <CustomAlert
+              dismissable={ true }
+              variant={ 'danger' }
+              heading={ 'Error could not contact the server' }
+              message={ <p>There was an error trying to create this transcript on the server</p> }
+            />
+          });
+        });
+
     } catch (e) {
       console.error('error submitting:::', e);
     }
@@ -140,6 +151,7 @@ class TranscriptForm extends Component {
             }
           ] }
         />
+        {this.state.savedNotification}
 
         <Form
           noValidate

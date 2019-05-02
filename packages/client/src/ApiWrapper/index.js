@@ -16,18 +16,17 @@ class ApiWrapper {
 
   annotationsUrl = (projectId, transcriptId) => `${ this.transcriptsIdUrl(projectId, transcriptId) }/annotations`;
 
+  /**
+   * Projects
+   */
+
   async getAllProjects() {
-    // if (isBrowser()) {
     console.log(this.projectsUrl);
     const res = await corsFetch(this.projectsUrl);
     const json = await res.json();
 
     return json.projects;
   }
-
-  /**
-   * Projects
-   */
 
   async getProject(id) {
     const res = await corsFetch(this.projectsIdUrl(id));
@@ -37,7 +36,7 @@ class ApiWrapper {
   }
 
   async createProject(data) {
-    const res = await corsFetch(this.projectsUrl, 'POST', data);
+    const res = await corsFetch(this.projectsUrl, 'POST', data, 'json');
 
     return await res.json();
   }
@@ -68,8 +67,9 @@ class ApiWrapper {
   }
 
   async createTranscript(projectId, data) {
-    const res = await corsFetch(this.transcriptsUrl(projectId), data);
+    const res = await corsFetch(this.transcriptsUrl(projectId), 'POST', data);
     const json = await res.json();
+    console.log('createTranscript json', json);
 
     return json;
   }
