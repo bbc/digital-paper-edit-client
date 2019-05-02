@@ -1,10 +1,6 @@
 import querystring from 'querystring';
 import corsFetch from './cors_wrapper.js';
 
-window.DB = () => {
-  console.log('in react test ');
-};
-
 class ApiWrapper {
   projectsUrl = `${ process.env.REACT_APP_SERVER_URL }/api/projects`
   projectsIdUrl = (projectId) => `${ this.projectsUrl }/${ projectId }`;
@@ -27,16 +23,6 @@ class ApiWrapper {
     const json = await res.json();
 
     return json.projects;
-    // }
-    // TODO: to call electron, call the window.DB functions implemented in `/packages/electron/db/db.js`
-    // if (isElectron()) {
-    // TODO:
-    // return new Promise((resolve, reject) => {
-    //   resolve(false);
-    //   reject(false);
-    // });
-    // }
-    // TODO: CEP + error handling
   }
 
   /**
