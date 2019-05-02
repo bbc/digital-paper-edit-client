@@ -17,43 +17,58 @@ const getCanvas = (ref, width, height) => {
 class PaperCutsPlayer extends React.PureComponent {
   constructor(props) {
     const {
-      width = 1280,
-      height = 720,
-      playlist = []
+      width = 640,
+      height = 360,
+      playlist = [],
     } = props;
 
     super(props);
+
     this.playlist = playlist;
+    this.playing = false;
+
     this.canvasRef = React.createRef();
     this.canvas = getCanvas(this.canvasRef, width, height);
+
+    this.play = this.play.bind(this);
+    this.pause = this.pause.bind(this);
+    this.loadPlaylist = this.loadPlaylist.bind(this);
   }
 
   componentDidMount() {
-    this.videoCtx = new VideoContext(this.canvasRef.current);
+    this.videoCtx = new VideoContext(this.canvasRef.current, () => console.log('oops'));
+    this.loadPlaylist();
   }
 
-  connect() {
-    // Connect the created track to the ouput canvas so it can be rendered.
-    // You could also connect the video track to an effect node if you wanted to do effects.
-    VideoContext
-      .importSimpleEDL(this.videoCtx, this.playlist)
-      .connect(this.videoCtx.destination);
+  loadPlaylist() {
+    this.playlist.forEach(({ offset, start, duration, src }) => {
+      const videoNode = this.videoCtx.video(src, offset);
+      videoNode.start(start);
+      videoNode.stop(duration);
+      videoNode.connect(this.videoCtx.destination);
+    });
   }
 
   play() {
     this.videoCtx.play();
+    this.playing = true;
   }
 
   pause() {
     this.videoCtx.pause();
+    this.playing = false;
   }
 
   render() {
     return (
       <>
         {this.canvas}
-        {this.progressBar && this.progressBar}
-        {this.controls && this.controls}
+        <div
+          className="play-pause-button"
+          style={ { background: 'red', width: '100px', height: '100px' } }
+          onClick={ () => this.playing ? this.pause() : this.play() }
+        >
+        </div>
       </>
     );
   }
