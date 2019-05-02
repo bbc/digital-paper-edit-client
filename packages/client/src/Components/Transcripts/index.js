@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { faFileAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ListPageTemplate from '../lib/ListPageTemplate/index.js';
-import ApiRouter from '../../ApiRouter/index.js';
+import ApiWrapper from '../../ApiWrapper/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
 
 class Transcripts extends Component {
@@ -16,7 +16,7 @@ class Transcripts extends Component {
   }
 
   componentDidMount = () => {
-    ApiRouter.getTranscripts(this.state.projectId)
+    ApiWrapper.getTranscripts(this.state.projectId)
       // TODO: add error handling
       .then(json => {
         console.log(json);
@@ -37,7 +37,7 @@ class Transcripts extends Component {
 
     // TODO: API + server side request for delete
     // on successful then update state
-    ApiRouter.deleteTranscript(this.state.projectId, transcriptId).then((res) => {
+    ApiWrapper.deleteTranscript(this.state.projectId, transcriptId).then((res) => {
       if (res.status === 'ok') {
         const tmpNewList = this.state.transcriptsList.filter(function( obj ) {
           return obj.id !== transcriptId;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolder, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 import ListPageTemplate from '../lib/ListPageTemplate/index.js';
-import ApiRouter from '../../ApiRouter/index.js';
+import ApiWrapper from '../../ApiWrapper/index.js';
 
 class Projects extends Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class Projects extends Component {
 
   async componentDidMount () {
     // TODO: do we need to add user id in request?
-    const result = await ApiRouter.getAllProjects();
+    const result = await ApiWrapper.getAllProjects();
 
     if (result) {
       // add a display property for component cards search
@@ -31,7 +31,7 @@ class Projects extends Component {
   async handleDelete(id) {
     // TODO: API + server side request for delete
     // on successful then update state
-    const result = await ApiRouter.deleteProject(id);
+    const result = await ApiWrapper.deleteProject(id);
     const findId = (item) => item.id !== id;
 
     if (result.status === 'ok') {

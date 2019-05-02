@@ -12,7 +12,7 @@ import Button from 'react-bootstrap/Button';
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 // import CustomFooter from '../lib/CustomFooter/index.js';
-import ApiRouter from '../../ApiRouter/index.js';
+import ApiWrapper from '../../ApiWrapper/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
 import CustomFooter from '../lib/CustomFooter/index.js';
 import CustomAlert from '../lib/CustomAlert/index.js';
@@ -33,7 +33,7 @@ class TranscriptCorrect extends Component {
   }
 
   componentDidMount = () => {
-    ApiRouter.getTranscript(this.state.projectId, this.state.transcriptId)
+    ApiWrapper.getTranscript(this.state.projectId, this.state.transcriptId)
       // TODO: add error handling
       .then(json => {
         this.setState({
@@ -51,7 +51,7 @@ class TranscriptCorrect extends Component {
 
     const { data } = this.transcriptEditorRef.current.getEditorContent('digitalpaperedit');
     const queryParamsOptions = false;
-    ApiRouter.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, data).then((response) => {
+    ApiWrapper.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, data).then((response) => {
       if (response.status === 'ok') {
       // show message or redirect
         console.log('updated');

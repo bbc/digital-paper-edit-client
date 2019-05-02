@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
-import ApiRouter from '../../ApiRouter/index.js';
+import ApiWrapper from '../../ApiWrapper/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
 import './index.module.css';
 
@@ -74,7 +74,7 @@ class TranscriptForm extends Component {
     // Move to API.js
 
     try {
-      const createdTranscript = ApiRouter.createTranscript(this.state.projectId, this.state.formData);
+      const createdTranscript = ApiWrapper.createTranscript(this.state.projectId, this.state.formData);
       this.setState({
         uploading: false,
         uploadCompleted: true,

@@ -18,7 +18,7 @@ import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
 import CustomAlert from '../lib/CustomAlert/index.js';
-import ApiRouter from '../../ApiRouter/index.js';
+import ApiWrapper from '../../ApiWrapper/index.js';
 
 class Project extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class Project extends Component {
   }
 
   componentDidMount = () => {
-    const tmpProject = ApiRouter.getProject(this.state.projectId).then(tmpProject => {
+    const tmpProject = ApiWrapper.getProject(this.state.projectId).then(tmpProject => {
 
       this.setState({
         title: tmpProject.title,
@@ -73,7 +73,7 @@ class Project extends Component {
         projectId: this.state.projectId
       };
       console.log(tmpProject);
-      ApiRouter.updateProject(this.state.projectId, tmpProject)
+      ApiWrapper.updateProject(this.state.projectId, tmpProject)
         .then(response => {
           if (response.status === 'ok') {
             // show message or redirect

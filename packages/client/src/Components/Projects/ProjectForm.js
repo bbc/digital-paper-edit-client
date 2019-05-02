@@ -12,7 +12,7 @@ import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
 
-import ApiRouter from '../../ApiRouter/index.js';
+import ApiWrapper from '../../ApiWrapper/index.js';
 
 class ProjectForm extends Component {
   constructor(props) {
@@ -41,7 +41,7 @@ class ProjectForm extends Component {
       description: this.state.description
     };
 
-    ApiRouter.createProject(tmpProject).then(response => {
+    ApiWrapper.createProject(tmpProject).then(response => {
       if (response.status === 'ok') {
         // show message or redirect
         this.setState({ redirect: true, newProjectId: response.projectId });

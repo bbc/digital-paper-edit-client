@@ -23,7 +23,7 @@ import LabelsList from './LabelsList/index.js';
 
 import Paragraphs from './Paragraphs/index.js';
 import SearchBar from './SearchBar/index.js';
-import ApiRouter from '../../../ApiRouter/index.js';
+import ApiWrapper from '../../../ApiWrapper/index.js';
 import navbarLinks from '../../lib/custom-navbar-links';
 
 class TranscriptAnnotate extends Component {
@@ -71,7 +71,7 @@ class TranscriptAnnotate extends Component {
   }
 
   componentDidMount = () => {
-    ApiRouter.getAnnotations(this.state.projectId, this.state.transcriptId)
+    ApiWrapper.getAnnotations(this.state.projectId, this.state.transcriptId)
       // TODO: add error handling
       .then(json => {
         console.log(json);

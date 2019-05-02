@@ -12,7 +12,7 @@ import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
 import CustomAlert from '../lib/CustomAlert/index.js';
-import ApiRouter from '../../ApiRouter/index.js';
+import ApiWrapper from '../../ApiWrapper/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
 
 const queryParamsOptions = {
@@ -43,7 +43,7 @@ class Transcript extends Component {
     // get transcript resource but not transcript json to
     // reduce the payload for this page
 
-    ApiRouter.getTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions).then((transcript) => {
+    ApiWrapper.getTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions).then((transcript) => {
       console.log(transcript);
       this.setState({
         projectTitle: transcript.projectTitle,
@@ -83,7 +83,7 @@ class Transcript extends Component {
         projectId: this.state.projectId
       };
       console.log(tmpTranscript);
-      ApiRouter.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, tmpTranscript).then((response) => {
+      ApiWrapper.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, tmpTranscript).then((response) => {
         if (response.status === 'ok') {
         // show message or redirect
           console.log('updated');

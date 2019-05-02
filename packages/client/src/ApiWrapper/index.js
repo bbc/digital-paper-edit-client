@@ -5,7 +5,7 @@ window.DB = () => {
   console.log('in react test ');
 };
 
-class ApiRouter {
+class ApiWrapper {
   projectsUrl = `${ process.env.REACT_APP_SERVER_URL }/api/projects`
   projectsIdUrl = (projectId) => `${ this.projectsUrl }/${ projectId }`;
   transcriptsUrl = (projectId) => `${ this.projectsIdUrl(projectId) }/transcripts`;
@@ -121,7 +121,6 @@ class ApiRouter {
 }
 
 // https://www.sitepoint.com/javascript-design-patterns-singleton/
-const apiRouter = new ApiRouter();
-
-Object.freeze(apiRouter);
-export default apiRouter;
+const apiWrapper = new ApiWrapper();
+Object.freeze(apiWrapper);
+export default apiWrapper;
