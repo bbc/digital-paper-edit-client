@@ -10,7 +10,5 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "videocontext": "^0.53.0"
-  }
+  "dependencies": {}
 }
