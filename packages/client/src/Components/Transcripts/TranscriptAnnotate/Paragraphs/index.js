@@ -94,14 +94,15 @@ class Paragraphs extends Component {
             As well as cross to delete it */}
                     <Col md={ 1 } style={ { backgroundColor: label.color, marginLeft:'1em' } }></Col>
                     <Col >
-                      {JSON.stringify( label)}
+                      {label.label}
                     </Col>
                     <Col md={ 1 } style={ { marginRight:'1em' } }>
                       <FontAwesomeIcon icon={ faTrashAlt } />
                     </Col>
                   </Row>
                   <hr/>
-          A user note about this annotaiton, optional
+                  {/* { label.description } */}
+                  Place holder text for annotaiton
                   <br/>
                   <FontAwesomeIcon icon={ faPen } />
                 </Popover>
@@ -126,22 +127,22 @@ class Paragraphs extends Component {
       let paragraphElement;
       if (paragraphSplitByAnnotation) {
 
-        const before = <Words
+        const wordsBefore = <Words
           paragraph={ paragraphSplitByAnnotation.before }
           handleKeyDownWords={ this.handleKeyDownWords }
         />;
 
-        const annotations = <Words
+        const annotatatedWords = <Words
           paragraph={ paragraphSplitByAnnotation.annotations }
           handleKeyDownWords={ this.handleKeyDownWords }
         />;
 
-        const after = <Words
+        const wordsAfter = <Words
           paragraph={ paragraphSplitByAnnotation.after }
           handleKeyDownWords={ this.handleKeyDownWords }
         />;
 
-        paragraphElement = [ before, <CustomOverlayTrigger labelsOptions={ this.props.labelsOptions } words={ annotations }/>, after ];
+        paragraphElement = [ wordsBefore, <CustomOverlayTrigger labelsOptions={ this.props.labelsOptions } words={ annotatatedWords }/>, wordsAfter ];
       }
       // if there are no annotations in this paragraph
       else {
