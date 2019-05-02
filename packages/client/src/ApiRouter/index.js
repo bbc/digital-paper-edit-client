@@ -15,14 +15,14 @@ class ApiRouter {
       ? `?${ querystring.stringify(queryParamsOptions) }`
       : '';
 
-    return `${ this.transcriptsUrl(projectId) }/transcripts/${ transcriptId }${ queryParams }`.trim();
+    return `${ this.transcriptsUrl(projectId) }/${ transcriptId }${ queryParams }`.trim();
   };
 
-  annotationsUrl = (projectId, transcriptId) => `${ this.transcriptsUrl(projectId, transcriptId) }/annotations`;
+  annotationsUrl = (projectId, transcriptId) => `${ this.transcriptsIdUrl(projectId, transcriptId) }/annotations`;
 
   async getAllProjects() {
     // if (isBrowser()) {
-    console.log(this.projectsUrl)
+    console.log(this.projectsUrl);
     const res = await corsFetch(this.projectsUrl);
     const json = await res.json();
 
@@ -112,6 +112,7 @@ class ApiRouter {
    * Annotations
    */
   async getAnnotations(projectId, transcriptId) {
+    console.log('this.annotationsUrl(projectId, transcriptId)', this.annotationsUrl(projectId, transcriptId));
     const res = await fetch(this.annotationsUrl(projectId, transcriptId));
     const json = await res.json();
 
