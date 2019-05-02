@@ -17,14 +17,16 @@ import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import CustomNavbar from './lib/CustomNavbar/index.js';
 import CustomFooter from './lib/CustomFooter/index.js';
 
-{/* <Button intent="success" text="button content" onClick={incrementCounter} /> */}
+{
+  /* <Button intent="success" text="button content" onClick={incrementCounter} /> */
+}
 
 class Home extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       transcriptJson: null
-//     }
+  //   constructor(props) {
+  //     super(props);
+  //     this.state = {
+  //       transcriptJson: null
+  //     }
 
   //   }
 
@@ -51,13 +53,12 @@ class Home extends Component {
             }
           ] }
         />
-        <br/><br/>
+        <br />
+        <br />
         {/* TBC add some info about what the app, is how to use, signing in etc.. */}
         <Jumbotron>
           <h1>Digital Paper Edit</h1>
-          <p>
-            Some explanation text on how to make the most of this app
-          </p>
+          <p>Some explanation text on how to make the most of this app</p>
           <p>
             <ButtonToolbar>
               <LinkContainer to={ '/projects' }>

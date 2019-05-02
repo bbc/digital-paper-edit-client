@@ -1,16 +1,8 @@
 import React, { Component } from 'react';
-import { faPen,
-  faSave,
-  faFolderOpen,
-  faFolderPlus,
-  faFileAlt,
-  faFile,
-  faTasks,
-  faCut,
-  faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faFileAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ListPageTemplate from '../lib/ListPageTemplate/index.js';
-import Api from '../../Api/index.js';
+import ApiRouter from '../../ApiRouter/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
 
 class Transcripts extends Component {
@@ -24,7 +16,7 @@ class Transcripts extends Component {
   }
 
   componentDidMount = () => {
-    Api.getTranscripts(this.state.projectId)
+    ApiRouter.getTranscripts(this.state.projectId)
       // TODO: add error handling
       .then(json => {
         console.log(json);
@@ -45,7 +37,7 @@ class Transcripts extends Component {
 
     // TODO: API + server side request for delete
     // on successful then update state
-    Api.deleteTranscript(this.state.projectId, transcriptId).then((res) => {
+    ApiRouter.deleteTranscript(this.state.projectId, transcriptId).then((res) => {
       if (res.status === 'ok') {
         const tmpNewList = this.state.transcriptsList.filter(function( obj ) {
           return obj.id !== transcriptId;

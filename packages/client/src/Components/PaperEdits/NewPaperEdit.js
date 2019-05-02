@@ -1,21 +1,20 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import Container from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 
-import CustomNavbar from '../lib/CustomNavbar/index.js';
-import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
-import CustomFooter from '../lib/CustomFooter/index.js';
+import CustomNavbar from "../lib/CustomNavbar/index.js";
+import CustomBreadcrumb from "../lib/CustomBreadcrumb/index.js";
+import CustomFooter from "../lib/CustomFooter/index.js";
 
-class NewPaperEdit extends Component {
+class PaperEditForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       transcriptJson: null,
       projectId: this.props.match.params.projectId
     };
-
   }
 
   //   componentDidMount = () =>{
@@ -28,62 +27,61 @@ class NewPaperEdit extends Component {
 
   render() {
     return (
-      <Container style={ { marginBottom: '5em' } }>
+      <Container style={{ marginBottom: "5em" }}>
         {/* TODO: import navbar */}
         <CustomNavbar
-          links={ [
+          links={[
             {
-              name: 'Projects',
-              link: '/projects'
+              name: "Projects",
+              link: "/projects"
             },
             {
-              name: 'New Projects',
-              link: '/projects/new'
+              name: "New Projects",
+              link: "/projects/new"
             },
             {
-              name: 'Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts`
+              name: "Transcripts",
+              link: `/projects/${this.state.projectId}/transcripts`
             },
             {
-              name: 'New Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts/new`
+              name: "New Transcripts",
+              link: `/projects/${this.state.projectId}/transcripts/new`
             },
             {
-              name: 'Paper Edits',
-              link: `/projects/${ this.state.projectId }/paperedits`
+              name: "Paper Edits",
+              link: `/projects/${this.state.projectId}/paperedits`
             },
             {
-              name: 'New Paper Edit',
-              link: `/projects/${ this.state.projectId }/paperedits/new`
+              name: "New Paper Edit",
+              link: `/projects/${this.state.projectId}/paperedits/new`
             },
             {
-              name: 'Users',
-              link: `/projects/${ this.state.projectId }/users`
+              name: "Users",
+              link: `/projects/${this.state.projectId}/users`
             }
-          ]
-          }
+          ]}
         />
 
-        <br/>
+        <br />
         <CustomBreadcrumb
-          items={ [
+          items={[
             {
-              name: 'Projects',
-              link: '/projects'
+              name: "Projects",
+              link: "/projects"
             },
             {
               // TODO: need to get project name
-              name: 'Project:',
-              link: `/projects/${ this.state.projectId }`
+              name: "Project:",
+              link: `/projects/${this.state.projectId}`
             },
             {
-              name: 'Paper Edits',
-              link: `/projects/${ this.state.projectId }/paperEdits`
+              name: "Paper Edits",
+              link: `/projects/${this.state.projectId}/paperEdits`
             },
             {
-              name: 'New'
+              name: "New"
             }
-          ] }
+          ]}
         />
 
         <Form>
@@ -91,21 +89,24 @@ class NewPaperEdit extends Component {
             <Form.Label>Title </Form.Label>
             <Form.Control type="text" placeholder="Enter a Paper Edit title" />
             <Form.Text className="text-muted">
-    Chose a title for your Paper Edit
+              Chose a title for your Paper Edit
             </Form.Text>
           </Form.Group>
 
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Description </Form.Label>
-            <Form.Control type="text" placeholder="Enter a Paper Edit description" />
+            <Form.Control
+              type="text"
+              placeholder="Enter a Paper Edit description"
+            />
             <Form.Text className="text-muted">
-    Chose an optional description for your Paper Edit
+              Chose an optional description for your Paper Edit
             </Form.Text>
           </Form.Group>
 
           {/* on change save - send to server as post + link to projects list? */}
-          <Button onChange={ this.handleSave } variant="primary" type="submit">
-  Save
+          <Button onChange={this.handleSave} variant="primary" type="submit">
+            Save
           </Button>
         </Form>
         <CustomFooter />
@@ -114,4 +115,4 @@ class NewPaperEdit extends Component {
   }
 }
 
-export default NewPaperEdit;
+export default PaperEditForm;

@@ -2,65 +2,62 @@ import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolder, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 import ListPageTemplate from '../lib/ListPageTemplate/index.js';
-import Api from '../../Api/index.js';
+import ApiRouter from '../../ApiRouter/index.js';
 
 class Projects extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      projectsList: null
+      projects: null
     };
   }
 
-  componentDidMount = () => {
+  async componentDidMount () {
     // TODO: do we need to add user id in request?
-    Api.getProjects().then((itemsList) => {
-      console.log('itemsList::', itemsList);
-      if (itemsList) {
-        // add a display property for component cards search
-        const tmpList = itemsList.map((item) => {
-          item.display = true;
+    const result = await ApiRouter.getAllProjects();
 
-          return item;
-        });
-        this.setState({ projectsList: tmpList });
-      }
-      // TODO: some error handling
-    });
-  }
+    if (result) {
+      // add a display property for component cards search
+      const tmpList = result.map(project => {
+        project.display = true;
 
-  handleDelete = (id) => {
+        return project;
+      });
+      this.setState({ projects: tmpList });
+    }
+    // TODO: some error handling
+  };
+
+  async handleDelete(id) {
     // TODO: API + server side request for delete
     // on successful then update state
-    Api.deleteProject(id).then((res) => {
-      if (res.status === 'ok') {
-        const tmpNewList = this.state.projectsList.filter(function( obj ) {
-          return obj.id !== id;
-        });
-        this.setState({
-          projectsList: tmpNewList
-        });
-      } else {
-        // TODO: some error handling, error message saying something went wrong
-      }
-    });
-  }
+    const result = await ApiRouter.deleteProject(id);
+    const findId = (item) => item.id !== id;
+
+    if (result.status === 'ok') {
+      const filteredProjects = this.state.projects.filter(item => findId(item));
+      this.setState({
+        projects: filteredProjects
+      });
+    } else {
+      // TODO: some error handling, error message saying something went wrong
+    }
+  };
 
   // To be able to do REST for cards for - Projects, transcripts, paperedits
-  getShowLinkForCard = (id) => {
+  getShowLinkForCard = id => {
     return `/projects/${ id }`;
-  }
+  };
 
   linkToNew = () => {
-    return `/projects/new`;
+    return '/projects/new';
   };
 
   render() {
-
     return (
       <ListPageTemplate
         icon={ <FontAwesomeIcon icon={ faFolder } /> }
-        itemsList={ this.state.projectsList }
+        itemsList={ this.state.projects }
         handleDelete={ this.handleDelete }
         modelName={ 'projects' }
         getShowLinkForCard={ this.getShowLinkForCard }
@@ -68,20 +65,29 @@ class Projects extends Component {
         // showLink for customCard?
         navbarLinks={ [
           {
-            name:   <span> <FontAwesomeIcon icon={ faFolder } />  Projects</span>,
+            name: (
+              <span>
+                {' '}
+                <FontAwesomeIcon icon={ faFolder } /> Projects
+              </span>
+            ),
             link: '/projects'
           },
           {
-            name:  <span> <FontAwesomeIcon icon={ faFolderPlus } />  NewProject</span>,
-            link: '/projects/new',
+            name: (
+              <span>
+                {' '}
+                <FontAwesomeIcon icon={ faFolderPlus } /> NewProject
+              </span>
+            ),
+            link: '/projects/new'
           }
         ] }
-        breadCrumbItems={
-          [ {
+        breadCrumbItems={ [
+          {
             name: 'Projects'
           }
-          ]
-        }
+        ] }
       />
     );
   }

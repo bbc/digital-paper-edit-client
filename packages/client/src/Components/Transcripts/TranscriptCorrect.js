@@ -9,11 +9,10 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { LinkContainer } from 'react-router-bootstrap';
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 // import CustomFooter from '../lib/CustomFooter/index.js';
-import Api from '../../Api/index.js';
+import ApiRouter from '../../ApiRouter/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
 import CustomFooter from '../lib/CustomFooter/index.js';
 import CustomAlert from '../lib/CustomAlert/index.js';
@@ -34,10 +33,9 @@ class TranscriptCorrect extends Component {
   }
 
   componentDidMount = () => {
-    Api.getTranscript(this.state.projectId, this.state.transcriptId)
+    ApiRouter.getTranscript(this.state.projectId, this.state.transcriptId)
       // TODO: add error handling
       .then(json => {
-        console.log('json', json);
         this.setState({
           projectTitle: json.projectTitle,
           transcriptTitle: json.transcriptTitle,
@@ -51,9 +49,9 @@ class TranscriptCorrect extends Component {
     // TODO: add Api call to save content of
     alert('save to server');
 
-    const { data, ext } = this.transcriptEditorRef.current.getEditorContent('digitalpaperedit');
+    const { data } = this.transcriptEditorRef.current.getEditorContent('digitalpaperedit');
     const queryParamsOptions = false;
-    Api.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, data).then((response) => {
+    ApiRouter.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, data).then((response) => {
       if (response.status === 'ok') {
       // show message or redirect
         console.log('updated');

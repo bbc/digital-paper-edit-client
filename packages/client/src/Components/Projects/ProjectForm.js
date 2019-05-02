@@ -12,9 +12,9 @@ import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
 
-import Api from '../../Api/index.js';
+import ApiRouter from '../../ApiRouter/index.js';
 
-class NewProject extends Component {
+class ProjectForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,7 +41,7 @@ class NewProject extends Component {
       description: this.state.description
     };
 
-    Api.createProject(tmpProject).then((response) => {
+    ApiRouter.createProject(tmpProject).then(response => {
       if (response.status === 'ok') {
         // show message or redirect
         this.setState({ redirect: true, newProjectId: response.projectId });
@@ -49,22 +49,21 @@ class NewProject extends Component {
     });
   }
 
-  handleTitleChange = (event) => {
+  handleTitleChange = event => {
     this.setState({ title: event.target.value });
-  }
+  };
 
-  handleDescriptionChange = (event) => {
+  handleDescriptionChange = event => {
     this.setState({ description: event.target.value });
-  }
+  };
 
   renderRedirect = () => {
     if (this.state.redirect && this.state.newProjectId) {
       return <Redirect to={ `/projects/${ this.state.newProjectId }` } />;
     }
-  }
+  };
 
   render() {
-
     return (
       <Container style={ { marginBottom: '5em' } }>
         {this.renderRedirect()}
@@ -72,12 +71,22 @@ class NewProject extends Component {
         <CustomNavbar
           links={ [
             {
-              name:   <span> <FontAwesomeIcon icon={ faFolder } />  Projects</span>,
+              name: (
+                <span>
+                  {' '}
+                  <FontAwesomeIcon icon={ faFolder } /> Projects
+                </span>
+              ),
               link: '/projects'
             },
             {
-              name:  <span> <FontAwesomeIcon icon={ faFolderPlus } />  NewProject</span>,
-              link: '/projects/new',
+              name: (
+                <span>
+                  {' '}
+                  <FontAwesomeIcon icon={ faFolderPlus } /> NewProject
+                </span>
+              ),
+              link: '/projects/new'
             }
           ] }
         />
@@ -113,7 +122,9 @@ class NewProject extends Component {
               Chose a title for your project
             </Form.Text>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            <Form.Control.Feedback type="invalid">Please chose a title for your project</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              Please chose a title for your project
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group controlId="formBasicEmail">
@@ -130,7 +141,9 @@ class NewProject extends Component {
               Chose an optional description for your project
             </Form.Text>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            <Form.Control.Feedback type="invalid">Please chose a description for your project</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              Please chose a description for your project
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* on change save - send to server as post + link to projects list? */}
@@ -145,4 +158,4 @@ class NewProject extends Component {
   }
 }
 
-export default NewProject;
+export default ProjectForm;

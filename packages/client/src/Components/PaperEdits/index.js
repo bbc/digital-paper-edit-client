@@ -1,18 +1,7 @@
 import React, { Component } from 'react';
-import {
-  faPen,
-  faSave,
-  faFolderOpen,
-  faFolder,
-  faFolderPlus,
-  faFileAlt,
-  faFile,
-  faTasks,
-  faCut,
-  faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faCut } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ListPageTemplate from '../lib/ListPageTemplate/index.js';
-import Api from '../../Api/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
 
 class PaperEdits extends Component {
@@ -23,7 +12,6 @@ class PaperEdits extends Component {
       projectId: this.props.match.params.projectId,
       projectTitle: ''
     };
-
   }
   componentDidMount = () => {
     // TODO: add user id in request?
@@ -31,9 +19,9 @@ class PaperEdits extends Component {
     // TODO: move fetch into a API class - to handle electron backend switch
     fetch('http://localhost:5000/api/projects/1/paperedits', { mode: 'cors' })
       .then(res => res.json())
-      .then((json) => {
+      .then(json => {
         // add a display property for component cards search
-        const tmpList = json.paperedits.map((item) => {
+        const tmpList = json.paperedits.map(item => {
           item.display = true;
 
           return item;
@@ -41,9 +29,9 @@ class PaperEdits extends Component {
         // projectTitle
         this.setState({ paperEditsList: tmpList });
       });
-  }
+  };
 
-  handleDelete = (id) => {
+  handleDelete = () => {
     // TODO: API + server side request for delete
     // on successful then update state
     // Api.deletePaperedit(id).then((res) => {
@@ -58,18 +46,17 @@ class PaperEdits extends Component {
     //     // TODO: some error handling, error message saying something went wrong
     //   }
     // });
-  }
+  };
 
-  getShowLinkForCard = (id) => {
+  getShowLinkForCard = id => {
     return `/projects/${ this.state.projectId }/paperedits/${ id }`;
-  }
+  };
 
   linkToNew = () => {
     return `/projects/${ this.state.projectId }/paperedits/new`;
   };
 
   render() {
-
     return (
       <ListPageTemplate
         icon={ <FontAwesomeIcon icon={ faCut } /> }
@@ -80,8 +67,8 @@ class PaperEdits extends Component {
         linkToNew={ this.linkToNew }
         // showLink for customCard?
         navbarLinks={ navbarLinks(this.state.projectId) }
-        breadCrumbItems={
-          [ {
+        breadCrumbItems={ [
+          {
             name: 'Projects',
             link: '/projects'
           },
@@ -94,8 +81,7 @@ class PaperEdits extends Component {
           {
             name: 'Paper Edits'
           }
-          ]
-        }
+        ] }
       />
     );
   }
