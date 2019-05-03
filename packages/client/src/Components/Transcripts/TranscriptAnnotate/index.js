@@ -245,7 +245,9 @@ class TranscriptAnnotate extends Component {
         // }
         selection.start = parseFloat(selection.start);
         selection.end = parseFloat(selection.end);
-        const customNoteText = prompt('some optional note to this annotation');
+        // commenting out prompt in favour of using edit functionality once annotation created
+        // const customNoteText = prompt('some optional note to this annotation');
+        const customNoteText = '';
         selection.note = customNoteText ? customNoteText : '';
         // TODO: there's got to be a more robust way to make id for label
         // eg use ?
@@ -273,27 +275,43 @@ class TranscriptAnnotate extends Component {
   // TODO: this is buggy, needs looking into it - disabled for now
   // keeping as place holder
   handleDeleteAnnotation = (annotationId) => {
-    console.log('handleDeleteLabel', annotationId);
     const { annotations } = this.state;
-    console.log(annotations, annotationId);
     const newAnnotationsSet = annotations.filter((annotation) => {
       return annotation.id !== annotationId;
     });
-    console.log(newAnnotationsSet);
 
-    // this.setState({
-    //   annotations: newAnnotationsSet
-    // });
-    alert('functionality TBC');
+    this.setState({
+      annotations: newAnnotationsSet
+    });
   }
 
   // TODO: implement edit label
   handleEditAnnotation = (annotationId, text) => {
+    console.log('annotationId, text ', annotationId, text);
     // similar to handleDeleteAnnotation filter to find annotation
     // then replace text
-    alert('functionality TBC');
 
     // TODO: also handler for switch of label associated with annotation
+    const { annotations } = this.state;
+    const newAnnotationsSet = annotations.filter((annotation) => {
+      return annotation.id !== annotationId;
+    });
+
+    const newAnnotationToEdit = annotations.find((annotation) => {
+      return annotation.id === annotationId;
+    });
+    const newNote = prompt('Edit the text note of the annotation', newAnnotationToEdit.note);
+    if (newNote) {
+      newAnnotationToEdit.note = newNote;
+      console.log('newAnnotationsSet ', newAnnotationToEdit);
+      newAnnotationsSet.push(newAnnotationToEdit);
+      this.setState({
+        annotations: newAnnotationsSet
+      });
+    }
+    else {
+      alert('all good nothing changed');
+    }
   }
 
   handleLabelsSearchChange = (selectedOptionLabelSearch) => {

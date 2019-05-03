@@ -36,7 +36,7 @@ class CustomOverlayTrigger extends Component {
     console.log('this.props.annotationLabelId', this.props.annotationLabelId);
 
     return (
-      <OverlayTrigger trigger="click" placement="bottom"
+      <OverlayTrigger rootClose={ true } trigger="click" placement="bottom"
         overlay={
           <Popover id="popover-basic">
             <Row>
