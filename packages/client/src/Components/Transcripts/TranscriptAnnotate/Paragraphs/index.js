@@ -1,25 +1,16 @@
 import React, { Component } from 'react';
-
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Popover from 'react-bootstrap/Popover';
-import Button from 'react-bootstrap/Button';
 import { shortTimecode } from '@bbc/react-transcript-editor/timecodeConverter';
 import splitParagraphByAnnotation from './split-paragraph-by-annotation.js';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPen,
-  faTrashAlt
-} from '@fortawesome/free-solid-svg-icons';
 import Words from './Words.js';
 import styles from './index.module.css';
 import removePunctuation from '../../../../Util/remove-punctuation/index.js';
-import CustomAnnotationPopover from './CustomAnnotationPopover.js';
-
+import CustomOverlayTrigger from './CustomOverlayTrigger.js';
+import findAnnotationInParagraph from './find-annotation-in-paragraph.js';
 class Paragraphs extends Component {
 
-  // for accassibility, being able to
+  // for accessibility, being able to
   // move with tabs and press enter on
   // timecode to start playing from that point
   handleKeyDownTimecodes =(e) => {
@@ -35,7 +26,10 @@ class Paragraphs extends Component {
   }
 
   render() {
-    let text;
+    let textResult;
+    let paragraphElement;
+    const { annotations } = this.props;
+    // console.log('annotations ', annotations);
     // TODO: change API end point to return transcript already formatted like this
     // and not in Kaldi format
     const words = this.props.transcriptJson.words.map(word => {
@@ -61,7 +55,7 @@ class Paragraphs extends Component {
       }
     });
 
-    text = paragraphs.map((paragraph, index) => {
+    textResult = paragraphs.map((paragraph, index) => {
       const paragraphText = paragraph
         .map(word => {
           return removePunctuation(word.text);
@@ -69,6 +63,9 @@ class Paragraphs extends Component {
         .join(' ');
 
       // TODO: handle/refactor search/Display to add support for filter results by speaker and labels
+
+      // let paragraphDisplayPreferenceIncludesLabel;
+      // TODO: handle support for multiple annotation
       const paragraphDisplayPreference = !paragraphText.includes(this.props.searchString.toLowerCase()) ? { display: 'none' } : { };
       // styles to separate the look of non contiguous paragraphs?
       paragraphDisplayPreference.borderStyle = 'dashed' ;
@@ -76,76 +73,68 @@ class Paragraphs extends Component {
       paragraphDisplayPreference.borderColor = 'lightgray';
       paragraphDisplayPreference.padding = '0.5em';
 
-      // TODO: something around parafraph, start and end time, included or overlappng in labels start and end time
+      // TODO: something around paragraph, start and end time, included or overlappng in labels start and end time
       // to do the filtering
 
-      class CustomOverlayTrigger extends Component {
-        render() {
-          const label = this.props.labelsOptions.find((label) => {
-            return label.id === 2;
-          });
+      // TODO: handle if it returns false
+      const annotation = findAnnotationInParagraph(annotations, paragraph);
+      // console.log('paragrah annotation ', annotation);
+      if (annotation) {
+        // annotation.labelId
+        // paragraphDisplayPreferenceIncludesLabel =
+        // const annotation = {
+        //   'id': 2,
+        //   'start':14.38,
+        //   'end': 18.14,
+        //   'labelId': 1,
+        //   'note': 'optional example text description for an annotation - TEST 1'
+        // };
+        // this.state.annotations
+        const paragraphSplitByAnnotation = splitParagraphByAnnotation(annotation, paragraph);
+        // <Example text="some text" />;
+        // console.log('paragraph:: ', JSON.stringify(paragraph, null, 2));
 
-          return (
-            <OverlayTrigger trigger="click" placement="bottom"
-              overlay={
-                <Popover id="popover-basic">
-                  <Row>
-                    {/* TODO: should/could have a select to change the label + listener to save
-            As well as cross to delete it */}
-                    <Col md={ 1 } style={ { backgroundColor: label.color, marginLeft:'1em' } }></Col>
-                    <Col >
-                      {label.label}
-                    </Col>
-                    <Col md={ 1 } style={ { marginRight:'1em' } }>
-                      <FontAwesomeIcon icon={ faTrashAlt } />
-                    </Col>
-                  </Row>
-                  <hr/>
-                  {/* { label.description } */}
-                  Place holder text for annotaiton
-                  <br/>
-                  <FontAwesomeIcon icon={ faPen } />
-                </Popover>
-              }
-            >
-              <span className={ [ 'highlight', styles.highlightedWord ].join(' ') }>{this.props.words}</span>
-            </OverlayTrigger>
-          );
+        if (paragraphSplitByAnnotation) {
+        // spread paragraphSplitByAnnotation to get before, annotations, and after
+          const wordsBefore = <Words
+            paragraph={ paragraphSplitByAnnotation.before }
+            handleKeyDownWords={ this.handleKeyDownWords }
+          />;
+
+          const annotatatedWords = <Words
+            paragraph={ paragraphSplitByAnnotation.annotations }
+            handleKeyDownWords={ this.handleKeyDownWords }
+          />;
+
+          const wordsAfter = <Words
+            paragraph={ paragraphSplitByAnnotation.after }
+            handleKeyDownWords={ this.handleKeyDownWords }
+          />;
+
+          // TODO: uncomment when ready
+          // annotation = paragraphSplitByAnnotation.annotation
+
+          paragraphElement = [ wordsBefore,
+          // eslint-disable-next-line react/jsx-key
+            <CustomOverlayTrigger
+              words={ annotatatedWords }
+              labelsOptions={ this.props.labelsOptions }
+              annotationLabelId={ annotation.labelId }
+              annotationId={ annotation.id }
+              annotationNote={ annotation.note }
+              handleDeleteAnnotation={ this.props.handleDeleteAnnotation }
+              handleEditAnnotation={ this.props.handleEditAnnotation }
+            />,
+            wordsAfter ];
         }
-      }
-
-      const annotation = {
-        'start':14.38,
-        'end': 18.14,
-        'labelId': 0,
-        'note': 'optional example text description for an annotation'
-      };
-      // this.state.annotations
-      const paragraphSplitByAnnotation = splitParagraphByAnnotation(annotation, paragraph);
-      // <Example text="some text" />;
-      // console.log('paragraph:: ', JSON.stringify(paragraph, null, 2));
-      let paragraphElement;
-      if (paragraphSplitByAnnotation) {
-
-        const wordsBefore = <Words
-          paragraph={ paragraphSplitByAnnotation.before }
-          handleKeyDownWords={ this.handleKeyDownWords }
-        />;
-
-        const annotatatedWords = <Words
-          paragraph={ paragraphSplitByAnnotation.annotations }
-          handleKeyDownWords={ this.handleKeyDownWords }
-        />;
-
-        const wordsAfter = <Words
-          paragraph={ paragraphSplitByAnnotation.after }
-          handleKeyDownWords={ this.handleKeyDownWords }
-        />;
-
-        paragraphElement = [ wordsBefore, <CustomOverlayTrigger labelsOptions={ this.props.labelsOptions } words={ annotatatedWords }/>, wordsAfter ];
-      }
-      // if there are no annotations in this paragraph
-      else {
+        // if there are no annotations in this paragraph
+        else {
+          paragraphElement = <Words
+            paragraph={ paragraph }
+            handleKeyDownWords={ this.handleKeyDownWords }
+          />;
+        }
+      } else {
         paragraphElement = <Words
           paragraph={ paragraph }
           handleKeyDownWords={ this.handleKeyDownWords }
@@ -189,7 +178,7 @@ class Paragraphs extends Component {
 
     return (
       <>
-        { text }
+        { textResult }
       </>
     );
   }

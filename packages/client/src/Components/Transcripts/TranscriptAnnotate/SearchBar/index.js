@@ -56,6 +56,7 @@ class SearchBar extends Component {
   };
 
    handleLabelsSearchChange = selectedOptionLabelSearch => {
+     this.props.handleLabelsSearchChange(selectedOptionLabelSearch);
      this.setState({ selectedOptionLabelSearch });
    };
 

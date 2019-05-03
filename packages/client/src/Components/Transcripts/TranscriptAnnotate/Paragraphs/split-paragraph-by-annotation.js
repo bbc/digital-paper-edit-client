@@ -158,8 +158,9 @@ const getWordsInAnnotation = (annotation, paragraph) => {
     return annotation.end === w.end;
   });
   const endIndex = paragraph.indexOf(endWord);
-
-  return paragraph.slice(startIndex, endIndex);
+  //  endIndex + 1 because end not included in slice()
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice
+  return paragraph.slice(startIndex, endIndex + 1);
 };
 
 /**

@@ -28,8 +28,8 @@ import Paragraphs from './Paragraphs/index.js';
 import SearchBar from './SearchBar/index.js';
 import Api from '../../../Api/index.js';
 import navbarLinks from '../../lib/custom-navbar-links';
-
 import getTimeFromUserWordsSelection from './get-user-selection.js';
+import CustomAlert from '../../lib/CustomAlert/index.js';
 
 class TranscriptAnnotate extends Component {
   constructor(props) {
@@ -54,21 +54,33 @@ class TranscriptAnnotate extends Component {
       showTextSearchPreferences: false, //
       showLabelsSearchPreferences: false, //
       showSpeakersSearchPreferences: false, //
-      selectedOptionLabelSearch: null,
+      showSelectedOptionLabelSearch: false,
+      selectedOptionLabelSearch: [],
       selectedOptionSpeakerSearch: null,
       showParagraphsMatchingSearch: false, //
+      notification: null,
+
       annotations: [
+        // {
+        //   'id': 0,
+        //   'start':14.38,
+        //   'end': 18.14,
+        //   'labelId': 0,
+        //   'note': 'optional example text description for an annotation'
+        // },
         {
-          'start':14.38,
-          'end': 18.14,
-          'labelId': 0,
-          'note': 'optional example text description for an annotation'
-        },
-        {
+          'id': 0,
           'start': 50.58,
           'end': 51.65,
           'labelId': 0,
           'note': 'optional example text description for an annotation'
+        },
+        {
+          'id': 1,
+          'start':14.38,
+          'end': 18.14,
+          'labelId': 1,
+          'note': 'optional example text description for an annotation - TEST 2'
         }
       ],
       // TODO: this needs to be called using API
@@ -94,13 +106,23 @@ class TranscriptAnnotate extends Component {
     Api.getAnnotations(this.state.projectId, this.state.transcriptId)
       // TODO: add error handling
       .then(json => {
-        console.log(json);
+        // console.log(json);
         this.setState({
           projectTitle: json.projectTitle,
           transcriptJson: json.transcript,
           transcriptTitle: json.transcriptTitle,
           url: json.url,
           labelsOptions: json.labels
+        });
+      })
+      .catch((e) => {
+        this.setState({
+          notification:<CustomAlert
+            dismissable={ true }
+            variant={ 'danger' }
+            heading={ 'Server Error' }
+            message={ <p>Error reaching the server to fetch transcript </p> }
+          />
         });
       });
   };
@@ -122,7 +144,7 @@ class TranscriptAnnotate extends Component {
   };
 
   handleSearch = (e, searchPreferences) => {
-    console.log(searchPreferences);
+    // console.log(searchPreferences);
     // TODO: debounce to optimise
     if (e.target.value !== '') {
       const searchString = e.target.value;
@@ -210,7 +232,6 @@ class TranscriptAnnotate extends Component {
   }
 
   handleAnnotation = (e) => {
-    console.log(e.target.dataset);
     const element = e.target;
     window.element = element;
     const selection = getTimeFromUserWordsSelection();
@@ -218,43 +239,74 @@ class TranscriptAnnotate extends Component {
     if (selection) {
       this.setState((state) => {
         const { annotations } = state;
-        if (element.id && element.id === 'defaultHighlightBtn') {
-          selection.labelId = 0;
-        }
-        else {
-          selection.labelId = element.dataset.labelId;
-        }
+        // console.log('annotations', annotations);
+        // if (element.id && element.id === 'defaultHighlightBtn') {
+        //   selection.labelId = 0;
+        // }
+        // else {
+        selection.labelId = parseInt(element.dataset.labelId);
+        // }
         selection.start = parseFloat(selection.start);
         selection.end = parseFloat(selection.end);
-        // selection.note = '';
-        selection.note = 'Default text for optional note';
-        // selection.note = prompt('some optional note');
-        console.log(selection);
+        const customNoteText = prompt('some optional note to this annotation');
+        selection.note = customNoteText ? customNoteText : '';
+        // TODO: there's got to be a more robust way to make id for label
+        // eg use ?
+        // const buf = crypto.randomBytes(16);
+        // buf.toString('hex');
+        const lastAnnotation = annotations[annotations.length - 1];
+        const lastAnnotationId = lastAnnotation.id;
+        const newAnnotationId = lastAnnotationId + 1;
+        selection.id = newAnnotationId;
+        // console.log('new selection annotation ', selection);
+        annotations.push(selection);
+        // console.log('annotations.push(selection);', annotations);
 
         return {
-          annotations: [ ...annotations, selection ]
+          annotations: annotations
         };
       });
+    }
+    else {
+      alert('Select some text in the transcript to highlight ');
     }
 
   }
 
+  // TODO: this is buggy, needs looking into it - disabled for now
+  // keeping as place holder
+  handleDeleteAnnotation = (annotationId) => {
+    console.log('handleDeleteLabel', annotationId);
+    const { annotations } = this.state;
+    console.log(annotations, annotationId);
+    const newAnnotationsSet = annotations.filter((annotation) => {
+      return annotation.id !== annotationId;
+    });
+    console.log(newAnnotationsSet);
+
+    // this.setState({
+    //   annotations: newAnnotationsSet
+    // });
+    alert('functionality TBC');
+  }
+
+  // TODO: implement edit label
+  handleEditAnnotation = (annotationId, text) => {
+    // similar to handleDeleteAnnotation filter to find annotation
+    // then replace text
+    alert('functionality TBC');
+
+    // TODO: also handler for switch of label associated with annotation
+  }
+
+  handleLabelsSearchChange = (selectedOptionLabelSearch) => {
+    console.log('selectedOptionLabelSearch', selectedOptionLabelSearch);
+    this.setState({
+      selectedOptionLabelSearch
+    });
+  }
   render() {
-    // TODO: change API to return transcript json already in this format
-    // + with list of speaker labels
-    let text;
-    // console.log('this.state.transcriptJson', this.state.transcriptJson);
-    if (this.state.transcriptJson) {
-      text = <Paragraphs
-        labelsOptions={ this.state.labelsOptions }
-        annotations={ this.state.annotations }
-        transcriptJson={ this.state.transcriptJson }
-        searchString={ this.state.searchString }
-        showParagraphsMatchingSearch={ this.state.showParagraphsMatchingSearch }
-        handleTimecodeClick={ this.handleTimecodeClick }
-        handleWordClick={ this.handleWordClick }
-      />;
-    }
+    // TODO: change API to return transcript json with list of speaker labels
 
     return (
       <Container fluid={ true } style={ { backgroundColor: '#f9f9f9', marginBottom: '5em' } }>
@@ -267,7 +319,7 @@ class TranscriptAnnotate extends Component {
             }`}
         </style>
         <style scoped>
-          {/* This effects the styling of the Paragraph component */}
+          {/* This is to style of the Paragraph component programmatically */}
           {`${ this.state.sentenceToSearchCSS } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
           {`${ this.state.sentenceToSearchCSSInHighlights } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
         </style>
@@ -290,6 +342,7 @@ class TranscriptAnnotate extends Component {
           links={ navbarLinks(this.state.projectId) }
         />
         <br />
+        {this.state.notification}
         <Row>
           <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
             <CustomBreadcrumb
@@ -373,13 +426,13 @@ class TranscriptAnnotate extends Component {
 
             <br/>
             <Dropdown as={ ButtonGroup } style={ { width: '100%' } } >
-              <Button variant="outline-primary" id="defaultHighlightBtn" onClick={ this.handleAnnotation } > Highlight <FontAwesomeIcon icon={ faHighlighter } /></Button>
-              <Dropdown.Toggle split variant="outline-primary" id="dropdown-split-basic" data-lable-id={ 0 }/>
+              <Button variant="warning" id="defaultHighlightBtn" data-label-id={ 0 } onClick={ this.handleAnnotation } > Highlight <FontAwesomeIcon icon={ faHighlighter } /></Button>
+              <Dropdown.Toggle split variant="warning" id="dropdown-split-basic" data-lable-id={ 0 }/>
               <Dropdown.Menu onClick={ this.handleAnnotation }>
                 {this.state.labelsOptions.map((label) => {
                   return (
                     <Dropdown.Item key={ `label_id_${ label.id }` } data-label-id={ label.id } >
-                      <Row>
+                      <Row data-label-id={ label.id }>
                         <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } style={ { backgroundColor: label.color } } data-label-id={ label.id }></Col>
                         <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } data-label-id={ label.id }>{label.label}</Col>
                       </Row>
@@ -399,6 +452,7 @@ class TranscriptAnnotate extends Component {
 
             <Card>
               <SearchBar
+                handleLabelsSearchChange={ this.handleLabelsSearchChange }
                 labelsOptions={ this.state.labelsOptions }
                 handleSearch={ this.handleSearch }
                 speakersOptions={ this.state.speakersOptions }
@@ -410,7 +464,19 @@ class TranscriptAnnotate extends Component {
                 style={ { height: '80vh', overflow: 'scroll' } }
               >
                 {/* TODO: instead of null, if transcript is not provided, eg offline or server error, then add custom alert */}
-                {this.state.transcriptJson !== null && text}
+                {this.state.transcriptJson
+                && <Paragraphs
+                  labelsOptions={ this.state.labelsOptions }
+                  annotations={ this.state.annotations }
+                  transcriptJson={ this.state.transcriptJson }
+                  searchString={ this.state.searchString }
+                  showParagraphsMatchingSearch={ this.state.showParagraphsMatchingSearch }
+                  selectedOptionLabelSearch={ this.state.selectedOptionLabelSearch }
+                  handleTimecodeClick={ this.handleTimecodeClick }
+                  handleWordClick={ this.handleWordClick }
+                  handleDeleteAnnotation={ this.handleDeleteAnnotation }
+                  handleEditAnnotation={ this.handleEditAnnotation }
+                />}
               </Card.Body>
             </Card>
           </Col>
