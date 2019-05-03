@@ -1,4 +1,5 @@
 /**
+ * Gets the start and end time for a range of words elements selected by a user on the page
  * https://github.com/OpenNewsLabs/autoEdit_2/blob/master/lib/app/views/transcription_view.js#L47
  *
  * TODO: check in chrome, firefox, and safari?

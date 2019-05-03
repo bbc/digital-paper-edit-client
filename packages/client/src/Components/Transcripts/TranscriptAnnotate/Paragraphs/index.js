@@ -82,34 +82,33 @@ class Paragraphs extends Component {
       if (annotation) {
         // annotation.labelId
         // paragraphDisplayPreferenceIncludesLabel =
-        // const annotation = {
-        //   'id': 2,
-        //   'start':14.38,
-        //   'end': 18.14,
-        //   'labelId': 1,
-        //   'note': 'optional example text description for an annotation - TEST 1'
-        // };
         // this.state.annotations
         const paragraphSplitByAnnotation = splitParagraphByAnnotation(annotation, paragraph);
         // <Example text="some text" />;
         // console.log('paragraph:: ', JSON.stringify(paragraph, null, 2));
 
         if (paragraphSplitByAnnotation) {
-        // spread paragraphSplitByAnnotation to get before, annotations, and after
-          const wordsBefore = <Words
-            paragraph={ paragraphSplitByAnnotation.before }
-            handleKeyDownWords={ this.handleKeyDownWords }
-          />;
+          let wordsBefore;
+          // spread paragraphSplitByAnnotation to get before, annotations, and after
+          if (paragraphSplitByAnnotation.before ) {
+            wordsBefore = <Words
+              paragraph={ paragraphSplitByAnnotation.before }
+              handleKeyDownWords={ this.handleKeyDownWords }
+            />;
+          }
 
           const annotatatedWords = <Words
             paragraph={ paragraphSplitByAnnotation.annotations }
             handleKeyDownWords={ this.handleKeyDownWords }
           />;
 
-          const wordsAfter = <Words
-            paragraph={ paragraphSplitByAnnotation.after }
-            handleKeyDownWords={ this.handleKeyDownWords }
-          />;
+          let wordsAfter;
+          if (paragraphSplitByAnnotation.after) {
+            wordsAfter = <Words
+              paragraph={ paragraphSplitByAnnotation.after }
+              handleKeyDownWords={ this.handleKeyDownWords }
+            />;
+          }
 
           // TODO: uncomment when ready
           // annotation = paragraphSplitByAnnotation.annotation
