@@ -6,48 +6,60 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen,
+import {
+  faPen,
   faSave,
   faFileAlt,
   faTasks,
-  faUsers } from '@fortawesome/free-solid-svg-icons';
+  faUsers
+} from '@fortawesome/free-solid-svg-icons';
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
 import CustomAlert from '../lib/CustomAlert/index.js';
-import Api from '../../Api/index.js';
+import ApiWrapper from '../../ApiWrapper/index.js';
 
 class Project extends Component {
   constructor(props) {
     super(props);
     this.state = {
       projectId: this.props.match.params.projectId,
-      project: null,
       title: '',
       description: '',
       formDisabled: true,
-      validated: false,
+      validated: false
     };
-
   }
 
   componentDidMount = () => {
-    Api.getProject(this.state.projectId).then((tmpProject) => {
-      this.setState({ project: tmpProject,
+    const tmpProject = ApiWrapper.getProject(this.state.projectId).then(tmpProject => {
+
+      this.setState({
         title: tmpProject.title,
         description: tmpProject.description
       });
+    }).catch((e) => {
+      console.log('error:::: ', e);
+      this.setState({
+        savedNotification: <CustomAlert
+          dismissable={ true }
+          variant={ 'danger' }
+          heading={ 'Error could not contact the server' }
+          message={ <p>There was an error trying to get this transcript from the server</p> }
+        />
+      });
     });
-  }
 
-  handleTitleChange = (event) => {
+  };
+
+  handleTitleChange = event => {
     this.setState({ title: event.target.value });
-  }
+  };
 
-  handleDescriptionChange = (event) => {
+  handleDescriptionChange = event => {
     this.setState({ description: event.target.value });
-  }
+  };
 
   handleSubmit(event) {
     const form = event.currentTarget;
@@ -61,52 +73,65 @@ class Project extends Component {
         projectId: this.state.projectId
       };
       console.log(tmpProject);
-      Api.updateProject(this.state.projectId, tmpProject).then((response) => {
-        if (response.status === 'ok') {
-          // show message or redirect
-          console.log('updated');
-          // this.setState({ redirect: true, newProjectId: response.projectId });
+      ApiWrapper.updateProject(this.state.projectId, tmpProject)
+        .then(response => {
+          if (response.status === 'ok') {
+            // show message or redirect
+            console.log('updated');
+            // this.setState({ redirect: true, newProjectId: response.projectId });
+            this.setState({
+              formDisabled: true,
+              savedNotification: (
+                <CustomAlert
+                  dismissable={ true }
+                  variant={ 'success' }
+                  heading={ 'Project saved' }
+                  message={
+                    <p>
+                      Project: <b>{this.state.title}</b> has been saved
+                    </p>
+                  }
+                />
+              )
+            });
+          }
+        })
+        .catch(() => {
           this.setState({
-            formDisabled: true,
-            savedNotification: <CustomAlert
-              dismissable={ true }
-              variant={ 'success' }
-              heading={ 'Project saved' }
-              message={ <p>Project: <b>{this.state.title}</b> has been saved</p> }
-            />
+            savedNotification: (
+              <CustomAlert
+                dismissable={ true }
+                variant={ 'danger' }
+                heading={ 'Error saving project' }
+                message={
+                  <p>
+                    There was an error trying to save project:{' '}
+                    <b>{this.state.title}</b>
+                  </p>
+                }
+              />
+            )
           });
-        }
-      }).catch(() => {
-        this.setState({
-          savedNotification: <CustomAlert
-            dismissable={ true }
-            variant={ 'danger' }
-            heading={ 'Error saving project' }
-            message={ <p>There was an error trying to save project: <b>{this.state.title}</b></p> }
-          />
         });
-      });
     }
     this.setState({ validated: true });
   }
 
   render() {
-
     return (
       <Container style={ { marginBottom: '5em' } }>
-        <CustomNavbar
-          links={ navbarLinks(this.state.projectId) }
-        />
-        <br/>
+        <CustomNavbar links={ navbarLinks(this.state.projectId) } />
+        <br />
         <CustomBreadcrumb
-          items={ [ {
-            name: 'Projects',
-            link: '/projects'
-          },
-          {
-            // TODO: project title
-            name: `${ this.state.project ? this.state.title : '' }`
-          }
+          items={ [
+            {
+              name: 'Projects',
+              link: '/projects'
+            },
+            {
+              // TODO: project title
+              name: `${ this.state.title ? this.state.title : '' }`
+            }
           ] }
         />
         {/* <br/> */}
@@ -114,10 +139,10 @@ class Project extends Component {
           <Col xs={ 12 } sm={ 4 } md={ 4 } lg={ 4 } xl={ 4 }>
             <LinkContainer to={ `/projects/${ this.state.projectId }/transcripts` }>
               <Button variant="outline-primary" size="lg" block>
-                <FontAwesomeIcon icon={ faFileAlt } />  Transcripts
+                <FontAwesomeIcon icon={ faFileAlt } /> Transcripts
               </Button>
             </LinkContainer>
-            <br/>
+            <br />
           </Col>
           <Col xs={ 12 } sm={ 4 } md={ 4 } lg={ 4 } xl={ 4 }>
             <LinkContainer to={ `/projects/${ this.state.projectId }/paperedits` }>
@@ -125,7 +150,7 @@ class Project extends Component {
                 <FontAwesomeIcon icon={ faTasks } /> Paper-Edits
               </Button>
             </LinkContainer>
-            <br/>
+            <br />
           </Col>
           <Col xs={ 12 } sm={ 4 } md={ 4 } lg={ 4 } xl={ 4 }>
             <LinkContainer to={ `/projects/${ this.state.projectId }/users` }>
@@ -135,23 +160,32 @@ class Project extends Component {
             </LinkContainer>
           </Col>
         </Row>
-        <hr/>
+        <hr />
         <Row>
           <Col xs={ 12 } sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 }>
             <Button
-              onClick={ () => { this.setState((state) => {return { formDisabled: !state.formDisabled, savedNotification: null };}); } }
-              variant={ this.state.formDisabled ? 'outline-secondary' : 'secondary' }
+              onClick={ () => {
+                this.setState(state => {
+                  return {
+                    formDisabled: !state.formDisabled,
+                    savedNotification: null
+                  };
+                });
+              } }
+              variant={
+                this.state.formDisabled ? 'outline-secondary' : 'secondary'
+              }
               type="submit"
               block
               size="sm"
             >
-                Edit Project  <FontAwesomeIcon icon={ faPen } />
+              Edit Project <FontAwesomeIcon icon={ faPen } />
             </Button>
           </Col>
         </Row>
-        <br/>
+        <br />
         {this.state.savedNotification}
-        <Row >
+        <Row>
           <Col xs={ 12 } sm={ 12 } md={ 12 } lg={ 12 } xl={ 12 }>
             <Form
               noValidate
@@ -170,10 +204,13 @@ class Project extends Component {
                     // placeholder="A Project Title"
                     // style={ { border: 'none' } }
                     onChange={ this.handleTitleChange }
-                    value={ this.state.title }/>
+                    value={ this.state.title }
+                  />
                 </Col>
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                <Form.Control.Feedback type="invalid">Please chose a title for your project</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  Please chose a title for your project
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group as={ Row } controlId="formHorizontalDescription">
                 <Form.Label column sm={ 2 }>
@@ -183,20 +220,27 @@ class Project extends Component {
                   <Form.Control
                     disabled={ this.state.formDisabled }
                     type="text"
-                    as="textarea" rows="3"
+                    as="textarea"
+                    rows="3"
                     // placeholder="A Project Description"
                     // style={ { border: 'none' } }
                     onChange={ this.handleDescriptionChange }
-                    value={ this.state.description }/>
+                    value={ this.state.description }
+                  />
                 </Col>
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                <Form.Control.Feedback type="invalid">Please chose a description for your project</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  Please chose a description for your project
+                </Form.Control.Feedback>
               </Form.Group>
               <Button
                 disabled={ this.state.formDisabled }
                 // variant="primary"
-                variant={ this.state.formDisabled ? 'outline-primary' : 'primary' }
-                type="submit">
+                variant={
+                  this.state.formDisabled ? 'outline-primary' : 'primary'
+                }
+                type="submit"
+              >
                 Save <FontAwesomeIcon icon={ faSave } />
               </Button>
             </Form>

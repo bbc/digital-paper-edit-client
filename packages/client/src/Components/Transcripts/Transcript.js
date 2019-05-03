@@ -7,22 +7,19 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen,
-  faSave,
-  faFileAlt,
-  faTasks,
-  faUsers } from '@fortawesome/free-solid-svg-icons';
+  faSave } from '@fortawesome/free-solid-svg-icons';
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
 import CustomAlert from '../lib/CustomAlert/index.js';
-import Api from '../../Api/index.js';
+import ApiWrapper from '../../ApiWrapper/index.js';
 import navbarLinks from '../lib/custom-navbar-links';
 
 const queryParamsOptions = {
   transcriptJson: false
 };
 
-class TranscriptShow extends Component {
+class Transcript extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,7 +43,7 @@ class TranscriptShow extends Component {
     // get transcript resource but not transcript json to
     // reduce the payload for this page
 
-    Api.getTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions).then((transcript) => {
+    ApiWrapper.getTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions).then((transcript) => {
       console.log(transcript);
       this.setState({
         projectTitle: transcript.projectTitle,
@@ -86,7 +83,7 @@ class TranscriptShow extends Component {
         projectId: this.state.projectId
       };
       console.log(tmpTranscript);
-      Api.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, tmpTranscript).then((response) => {
+      ApiWrapper.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, tmpTranscript).then((response) => {
         if (response.status === 'ok') {
         // show message or redirect
           console.log('updated');
@@ -232,4 +229,4 @@ class TranscriptShow extends Component {
   }
 }
 
-export default TranscriptShow;
+export default Transcript;

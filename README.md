@@ -174,6 +174,11 @@ npm run test:watch
 
 On commit this repo uses the [.travis.yml](./.travis.yml) config tu run the automated test on [travis CI](https://travis-ci.org/bbc/react-transcript-editor). -->
 
+## Environment variables
+
+[`packages/client/.env`](./packages/client/.env) contains environment variables config for the React client side app.
+
+<mark>Do not store credentials in `.env` during development.</mark>
 
 ## Deployment
 
