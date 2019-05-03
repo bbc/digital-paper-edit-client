@@ -2,21 +2,9 @@
 
 ---> _Work in progress_ <--
 
-<!-- Proof of concept for a modular architecture with
+An application to make it faster, easier and more accessible to edit audio and video interviews using automatically generated transcriptions form STT service.
 
-- React
-- Express
-- Electron
-
-To be able to deploy one code base as
-
-- Desktop app for Mac, win and linux (with auto update)
-- Web app -->
-
-<!-- ## Brief of the project
- _One liner + link to confluence page_
-
-_Screenshot of UI - optional_ -->
+See [intro](./docs/intro.md) for more info on the project. And [user journey](./docs/guides/user-journey/user-journey.md) for a high level overview of the user journey.
 
 ## Setup
 
@@ -24,68 +12,80 @@ _Screenshot of UI - optional_ -->
 
 _How to build and run the code/app_ -->
 
-<!-- Follow these instructions to download the repository with the necessary submodules.
-With submodules included, it's roughly 300MB so might take a little bit to download.
 
-1. `git clone --recursive --single-branch --branch master git@github.com:electron-react-express.git`
-2. `cd electron-react-express`
-3. `nvm use || nvm install` - optional, otherwise just use node version 10
-4. `yarn` - installs dependencies recursively in each package -->
+```
+git clone git@github.com:bbc/digital-paper-edit.git
+```
 
-See the `Makefile`
+```
+cd digital-paper-edit
+```
+
+Optional step to setup [nvm](https://github.com/nvm-sh/nvm) to use node version 10, otherwise just use node version 10
+```
+nvm use || nvm install`
+```
 
 in root of project
 ```
-make react-install
+make install-react
 ```
 
 and 
 ```
-make server-install
+make install-server
 ```
 
 if you want to develop for electron also do 
 ```
-make electron-install
+make install-electron
 ```
+
+_Adobe CEP panel instructions coming soon_
 
 ## Usage
 
 <!-- `cd` into the individual repository inside [`./packages`](./packages) and npm start, or see respective README and package.json for how deal with each. -->
 
-in root of project start the server, express.
+
+In root of project start the express server
 
 ```
-make server-start
+make start-server
+```
+
+and in another terminal, in root of project, start the client react app.
+```
+make start-react
+```
+
+additionally to develop for electron also run ,in another terminal, in root of project.
+
+```
+make start-electron
 ```
 
 
-and in another terminal, start the client react app.
-```
-make react-start
-```
+_Adobe CEP panel instructions coming soon_
+See the [`Makefile`](./Makefile) for more details on these commands.
 
 
-additionally to develop for electron also run 
-```
-make electron-start
-```
+To make code changes checkout the individual repository inside [`./packages/`](./packages)
+eg for Client - React [`./packages/client`](./packages/client)
+and for Server - Express [`./packages/server`](./packages/server)
 
-CEP panel, tbc soon.
+To install new modules, cd into the individual repository and npm install from there.
+
 
 ## System Architecture
 
-<!-- _High level overview of system architecture_ -->
+It's a React, Express, Electron, Adobe CEP, AWS stack to be able to deploy one code base a sWeb app or Desktop app for Mac, win and linux.
 
-<!-- This project uses [yarn workspaces](https://yarnpkg.com/lang/en/docs/workspaces/). -->
+See [modular architecture section](./docs/guides/modular-architecture.md) for more details on the stack.
 
-- React app can be deployed on S3 or github pages
-- backend, express, deployed on EC2 instance
-- db connected to AWS db
+At the moment the repository is setup similarly to a mono repo but it's not using workspaces or other modules normally used in that context just yet (such as lerna etc..).
 
-TODO
-
-- [ ] hot reloading/watch for express
+Client - React, is setup using [Create React App](https://facebook.github.io/create-react-app/docs/getting-started).
 
 ## Development env
 
@@ -96,37 +96,108 @@ _Coding style convention ref optional, eg which linter to use_
 
 _Linting, github pre-push hook - optional_ -->
 
-- [ ] node v 10 - lts/dubnium
-- [ ] [yarn](https://yarnpkg.com/en/docs/install#mac-stable)
-- [ ] see [`.eslintrc`](./.eslintrc) for linting rules
+- [ ] npm > `6.1.0`
+- [ ] node v 10 - [lts/dubnium](https://scotch.io/tutorials/whats-new-in-node-10-dubnium)
+- [ ] see [`.eslintrc`](./.eslintrc) in the various packages for linting rules
+
+Node version is set in node version manager [`.nvmrc`](https://github.com/creationix/nvm#nvmrc)
+
+<!-- TODO: Setup eslint in express server -->
+
+## Documentation
+
+See [docs](./docs) folder 
+
+- [`docs/features-list`](./docs/features-list.md) overview of main features of the app.
+- [`docs/user-journey/user-journey.md`](./docs/user-journey/user-journey.md) overview of main features of the app.
+- [`docs/notes/`](./docs/notes/) contains unsorted dev notes on various aspects of the project (think of it as drafts).
+- [`docs/guides/`](./docs/guides/) contains good to know/how to on various aspects of the project.
+- [`docs/adr/`](./docs/adr/) contains [Architecture Decision Record](https://github.com/joelparkerhenderson/architecture_decision_record).
+
+> An architectural decision record (ADR) is a document that captures an important architectural decision made along with its context and consequences.
+
+We are using [this template for ADR](https://gist.github.com/iaincollins/92923cc2c309c2751aea6f1b34b31d95)
+<!-- 
+[There also QA testing docs](./docs/qa/README.md) to manual test the component before a major release, (QA testing does not require any technical knowledge). -->
+
 
 ## Build
 
 <!-- _How to run build_ -->
 
-use the make file 
+<!-- See README for individual packages for more details ?-->
+
+### Client - React 
+
+```
+make build-react
+```
+
+Build of react client side will be in `packages/client/build`
+
+
+### Electron - Build
+First do `make build-react` then 
+
+```
+make build-electron
+```
+
+`packages/client/dist` will contain your packaged version of the app for desktop
+
+### Adobe CEP Panel 
+
+_Adobe CEP panel instructions coming soon_
 
 ## Tests
 
 <!-- _How to carry out tests_ -->
 
-TBC
+_TBC_
+
+<!-- Test coverage using [`jest`](https://jestjs.io/), to run tests
+
+```
+npm run test
+```
+
+During development you can use
+
+```
+npm run test:watch
+``` -->
+
+<!-- See README for individual packages for more details -->
+
+
+<!-- ## Travis CI
+
+On commit this repo uses the [.travis.yml](./.travis.yml) config tu run the automated test on [travis CI](https://travis-ci.org/bbc/react-transcript-editor). -->
+
+## Environment variables
+
+[`packages/client/.env`](./packages/client/.env) contains environment variables config for the React client side app.
+
+<mark>Do not store credentials in `.env` during development.</mark>
 
 ## Deployment
 
 <!-- _How to deploy the code/app into test/staging/production_ -->
 
-TBC
+_TBC_
+
+<!-- See README for individual packages for more details -->
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) guidelines and [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) guidelines.
+
+## Licence
+<!-- mention MIT Licence -->
+See [LICENCE](./LICENCE.md)
+
+## Legal Disclaimer
+
+_Despite using React and DraftJs, the BBC is not promoting any Facebook products or other commercial interest._
 
 
----
-
-# TODO
-- [x] `.gitignore`, various `node_modules` folders + `dist` folder for electron and `build` folder for react
-- [ ] way to deal with `node_modules` repetitions
-- [ ] TravisCI deploy for electron cross platform into github releases
-- [ ] add auto update module using github releases
-- [ ] figure out how to use and if necessary to use, yarn and lerna for mono repo 
-- [ ] figure out how to setup monorepo for npm publishing of individual modules, name spacing etc..
-- [ ] figure out where/how to handle configs (eg server and db details for production and development)
-- [ ] figure out how to have dev, staging and live enviroment.

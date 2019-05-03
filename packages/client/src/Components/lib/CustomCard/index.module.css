@@ -1,0 +1,10 @@
+
+/* Mobile media query  */
+@media (min-width: 320px) and (max-width: 480px) {
+    .cardLink + .cardLink {
+        margin-left: 0.25rem;
+    }
+    .cardLink  {
+        margin-bottom: 0.25rem;
+    }
+}
