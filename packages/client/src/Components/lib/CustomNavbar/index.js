@@ -17,33 +17,40 @@ class CustomNavbar extends Component {
 
   render() {
     let links;
-    if (this.props.links !== undefined && this.props.links.length !== 0 ) {
+    if (this.props.links !== undefined && this.props.links.length !== 0) {
       links = this.props.links.map((item, i) => {
-        return (<LinkContainer key={ i + '_lid' } to={ item.link }>
-          <Nav.Link>{item.name}</Nav.Link>
-        </LinkContainer>);
+        return (
+          <LinkContainer key={ i + '_lid' } to={ item.link }>
+            <Nav.Link>{item.name}</Nav.Link>
+          </LinkContainer>
+        );
       });
     }
 
-    const popover = (<Popover id="popover-basic">
-      {links}
-    </Popover>);
+    const popover = <Popover id="popover-basic">{links}</Popover>;
 
     return (
-      <Navbar collapseOnSelect expand={ 'md' } bg="light" variant="light" fixed="top" >
-        <FontAwesomeIcon icon={ faFlask } />&nbsp;&nbsp;
-        <LinkContainer to="/" >
-          <Navbar.Brand >{process.env.REACT_APP_NAME}</Navbar.Brand>
+      <Navbar
+        collapseOnSelect
+        expand={ 'md' }
+        bg="light"
+        variant="light"
+        fixed="top"
+      >
+        <FontAwesomeIcon icon={ faFlask } />
+        &nbsp;&nbsp;
+        <LinkContainer to="/">
+          <Navbar.Brand>{process.env.REACT_APP_NAME}</Navbar.Brand>
         </LinkContainer>
         <OverlayTrigger
           trigger="click"
           rootClose
           placement="bottom"
-          overlay={ popover }>
+          overlay={ popover }
+        >
           <FontAwesomeIcon icon={ faEllipsisH } />
         </OverlayTrigger>
       </Navbar>
-
     );
   }
 }

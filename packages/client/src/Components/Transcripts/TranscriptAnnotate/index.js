@@ -7,12 +7,9 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Dropdown from 'react-bootstrap/Dropdown';
-import Collapse from 'react-bootstrap/Collapse';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faHighlighter,
-  faQuestionCircle
-} from '@fortawesome/free-solid-svg-icons';
+  faHighlighter } from '@fortawesome/free-solid-svg-icons';
 
 import MediaPlayer from '@bbc/react-transcript-editor/MediaPlayer';
 import VideoPlayer from '@bbc/react-transcript-editor/VideoPlayer';
@@ -26,7 +23,7 @@ import LabelsList from './LabelsList/index.js';
 
 import Paragraphs from './Paragraphs/index.js';
 import SearchBar from './SearchBar/index.js';
-import Api from '../../../Api/index.js';
+import ApiWrapper from '../../../ApiWrapper/index.js';
 import navbarLinks from '../../lib/custom-navbar-links';
 
 class TranscriptAnnotate extends Component {
@@ -74,7 +71,7 @@ class TranscriptAnnotate extends Component {
   }
 
   componentDidMount = () => {
-    Api.getAnnotations(this.state.projectId, this.state.transcriptId)
+    ApiWrapper.getAnnotations(this.state.projectId, this.state.transcriptId)
       // TODO: add error handling
       .then(json => {
         console.log(json);

@@ -20,13 +20,36 @@ class Users extends Component {
       projectId: this.props.match.params.projectId,
       projectTitle: '',
       usersList: [
-        { id:0, name: 'Example 1', email: 'example.1@bbc.co.uk', display: true, partOfProject: true },
-        { id:1, name: 'Example 2', email: 'example.2@bbc.co.uk', display: true, partOfProject: false },
-        { id:2, name: 'Example 3', email: 'example.3@bbc.co.uk', display: true, partOfProject: true },
-        { id:3, name: 'Example 4', email: 'example.4@bbc.co.uk', display: true, partOfProject: false },
+        {
+          id: 0,
+          name: 'Example 1',
+          email: 'example.1@bbc.co.uk',
+          display: true,
+          partOfProject: true
+        },
+        {
+          id: 1,
+          name: 'Example 2',
+          email: 'example.2@bbc.co.uk',
+          display: true,
+          partOfProject: false
+        },
+        {
+          id: 2,
+          name: 'Example 3',
+          email: 'example.3@bbc.co.uk',
+          display: true,
+          partOfProject: true
+        },
+        {
+          id: 3,
+          name: 'Example 4',
+          email: 'example.4@bbc.co.uk',
+          display: true,
+          partOfProject: false
+        }
       ]
     };
-
   }
 
   // TODO: use API class
@@ -45,13 +68,14 @@ class Users extends Component {
   //   return textOne.toLowerCase().trim().includes(textTwo.toLowerCase().trim());
   // }
 
-  handleSearch = (e) => {
+  handleSearch = e => {
     const searchText = e.target.value;
 
-    const results = this.state.usersList.filter((user) => {
+    const results = this.state.usersList.filter(user => {
       console.log(searchText, user.name, user.email);
-      if (includesText(user.name, searchText)
-      || includesText(user.email, searchText)
+      if (
+        includesText(user.name, searchText) ||
+        includesText(user.email, searchText)
       ) {
         user.display = true;
 
@@ -66,13 +90,13 @@ class Users extends Component {
     this.setState({
       usersList: results
     });
-  }
+  };
 
-  handleAddUserToProject = (userId) => {
+  handleAddUserToProject = userId => {
     alert('add user ' + userId);
     // TODO: Call API
     const users = this.state.usersList;
-    const userTmp = users.map((u) => {
+    const userTmp = users.map(u => {
       if (u.id === userId) {
         u.partOfProject = true;
       }
@@ -82,10 +106,9 @@ class Users extends Component {
     this.setState({
       usersList: userTmp
     });
+  };
 
-  }
-
-  handleRemoveUserToProject= (userId) => {
+  handleRemoveUserToProject = userId => {
     alert('remove user ' + userId);
     //eslint-disable-next-line
     // const confirmationPrompt = confirm("Click OK if you wish to delete, cancel if you don't");
@@ -98,7 +121,7 @@ class Users extends Component {
     // }
     // TODO: Call API
     const users = this.state.usersList;
-    const userTmp = users.map((u) => {
+    const userTmp = users.map(u => {
       if (u.id === userId) {
         u.partOfProject = false;
       }
@@ -108,56 +131,56 @@ class Users extends Component {
     this.setState({
       usersList: userTmp
     });
-
-  }
+  };
 
   render() {
-
     let users;
     // if ( this.state.transcriptsList !== null) {
-    users = this.state.usersList.map((user) => {
-      if (user.display) {
-        return ( <CustomUserCard
-          key={ user.id }
-          userId={ user.id }
-          userName={ user.name }
-          userEmail={ user.email }
-          partOfProject={ user.partOfProject }
-          handleAddUserToProject={ this.handleAddUserToProject }
-          handleRemoveUserToProject={ this.handleRemoveUserToProject }
-        />
-        );
-      } else {
-        return null;
-      }
-    }).filter((user) => {
-      return user !== null;
-    });
+    users = this.state.usersList
+      .map(user => {
+        if (user.display) {
+          return (
+            <CustomUserCard
+              key={ user.id }
+              userId={ user.id }
+              userName={ user.name }
+              userEmail={ user.email }
+              partOfProject={ user.partOfProject }
+              handleAddUserToProject={ this.handleAddUserToProject }
+              handleRemoveUserToProject={ this.handleRemoveUserToProject }
+            />
+          );
+        } else {
+          return null;
+        }
+      })
+      .filter(user => {
+        return user !== null;
+      });
     // }
 
     return (
       <Container style={ { marginBottom: '5em' } }>
-        <CustomNavbar
-          links={ navbarLinks(this.state.projectId) }
-        />
-        <br/>
+        <CustomNavbar links={ navbarLinks(this.state.projectId) } />
+        <br />
         <CustomBreadcrumb
           // className="d-none d-sm-block"
           className="hidden-xs"
           // xsHidden
-          items={ [ {
-            name: 'Projects',
-            link: '/projects'
-          },
-          {
-            // TODO: need to get project name
-            // TODO: if using project name, only use first x char and add ...
-            name: `Project: ${ this.state.projectTitle }`,
-            link: `/projects/${ this.state.projectId }`
-          },
-          {
-            name: 'Users'
-          }
+          items={ [
+            {
+              name: 'Projects',
+              link: '/projects'
+            },
+            {
+              // TODO: need to get project name
+              // TODO: if using project name, only use first x char and add ...
+              name: `Project: ${ this.state.projectTitle }`,
+              link: `/projects/${ this.state.projectId }`
+            },
+            {
+              name: 'Users'
+            }
           ] }
         />
         <div className="">
