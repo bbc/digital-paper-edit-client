@@ -1,0 +1,29 @@
+{
+    "transcripts": [
+      {
+        "id": 0,
+        "title": "Transcript title Zero",
+        "description": "Transcript zero description",
+        "status": "done"
+      },
+      {
+        "id": 1,
+        "title": "Transcript title One",
+        "description": "Transcript one description",
+        "status": "in-progress"
+      },
+      {
+        "id": 2,
+        "title": "Transcript title Two",
+        "description": "Transcript Two description brexit",
+        "status": "error",
+        "errorMessage": "Wasn't able to complete the transcription"
+      },
+      {
+        "id": 3,
+        "title": "Transcript title 3",
+        "description": "Transcript 3 description brexit",
+        "status": "error"
+      }
+    ]
+  }

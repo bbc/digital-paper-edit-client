@@ -9,16 +9,24 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
+
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faFileVideo, faFileAudio, faFileAlt, faFilm } from '@fortawesome/free-solid-svg-icons';
 
 import CustomNavbar from './lib/CustomNavbar/index.js';
 import CustomFooter from './lib/CustomFooter/index.js';
 
+{
+  /* <Button intent="success" text="button content" onClick={incrementCounter} /> */
+}
+
 class Home extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       transcriptJson: null
-//     }
+  //   constructor(props) {
+  //     super(props);
+  //     this.state = {
+  //       transcriptJson: null
+  //     }
 
   //   }
 
@@ -29,31 +37,40 @@ class Home extends Component {
   //       this.setState({transcriptJson: json})
   //     })
   //   }
+  // eslint-disable-next-line class-methods-use-this
   render() {
     return (
       <Container>
-        <CustomNavbar/>
-        <br/><br/>
+        <CustomNavbar
+          links={ [
+            {
+              name: 'Projects',
+              link: '/projects'
+            },
+            {
+              name: 'New Projects',
+              link: '/projects/new'
+            }
+          ] }
+        />
+        <br />
+        <br />
         {/* TBC add some info about what the app, is how to use, signing in etc.. */}
-
         <Jumbotron>
-          <h1>Hello, world!</h1>
+          <h1>Digital Paper Edit</h1>
+          <p>Some explanation text on how to make the most of this app</p>
           <p>
-    This is a simple hero unit, a simple jumbotron-style component for calling
-    extra attention to featured content or information.
-          </p>
-          <p>
+            <ButtonToolbar>
+              <LinkContainer to={ '/projects' }>
+                <Button variant="link">Projects</Button>
+              </LinkContainer>
 
-            <LinkContainer to={ '/projects' }>
-              <Button variant="primary">Projects</Button>
-            </LinkContainer>
-
-            {/* <LinkContainer to={ '/projects' }>
-              <Button variant="primary">Learn more</Button>
-            </LinkContainer> */}
+              <LinkContainer to={ '/projects/new' }>
+                <Button variant="link">New Projects</Button>
+              </LinkContainer>
+            </ButtonToolbar>
           </p>
         </Jumbotron>
-
         <CustomFooter />
       </Container>
     );

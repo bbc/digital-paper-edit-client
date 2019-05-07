@@ -1,8 +1,8 @@
 # Architecture for Digital Paper Edit
 
-* Status: pending <!-- optional -->
-* Deciders: Pietro, Eimi <!-- Laurien, Mark Langton, James Gruessing -->
-* Date: 2019-04-23
+* Status: Accepted <!-- optional -->
+* Deciders: Pietro, Dave, Eimi <!-- Laurien, Mark Langton, James Gruessing -->
+* Date: 2019-05-01
 
 Technical Story: https://github.com/bbc/digital-paper-edit/issues/1 <!-- optional -->
 
@@ -86,6 +86,31 @@ Cons:
 * Could be slower
 
 
+**Cold Lambda**
+Articles read:
+* https://read.acloud.guru/does-coding-language-memory-or-package-size-affect-cold-starts-of-aws-lambda-a15e26d12c76
+* https://kevinslin.com/aws/lambda_cold_start_idle/#results-us-east-1
+* https://read.acloud.guru/how-long-does-aws-lambda-keep-your-idle-functions-around-before-a-cold-start-bf715d3b810
+
+tl;dr the three articles above:
+Lambda idleness causes
+
+1. lambda is terminated
+2. a call can timeout or return an error
+3. the next successful call will be “cold”, meaning slower
+
+* Cold starts can happen when idle time is around the 1h mark but this is not
+set in stone.
+* Cold starts can vary depending on the allocated memory, code size, and the
+  language the lambda is running.
+* Python works best in these scenarios (very little time taken to start once
+  cold) and Java / C# takes longest (static typing)
+* The worst case scenario is ~5s (C# with 128 memory size).
+
+In order to avoid the cold restarts, we would need to create "Step Functions" to
+retain Lambdas "warm". The Step Functions will periodically call Lambdas (every
+30 minutes or so) to reduce idle time.
+
 #### Storage: local vs S3
 
 S3 will benefit us in terms of resilience and remote storage. However this could introduce issues
@@ -135,7 +160,6 @@ only IP address based authentication.
 
 Both options will have the advantages of:
 
-<<<<<<< HEAD
 * being maintainable,
 * being transparent
 * being transferable
@@ -154,15 +178,6 @@ Both options will have the disadvantages of:
   `t2.small` instances for Option 2, plus lambda executions as well as SQS and
   S3.
 * Locking in with AWS.
-=======
-* maintainable,
-* transferable
-* using existing pipelines
-
-Both options will have the disadvantages of:
-
-* Initial 
->>>>>>> a7c87c0... Adding ADR draft for transcript architecture
 
 ### Option 1
 
@@ -183,17 +198,9 @@ test integration locally with Lambdas and Gateways.
 #### Advantages
 
 * Cheaper as there isn't a full instance running - Lambda.
-<<<<<<< HEAD
 * Better for the environment (less operational CO2 cost)
-=======
-* Better for the environment
->>>>>>> a7c87c0... Adding ADR draft for transcript architecture
 
 #### Disadvantages
 
 * There could be a timeout issue for Lambda
-<<<<<<< HEAD
 * Difficulty in debugging due to Lambda
-=======
-* Difficulty in debugging
->>>>>>> a7c87c0... Adding ADR draft for transcript architecture
