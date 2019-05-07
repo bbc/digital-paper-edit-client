@@ -15,7 +15,7 @@ class Words extends Component {
           data-text={ removePunctuation(word.text) }
           data-end={ word.end }
           key={ 'key_' + word.index + '_' + word.end }
-          tabIndex="0"
+          // tabIndex="0"
           role="button"
           aria-pressed="false"
           onKeyDown={ this.props.handleKeyDownWords }

@@ -236,30 +236,19 @@ class TranscriptAnnotate extends Component {
     if (selection) {
       this.setState((state) => {
         const { annotations } = state;
-        // console.log('annotations', annotations);
-        // if (element.id && element.id === 'defaultHighlightBtn') {
-        //   selection.labelId = 0;
-        // }
-        // else {
         selection.labelId = parseInt(element.dataset.labelId);
-        // }
         selection.start = parseFloat(selection.start);
         selection.end = parseFloat(selection.end);
-        // commenting out prompt in favour of using edit functionality once annotation created
-        // const customNoteText = prompt('some optional note to this annotation');
         const customNoteText = '';
         selection.note = customNoteText ? customNoteText : '';
+        // Temporary workaround to calculate label Id
         // TODO: there's got to be a more robust way to make id for label
-        // eg use ?
-        // const buf = crypto.randomBytes(16);
-        // buf.toString('hex');
+        // eg use: `const buf = crypto.randomBytes(16); buf.toString('hex');`
         const lastAnnotation = annotations[annotations.length - 1];
         const lastAnnotationId = lastAnnotation.id;
         const newAnnotationId = lastAnnotationId + 1;
         selection.id = newAnnotationId;
-        // console.log('new selection annotation ', selection);
         annotations.push(selection);
-        // console.log('annotations.push(selection);', annotations);
 
         return {
           annotations: annotations
