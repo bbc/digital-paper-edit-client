@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import Player from './Player';
-import ProgressBar from '@bbc/react-transcript-editor/ProgressBar';
+import ProgressBar from './ProgressBar';
+import Controls from './Controls';
 
 class PaperCutsPlayer extends React.PureComponent {
 
@@ -11,18 +12,20 @@ class PaperCutsPlayer extends React.PureComponent {
     super(props);
 
     this.playlist = playlist;
-    this.player = React.createRef();
+    this.playerRef = React.createRef();
+  }
+
+  componentDidMount() {
+    this.player = this.playerRef && this.playerRef.current;
+    this.forceUpdate();
   }
 
   render() {
     return (
       <>
-        <Player ref={ this.player } playlist={ this.playlist } />
-        <ProgressBar
-          buttonClick={ () => {} }
-          value={ (this.playlist && this.playlist.current && this.playlist.current.currentTime) || 0 }
-          max={ (this.playlist && this.playlist.current && this.playlist.current.duration) || 0 }
-        />
+        <Player ref={ this.playerRef } playlist={ this.playlist } />
+        <ProgressBar videoContext={ this.player && this.player.videoContext } />
+        <Controls videoContext={ this.player && this.player.videoContext } />
       </>
     );
   }

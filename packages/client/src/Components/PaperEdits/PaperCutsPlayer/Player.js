@@ -6,7 +6,7 @@ const getCanvas = (ref, width, height) => {
   return (
     <canvas
       ref={ ref }
-      className="video-canvas"
+      className='video-canvas'
       width={ width }
       height={ height }
     >
@@ -24,25 +24,17 @@ class PaperCutsPlayer extends React.PureComponent {
     } = props;
 
     super(props);
-    this.duration = 0;
-    this.currentTime = 0;
-    this.isPlaying = false;
-
-    this.playlist = playlist;
 
     this.canvasRef = canvasRef;
     this.canvas = getCanvas(this.canvasRef, width, height);
 
-    this.play = this.play.bind(this);
-    this.pause = this.pause.bind(this);
+    this.playlist = playlist;
     this.loadPlaylist = this.loadPlaylist.bind(this);
   }
 
   componentDidMount() {
     this.videoContext = new VideoContext(this.canvasRef.current, () => console.log('oops'));
     this.loadPlaylist();
-    this.duration = this.videoContext.duration;
-    this.currentTime = this.videoContext.currentTime;
   }
 
   loadPlaylist() {
@@ -52,17 +44,6 @@ class PaperCutsPlayer extends React.PureComponent {
       node.stopAt(start + duration);
       node.connect(this.videoContext.destination);
     });
-  }
-
-  play() {
-    console.log('play');
-    this.videoContext.play();
-    this.isPlaying = true;
-  }
-
-  pause() {
-    this.videoContext.pause();
-    this.isPlaying = false;
   }
 
   render() {
