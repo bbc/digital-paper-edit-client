@@ -29,11 +29,15 @@ class ProgressBar extends React.PureComponent {
     requestAnimationFrame(this.updateProgress);
   });
 
+  handleClick = ({ nativeEvent: { offsetX } }) => {
+    this.videoContext.currentTime = (offsetX / this.width) * this.duration;
+  }
+
   render() {
     const sharedStyle = { position: '0 0', height: '10px' };
 
     return (
-      <div style={ { ...sharedStyle, background: 'grey', width: `${this.width}px` } }>
+      <div onClick={ this.handleClick } style={ { ...sharedStyle, background: 'grey', width: `${this.width}px` } }>
         <div style={ { ...sharedStyle, background: 'red', width: `${this.state.progress}%` } } />
       </div>
     );
