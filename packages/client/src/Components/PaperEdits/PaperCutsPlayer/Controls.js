@@ -18,23 +18,19 @@ class Controls extends React.PureComponent {
     this.state = {
       isPlaying: false
     };
-
-    this.handlePlay = this.handlePlay.bind(this);
-    this.handlePause = this.handlePause.bind(this);
-    this.handleStop = this.handleStop.bind(this);
   }
 
-  handlePlay() {
+  handlePlay = () => {
     this.props.videoContext.play();
     this.setState({ isPlaying: true });
   }
 
-  handlePause() {
+  handlePause = () => {
     this.props.videoContext.pause();
     this.setState({ isPlaying: false });
   }
 
-  handleStop() {
+  handleStop = () => {
     this.props.videoContext.pause();
     this.props.videoContext.currentTime = 0;
     this.setState({ isPlaying: false });

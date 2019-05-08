@@ -20,16 +20,13 @@ class PaperCutsPlayer extends React.PureComponent {
       width = 640,
       height = 360,
       playlist = [],
-      canvasRef = React.createRef(),
     } = props;
 
     super(props);
 
-    this.canvasRef = canvasRef;
-    this.canvas = getCanvas(this.canvasRef, width, height);
-
     this.playlist = playlist;
-    this.loadPlaylist = this.loadPlaylist.bind(this);
+    this.canvasRef = React.createRef();
+    this.canvas = getCanvas(this.canvasRef, width, height);
   }
 
   componentDidMount() {
@@ -37,7 +34,7 @@ class PaperCutsPlayer extends React.PureComponent {
     this.loadPlaylist();
   }
 
-  loadPlaylist() {
+  loadPlaylist = () => {
     this.playlist.forEach(({ type, offset, start, duration, src }) => {
       const node = this.videoContext[type](src, offset);
       node.startAt(start);

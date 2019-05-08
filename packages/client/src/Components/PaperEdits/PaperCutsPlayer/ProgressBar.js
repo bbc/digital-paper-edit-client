@@ -11,24 +11,23 @@ class ProgressBar extends React.PureComponent {
     super(props);
 
     this.width = width;
-
     this.state = { progress: 0 };
-  }
-
-  componentDidMount() {
-    this.interval = setInterval(() =>
-      this.setState({ progress: ((this.videoContext.currentTime / this.duration) * 100) })
-    , 16);
   }
 
   componentDidUpdate() {
     this.duration = this.videoContext && this.videoContext.duration;
     this.videoContext = this.props.videoContext;
+    this.updateProgress();
   }
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+  updateProgress = () => requestAnimationFrame(() => {
+    const currentTime = this.videoContext && this.videoContext.currentTime;
+    const progress = ( currentTime / this.duration) * 100;
+
+    if (this.state.progress !== progress) this.setState({ progress });
+
+    requestAnimationFrame(this.updateProgress);
+  });
 
   render() {
     const sharedStyle = { position: '0 0', height: '10px' };
