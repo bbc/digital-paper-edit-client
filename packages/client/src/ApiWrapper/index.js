@@ -49,7 +49,7 @@ class ApiWrapper {
   }
 
   async deleteProject(id) {
-    const res = await corsFetch(this.getProjectUrl(id), 'DELETE');
+    const res = await corsFetch(this.projectsIdUrl(id), 'DELETE');
     const json = await res.json();
 
     return json;
@@ -88,7 +88,7 @@ class ApiWrapper {
   }
 
   async deleteTranscript(projectId, transcriptId) {
-    const res = await fetch(this.getTranscriptUrl(projectId, transcriptId), 'DELETE');
+    const res = await corsFetch(this.transcriptsIdUrl(projectId, transcriptId), 'DELETE');
     const json = await res.json();
 
     return json;
