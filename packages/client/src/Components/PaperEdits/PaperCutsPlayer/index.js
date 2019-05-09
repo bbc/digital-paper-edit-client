@@ -15,17 +15,19 @@ class PaperCutsPlayer extends React.PureComponent {
     this.playerRef = React.createRef();
   }
 
-  componentDidMount() {
-    this.player = this.playerRef && this.playerRef.current;
+  async componentDidMount() {
+    this.videoContext = await this.playerRef && this.playerRef.current && this.playerRef.current.videoContext;
     this.forceUpdate();
   }
 
   render() {
+    console.log('render', this.videoContext);
+
     return (
       <>
         <Player ref={ this.playerRef } playlist={ this.playlist } />
-        <ProgressBar videoContext={ this.player && this.player.videoContext } />
-        <Controls videoContext={ this.player && this.player.videoContext } />
+        <ProgressBar videoContext={ this.videoContext && this.videoContext } />
+        <Controls videoContext={ this.videoContext && this.videoContext } />
       </>
     );
   }

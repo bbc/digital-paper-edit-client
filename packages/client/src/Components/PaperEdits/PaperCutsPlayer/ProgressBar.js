@@ -15,14 +15,14 @@ class ProgressBar extends React.PureComponent {
   }
 
   componentDidUpdate() {
-    this.duration = this.videoContext && this.videoContext.duration;
     this.videoContext = this.props.videoContext;
+    this.setState({ duration: this.videoContext.duration });
     this.updateProgress();
   }
 
   updateProgress = () => requestAnimationFrame(() => {
     const currentTime = this.videoContext && this.videoContext.currentTime;
-    const progress = ( currentTime / this.duration) * 100;
+    const progress = (currentTime / this.state.duration) * 100;
 
     if (this.state.progress !== progress) this.setState({ progress });
 
@@ -33,12 +33,34 @@ class ProgressBar extends React.PureComponent {
     this.videoContext.currentTime = (offsetX / this.width) * this.duration;
   }
 
+  getTracks = () => this.state.duration && this.videoContext._sourceNodes.map(
+    ({ startTime, stopTime, elementURL }, i) => {
+      const marginLeft = (startTime / this.state.duration) * this.width;
+      const width = ((stopTime - startTime) / this.state.duration) * this.width;
+      const key = `${elementURL.split('/').slice(-1).pop()}.${i}`;
+
+      return (
+        <div key={ key } style={ { pointerEvents: 'none' } } >
+          <div style={ { height: 1, opacity: 0.0 } } />
+          <div style={ { height: 8, opacity: 0.2, background: 'black', width, marginLeft } } />
+          <div style={ { height: 1, opacity: 0.0 } } />
+        </div>
+      );
+    });
+
   render() {
     const sharedStyle = { position: '0 0', height: '10px' };
 
+    if (!this.tracks) this.tracks = this.getTracks();
+
     return (
-      <div onClick={ this.handleClick } style={ { ...sharedStyle, background: 'grey', width: `${this.width}px` } }>
-        <div style={ { ...sharedStyle, background: 'red', width: `${this.state.progress}%` } } />
+      <div
+        onClick={ this.handleClick }
+        style={ { ...sharedStyle, background: 'grey', width: this.width, height: 'auto' } }
+      >
+        <div style={ { ...sharedStyle, background: 'red', width: `${this.state.progress}%`, height: 'auto' } } >
+          { this.tracks }
+        </div>
       </div>
     );
   }
