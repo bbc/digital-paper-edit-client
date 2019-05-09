@@ -30,10 +30,10 @@ class ProgressBar extends React.PureComponent {
   });
 
   handleClick = ({ nativeEvent: { offsetX } }) => {
-    this.videoContext.currentTime = (offsetX / this.width) * this.duration;
+    this.videoContext.currentTime = (offsetX / this.width) * this.state.duration;
   }
 
-  getTracks = () => this.state.duration && this.videoContext._sourceNodes.map(
+  getTracks = () => this.state.duration && this.videoContext._sourceNodes.reverse().map(
     ({ startTime, stopTime, elementURL }, i) => {
       const marginLeft = (startTime / this.state.duration) * this.width;
       const width = ((stopTime - startTime) / this.state.duration) * this.width;
