@@ -53,6 +53,9 @@ function createWindow() {
     );
   }
 
+  // https://github.com/electron/electron/issues/1095
+  mainWindow.dataPath = app.getPath("userData");
+
   // MENU
   // TODO: menu could be refactored as separate file?
   // Create the Application's main menu

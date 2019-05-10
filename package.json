@@ -1,7 +1,8 @@
 {
   "name": "digital-paper-edit",
   "version": "1.0.0",
-  "description": "A boilerplate proof of concept for a modular architecture with  - React - Express - Electron",
+  "private": true,
+  "description": "Digital paper edit application, using transcriptions from automated STT, to do text based video editing on audio and video interviews. Modular architecture with  - React - Express - Electron - Adobe CEP",
   "main": "index.js",
   "scripts": {
     "start:server": "node ./packages/backend/index.js",
@@ -9,6 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {}
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3"
+  }
 }
