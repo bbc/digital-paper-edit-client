@@ -2,7 +2,10 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 
-class ProgressBar extends React.PureComponent {
+import './styles.css';
+
+
+class PaperCutsPlayerProgressBar extends React.PureComponent {
   constructor(props) {
     const {
       width = 640,
@@ -41,24 +44,26 @@ class ProgressBar extends React.PureComponent {
 
       return (
         <div key={ key } style={ { pointerEvents: 'none' } } >
-          <div style={ { height: 1, opacity: 0.0 } } />
-          <div style={ { height: 8, opacity: 0.2, background: 'black', width, marginLeft } } />
-          <div style={ { height: 1, opacity: 0.0 } } />
+          <div className='papercuts-player-progress-track-buffer' />
+          <div className='papercuts-player-progress-track' style={ { width, marginLeft } } />
+          <div className='papercuts-player-progress-track-buffer' />
         </div>
       );
     });
 
   render() {
-    const sharedStyle = { position: '0 0', height: '10px' };
-
     if (!this.tracks) this.tracks = this.getTracks();
 
     return (
       <div
+        className='papercuts-player-progress papercuts-player-progress-back'
         onClick={ this.handleClick }
-        style={ { ...sharedStyle, background: 'grey', width: this.width, height: 'auto' } }
+        style={ { width: this.width } }
       >
-        <div style={ { ...sharedStyle, background: 'red', width: `${this.state.progress}%`, height: 'auto' } } >
+        <div
+          className='papercuts-player-progess papercuts-player-progress-front'
+          style={ { width: `${this.state.progress}%` } }
+        >
           { this.tracks }
         </div>
       </div>
@@ -66,4 +71,4 @@ class ProgressBar extends React.PureComponent {
   }
 }
 
-export default ProgressBar;
+export default PaperCutsPlayerProgressBar;
