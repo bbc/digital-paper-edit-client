@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 // import Button from 'react-bootstrap/Button';
 import './Home.module.css';
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';

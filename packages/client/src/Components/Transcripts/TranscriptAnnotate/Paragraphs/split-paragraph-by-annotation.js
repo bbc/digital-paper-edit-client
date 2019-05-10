@@ -72,49 +72,49 @@ const annotation = {
 /**
  * Checks if end of an annotation is included in a paragraph
  */
-const paragraphIncludesStartOfAnnotation = (annotation, paragraph) => {
-  // find returns undefined if it doesn't find anything
-  const startWord = paragraph.find(w => {
-    return annotation.start == w.start;
-  });
-  // find returns undefined if it doesn't find anything
-  if (startWord) {
-    return true;
-  }
+// const paragraphIncludesStartOfAnnotation = (annotation, paragraph) => {
+//   // find returns undefined if it doesn't find anything
+//   const startWord = paragraph.find(w => {
+//     return annotation.start == w.start;
+//   });
+//   // find returns undefined if it doesn't find anything
+//   if (startWord) {
+//     return true;
+//   }
 
-  return false;
-};
+//   return false;
+// };
 
 /**
  * Helper function
  * Checks if start of an annotation is included in a paragraph
  */
-const paragraphIncludesEndOfAnnotation = (annotation, paragraph) => {
-  const endWord = paragraph.find(w => {
-    return annotation.end == w.end;
-  });
-  // find returns undefined if it doesn't find anything
-  if (endWord) {
-    return true;
-  }
+// const paragraphIncludesEndOfAnnotation = (annotation, paragraph) => {
+//   const endWord = paragraph.find(w => {
+//     return annotation.end == w.end;
+//   });
+//   // find returns undefined if it doesn't find anything
+//   if (endWord) {
+//     return true;
+//   }
 
-  return false;
-};
+//   return false;
+// };
 
 /**
  * Helper function
  * Checks if an annotation is included in a paragraph
  */
-const paragraphIncludesAnnotation = (annotation, paragraph) => {
-  if (
-    paragraphIncludesStartOfAnnotation(annotation, paragraph) &&
-    paragraphIncludesEndOfAnnotation(annotation, paragraph)
-  ) {
-    return true;
-  }
+// const paragraphIncludesAnnotation = (annotation, paragraph) => {
+//   if (
+//     paragraphIncludesStartOfAnnotation(annotation, paragraph) &&
+//     paragraphIncludesEndOfAnnotation(annotation, paragraph)
+//   ) {
+//     return true;
+//   }
 
-  return false;
-};
+//   return false;
+// };
 
 /**
  *
@@ -150,7 +150,7 @@ const getWordsAfterAnnotation = (annotation, paragraph) => {
 const getWordsInAnnotation = (annotation, paragraph) => {
   // index for start
   const startWord = paragraph.find(w => {
-    return annotation.start == w.start;
+    return annotation.start === w.start;
   });
   const startIndex = paragraph.indexOf(startWord);
   // index for end
@@ -158,6 +158,7 @@ const getWordsInAnnotation = (annotation, paragraph) => {
     return annotation.end === w.end;
   });
   const endIndex = paragraph.indexOf(endWord);
+
   //  endIndex + 1 because end not included in slice()
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice
   return paragraph.slice(startIndex, endIndex + 1);
@@ -195,18 +196,18 @@ const getWordsInAnnotation = (annotation, paragraph) => {
  *
  */
 const splitParagraphByAnnotation = (annotation, paragraph) => {
-  if (paragraphIncludesAnnotation(annotation, paragraph)) {
-    return {
-      // slice before
-      before: getWordsBeforeAnnotation(annotation, paragraph),
-      // slice between
-      annotations: getWordsInAnnotation(annotation, paragraph),
-      // slice after
-      after: getWordsAfterAnnotation(annotation, paragraph)
-    };
-  }
+  // if (paragraphIncludesAnnotation(annotation, paragraph)) {
+  return {
+    // slice before
+    wordsBefore: getWordsBeforeAnnotation(annotation, paragraph),
+    // slice between
+    wordsInAnnotation: getWordsInAnnotation(annotation, paragraph),
+    // slice after
+    wordsAfter: getWordsAfterAnnotation(annotation, paragraph)
+  };
+  // }
 
-  return false;
+  // return false;
 };
 
 export default splitParagraphByAnnotation;

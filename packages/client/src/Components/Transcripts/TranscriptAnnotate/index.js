@@ -48,23 +48,15 @@ class TranscriptAnnotate extends Component {
       sentenceToSearchCSS: '',
       sentenceToSearchCSSInHighlights: '',
       wordsToSearchCSS: '',
-      showTextSearchPreferences: false, //
-      showLabelsSearchPreferences: false, //
-      showSpeakersSearchPreferences: false, //
+      showTextSearchPreferences: false,
+      showLabelsSearchPreferences: false,
+      showSpeakersSearchPreferences: false,
       showSelectedOptionLabelSearch: false,
       selectedOptionLabelSearch: [],
       selectedOptionSpeakerSearch: null,
-      showParagraphsMatchingSearch: false, //
+      showParagraphsMatchingSearch: false,
       notification: null,
-
       annotations: [
-        // {
-        //   'id': 0,
-        //   'start':14.38,
-        //   'end': 18.14,
-        //   'labelId': 0,
-        //   'note': 'optional example text description for an annotation'
-        // },
         {
           'id': 0,
           'start': 50.58,
@@ -103,7 +95,6 @@ class TranscriptAnnotate extends Component {
     ApiWrapper.getAnnotations(this.state.projectId, this.state.transcriptId)
       // TODO: add error handling
       .then(json => {
-        // console.log(json);
         this.setState({
           projectTitle: json.projectTitle,
           transcriptJson: json.transcript,
@@ -168,7 +159,7 @@ class TranscriptAnnotate extends Component {
     const pCSS = `.paragraph[data-paragraph-text*="${ listOfSearchWords.join(' ') }"]`;
 
     const wordsToSearchCSS = listOfSearchWords.map((searchWord, index) => {
-      let res = `${ pCSS } > div > div > span.words[data-text="${ searchWord
+      let res = `${ pCSS } > div > span.words[data-text="${ searchWord
         .toLowerCase()
         .trim() }"]`;
       if (index < listOfSearchWords.length - 1) {
@@ -181,7 +172,7 @@ class TranscriptAnnotate extends Component {
     // Need to add an extra span to search annotation hilights
     // TODO: refactor to make more DRY
     const wordsToSearchCSSInHighlights = listOfSearchWords.map((searchWord, index) => {
-      let res = `${ pCSS } > div > div > span >span.words[data-text="${ searchWord
+      let res = `${ pCSS } > div  > span >span.words[data-text="${ searchWord
         .toLowerCase()
         .trim() }"]`;
       if (index < listOfSearchWords.length - 1) {
@@ -237,8 +228,6 @@ class TranscriptAnnotate extends Component {
       this.setState((state) => {
         const { annotations } = state;
         selection.labelId = parseInt(element.dataset.labelId);
-        selection.start = parseFloat(selection.start);
-        selection.end = parseFloat(selection.end);
         const customNoteText = '';
         selection.note = customNoteText ? customNoteText : '';
         // Temporary workaround to calculate label Id
@@ -311,7 +300,6 @@ class TranscriptAnnotate extends Component {
   }
   render() {
     // TODO: change API to return transcript json with list of speaker labels
-
     return (
       <Container fluid={ true } style={ { backgroundColor: '#f9f9f9', marginBottom: '5em' } }>
         <style scoped>
@@ -416,7 +404,6 @@ class TranscriptAnnotate extends Component {
                   mediaUrl={ this.state.url }
                   onTimeUpdate={ this.handleTimeUpdate }
                   videoRef={ this.videoRef }
-                  // previewIsDisplayed={ this.state.previewIsDisplayed }
                   previewIsDisplayed={ true }
                   onLoadedDataGetDuration={ this.onLoadedDataGetDuration }
                 />

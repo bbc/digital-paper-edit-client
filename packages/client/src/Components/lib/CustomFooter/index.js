@@ -17,7 +17,7 @@ function CustomFooter() {
       <small>
         <img src={ labsLogo } style={ { height: '2em' } } alt="Labs Logo" /> This is
         a prototype from{' '}
-        <a href="http://bbcnewslabs.co.uk/" target="_blank">
+        <a href="http://bbcnewslabs.co.uk/" target="_blank" rel="noopener noreferrer">
           BBC News Labs
         </a>
       </small>

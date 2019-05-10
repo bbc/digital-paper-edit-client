@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTag,
@@ -17,11 +16,10 @@ import randomColor from 'randomcolor'; // import the script
 import { GithubPicker } from 'react-color';
 import csscolors from 'css-color-names';
 import chroma from 'chroma-js';
-import colourStyles from './select-color-styles.js';
 
 //  { value: 'chocolate', label: 'Chocolate' },
 //  "aqua": "#00ffff",
-const cssColorsList = new Array();
+const cssColorsList = [];
 for (var key in csscolors) {
   cssColorsList.push({
     value: key,
@@ -30,7 +28,7 @@ for (var key in csscolors) {
   });
 }
 
-class CreateNewLabelModal extends React.Component {
+class CreateNewLabelModal extends Component {
   constructor(props, context) {
     super(props, context);
 

@@ -11,7 +11,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 const navbarLinks = projectId => {
-  console.log('projectId', projectId);
 
   return [
     {

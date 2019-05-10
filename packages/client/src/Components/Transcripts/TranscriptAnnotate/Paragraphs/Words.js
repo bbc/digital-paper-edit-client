@@ -14,7 +14,7 @@ class Words extends Component {
           // TODO: make/Use helper function in Util - removePunctuation
           data-text={ removePunctuation(word.text) }
           data-end={ word.end }
-          key={ 'key_' + word.index + '_' + word.end }
+          key={ 'key_' + word.id + '_' + word.end }
           // tabIndex="0"
           role="button"
           aria-pressed="false"

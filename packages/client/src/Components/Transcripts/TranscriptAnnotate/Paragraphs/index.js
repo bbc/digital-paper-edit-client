@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { shortTimecode } from '@bbc/react-transcript-editor/timecodeConverter';
 import splitParagraphByAnnotation from './split-paragraph-by-annotation.js';
 import Words from './Words.js';
-import styles from './index.module.css';
 import removePunctuation from '../../../../Util/remove-punctuation/index.js';
-import CustomOverlayTrigger from './CustomOverlayTrigger.js';
+import AnnotationOverlayTrigger from './AnnotationOverlayTrigger.js';
 import findAnnotationInParagraph from './find-annotation-in-paragraph.js';
+import Paragraph from './Paragraph.js';
+
 class Paragraphs extends Component {
 
   // for accessibility, being able to
@@ -26,21 +24,10 @@ class Paragraphs extends Component {
   }
 
   render() {
-    let textResult;
     let paragraphElement;
     const { annotations } = this.props;
-    // console.log('annotations ', annotations);
-    // TODO: change API end point to return transcript already formatted like this
-    // and not in Kaldi format
-    const words = this.props.transcriptJson.words.map(word => {
-      return {
-        index: word.id,
-        start: word.start,
-        end: word.end,
-        text: word.text
-      };
-    });
-    // Breaking down by punctuation can be done client side
+    const words = this.props.transcriptJson.words;
+    // TODO: Breaking down by punctuation could be done client side or server side
     // might need to use a sentence boundary detection
     // later on to optimise. eg to avoid breaking U.S.A. on 3 lines
     const paragraphs = [];
@@ -55,16 +42,12 @@ class Paragraphs extends Component {
       }
     });
 
-    textResult = paragraphs.map((paragraph, index) => {
-      const paragraphText = paragraph
-        .map(word => {
-          return removePunctuation(word.text);
-        })
-        .join(' ');
+    const textResult = paragraphs.map((paragraph, index) => {
+      const paragraphText = paragraph.map(word => {
+        return removePunctuation(word.text);
+      }).join(' ');
 
       // TODO: handle/refactor search/Display to add support for filter results by speaker and labels
-
-      // let paragraphDisplayPreferenceIncludesLabel;
       // TODO: handle support for multiple annotation
       const paragraphDisplayPreference = !paragraphText.includes(this.props.searchString.toLowerCase()) ? { display: 'none' } : { };
       // styles to separate the look of non contiguous paragraphs?
@@ -76,65 +59,46 @@ class Paragraphs extends Component {
       // TODO: something around paragraph, start and end time, included or overlappng in labels start and end time
       // to do the filtering
 
-      // TODO: handle if it returns false
+      // findAnnotationInParagraph returns false if it doesn't find any
       const annotation = findAnnotationInParagraph(annotations, paragraph);
-      // console.log('paragrah annotation ', annotation);
       if (annotation) {
-        // annotation.labelId
-        // paragraphDisplayPreferenceIncludesLabel =
-        // this.state.annotations
-        const paragraphSplitByAnnotation = splitParagraphByAnnotation(annotation, paragraph);
-        // <Example text="some text" />;
-        // console.log('paragraph:: ', JSON.stringify(paragraph, null, 2));
+        // splitParagraphByAnnotation returns false if it doesn't find any.
+        // but we have already checked in previous line with `findAnnotationInParagraph`
+        const { wordsBefore, wordsInAnnotation, wordsAfter } = splitParagraphByAnnotation(annotation, paragraph);
 
-        if (paragraphSplitByAnnotation) {
-          let wordsBefore;
-          // spread paragraphSplitByAnnotation to get before, annotations, and after
-          if (paragraphSplitByAnnotation.before ) {
-            wordsBefore = <Words
-              paragraph={ paragraphSplitByAnnotation.before }
-              handleKeyDownWords={ this.handleKeyDownWords }
-            />;
-          }
+        const wordsBeforeEl = wordsBefore ? <Words
+          key={ 'key-' + index }
+          paragraph={ wordsBefore }
+          handleKeyDownWords={ this.handleKeyDownWords }
+        /> : null;
 
-          const annotatatedWords = <Words
-            paragraph={ paragraphSplitByAnnotation.annotations }
-            handleKeyDownWords={ this.handleKeyDownWords }
-          />;
+        const wordsInAnnotationEl = <Words
+          key={ 'key--' + index }
+          paragraph={ wordsInAnnotation }
+          handleKeyDownWords={ this.handleKeyDownWords }
+        />;
 
-          let wordsAfter;
-          if (paragraphSplitByAnnotation.after) {
-            wordsAfter = <Words
-              paragraph={ paragraphSplitByAnnotation.after }
-              handleKeyDownWords={ this.handleKeyDownWords }
-            />;
-          }
+        const wordsAfterEl = wordsAfter ? <Words
+          key={ 'key---' + index }
+          paragraph={ wordsAfter }
+          handleKeyDownWords={ this.handleKeyDownWords }
+        /> : null;
 
-          // TODO: uncomment when ready
-          // annotation = paragraphSplitByAnnotation.annotation
-
-          paragraphElement = [ wordsBefore,
-          // eslint-disable-next-line react/jsx-key
-            <CustomOverlayTrigger
-              words={ annotatatedWords }
-              labelsOptions={ this.props.labelsOptions }
-              annotationLabelId={ annotation.labelId }
-              annotationId={ annotation.id }
-              annotationNote={ annotation.note }
-              handleDeleteAnnotation={ this.props.handleDeleteAnnotation }
-              handleEditAnnotation={ this.props.handleEditAnnotation }
-            />,
-            wordsAfter ];
-        }
-        // if there are no annotations in this paragraph
-        else {
-          paragraphElement = <Words
-            paragraph={ paragraph }
-            handleKeyDownWords={ this.handleKeyDownWords }
-          />;
-        }
+        paragraphElement = [ wordsBeforeEl,
+          <AnnotationOverlayTrigger
+            key={ 'key----' + index }
+            words={ wordsInAnnotationEl }
+            labelsOptions={ this.props.labelsOptions }
+            annotationLabelId={ annotation.labelId }
+            annotationId={ annotation.id }
+            annotationNote={ annotation.note }
+            handleDeleteAnnotation={ this.props.handleDeleteAnnotation }
+            handleEditAnnotation={ this.props.handleEditAnnotation }
+          />,
+          wordsAfterEl ];
       } else {
         paragraphElement = <Words
+          key={ 'key-----' + index }
           paragraph={ paragraph }
           handleKeyDownWords={ this.handleKeyDownWords }
         />;
@@ -142,36 +106,18 @@ class Paragraphs extends Component {
 
       return (
 
-        <div
-          style={ this.props.showParagraphsMatchingSearch ? paragraphDisplayPreference : {} }
-          className="paragraph"
-          key={ 'key_' + index }
-          data-paragraph-text={ paragraphText }
-        >
-          <Row key={ 'key_' + index }>
-            <Col xs={ 8 } sm={ 8 } md={ 3 } lg={ 3 } xl={ 2 }>
-              <span className={ [ styles.speaker, styles.unselectable ].join(' ') }
-                tabIndex="0"
-              >Speaker Long Name   </span>
-            </Col>
-            <Col xs={ 4 } sm={ 4 } md={ 2 } lg={ 2 } xl={ 1 }
-              style={ { padding: '0em', textAlign: 'center' } }
-              className={ styles.unselectable }>
-              {/* TODO: convert timecode, with @bbc/react-transcript-editor util */}
-              <span
-                style={ { cursor: 'pointer', width: '100%' } }
-                data-start={ paragraph[0].start } className={ 'timecode' }
-                tabIndex="0"
-                onKeyDown={ this.handleKeyDownTimecodes }>
-                { shortTimecode(paragraph[0].start) }
-              </span>
-            </Col>
-            {/* <Example/> */}
-            <Col xs={ 12 } sm={ 12 } md={ 7 } lg={ 7 } xl={ 9 } >
-              {paragraphElement}
-            </Col>
-          </Row>
-        </div>
+        // TODO: could be extracted as separate component Paragraph?
+        <Paragraph
+          showParagraphsMatchingSearch={ this.props.showParagraphsMatchingSearch }
+          paragraphDisplayPreference={ paragraphDisplayPreference }
+          key={ 'key------' + index }
+          paragraphText={ paragraphText }
+          speakerName={ 'some speaker name' }
+          paragraph={ paragraph }
+          handleKeyDownTimecodes={ this.handleKeyDownTimecodes }
+          paragraphElement={ paragraphElement }
+        />
+
       );
     });
 

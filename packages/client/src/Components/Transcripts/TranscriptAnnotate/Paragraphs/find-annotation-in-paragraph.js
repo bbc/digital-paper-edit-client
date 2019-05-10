@@ -13,7 +13,6 @@
 ```
  */
 const findAnnotationInParagraph = (annotations, paragraph) => {
-  // console.log('findAnnotationInParagraph ', annotations);
   const paragraphFirstWordTime = paragraph[0].start;
   const paragraphLastWordTime = paragraph[paragraph.length - 1].end;
   const results = annotations.find((annotation) => {
@@ -22,7 +21,6 @@ const findAnnotationInParagraph = (annotations, paragraph) => {
   });
 
   if (results) {
-    // console.log('results ', results);
 
     return results;
   }

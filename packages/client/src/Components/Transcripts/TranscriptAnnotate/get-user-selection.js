@@ -22,12 +22,24 @@ function getTimeFromUserWordsSelection(e) {
     if (words.length !== 0) {
 
       return {
-        start: words[0].dataset.start,
-        end: words[words.length - 1].dataset.end
+        start: parseFloat(words[0].dataset.start),
+        end: parseFloat(words[words.length - 1].dataset.end)
       };
     }
+    else {
+      // handles selection of single word
+      // if selected a single word - then selection is on text element
+      // and we want to get to parent element, span with words class
+      const word = window.getSelection().anchorNode.parentElement;
+      if (word.className === 'words') {
+        return {
+          start: parseFloat(word.dataset.start),
+          end: parseFloat(word.dataset.end)
+        };
+      }
 
-    return false;
+      return false;
+    }
   }
 
   return false;

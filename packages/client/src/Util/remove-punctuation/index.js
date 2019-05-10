@@ -1,5 +1,5 @@
 const removePunctuation = (string) => {
-  return string.replace(/\.|\?|\!|\,|\;/, '').toLowerCase() ;
+  return string.replace(/\.|\?|!|,|;/, '').toLowerCase() ;
 };
 
 export default removePunctuation;

@@ -69,7 +69,7 @@ class SearchBar extends Component {
    }
 
    render() {
-     {/* TODO: move this to a Search Toolbar component? */}
+     // TODO: move this to a Search Toolbar component?
      const searchBar = <Card.Header>
        <InputGroup className="mb-3">
          {/* Search controls settings */}
@@ -171,8 +171,8 @@ class SearchBar extends Component {
      return (
        <>
          { searchBar }
-         {textSearchPreferences}
-         {labelsSearchPreferences}
+         { textSearchPreferences }
+         { labelsSearchPreferences }
          { speakerSearchPreferences }
        </>
      );

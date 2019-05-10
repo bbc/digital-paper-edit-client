@@ -21,7 +21,6 @@ class Transcripts extends Component {
 
     const result = await ApiWrapper.getTranscripts(this.state.projectId);
     // TODO: add error handling
-    console.log(result);
     if (result) {
       const tmpList = result.transcripts.map((item) => {
         item.display = true;
@@ -33,19 +32,6 @@ class Transcripts extends Component {
         transcriptsList: tmpList
       });
     }
-    // .then(json => {
-    //   console.log(json);
-    //   // add a display property for component cards search
-    //   const tmpList = json.transcripts.map((item) => {
-    //     item.display = true;
-
-    //     return item;
-    //   });
-    //   this.setState({
-    //     projectTitle: json.projectTitle,
-    //     transcriptsList: tmpList
-    //   });
-    // });
   }
 
   async handleDelete (transcriptId ) {
@@ -53,18 +39,14 @@ class Transcripts extends Component {
     // TODO: API + server side request for delete
     // on successful then update state
     const result = await ApiWrapper.deleteTranscript(this.state.projectId, transcriptId);
-    console.log('result ', result);
+    // TODO: some error handling, error message saying something went wrong
     const findId = (item) => item.id !== transcriptId;
-    // .then((res) => {
     if (result.status === 'ok') {
       const tmpNewList = this.state.transcriptsList.filter(item => findId(item));
       this.setState({
         transcriptsList: tmpNewList
       });
-    } else {
-      // TODO: some error handling, error message saying something went wrong
     }
-    // });
   }
 
   getShowLinkForCard = (id) => {
