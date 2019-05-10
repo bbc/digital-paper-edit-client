@@ -1,16 +1,18 @@
 /* eslint-disable template-curly-spacing */
 /* eslint-disable react/prop-types */
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faPause, faStop } from '@fortawesome/free-solid-svg-icons';
 
-const ControlButton = ({ className, icon, onClick }) => {
-  return (
-    <button className={ className } onClick={ onClick } >
-      { icon }
-    </button>
-  );
-};
+import './styles.css';
 
-class Controls extends React.PureComponent {
+const ControlButton = ({ icon, onClick }) => (
+  <button className='papercuts-player-controls-button' onClick={ onClick } >
+    { icon }
+  </button>
+);
+
+class PaperCutsPlayerControls extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -37,28 +39,26 @@ class Controls extends React.PureComponent {
   }
 
   render() {
-    const classNameContainer = 'player-controls-container';
-    const classNameContolButton = 'control-button';
 
-    const playIcon = '';
-    const pauseIcon = '';
-    const stopIcon = '';
+    const playIcon = <FontAwesomeIcon icon={ faPlay } />;
+    const pauseIcon = <FontAwesomeIcon icon={ faPause } />;
+    const stopIcon = <FontAwesomeIcon icon={ faStop } />;
 
     return (
-      <div className={ classNameContainer }>
-        <ControlButton
-          className={ `${classNameContainer} ${classNameContolButton} ${classNameContolButton}__play` }
-          icon={ this.state.isPlaying ? pauseIcon : playIcon }
-          onClick={ this.state.isPlaying ? this.handlePause : this.handlePlay }
-        />
-        <ControlButton
-          className={ `${classNameContainer} ${classNameContolButton} ${classNameContolButton}__stop` }
-          icon={ stopIcon }
-          onClick={ this.handleStop }
-        />
+      <div className='papercuts-player-controls'>
+        <div className='papercuts-player-controls-buttons'>
+          <ControlButton
+            icon={ this.state.isPlaying ? pauseIcon : playIcon }
+            onClick={ this.state.isPlaying ? this.handlePause : this.handlePlay }
+          />
+          <ControlButton
+            icon={ stopIcon }
+            onClick={ this.handleStop }
+          />
+        </div>
       </div>
     );
   }
 }
 
-export default Controls;
+export default PaperCutsPlayerControls;

@@ -1,8 +1,10 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import Player from './Player';
-import ProgressBar from './ProgressBar';
-import Controls from './Controls';
+import PaperCutsPlayerViewer from './Viewer';
+import PaperCutsPlayerProgressBar from './ProgressBar';
+import PaperCutsPlayerControls from './Controls';
+
+import './styles.css';
 
 class PaperCutsPlayer extends React.PureComponent {
 
@@ -12,23 +14,21 @@ class PaperCutsPlayer extends React.PureComponent {
     super(props);
 
     this.playlist = playlist;
-    this.playerRef = React.createRef();
+    this.videoContextRef = React.createRef();
   }
 
   async componentDidMount() {
-    this.videoContext = await this.playerRef && this.playerRef.current && this.playerRef.current.videoContext;
+    this.videoContext = await this.videoContextRef && this.videoContextRef.current && this.videoContextRef.current.videoContext;
     this.forceUpdate();
   }
 
   render() {
-    console.log('render', this.videoContext);
-
     return (
-      <>
-        <Player ref={ this.playerRef } playlist={ this.playlist } />
-        <ProgressBar videoContext={ this.videoContext && this.videoContext } />
-        <Controls videoContext={ this.videoContext && this.videoContext } />
-      </>
+      <div className='papercuts-player'>
+        <PaperCutsPlayerViewer ref={ this.videoContextRef } playlist={ this.playlist } />
+        <PaperCutsPlayerProgressBar videoContext={ this.videoContext && this.videoContext } />
+        <PaperCutsPlayerControls videoContext={ this.videoContext && this.videoContext } />
+      </div>
     );
   }
 };

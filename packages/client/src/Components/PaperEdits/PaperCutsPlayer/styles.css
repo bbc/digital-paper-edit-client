@@ -1,0 +1,53 @@
+.papercuts-player {
+  width: auto;
+  display: inline-block;
+}
+
+.papercuts-player-controls {
+  width: 100%;
+  display: block;
+}
+
+.papercuts-player-controls-buttons {
+  width: auto;
+  margin: auto;
+}
+
+.papercuts-player-controls-button {
+  height: 25px;
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+
+.papercuts-player-progress {
+  position: 0 0;
+  height: 'auto';
+}
+
+.papercuts-player-progress-back {
+  background: grey;
+}
+
+.papercuts-player-progress-front {
+  background: red;
+}
+
+.papercuts-player-progress-track{
+  height: 8px;
+  opacity: 0.2;
+  background: black;
+}
+
+.papercuts-player-progress-track-buffer{
+  height: 1px;
+  opacity: 0;
+}
+
+.papercuts-player-viewer {
+
+}
+
+
+
+
+
