@@ -2,12 +2,19 @@ import React, { Component } from 'react';
 import './index.module.css';
 
 import { TranscriptEditor } from '@bbc/react-transcript-editor';
+import PaperCutsPlayer from './PaperCutsPlayer/index.js';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../lib/CustomFooter/index.js';
+
+const playlist = [
+  { type:'video', offset:0, start:0, duration:10, src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4' },
+  { type:'video', offset:0, start:5, duration:10, src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
+  { type:'video', offset:10, start:10, duration:10, src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' }
+];
 
 class Transcript extends Component {
   constructor(props) {
@@ -59,6 +66,9 @@ class Transcript extends Component {
         />
 
         <h1>Paper Edit: {this.state.title}</h1>
+
+        <PaperCutsPlayer playlist={ playlist } />
+
         <CustomFooter />
       </Container>
     );
