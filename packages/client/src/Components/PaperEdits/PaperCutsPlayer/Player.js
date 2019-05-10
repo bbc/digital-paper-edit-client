@@ -2,9 +2,19 @@
 import React from 'react';
 import VideoContext from 'videocontext';
 
-import './styles.css';
+const getCanvas = (ref, width, height) => {
+  return (
+    <canvas
+      ref={ ref }
+      className='video-canvas'
+      width={ width }
+      height={ height }
+    >
+    </canvas>
+  );
+};
 
-class PaperCutsPlayerViewer extends React.PureComponent {
+class PaperCutsPlayer extends React.PureComponent {
   constructor(props) {
     const {
       width = 640,
@@ -16,12 +26,7 @@ class PaperCutsPlayerViewer extends React.PureComponent {
 
     this.playlist = playlist;
     this.canvasRef = React.createRef();
-    this.canvas = (<canvas
-      className='papercuts-player-viewer'
-      ref={ this.canvasRef }
-      width={ width }
-      height={ height }
-    />);
+    this.canvas = getCanvas(this.canvasRef, width, height);
   }
 
   componentDidMount() {
@@ -43,4 +48,4 @@ class PaperCutsPlayerViewer extends React.PureComponent {
   }
 }
 
-export default PaperCutsPlayerViewer;
+export default PaperCutsPlayer;
