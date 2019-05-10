@@ -1,7 +1,7 @@
 # Modular Architecture (breaking down repositories and packages)
 
 * Status: accepted
-* Deciders: Pietro, Eimi
+* Deciders: Pietro, Eimi, Dan (Data solutions)
 * Date: 2019-05-10
 
 Technical Story: Exploring a better way to organise the project than in a monorepo.
