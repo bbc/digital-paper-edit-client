@@ -85,7 +85,7 @@ class LabelForm extends Component {
             <Form.Control
               type="text"
               placeholder="Enter label name"
-              value={ this.state.label }
+              defaultValue={ this.state.label }
               onInput={ (e) => {this.setState({ label: e.target.value });} }
             />
             <Form.Text className="text-muted">
@@ -97,7 +97,7 @@ class LabelForm extends Component {
             <Form.Control
               type="text"
               placeholder="Enter label description"
-              value={ this.state.description }
+              defaultValue={ this.state.description }
               as="textarea" rows="3"
               onInput={ (e) => { this.setState({ description: e.target.value });} }
             />
