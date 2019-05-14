@@ -104,17 +104,19 @@ class LabelsList extends Component {
           </Col>
 
           <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }>
-            {/* Edit labek */}
-            <p> { console.log(JSON.stringify(label))}</p>
-            <LabelModal
-              color={ label.color }
-              label={ label.label }
-              description={ label.description }
-              labelId={ label.id }
-              show={ this.state.isLabelmodalShown }
-              onLabelSaved={ this.onLabelSaved }
-              openBtn={ <span> <FontAwesomeIcon icon={ faPen } /></span> }
-            />
+            {/* Edit label */}
+
+            {label.label.toLowerCase() !== 'default' ?
+              <LabelModal
+                color={ label.color }
+                label={ label.label }
+                description={ label.description }
+                labelId={ label.id }
+                show={ this.state.isLabelmodalShown }
+                onLabelSaved={ this.onLabelSaved }
+                openBtn={ <span> <FontAwesomeIcon icon={ faPen } /></span> }
+              /> : <Button title={ 'edit label' } variant="link" size="sm" disabled>
+                <FontAwesomeIcon icon={ faPen } /> </Button> }
 
             {/* <Button title={ 'edit label' }variant="link" size="sm"
               // onClick={ (e) => { this.editLabel(label.id, e); } }
