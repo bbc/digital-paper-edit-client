@@ -9,6 +9,7 @@ import Nav from 'react-bootstrap/Nav';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTags,
+  faTag,
   faAngleDown,
   faAngleUp,
   faTimes,
@@ -16,14 +17,16 @@ import {
   faSlidersH
 } from '@fortawesome/free-solid-svg-icons';
 
-import CreateNewLabelModal from './CreateNewLabelModal.js';
+import LabelModal from './LabelModal.js';
+import { randomColor } from './css-color-names.js';
 
 class LabelsList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      labelsListOpen: false
+      labelsListOpen: false,
+      isLabelmodalShown: false
     };
   }
 
@@ -50,13 +53,39 @@ class LabelsList extends Component {
       return label.id === id;
     });
     console.log('labelToEdit', labelToEdit);
-    alert('this functionality has not been implemented yet');
+    // alert('this functionality has not been implemented yet');
   }
-  handleNewLabelCreated = (newLabel) => {
-    const newLabelsOptions = this.props.labelsOptions;
-    newLabel.id = newLabelsOptions[newLabelsOptions.length - 1].id + 1;
-    newLabelsOptions.push(newLabel);
-    this.props.onLabelsUpdated(newLabelsOptions);
+  onLabelSaved = (newLabel) => {
+    console.log('onLabelSaved::', newLabel);
+    const { labelsOptions } = this.props;
+    // if updated - labelId is diff from null
+    if (newLabel.id) {
+      console.log('updated?');
+      // find label // assign id
+      // newLabel.id = newLabel.labelId;
+      // TODO: refactor this, eg use id instead of labelId
+      // delete newLabel.labelId;
+      // update label
+      labelsOptions[newLabel.id] = newLabel;
+      // update list of labels
+      this.props.onLabelsUpdated(labelsOptions);
+    }
+    // if created
+    else {
+      console.log('created?');
+      newLabel.id = labelsOptions[labelsOptions.length - 1].id + 1;
+      labelsOptions.push(newLabel);
+      this.props.onLabelsUpdated(labelsOptions);
+    }
+  }
+
+  showLabelModal = () => {
+    console.log(this.state.isLabelmodalShown);
+    this.setState((state) => {
+      return {
+        isLabelmodalShown: !state.isLabelmodalShown
+      };
+    });
   }
 
   render() {
@@ -75,11 +104,23 @@ class LabelsList extends Component {
           </Col>
 
           <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }>
-            <Button title={ 'edit label' }variant="link" size="sm"
-              onClick={ (e) => {this.editLabel(label.id, e);} }
-              disabled={ label.label.toLowerCase() === 'default' ? true : false }>
-              <FontAwesomeIcon icon={ faPen } />
-            </Button>
+            {/* Edit labek */}
+            <p> { console.log(JSON.stringify(label))}</p>
+            <LabelModal
+              color={ label.color }
+              label={ label.label }
+              description={ label.description }
+              labelId={ label.id }
+              show={ this.state.isLabelmodalShown }
+              onLabelSaved={ this.onLabelSaved }
+              openBtn={ <span> <FontAwesomeIcon icon={ faPen } /></span> }
+            />
+
+            {/* <Button title={ 'edit label' }variant="link" size="sm"
+              // onClick={ (e) => { this.editLabel(label.id, e); } }
+              disabled={ label.label.toLowerCase() === 'default' ? true : false }
+            >
+            </Button> */}
           </Col>
           <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }>
             <Button title={ 'delete label' } variant="link" size="sm"
@@ -124,8 +165,14 @@ class LabelsList extends Component {
         </Card.Header>
         {this.state.labelsListOpen ? <> { labelsList }
           <Card.Footer className="text-muted">
-            <CreateNewLabelModal
-              onNewLabelCreated={ this.handleNewLabelCreated }
+            <LabelModal
+              color={ randomColor() }
+              label={ '' }
+              description={ '' }
+              labelId={ null }
+              show={ this.state.isLabelmodalShown }
+              onLabelSaved={ this.onLabelSaved }
+              openBtn={ <span>Create New Label <FontAwesomeIcon icon={ faTag } />{' '}</span> }
             />
           </Card.Footer> </> : ''}
       </Card>

@@ -11,11 +11,13 @@
     'note': 'optional example text description for an annotation - TEST 1'
   };
 ```
+ * TODO: This assumes the annotation is included in the paragraph, and doesn't span across multiple lines
  */
 const findAnnotationInParagraph = (annotations, paragraph) => {
   const paragraphFirstWordTime = paragraph[0].start;
   const paragraphLastWordTime = paragraph[paragraph.length - 1].end;
   const results = annotations.find((annotation) => {
+    // TODO: refactor
     return (annotation.start >= paragraphFirstWordTime
         && annotation.end <= paragraphLastWordTime );
   });

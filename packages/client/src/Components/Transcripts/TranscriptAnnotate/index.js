@@ -105,6 +105,7 @@ class TranscriptAnnotate extends Component {
     ApiWrapper.getAnnotations(this.state.projectId, this.state.transcriptId)
       // TODO: add error handling
       .then(json => {
+        console.log(json.labels);
         this.setState({
           projectTitle: json.projectTitle,
           transcriptJson: json.transcript,
