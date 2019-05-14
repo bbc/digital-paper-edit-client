@@ -52,6 +52,7 @@ class SearchBar extends Component {
   };
 
   handleSpeakersSearchChange = selectedOptionSpeakerSearch => {
+    this.props.handleSpeakersSearchChange(selectedOptionSpeakerSearch);
     this.setState({ selectedOptionSpeakerSearch });
   };
 
@@ -76,7 +77,7 @@ class SearchBar extends Component {
          <DropdownButton
            as={ InputGroup.Prepend }
            variant="outline-secondary"
-           title={ <><FontAwesomeIcon icon={ faSlidersH } /><FontAwesomeIcon icon={ faSearch } /></> }
+           title={ <><FontAwesomeIcon icon={ faSearch } />  <FontAwesomeIcon icon={ faSlidersH } /></> }
            id="input-group-dropdown-1">
            <Dropdown.Item onClick={ this.handleToggleSearchTextPreferences }>
              <FontAwesomeIcon icon={ faParagraph }/>
@@ -105,7 +106,7 @@ class SearchBar extends Component {
            aria-describedby="search"
          />
          {/* TODO: make own component? - Search controls - show/hide  */}
-         <InputGroup.Append>
+         {/* <InputGroup.Append>
            <InputGroup.Text id="basic-addon2">
              <FontAwesomeIcon icon={ faAngleDown } />
            </InputGroup.Text>
@@ -118,7 +119,7 @@ class SearchBar extends Component {
          <InputGroup.Append>
            <InputGroup.Text id="basic-addon2">1</InputGroup.Text>
            <InputGroup.Text id="basic-addon2">3</InputGroup.Text>
-         </InputGroup.Append>
+         </InputGroup.Append> */}
          {/* end TODO  */}
        </InputGroup>
      </Card.Header>;
@@ -128,11 +129,11 @@ class SearchBar extends Component {
          <Form.Check
            type="checkbox"
            value={ this.state.showParagraphsMatchingSearch }
-           label={ <><FontAwesomeIcon icon={ faParagraph }/>Show only matching Paragraphs </> }
+           label={ <>Show only matching Paragraphs </> }
            onClick={ this.handleShowParagraphsMatchingSearch }
          />
          <Form.Text className="text-muted">
-             Show only paragraphs that contain search results
+           <FontAwesomeIcon icon={ faParagraph }/> Show only paragraphs that contain search results
          </Form.Text>
        </Card.Header>
        : '';
