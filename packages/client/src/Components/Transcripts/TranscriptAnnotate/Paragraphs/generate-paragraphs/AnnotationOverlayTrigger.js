@@ -6,7 +6,9 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPen,
-  faTrashAlt
+  faStickyNote,
+  faTrashAlt,
+  faTag
 } from '@fortawesome/free-solid-svg-icons';
 
 class AnnotationOverlayTrigger extends Component {
@@ -22,7 +24,7 @@ class AnnotationOverlayTrigger extends Component {
       return label.id === annotationLabelId;
     });
     // console.log('label:: ', label, annotationLabelId, this.props.labelsOptions, 'this.props.words', this.props.words, this.props.annotationNote);
-    // TODO: Quick fix
+    // TODO: Quick fix - needs digging into why sometimes adding a new label crashes, and the `find` function above returns undefined
     if (!label) {
       label = this.props.labelsOptions[0];
     }
@@ -34,7 +36,7 @@ class AnnotationOverlayTrigger extends Component {
             <Row>
               <Col md={ 1 } style={ { backgroundColor: label.color, marginLeft:'1em' } }></Col>
               <Col >
-                {label.label}
+                <FontAwesomeIcon icon={ faTag } />  {label.label}
               </Col>
               <Col md={ 1 } style={ { marginRight:'1em' } }
                 onClick={ () => {this.props.handleDeleteAnnotation(this.props.annotationId);} }>
@@ -42,10 +44,13 @@ class AnnotationOverlayTrigger extends Component {
               </Col>
             </Row>
             <hr/>
-            { this.props.annotationNote }
+            <FontAwesomeIcon icon={ faStickyNote }
+              onClick={ this.handleEditAnnotation }
+            />   { this.props.annotationNote }
             <br/>
             <FontAwesomeIcon icon={ faPen }
-              onClick={ this.handleEditAnnotation }/>
+              onClick={ this.handleEditAnnotation }
+            />
           </Popover>
         }
       >
