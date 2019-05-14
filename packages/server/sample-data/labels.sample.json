@@ -10,70 +10,28 @@
       "id": 1,
       "value": "economics",
       "label": "Economics",
-      "color": "green",
+      "color": "brown",
       "description": "Test description 1"
     },
     {
       "id": 2,
       "value": "introduction",
       "label": "Introduction",
-      "color": "#5243AA",
+      "color": "darkblue",
       "description": "Test description 2"
     },
     {
       "id": 3,
       "value": "brexit",
       "label": "Brexit",
-      "color": "#FF5630",
+      "color": "deeppink",
       "description": "Test description 3"
     },
     {
       "id": 4,
-      "value": "conclusion",
-      "label": "Conclusion",
-      "color": "#FF8B00",
-      "description": "Test description 4"
-    },
-    {
-      "id": 5,
-      "value": "europe",
-      "label": "Europe",
-      "color": "#FFC400",
-      "description": "Test description 5"
-    },
-    {
-      "id": 6,
-      "value": "ritual",
-      "label": "Ritual",
-      "color": "#36B37E",
-      "description": "Test description 6"
-    },
-    {
-      "id": 7,
-      "value": "negotiation",
-      "label": "Negotiation",
-      "color": "#00875A",
-      "description": "Test description 7"
-    },
-    {
-      "id": 8,
       "value": "computer vision",
       "label": "Computer vision",
-      "color": "#253858",
-      "description": "Test description 8"
-    },
-    {
-      "id": 9,
-      "value": "open source",
-      "label": "Open Source",
-      "color": "#666666",
-      "description": "Test description 9"
-    },
-    {
-      "id": 10,
-      "value": "politics",
-      "label": "Politics",
-      "color": "#00B8D9",
-      "description": "Test description 10"
+      "color": "deepskyblue",
+      "description": "Test description 4"
     }
   ]

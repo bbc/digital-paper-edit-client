@@ -9,24 +9,15 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+// import Select from 'react-select';
 // TODO: could replace random with this
 // https://github.com/bahamas10/css-color-names/blob/master/css-color-names.json
 // and use the list of named CSS colors instead of hex
-import randomColor from 'randomcolor'; // import the script
+// import randomColor from 'randomcolor'; // import the script
 import { GithubPicker } from 'react-color';
-import csscolors from 'css-color-names';
+// import csscolors from 'css-color-names';
+import { colorNamesList, randomColor } from './css-color-names.js';
 import chroma from 'chroma-js';
-
-//  { value: 'chocolate', label: 'Chocolate' },
-//  "aqua": "#00ffff",
-const cssColorsList = [];
-for (var key in csscolors) {
-  cssColorsList.push({
-    value: key,
-    label:key,
-    color: csscolors[key]
-  });
-}
 
 class CreateNewLabelModal extends Component {
   constructor(props, context) {
@@ -63,19 +54,24 @@ class CreateNewLabelModal extends Component {
   }
 
   handleColorPickerChangeComplete = (color) => {
-    this.setState({ color: color.hex });
+    console.log('color', color, chroma(color.hex ).name() );
+
+    this.setState({ color: chroma(color.hex ).name() });
   }
 
-  handleHexChange = (e) => {
+  handleManualColorChange = (e) => {
     if (e && e.target && e.target.value) {
-      const hexColor = e.target.value;
+      const colorValue = e.target.value;
       // if it's a valid colour - css
       //   if (chroma.valid(hexColor)) {
       // if it is expressed as hex
       //   if (!hexColor.includes('#')) {
       // hexColor = chroma(hexColor).hex();
       //   }
-      this.setState({ color: chroma.valid(hexColor) ? chroma(hexColor).name() : hexColor });
+      // if (chroma.valid(colorValue)) {
+      //
+      this.setState({ color: chroma.valid(colorValue) ? chroma(colorValue).name() : colorValue });
+      // }
     //   }
     }
     else if (e && e.target && e.target.value === '') {
@@ -88,22 +84,27 @@ class CreateNewLabelModal extends Component {
     // console.log('Option selected:', selectedOptionSpeakerSearch);
   };
 
-  //   handleColorNameChange =
   handleSave = () => {
-    if ( this.state.label !== '') {
-      this.props.onNewLabelCreated({
-        value: this.state.color,
-        label: this.state.label,
-        color: this.state.color,
-        description: this.state.description
-      });
+    // checks color in color picker input is valid - can be color name in letters or hex
+    if (chroma.valid(this.state.color)) {
+      // checks label name is not empty
+      if ( this.state.label !== '') {
+        this.props.onNewLabelCreated({
+          value: this.state.color,
+          label: this.state.label,
+          color: this.state.color,
+          description: this.state.description
+        });
 
-      this.handleClose();
+        this.handleClose();
+      }
+      else {
+        alert('add a name to the label to be able to save');
+      }
     }
     else {
-      alert('add a name to the label to be able to save');
+      alert('choose a valid color');
     }
-
   }
 
   render() {
@@ -152,27 +153,14 @@ class CreateNewLabelModal extends Component {
                       <FontAwesomeIcon icon={ faSyncAlt } />
                     </Button>
                   </Col>
-                  {/* <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }>
-                  </Col> */}
-                  <Col xs={ 4 } sm={ 3 } md={ 3 } lg={ 3 } xl={ 3 }>
+                  <Col xs={ 6 } sm={ 6 } md={ 6 } lg={ 6 } xl={ 6 }>
                     <Form.Control
                       value={ this.state.color }
                       type="text"
                       placeholder="#"
-                      onChange={ this.handleHexChange }
+                      onChange={ this.handleManualColorChange }
                     />
                   </Col>
-                  {/* <Col xs={ 4 } sm={ 4 } md={ 4 } lg={ 4 } xl={ 4 }>
-                    <Select
-                      value={ chroma(this.state.color).name() }
-                      onChange={ this.handleColorSelectChange }
-                      isMulti={ false }
-                      isSearchable
-                      options={ cssColorsList }
-                      styles={ colourStyles }
-                    />
-
-                  </Col> */}
                   <Col xs={ 2 } sm={ 2 } md={ 2 } lg={ 2 } xl={ 2 }
                     style={ {
                       backgroundColor: this.state.color,
@@ -194,7 +182,8 @@ class CreateNewLabelModal extends Component {
                       triangle={ 'hide' }
                       onChangeComplete={ this.handleColorPickerChangeComplete }
                       //   https://casesandberg.github.io/react-color/
-                    //   colors={ csscolorsHexList }
+                      colors={ colorNamesList }
+                      // colors={ [ 'red', 'white', '#008B02', '#006B76', '#1273DE', '#004DCF', '#5300EB', '#EB9694', '#FAD0C3', '#FEF3BD', '#C1E1C5', '#BEDADC', '#C4DEF6', '#BED3F3', '#D4C4FB' ] }
                     />
                   </Col>
                 </Row>

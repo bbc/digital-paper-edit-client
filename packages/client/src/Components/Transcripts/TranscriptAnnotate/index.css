@@ -1,0 +1,25 @@
+/* 
+Used to make scrollbar visible for Labels list 
+https://stackoverflow.com/questions/7492062/css-overflow-scroll-always-show-vertical-scroll-bar 
+*/
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+/* Styling timecodes and words */
+.timecode:hover{
+  text-decoration: underline;
+}
+.words{
+  cursor: pointer
+}
+/* 
+.words:hover {
+  font-weight: 900;
+} */

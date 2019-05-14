@@ -12,7 +12,8 @@ import {
   faAngleDown,
   faAngleUp,
   faTimes,
-  faPen
+  faPen,
+  faSlidersH
 } from '@fortawesome/free-solid-svg-icons';
 
 import CreateNewLabelModal from './CreateNewLabelModal.js';
@@ -114,16 +115,13 @@ class LabelsList extends Component {
           onClick={ () => {this.setState((state) => {return { labelsListOpen: !state.labelsListOpen };});} }>
           <Nav justify variant="pills">
             <Nav.Item>
-              <FontAwesomeIcon icon={ faTags } /> Labels
+              <FontAwesomeIcon icon={ faTags } />  <FontAwesomeIcon icon={ faSlidersH } />  Labels
             </Nav.Item>
-
             <Nav.Item>
               <FontAwesomeIcon icon={ this.state.labelsListOpen ? faAngleDown : faAngleUp } />
             </Nav.Item>
           </Nav>
-
         </Card.Header>
-
         {this.state.labelsListOpen ? <> { labelsList }
           <Card.Footer className="text-muted">
             <CreateNewLabelModal
@@ -131,7 +129,6 @@ class LabelsList extends Component {
             />
           </Card.Footer> </> : ''}
       </Card>
-
     </>
     );
   }
