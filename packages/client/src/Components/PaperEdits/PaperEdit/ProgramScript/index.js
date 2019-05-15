@@ -10,7 +10,6 @@ import CustomNavbar from '../../../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../../../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../../../lib/CustomFooter/index.js';
 import navbarLinks from '../../../lib/custom-navbar-links';
-import PaperCutsPlayer from '../../PaperCutsPlayer/index.js';
 class ProgramScript extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +24,7 @@ class ProgramScript extends Component {
         <h2>Program Script</h2>
         <hr/>
         <h3>Paper Edit title</h3>
-        <PaperCutsPlayer width={  } />
+        <section style={ { width: '100%', height:'10em', backgroundColor: 'black', overflow: 'scroll' } } ></section>
 
         <article style={ { height: '60vh', overflow: 'scroll' } }>
           {/* Canvas preview  */}
