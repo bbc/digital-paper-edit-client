@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './index.module.css';
 
 import { TranscriptEditor } from '@bbc/react-transcript-editor';
 import PaperCutsPlayer from './PaperCutsPlayer/index.js';

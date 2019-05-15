@@ -2,8 +2,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 
-// import './styles.css';
-
 class PaperCutsPlayerProgressBar extends React.PureComponent {
   constructor(props) {
     const {
@@ -32,23 +30,28 @@ class PaperCutsPlayerProgressBar extends React.PureComponent {
   });
 
   handleClick = ({ nativeEvent: { offsetX } }) => {
-    this.videoContext.currentTime = (offsetX / this.width) * this.state.duration;
+    this.videoContext.currentTime =
+      (offsetX / this.width) * this.state.duration;
   }
 
-  getTracks = () => this.state.duration && this.videoContext._sourceNodes.reverse().map(
-    ({ startTime, stopTime, elementURL }, i) => {
-      const marginLeft = (startTime / this.state.duration) * this.width;
-      const width = ((stopTime - startTime) / this.state.duration) * this.width;
-      const key = `${elementURL.split('/').slice(-1).pop()}.${i}`;
+  getTracks = () =>
+    this.state.duration && this.videoContext._sourceNodes.reverse().map(
+      ({ startTime, stopTime, elementURL }, i) => {
+        const marginLeft = (startTime / this.state.duration) * this.width;
+        const width =
+          ((stopTime - startTime) / this.state.duration) * this.width;
+        const key = `${elementURL.split('/').slice(-1).pop()}.${i}`;
 
-      return (
-        <div key={ key } style={ { pointerEvents: 'none' } } >
-          <div className='papercuts-player-progress-track-buffer' />
-          <div className='papercuts-player-progress-track' style={ { width, marginLeft } } />
-          <div className='papercuts-player-progress-track-buffer' />
-        </div>
-      );
-    });
+        return (
+          <div key={ key } style={ { pointerEvents: 'none' } } >
+            <div className='papercuts-player-progress-track-buffer' />
+            <div className='papercuts-player-progress-track'
+              style={ { width, marginLeft } }
+            />
+            <div className='papercuts-player-progress-track-buffer' />
+          </div>
+        );
+      });
 
   render() {
     if (!this.tracks) this.tracks = this.getTracks();

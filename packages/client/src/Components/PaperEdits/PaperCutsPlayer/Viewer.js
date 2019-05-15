@@ -2,19 +2,7 @@
 import React from 'react';
 import VideoContext from 'videocontext';
 
-const getCanvas = (ref, width, height) => {
-  return (
-    <canvas
-      ref={ ref }
-      className='video-canvas'
-      width={ width }
-      height={ height }
-    >
-    </canvas>
-  );
-};
-
-class PaperCutsPlayer extends React.PureComponent {
+class PaperCutsPlayerViewer extends React.PureComponent {
   constructor(props) {
     const {
       width = 640,
@@ -26,11 +14,22 @@ class PaperCutsPlayer extends React.PureComponent {
 
     this.playlist = playlist;
     this.canvasRef = React.createRef();
-    this.canvas = getCanvas(this.canvasRef, width, height);
+    this.canvas = (<canvas
+      className='papercuts-player-viewer'
+      ref={ this.canvasRef }
+      width={ width }
+      height={ height }
+    />);
   }
 
   componentDidMount() {
-    this.videoContext = new VideoContext(this.canvasRef.current, console.error);
+    this.videoContext = new VideoContext(
+      this.canvasRef.current,
+      (err) => console.error(
+        'There was problem instantiating the Video Context in Paper Cuts Player Viewer component',
+        err,
+      )
+    );
     this.loadPlaylist();
   }
 
@@ -48,4 +47,4 @@ class PaperCutsPlayer extends React.PureComponent {
   }
 }
 
-export default PaperCutsPlayer;
+export default PaperCutsPlayerViewer;
