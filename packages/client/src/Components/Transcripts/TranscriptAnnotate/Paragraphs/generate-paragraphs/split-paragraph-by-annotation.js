@@ -115,11 +115,18 @@ const annotation = {
 
 //   return false;
 // };
-
 /**
  *
  */
 const getWordsBeforeAnnotation = (annotation, paragraph) => {
+  // TODO: move these in annotation
+  // const paragraphFirstWordTime = paragraph[0].start;
+  // const paragraphLastWordTime = paragraph[paragraph.length - 1].end;
+  // if (annotation.start >= paragraphFirstWordTime &&
+  //   annotation.start <= paragraphLastWordTime) {
+  //   return paragraph;
+  // }
+  ///////////////////////////////////////////////////////////
   const paragraphFilterBeforeSelection = paragraph.filter(w => {
     return annotation.start > w.start;
   });
@@ -134,6 +141,14 @@ const getWordsBeforeAnnotation = (annotation, paragraph) => {
  *
  */
 const getWordsAfterAnnotation = (annotation, paragraph) => {
+  // TODO: move these in annotation
+  // const paragraphFirstWordTime = paragraph[0].start;
+  // const paragraphLastWordTime = paragraph[paragraph.length - 1].end;
+  // if ( annotation.end >= paragraphFirstWordTime &&
+  //     annotation.end <= paragraphLastWordTime) {
+  //   return paragraph;
+  // }
+  ///////////////////////////////////////////////////////////
   const paragraphFilterBeforeSelection = paragraph.filter(w => {
     return annotation.end < w.end;
   });
@@ -148,6 +163,15 @@ const getWordsAfterAnnotation = (annotation, paragraph) => {
  *
  */
 const getWordsInAnnotation = (annotation, paragraph) => {
+  ///////////////////////////////////////////////////////
+  // Case 4 - annotation spans across the current paragraph  but starts in previous one and ends in subsequent one
+  // if annotation spans across paragraph - return paragraph
+  // const paragraphFirstWordTime = paragraph[0].start;
+  // const paragraphLastWordTime = paragraph[paragraph.length - 1].end;
+  // if (annotation.start <= paragraphFirstWordTime && annotation.end >= paragraphLastWordTime) {
+  //   return paragraph;
+  // }
+  ///////////////////////////////////////////////////////
   // index for start
   const startWord = paragraph.find(w => {
     return annotation.start === w.start;

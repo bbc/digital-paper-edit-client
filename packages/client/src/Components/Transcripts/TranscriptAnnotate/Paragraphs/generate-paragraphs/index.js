@@ -40,6 +40,7 @@ function generateParagraphs(props) {
      * findAnnotationInParagraph returns false if it doesn't find any
      */
     const annotation = findAnnotationInParagraph(annotations, paragraph.words);
+    console.log('annotation', annotation);
     const isTextSearch = paragraphTextWithoutPunctuation.includes(props.searchString.toLowerCase());
 
     let isSpeakerSearch = false;
