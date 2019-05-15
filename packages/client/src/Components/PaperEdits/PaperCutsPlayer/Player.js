@@ -30,7 +30,7 @@ class PaperCutsPlayer extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.videoContext = new VideoContext(this.canvasRef.current, () => console.log('oops'));
+    this.videoContext = new VideoContext(this.canvasRef.current, console.error);
     this.loadPlaylist();
   }
 
