@@ -10,6 +10,15 @@ import CustomNavbar from '../../../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../../../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../../../lib/CustomFooter/index.js';
 import navbarLinks from '../../../lib/custom-navbar-links';
+import PaperCutsPlayer from '../../PaperCutsPlayer';
+
+// Temporary Demo Playlist
+const playlist = [
+  { type:'video', offset:0, start:0, duration:10, src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4' },
+  { type:'video', offset:0, start:5, duration:10, src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
+  { type:'video', offset:10, start:10, duration:10, src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' }
+];
+
 class ProgramScript extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +33,8 @@ class ProgramScript extends Component {
         <h2>Program Script</h2>
         <hr/>
         <h3>Paper Edit title</h3>
-        <section style={ { width: '100%', height:'10em', backgroundColor: 'black', overflow: 'scroll' } } ></section>
+
+        <PaperCutsPlayer playlist={ playlist } />
 
         <article style={ { height: '60vh', overflow: 'scroll' } }>
           {/* Canvas preview  */}
