@@ -28,6 +28,7 @@ There are 3 logically separated packages:
 * Option 2 - separate the UI to a new github repository, bundle it as an NPM package. Keep infrastructure in the same repository as API. API will pull in UI as a dependency.
 * Option 3 - separate the UI, API and infrastructure. Bundle UI and API separately as NPM packages  Infrastructure will have UI and API packages as dependencies.
 
+
 ## Decision Outcome
 
 We selected Option 3.
@@ -36,3 +37,64 @@ There is a separation to all the packages, which means it will be simpler to ver
 A potential problem here is that during development, the packages will have features not implemented in the other packages. In order to have parallel set of features, we will add BDD tests to automatically test that all the packages have the same features which are functional.
 
 We are also keeping the AWS Infrastructure public, as the generic cloudformation JSON has no confidential or security issues in it.
+
+
+### Deployment flow
+
+```
+Infrastructure Repo
++------------------------------+
+|                              |            +-----------+         +---------+           +------------+
+| * Dependency to UI and API   |            |           |         |         |           |            |
+| * AWS/Cosmos specific        +----------->+  Jenkins  +-------->+   RPM   +---------->+   Cosmos   |
+|   configuration files        |            |           |         |         |           |            |
+|                              |            +-----------+         +--+---+--+           +------------+
++------------------------------+                                     |   |
+                                                                     |   |
+                                                                     |   |
+    UI Repo                                                          |   | pull
+    +-------------------+                                            |   |
+    |                   |                                            |   |
+    | * React App       +----------------------+                     |   |
+    | * Express Server  |                      v          push       v   v
+    |                   |                 +----+------+           +--+---+--+
+    +-------------------+                 |           +---------->+         |
+                                          |  Jenkins  |           |   NPM   |
+                                          |           +---------->+         |
+    API Repo                              +-----+-----+           +---------+
+    +--------------------+                      ^
+    |                    |                      |
+    | * Express Server   +----------------------+
+    |                    |
+    +--------------------+
+http://asciiflow.com/
+
+
+```
+
+### Once deployed
+There will be *two* express servers in an EC2 instance.
+```
+              EC2
+              +-----------------------------------+
+              | +------------+     +------------+ |
+              | | Express    |     | Express    | |
+              | |  +------+  |     |            | |
+              | |  |      |  |     |            | |
+User+------------->+React |  +---->+            +-------->...
+              | |  |UI    |  |     |            | |
+              | |  |      |  |     |            | |
+              | |  +------+  |     |            | |
+              | |            |     |            | |
+              | +------------+     +------------+ |
+              +-----------------------------------+
+
+```
+### Repo naming conventions
+Prefix can be `digital-paper-edit` or `rough-cut-pro` pending name changes
+
+- client: `-client`
+- server: `-api`
+- electron: `-electron`
+- cep: `-cep`
+- infrastructure: `-infrastructure` or `-aws`
