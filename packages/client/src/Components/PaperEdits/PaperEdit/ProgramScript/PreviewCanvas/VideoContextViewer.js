@@ -15,7 +15,6 @@ class PaperCutsPlayerViewer extends React.PureComponent {
     this.playlist = playlist;
     this.canvasRef = React.createRef();
     this.canvas = (<canvas
-      className='papercuts-player-viewer'
       ref={ this.canvasRef }
       width={ width }
       height={ height }

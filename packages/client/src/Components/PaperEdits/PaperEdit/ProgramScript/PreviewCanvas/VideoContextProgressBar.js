@@ -1,8 +1,9 @@
 /* eslint-disable template-curly-spacing */
 /* eslint-disable react/prop-types */
 import React from 'react';
+import styles from './VideoContextProgressBar.module.css';
 
-class PaperCutsPlayerProgressBar extends React.PureComponent {
+class VideoContextProgressBar extends React.PureComponent {
   constructor(props) {
     const {
       width = 640,
@@ -44,11 +45,11 @@ class PaperCutsPlayerProgressBar extends React.PureComponent {
 
         return (
           <div key={ key } style={ { pointerEvents: 'none' } } >
-            <div className='papercuts-player-progress-track-buffer' />
-            <div className='papercuts-player-progress-track'
+            <div className={ styles.papercutsPlayerProgressTrackBuffer } />
+            <div className={ styles.papercutsPlayerProgressTrack }
               style={ { width, marginLeft } }
             />
-            <div className='papercuts-player-progress-track-buffer' />
+            <div className={ styles.papercutsPlayerProgressTrackBuffer }/>
           </div>
         );
       });
@@ -57,20 +58,24 @@ class PaperCutsPlayerProgressBar extends React.PureComponent {
     if (!this.tracks) this.tracks = this.getTracks();
 
     return (
-      <div
-        className='papercuts-player-progress papercuts-player-progress-back'
-        onClick={ this.handleClick }
-        style={ { width: this.width } }
-      >
+      <>
         <div
-          className='papercuts-player-progess papercuts-player-progress-front'
-          style={ { width: `${this.state.progress}%` } }
+        // className='papercuts-player-progress papercuts-player-progress-back'
+          className={ [ styles.papercutsPlayerProgress, styles.papercutsPlayerProgressBack ].join(' ') }
+          onClick={ this.handleClick }
+          style={ { width: this.width } }
         >
-          { this.tracks }
+          <div
+          // className='papercuts-player-progess papercuts-player-progress-front'
+            className={ [ styles.papercutsPlayerProgress, styles.papercutsPlayerProgressFront ].join(' ') }
+            style={ { width: `${this.state.progress}%` } }
+          >
+            { this.tracks }
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 }
 
-export default PaperCutsPlayerProgressBar;
+export default VideoContextProgressBar;
