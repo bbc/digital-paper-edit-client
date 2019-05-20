@@ -1,12 +1,12 @@
-/* eslint-disable template-curly-spacing */
-/* eslint-disable react/prop-types */
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faStop } from '@fortawesome/free-solid-svg-icons';
+
+const playIcon = <FontAwesomeIcon icon={ faPlay } />;
+const pauseIcon = <FontAwesomeIcon icon={ faPause } />;
+const stopIcon = <FontAwesomeIcon icon={ faStop } />;
 
 class Controls extends React.PureComponent {
 
@@ -35,9 +35,6 @@ class Controls extends React.PureComponent {
   }
 
   render() {
-    const playIcon = <FontAwesomeIcon icon={ faPlay } />;
-    const pauseIcon = <FontAwesomeIcon icon={ faPause } />;
-    const stopIcon = <FontAwesomeIcon icon={ faStop } />;
 
     return (
       <>

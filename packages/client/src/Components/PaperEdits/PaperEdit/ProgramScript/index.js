@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
-import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faFolderPlus, faMicrophoneAlt, faTag } from '@fortawesome/free-solid-svg-icons';
-import CustomNavbar from '../../../lib/CustomNavbar/index.js';
-import CustomBreadcrumb from '../../../lib/CustomBreadcrumb/index.js';
-import CustomFooter from '../../../lib/CustomFooter/index.js';
-import navbarLinks from '../../../lib/custom-navbar-links';
+import { faMicrophoneAlt, faTag } from '@fortawesome/free-solid-svg-icons';
 import PreviewCanvas from './PreviewCanvas';
 
 // Temporary Demo Playlist
