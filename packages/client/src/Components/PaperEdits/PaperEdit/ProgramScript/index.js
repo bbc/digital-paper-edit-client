@@ -34,7 +34,10 @@ class ProgramScript extends Component {
         <hr/>
         <h3>Paper Edit title</h3>
 
-        <PaperCutsPlayer playlist={ playlist } />
+        <PaperCutsPlayer
+          playlist={ playlist }
+          width={ '400' }
+        />
 
         <article style={ { height: '60vh', overflow: 'scroll' } }>
           {/* Canvas preview  */}

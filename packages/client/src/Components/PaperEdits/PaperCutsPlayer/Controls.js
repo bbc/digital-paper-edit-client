@@ -46,7 +46,9 @@ class PaperCutsPlayerControls extends React.PureComponent {
     const stopIcon = <FontAwesomeIcon icon={ faStop } />;
 
     return (
-      <div className='papercuts-player-controls d-flex align-items-center'>
+      <div
+        className='papercuts-player-controls d-flex align-items-center'
+        style={ { width: this.props.width } }>
         <div className='papercuts-player-controls-buttons'>
           <ControlButton
             icon={ this.state.isPlaying ? pauseIcon : playIcon }

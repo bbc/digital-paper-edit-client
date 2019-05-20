@@ -37,6 +37,7 @@ class PaperCutsPlayer extends React.PureComponent {
           height={ this.height }
         />
         <PaperCutsPlayerProgressBar
+          width={ this.width }
           videoContext={ this.videoContext && this.videoContext }
         />
         <PaperCutsPlayerControls
