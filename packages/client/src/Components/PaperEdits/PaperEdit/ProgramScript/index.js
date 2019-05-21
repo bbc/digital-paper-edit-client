@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
-import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faFolderPlus, faMicrophoneAlt, faTag } from '@fortawesome/free-solid-svg-icons';
-import CustomNavbar from '../../../lib/CustomNavbar/index.js';
-import CustomBreadcrumb from '../../../lib/CustomBreadcrumb/index.js';
-import CustomFooter from '../../../lib/CustomFooter/index.js';
-import navbarLinks from '../../../lib/custom-navbar-links';
+import { faMicrophoneAlt, faTag } from '@fortawesome/free-solid-svg-icons';
+import PreviewCanvas from './PreviewCanvas';
+
+// Temporary Demo Playlist
+const playlist = [
+  { type:'video', offset:0, start:0, duration:10, src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4' },
+  { type:'video', offset:0, start:10, duration:10, src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
+  { type:'video', offset:120, start:20, duration:10, src:'https://download.ted.com/talks/KateDarling_2018S-950k.mp4' },
+  { type:'video', offset:10, start:30, duration:10, src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' }
+];
+
 class ProgramScript extends Component {
   constructor(props) {
     super(props);
@@ -24,8 +28,10 @@ class ProgramScript extends Component {
         <h2>Program Script</h2>
         <hr/>
         <h3>Paper Edit title</h3>
-        <section style={ { width: '100%', height:'10em', backgroundColor: 'black', overflow: 'scroll' } } ></section>
-
+        <PreviewCanvas
+          playlist={ playlist }
+          width={ '400' }
+        />
         <article style={ { height: '60vh', overflow: 'scroll' } }>
           {/* Canvas preview  */}
           {/* Media Control - if separate from Canvas Preview */}

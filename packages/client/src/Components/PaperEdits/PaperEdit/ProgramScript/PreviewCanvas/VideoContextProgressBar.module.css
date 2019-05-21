@@ -1,0 +1,23 @@
+.papercutsPlayerProgress {
+  position: 0 0;
+  height: 'auto';
+}
+
+.papercutsPlayerProgressBack {
+  background: grey;
+}
+
+.papercutsPlayerProgressFront {
+  background: red;
+}
+
+.papercutsPlayerProgressTrack{
+  height: 8px;
+  opacity: 0.2;
+  background: black;
+}
+
+.papercutsPlayerProgressTrackBuffer{
+  height: 1px;
+  opacity: 0;
+}

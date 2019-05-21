@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "./",
   "dependencies": {
-    "@bbc/react-transcript-editor": "^1.0.0",
+    "@bbc/react-transcript-editor": "^1.0.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
     "@fortawesome/free-solid-svg-icons": "^5.7.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
@@ -20,6 +20,7 @@
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.5",
+    "videocontext": "^0.53.0",
     "react-select": "^2.4.3"
   },
   "scripts": {
