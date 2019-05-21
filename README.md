@@ -1,4 +1,4 @@
-# Digital Paper Edit
+# Digital Paper Edit - Client
 
 ---> _Work in progress_ <--
 
@@ -27,13 +27,15 @@ See [modular architecture section](./docs/guides/modular-architecture.md) for mo
 
 _How to build and run the code/app_ -->
 
+See [Getting setup with the visual code workspace](docs/guides/visual-code-workspace-setup.md) to get up and running with the various repository needed for this project.
+
 
 ```
-git clone git@github.com:bbc/digital-paper-edit.git
+git clone git@github.com:bbc/digital-paper-edit-client.git
 ```
 
 ```
-cd digital-paper-edit
+cd digital-paper-edit-client
 ```
 
 Optional step to setup [nvm](https://github.com/nvm-sh/nvm) to use node version 10, otherwise just use node version 10
@@ -43,58 +45,45 @@ nvm use || nvm install`
 
 in root of project
 ```
-make install-react
+npm install
 ```
-
-and 
-```
-make install-server
-```
-
-if you want to develop for electron also do 
-```
-make install-electron
-```
-
-_Adobe CEP panel instructions coming soon_
 
 ## Usage
 
 <!-- `cd` into the individual repository inside [`./packages`](./packages) and npm start, or see respective README and package.json for how deal with each. -->
 
 
-In root of project start the express server
+In root of the client project (`cd digital-paper-edit-client`) start React 
 
 ```
-make start-server
+npm start
 ```
 
-and in another terminal, in root of project, start the client react app.
-```
-make start-react
-```
+To developer for the web app [you will need to start setup and the API server](https://github.com/bbc/digital-paper-edit-api#setup) as well.
 
-additionally to develop for electron also run ,in another terminal, in root of project.
+
+>Runs the app in the development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+>
+>The page will reload if you make edits.<br>
+You will also see any lint errors in the console.
+
+<!-- additionally to develop for electron also run ,in another terminal, in root of project.
 
 ```
 make start-electron
-```
+``` -->
 
-
-_Adobe CEP panel instructions coming soon_
-See the [`Makefile`](./Makefile) for more details on these commands.
-
-
-To make code changes checkout the individual repository inside [`./packages/`](./packages)
-eg for Client - React [`./packages/client`](./packages/client)
-and for Server - Express [`./packages/server`](./packages/server)
-
-To install new modules, cd into the individual repository and npm install from there.
 
 
 ## System Architecture
 
 Client - React, is setup using [Create React App](https://facebook.github.io/create-react-app/docs/getting-started).
+
+>You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+>
+>To learn React, check out the [React documentation](https://reactjs.org/).
+
 
 ## Development env
 
@@ -136,15 +125,20 @@ We are using [this template for ADR](https://gist.github.com/iaincollins/92923cc
 
 <!-- See README for individual packages for more details ?-->
 
-### Client - React 
-
 ```
-make build-react
+npm run build
 ```
 
-Build of react client side will be in `packages/client/build`
+Build of react client side will be in `build`
+
+>Builds the app for production to the `build` folder.<br>
+It correctly bundles React in production mode and optimizes the build for the best performance.
+>
+>The build is minified and the filenames include the hashes.<br>
+Your app is ready to be deployed!
 
 
+<!-- 
 ### Electron - Build
 First do `make build-react` then 
 
@@ -152,11 +146,7 @@ First do `make build-react` then
 make build-electron
 ```
 
-`packages/client/dist` will contain your packaged version of the app for desktop
-
-### Adobe CEP Panel 
-
-_Adobe CEP panel instructions coming soon_
+`packages/client/dist` will contain your packaged version of the app for desktop -->
 
 ## Tests
 
@@ -164,7 +154,7 @@ _Adobe CEP panel instructions coming soon_
 
 _TBC_
 
-<!-- Test coverage using [`jest`](https://jestjs.io/), to run tests
+Test coverage using [`jest`](https://jestjs.io/), to run tests
 
 ```
 npm run test
@@ -174,7 +164,10 @@ During development you can use
 
 ```
 npm run test:watch
-``` -->
+```
+
+>Launches the test runner in the interactive watch mode.<br>
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 <!-- See README for individual packages for more details -->
 
@@ -185,7 +178,7 @@ On commit this repo uses the [.travis.yml](./.travis.yml) config tu run the auto
 
 ## Environment variables
 
-[`packages/client/.env`](./packages/client/.env) contains environment variables config for the React client side app.
+[`.env`](./.env) contains environment variables config for the React client side app.
 
 <mark>Do not store credentials in `.env` during development.</mark>
 
@@ -196,6 +189,8 @@ On commit this repo uses the [.travis.yml](./.travis.yml) config tu run the auto
 _TBC_
 
 <!-- See README for individual packages for more details -->
+
+>See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ## Contributing
 
