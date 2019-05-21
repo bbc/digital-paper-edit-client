@@ -16,7 +16,7 @@ The project is organised across these repository
 - [`bbc/digital-paper-edit-api`](https://github.com/bbc/digital-paper-edit-api) - Express server API
 - [`bbc/digital-paper-edit-infrastructure`](https://github.com/bbc/digital-paper-edit-infrastructure) - AWS infrastructure for API server and Client.
 - [`/bbc/digital-paper-edit-electron`](https://github.com/bbc/digital-paper-edit-electron) - Electron, Cross Platform Desktop app - Mac, Windows, Linux
-- [`bbc/digital-paper-edit-cep`](https://github.com/bbc/digital-paper-edit-cep)
+- [`bbc/digital-paper-edit-cep`](https://github.com/bbc/digital-paper-edit-cep) Adobe CEP (Common Extensibility Platform) - Premiere Pro Plugin Panel
 
 See [modular architecture section](./docs/guides/modular-architecture.md) for more details on the stack and the [Modular Architecture ADR for more info on the implementation](https://github.com/bbc/digital-paper-edit-client/blob/master/docs/ADR/2019-05-09-modular-architecture.md)
 
