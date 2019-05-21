@@ -4,6 +4,14 @@ import Row from 'react-bootstrap/Row';
 import Tab from 'react-bootstrap/Tab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophoneAlt, faTag } from '@fortawesome/free-solid-svg-icons';
+import PreviewCanvas from './PreviewCanvas/index.js';
+// demo content
+const playlist = [
+  { type:'video', offset:0, start:0, duration:10, src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4' },
+  { type:'video', offset:0, start:5, duration:10, src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
+  { type:'video', offset:10, start:10, duration:10, src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' }
+];
+
 class ProgramScript extends Component {
   constructor(props) {
     super(props);
@@ -19,16 +27,10 @@ class ProgramScript extends Component {
         <h2>Program Script</h2>
         <hr/>
         <h3>Paper Edit title</h3>
-        <section style={ { width: '100%', height:'10em', backgroundColor: 'black', overflow: 'scroll' } } ></section>
+
+        <PreviewCanvas playlist={ playlist } width={ '300' }/>
 
         <article style={ { height: '60vh', overflow: 'scroll' } }>
-          {/* Canvas preview  */}
-          {/* Media Control - if separate from Canvas Preview */}
-          {/* Program script - Headings */}
-          {/* Program script - Voice over */}
-          {/* Program script - Paragraphs (speaker, timecode, word timed text)
-    - show transcript title it belongs to,
-    as well as any labels paragraph might have? */}
           <h4>Topic One</h4>
           {/* https://getbootstrap.com/docs/4.0/utilities/colors/ */}
           <p className={ 'text-secondary' }><i><FontAwesomeIcon icon={ faMicrophoneAlt } />  But what thinks Lazarus? Can he warm his blue hands by holding them up to the grand northern lights? Would not Lazarus rather be in Sumatra than here?

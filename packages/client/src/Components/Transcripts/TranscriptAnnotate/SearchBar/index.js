@@ -70,14 +70,14 @@ class SearchBar extends Component {
    }
 
    render() {
-     // TODO: move this to a Search Toolbar component?
+     {/* TODO: move this to a Search Toolbar component? */}
      const searchBar = <Card.Header>
        <InputGroup className="mb-3">
          {/* Search controls settings */}
          <DropdownButton
            as={ InputGroup.Prepend }
            variant="outline-secondary"
-           title={ <><FontAwesomeIcon icon={ faSearch } />  <FontAwesomeIcon icon={ faSlidersH } /></> }
+           title={ <><FontAwesomeIcon icon={ faSlidersH } /><FontAwesomeIcon icon={ faSearch } /></> }
            id="input-group-dropdown-1">
            <Dropdown.Item onClick={ this.handleToggleSearchTextPreferences }>
              <FontAwesomeIcon icon={ faParagraph }/>
@@ -105,27 +105,11 @@ class SearchBar extends Component {
            aria-label="search"
            aria-describedby="search"
          />
-         {/* TODO: make own component? - Search controls - show/hide  */}
-         {/* <InputGroup.Append>
-           <InputGroup.Text id="basic-addon2">
-             <FontAwesomeIcon icon={ faAngleDown } />
-           </InputGroup.Text>
-         </InputGroup.Append>
-         <InputGroup.Append>
-           <InputGroup.Text id="basic-addon2">
-             <FontAwesomeIcon icon={ faAngleUp } />
-           </InputGroup.Text>
-         </InputGroup.Append>
-         <InputGroup.Append>
-           <InputGroup.Text id="basic-addon2">1</InputGroup.Text>
-           <InputGroup.Text id="basic-addon2">3</InputGroup.Text>
-         </InputGroup.Append> */}
-         {/* end TODO  */}
        </InputGroup>
      </Card.Header>;
 
      const textSearchPreferences = this.state.showTextSearchPreferences
-       ? <Card.Header>
+       ? (<Card.Header>
          <Form.Check
            type="checkbox"
            value={ this.state.showParagraphsMatchingSearch }
@@ -133,9 +117,15 @@ class SearchBar extends Component {
            onClick={ this.handleShowParagraphsMatchingSearch }
          />
          <Form.Text className="text-muted">
-           <FontAwesomeIcon icon={ faParagraph }/> Show only paragraphs that contain search results
+           label={ <><FontAwesomeIcon icon={ faParagraph }/>Show only matching Paragraphs </> }
+           onClick={ this.handleShowParagraphsMatchingSearch }
+         >
+         <FontAwesomeIcon icon={ faParagraph }/> Show only paragraphs that contain search results
          </Form.Text>
-       </Card.Header>
+         <Form.Text className="text-muted">
+             Show only paragraphs that contain search results
+         </Form.Text>
+       </Card.Header>)
        : '';
 
      const labelsSearchPreferences = this.state.showLabelsSearchPreferences
@@ -172,8 +162,8 @@ class SearchBar extends Component {
      return (
        <>
          { searchBar }
-         { textSearchPreferences }
-         { labelsSearchPreferences }
+         {textSearchPreferences}
+         {labelsSearchPreferences}
          { speakerSearchPreferences }
        </>
      );

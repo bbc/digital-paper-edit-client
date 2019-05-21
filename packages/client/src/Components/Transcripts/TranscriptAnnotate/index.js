@@ -65,6 +65,7 @@ class TranscriptAnnotate extends Component {
       transcriptId:  this.props.match.params.transcriptId,
       projectTitle: '',
       transcriptJson: null,
+      // TODO: rename title to Transcript Title
       transcriptTitle: '',
       url: null,
       mediaDuration: '00:00:00:00',

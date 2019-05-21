@@ -1,0 +1,19 @@
+.speaker{
+    font-weight: bold;
+    color: #696969;
+    overflow: hidden;
+    text-transform: uppercase;
+}
+
+
+.unselectable {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  } 
+
+.highlightedWord {
+    border-bottom: 0.1em orange solid;
+    /* border-bottom: 0.4em red solid */
+}
