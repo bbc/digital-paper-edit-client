@@ -81,8 +81,8 @@ There will be *two* express servers in an EC2 instance.
               | | Express    |     | Express    | |
               | |  +------+  |     |            | |
               | |  |      |  |     |            | |
-User+------------->+React |  +---->+            +-------->...
-              | |  |UI    |  |     |            | |
+User+------------->+React |  +---->+    API     +-------->...
+              | |  |UI    |  |     |   Server   | |
               | |  |      |  |     |            | |
               | |  +------+  |     |            | |
               | |            |     |            | |
