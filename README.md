@@ -6,6 +6,18 @@ An application to make it faster, easier and more accessible to edit audio and v
 
 See [intro](./docs/intro.md) for more info on the project. And [user journey](./docs/guides/user-journey/user-journey.md) for a high level overview of the user journey.
 
+## Repositories
+The project is organised across these repository 
+
+- [`bbc/digital-paper-edit-client`](https://github.com/bbc/digital-paper-edit-client) - React Client 
+- [`bbc/digital-paper-edit-api`](https://github.com/bbc/digital-paper-edit-api) - Express server API
+- [`bbc/digital-paper-edit-infrastructure)`](https://github.com/bbc/digital-paper-edit-infrastructure) - AWS infrastructure for API server and Client.
+- [`/bbc/digital-paper-edit-electron`](https://github.com/pietrop/bbc/digital-paper-edit-electron) - Electron, Cross Platform Desktop app - Mac, Windows, Linux
+- [`bbc/digital-paper-edit-cep`](https://github.com/bbc/digital-paper-edit-cep)
+
+[See Modular Architecture ADR for more background info](https://github.com/bbc/digital-paper-edit-client/blob/master/docs/ADR/2019-05-09-modular-architecture.md)
+
+
 ## Setup
 
 <!-- _stack - optional_
@@ -76,16 +88,6 @@ and for Server - Express [`./packages/server`](./packages/server)
 
 To install new modules, cd into the individual repository and npm install from there.
 
-
-## System Architecture
-
-It's a React, Express, Electron, Adobe CEP, AWS stack to be able to deploy one code base a sWeb app or Desktop app for Mac, win and linux.
-
-See [modular architecture section](./docs/guides/modular-architecture.md) for more details on the stack.
-
-At the moment the repository is setup similarly to a mono repo but it's not using workspaces or other modules normally used in that context just yet (such as lerna etc..).
-
-Client - React, is setup using [Create React App](https://facebook.github.io/create-react-app/docs/getting-started).
 
 ## Development env
 
