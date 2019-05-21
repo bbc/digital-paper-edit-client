@@ -60,3 +60,17 @@ Create a file named `digital-paper-edit.code-workspace` in the same root where y
 
 
 double clicking `digital-paper-edit.code-workspace` will open the workspace.
+
+## `npm ScriptExplorer` 
+
+You can also use the convinient `npm ScriptExplorer` 
+
+> go to File -> Preferences -> Settings (CTRL+,) and to enable npm.enableScriptExplorer. VS Code will now automatically search for your package.json file and extract all commands from its scripts section.
+
+> This adds a new view in the sidebar on the left called “NPM Scripts”.
+
+>There, all NPM script commands are listed and you can simply click on the little arrow next to each one to start it. A new terminal is opened and the script is executed.
+
+
+[see here for more details](http://www.matthiassommer.it/programming/testing/run-npm-scripts-in-visual-studio-code-with-a-click-of-a-button/)
+
