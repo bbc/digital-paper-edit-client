@@ -13,42 +13,40 @@ class Transcripts extends Component {
       projectId: this.props.match.params.projectId,
       projectTitle: ''
     };
+
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
-  componentDidMount = () => {
-    ApiWrapper.getTranscripts(this.state.projectId)
-      // TODO: add error handling
-      .then(json => {
-        console.log(json);
-        // add a display property for component cards search
-        const tmpList = json.transcripts.map((item) => {
-          item.display = true;
+  async componentDidMount() {
 
-          return item;
-        });
-        this.setState({
-          projectTitle: json.projectTitle,
-          transcriptsList: tmpList
-        });
+    const result = await ApiWrapper.getTranscripts(this.state.projectId);
+    // TODO: add error handling
+    if (result) {
+      const tmpList = result.transcripts.map((item) => {
+        item.display = true;
+
+        return item;
       });
+      this.setState({
+        projectTitle: result.projectTitle,
+        transcriptsList: tmpList
+      });
+    }
   }
 
-  handleDelete = (transcriptId ) => {
+  async handleDelete (transcriptId ) {
 
     // TODO: API + server side request for delete
     // on successful then update state
-    ApiWrapper.deleteTranscript(this.state.projectId, transcriptId).then((res) => {
-      if (res.status === 'ok') {
-        const tmpNewList = this.state.transcriptsList.filter(function( obj ) {
-          return obj.id !== transcriptId;
-        });
-        this.setState({
-          transcriptsList: tmpNewList
-        });
-      } else {
-        // TODO: some error handling, error message saying something went wrong
-      }
-    });
+    const result = await ApiWrapper.deleteTranscript(this.state.projectId, transcriptId);
+    // TODO: some error handling, error message saying something went wrong
+    const findId = (item) => item.id !== transcriptId;
+    if (result.status === 'ok') {
+      const tmpNewList = this.state.transcriptsList.filter(item => findId(item));
+      this.setState({
+        transcriptsList: tmpNewList
+      });
+    }
   }
 
   getShowLinkForCard = (id) => {

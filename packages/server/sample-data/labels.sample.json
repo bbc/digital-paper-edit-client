@@ -7,25 +7,18 @@
       "description": "A default label"
     },
     {
-      "id": 0,
-      "value": "politics",
-      "label": "Politics",
-      "color": "#00B8D9",
-      "description": "Test description"
-    },
-    {
       "id": 1,
       "value": "economics",
       "label": "Economics",
-      "color": "#0052CC",
-      "description": ""
+      "color": "brown",
+      "description": "Test description 1"
     },
     {
       "id": 2,
       "value": "introduction",
       "label": "Introduction",
-      "color": "#5243AA",
-      "description": ""
+      "color": "darkblue",
+      "description": "Test description 2"
     },
     {
       "id": 3,

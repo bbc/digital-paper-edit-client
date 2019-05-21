@@ -1,14 +1,16 @@
 [
-    {
-        "start": 635.42,
-        "end": 637.72,
-        "labelId": 3,
-        "description": "optional example text description for an annotation"
-      },
-      {
-        "start": 735.42,
-        "end": 737.72,
-        "labelId": 3,
-        "description": "optional example text description for an annotation"
-      }
+  {
+    "id": 0,
+    "start": 50.58,
+    "end": 51.65,
+    "labelId": 0,
+    "note": "optional example text description for an annotation"
+  },
+  {
+    "id": 1,
+    "start": 14.38,
+    "end": 18.14,
+    "labelId": 1,
+    "note": "optional example text description for an annotation - TEST 2"
+  }
 ]

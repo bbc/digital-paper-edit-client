@@ -21,7 +21,7 @@ module.exports = (app) => {
     app.get(`/api/projects/:projectId/transcripts/:transcriptId/annotations`, (req,res) => {
         const projectId =  req.params.projectId;
         const transcriptId = req.params.transcriptId;
-        console.log('labels','get',`/api/projects/${projectId}}/transcripts/${transcriptId}/annotations`);
+        console.log('labels','get',`/api/projects/${projectId}/transcripts/${transcriptId}/annotations`);
         
         const response = { 
             projectTitle: 'Sample Project Title',

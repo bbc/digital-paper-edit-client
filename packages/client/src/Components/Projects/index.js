@@ -10,6 +10,7 @@ class Projects extends Component {
     this.state = {
       projects: null
     };
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   async componentDidMount () {
@@ -29,6 +30,7 @@ class Projects extends Component {
   };
 
   async handleDelete(id) {
+    console.log('handleDelete id', id);
     // TODO: API + server side request for delete
     // on successful then update state
     const result = await ApiWrapper.deleteProject(id);

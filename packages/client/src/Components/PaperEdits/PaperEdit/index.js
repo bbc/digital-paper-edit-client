@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
-import { TranscriptEditor } from '@bbc/react-transcript-editor';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Nav from 'react-bootstrap/Nav';
-import Tab from 'react-bootstrap/Tab';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
-import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
-import ToggleButton from 'react-bootstrap/ToggleButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faFolderPlus, faMicrophoneAlt, faTag, faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import CustomNavbar from '../../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../../lib/CustomFooter/index.js';

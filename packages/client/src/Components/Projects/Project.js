@@ -33,7 +33,7 @@ class Project extends Component {
   }
 
   componentDidMount = () => {
-    const tmpProject = ApiWrapper.getProject(this.state.projectId).then(tmpProject => {
+    ApiWrapper.getProject(this.state.projectId).then(tmpProject => {
 
       this.setState({
         title: tmpProject.title,

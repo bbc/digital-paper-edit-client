@@ -52,10 +52,12 @@ class SearchBar extends Component {
   };
 
   handleSpeakersSearchChange = selectedOptionSpeakerSearch => {
+    this.props.handleSpeakersSearchChange(selectedOptionSpeakerSearch);
     this.setState({ selectedOptionSpeakerSearch });
   };
 
    handleLabelsSearchChange = selectedOptionLabelSearch => {
+     this.props.handleLabelsSearchChange(selectedOptionLabelSearch);
      this.setState({ selectedOptionLabelSearch });
    };
 
@@ -103,37 +105,27 @@ class SearchBar extends Component {
            aria-label="search"
            aria-describedby="search"
          />
-         {/* TODO: make own component? - Search controls - show/hide  */}
-         <InputGroup.Append>
-           <InputGroup.Text id="basic-addon2">
-             <FontAwesomeIcon icon={ faAngleDown } />
-           </InputGroup.Text>
-         </InputGroup.Append>
-         <InputGroup.Append>
-           <InputGroup.Text id="basic-addon2">
-             <FontAwesomeIcon icon={ faAngleUp } />
-           </InputGroup.Text>
-         </InputGroup.Append>
-         <InputGroup.Append>
-           <InputGroup.Text id="basic-addon2">1</InputGroup.Text>
-           <InputGroup.Text id="basic-addon2">3</InputGroup.Text>
-         </InputGroup.Append>
-         {/* end TODO  */}
        </InputGroup>
      </Card.Header>;
 
      const textSearchPreferences = this.state.showTextSearchPreferences
-       ? <Card.Header>
+       ? (<Card.Header>
          <Form.Check
            type="checkbox"
            value={ this.state.showParagraphsMatchingSearch }
-           label={ <><FontAwesomeIcon icon={ faParagraph }/>Show only matching Paragraphs </> }
+           label={ <>Show only matching Paragraphs </> }
            onClick={ this.handleShowParagraphsMatchingSearch }
          />
          <Form.Text className="text-muted">
+           label={ <><FontAwesomeIcon icon={ faParagraph }/>Show only matching Paragraphs </> }
+           onClick={ this.handleShowParagraphsMatchingSearch }
+         >
+         <FontAwesomeIcon icon={ faParagraph }/> Show only paragraphs that contain search results
+         </Form.Text>
+         <Form.Text className="text-muted">
              Show only paragraphs that contain search results
          </Form.Text>
-       </Card.Header>
+       </Card.Header>)
        : '';
 
      const labelsSearchPreferences = this.state.showLabelsSearchPreferences

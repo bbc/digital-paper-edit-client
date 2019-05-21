@@ -7,25 +7,53 @@ const colourStyles = {
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
     const color = chroma(data.color);
 
+    let tmpBackgroundColor = null;// 'black;
+    if (isDisabled) {
+      tmpBackgroundColor = null;
+    }
+    if (isSelected) {
+      tmpBackgroundColor = data.color;
+    }
+    if (isFocused) {
+      tmpBackgroundColor = color.alpha(0.1).css();
+    }
+
+    const tmpColor = data.color;
+    if (isDisabled) {
+      tmpColor = '#ccc';
+    }
+    if (isSelected) {
+      tmpColor = chroma.contrast(color, 'white') > 2
+        ? 'white'
+        : 'black';
+    }
+
     return {
       ...styles,
-      backgroundColor: isDisabled
-        ? null
-        : isSelected
-          ? data.color
-          : isFocused
-            ? color.alpha(0.1).css()
-            : null,
-      color: isDisabled
-        ? '#ccc'
-        : isSelected
-          ? chroma.contrast(color, 'white') > 2
-            ? 'white'
-            : 'black'
-          : data.color,
+      backgroundColor: tmpBackgroundColor,
+      color: tmpColor,
       cursor: isDisabled ? 'not-allowed' : 'default'
     };
   },
+  //   return {
+  //     ...styles,
+  //     backgroundColor: isDisabled
+  //       ? null
+  //       : isSelected
+  //         ? data.color
+  //         : isFocused
+  //           ? color.alpha(0.1).css()
+  //           : null, //'black'
+  //     color: isDisabled
+  //       ? '#ccc'
+  //       : isSelected
+  //         ? chroma.contrast(color, 'white') > 2
+  //           ? 'white'
+  //           : 'black'
+  //         : data.color,
+  //     cursor: isDisabled ? 'not-allowed' : 'default'
+  //   };
+  // },
   // singleValue: (provided, state) => {
   //   const opacity = state.isDisabled ? 0.5 : 1;
   //   const transition = 'opacity 300ms';

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
@@ -7,42 +6,34 @@ import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
-import Collapse from 'react-bootstrap/Collapse';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faSearch,
-  faSlidersH,
-  faHighlighter,
   faTags,
   faTag,
-  faUserTag,
   faAngleDown,
   faAngleUp,
-  faSyncAlt,
   faTimes,
   faPen,
-  faInfoCircle,
-  faQuestionCircle
+  faSlidersH
 } from '@fortawesome/free-solid-svg-icons';
-import chroma from 'chroma-js';
 
-import Select from 'react-select';
-
-import CreateNewLabelModal from './CreateNewLabelModal.js';
+import LabelModal from './LabelModal.js';
+import { randomColor } from './css-color-names.js';
 
 class LabelsList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      labelsListOpen: false
+      labelsListOpen: false,
+      isLabelmodalShown: false
     };
   }
 
   removeLabel = (id, e) => {
     // eslint-disable-next-line no-restricted-globals
     const response = confirm('Click OK to delete the label, Cancel if you changed your mind');
-    if (response == true) {
+    if (response === true) {
       const newLabelsOptions = this.props.labelsOptions.filter((label) => {
         return label.id !== id;
       });
@@ -62,13 +53,39 @@ class LabelsList extends Component {
       return label.id === id;
     });
     console.log('labelToEdit', labelToEdit);
-    alert('this functionality has not been implemented yet');
+    // alert('this functionality has not been implemented yet');
   }
-  handleNewLabelCreated = (newLabel) => {
-    const newLabelsOptions = this.props.labelsOptions;
-    newLabel.id = newLabelsOptions[newLabelsOptions.length - 1].id + 1;
-    newLabelsOptions.push(newLabel);
-    this.props.onLabelsUpdated(newLabelsOptions);
+  onLabelSaved = (newLabel) => {
+    console.log('onLabelSaved::', newLabel);
+    const { labelsOptions } = this.props;
+    // if updated - labelId is diff from null
+    if (newLabel.id) {
+      console.log('updated?');
+      // find label // assign id
+      // newLabel.id = newLabel.labelId;
+      // TODO: refactor this, eg use id instead of labelId
+      // delete newLabel.labelId;
+      // update label
+      labelsOptions[newLabel.id] = newLabel;
+      // update list of labels
+      this.props.onLabelsUpdated(labelsOptions);
+    }
+    // if created
+    else {
+      console.log('created?');
+      newLabel.id = labelsOptions[labelsOptions.length - 1].id + 1;
+      labelsOptions.push(newLabel);
+      this.props.onLabelsUpdated(labelsOptions);
+    }
+  }
+
+  showLabelModal = () => {
+    console.log(this.state.isLabelmodalShown);
+    this.setState((state) => {
+      return {
+        isLabelmodalShown: !state.isLabelmodalShown
+      };
+    });
   }
 
   render() {
@@ -87,11 +104,25 @@ class LabelsList extends Component {
           </Col>
 
           <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }>
-            <Button title={ 'edit label' }variant="link" size="sm"
-              onClick={ (e) => {this.editLabel(label.id, e);} }
-              disabled={ label.label.toLowerCase() === 'default' ? true : false }>
-              <FontAwesomeIcon icon={ faPen } />
-            </Button>
+            {/* Edit label */}
+
+            {label.label.toLowerCase() !== 'default' ?
+              <LabelModal
+                color={ label.color }
+                label={ label.label }
+                description={ label.description }
+                labelId={ label.id }
+                show={ this.state.isLabelmodalShown }
+                onLabelSaved={ this.onLabelSaved }
+                openBtn={ <span> <FontAwesomeIcon icon={ faPen } /></span> }
+              /> : <Button title={ 'edit label' } variant="link" size="sm" disabled>
+                <FontAwesomeIcon icon={ faPen } /> </Button> }
+
+            {/* <Button title={ 'edit label' }variant="link" size="sm"
+              // onClick={ (e) => { this.editLabel(label.id, e); } }
+              disabled={ label.label.toLowerCase() === 'default' ? true : false }
+            >
+            </Button> */}
           </Col>
           <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }>
             <Button title={ 'delete label' } variant="link" size="sm"
@@ -117,83 +148,36 @@ class LabelsList extends Component {
     });
 
     const labelsList = (<ListGroup style={ { height: '30vh', overflow: 'scroll' } }>{labelsListOptions}
-      {/* <ListGroup.Item key={ 'btn_new' }>
-        <CreateNewLabelModal
-          onNewLabelCreated={ this.handleNewLabelCreated }
-        />
-      </ListGroup.Item> */}
     </ListGroup>);
 
     return (<>
 
-      {/* <Button variant="outline-dark"
-        onClick={ () => {
-          this.setState((state) => {return { labelsListOpen: !state.labelsListOpen };});
-        } } block
-      >
-        <Nav justify variant="pills">
-          <Nav.Item>
-            <FontAwesomeIcon icon={ faTags } /> Labels
-          </Nav.Item>
-
-          <Nav.Item>
-            <FontAwesomeIcon icon={ this.state.labelsListOpen ? faAngleDown : faAngleUp } />
-          </Nav.Item>
-        </Nav>
-      </Button>
-
-      <Collapse in={ this.state.labelsListOpen }>
-        { labelsList }
-      </Collapse> */}
-
-      {/*
-      <Card.Footer className="text-muted">
-          <CreateNewLabelModal
-            onNewLabelCreated={ this.handleNewLabelCreated }
-          />
-        </Card.Footer>
-         */}
-
       <Card>
-        {/* <Button variant="outline-primary"
-          onClick={ () => {
-            this.setState((state) => {return { labelsListOpen: !state.labelsListOpen };});
-          } } block
-        >
-          <Nav justify variant="pills">
-            <Nav.Item>
-              <FontAwesomeIcon icon={ faTags } /> Labels
-            </Nav.Item>
-
-            <Nav.Item>
-              <FontAwesomeIcon icon={ this.state.labelsListOpen ? faAngleDown : faAngleUp } />
-            </Nav.Item>
-          </Nav>
-        </Button> */}
-
         <Card.Header
           variant="outline-primary"
           onClick={ () => {this.setState((state) => {return { labelsListOpen: !state.labelsListOpen };});} }>
           <Nav justify variant="pills">
             <Nav.Item>
-              <FontAwesomeIcon icon={ faTags } /> Labels
+              <FontAwesomeIcon icon={ faTags } />  <FontAwesomeIcon icon={ faSlidersH } />  Labels
             </Nav.Item>
-
             <Nav.Item>
               <FontAwesomeIcon icon={ this.state.labelsListOpen ? faAngleDown : faAngleUp } />
             </Nav.Item>
           </Nav>
-
         </Card.Header>
-
         {this.state.labelsListOpen ? <> { labelsList }
           <Card.Footer className="text-muted">
-            <CreateNewLabelModal
-              onNewLabelCreated={ this.handleNewLabelCreated }
+            <LabelModal
+              color={ randomColor() }
+              label={ '' }
+              description={ '' }
+              labelId={ null }
+              show={ this.state.isLabelmodalShown }
+              onLabelSaved={ this.onLabelSaved }
+              openBtn={ <span>Create New Label <FontAwesomeIcon icon={ faTag } />{' '}</span> }
             />
           </Card.Footer> </> : ''}
       </Card>
-
     </>
     );
   }
