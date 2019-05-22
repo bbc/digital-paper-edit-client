@@ -12,8 +12,6 @@ import {
   faSlidersH,
   faTags,
   faUserTag,
-  faAngleDown,
-  faAngleUp,
   faSearch,
 } from '@fortawesome/free-solid-svg-icons';
 import colourStyles from '../LabelsList/select-color-styles.js';
@@ -118,9 +116,8 @@ class SearchBar extends Component {
          />
          <Form.Text className="text-muted">
            label={ <><FontAwesomeIcon icon={ faParagraph }/>Show only matching Paragraphs </> }
-           onClick={ this.handleShowParagraphsMatchingSearch }
-         >
-         <FontAwesomeIcon icon={ faParagraph }/> Show only paragraphs that contain search results
+           onClick={ this.handleShowParagraphsMatchingSearch }>
+           <FontAwesomeIcon icon={ faParagraph }/> Show only paragraphs that contain search results
          </Form.Text>
          <Form.Text className="text-muted">
              Show only paragraphs that contain search results
