@@ -18,11 +18,16 @@ import PaperEdit from './Components/PaperEdits/PaperEdit';
 import PaperEditForm from './Components/PaperEdits/NewPaperEdit.js';
 import CustomAlert from './Components/lib/CustomAlert';
 import Container from 'react-bootstrap/Container';
+import Alert from 'react-bootstrap/Alert';
+
 import Row from 'react-bootstrap/Row';
 // import UserManual from './Components/UserManual';
 
 import './App.css';
 // import Transcript from './Components/PaperEdits/PaperEdit.js';
+
+const demoWarningMessage = (<p> This is Demo version of the app <Alert.Link href="https://github.com/bbc/digital-paper-edit-client" target="_blank" rel="noopener noreferrer"
+>see project Github repository for more info</Alert.Link>.</p>);
 
 class App extends Component {
   constructor(props) {
@@ -34,14 +39,13 @@ class App extends Component {
   // eslint-disable-next-line class-methods-use-this
   render() {
     let envWarning = null;
-    if (process.env.REACT_APP_NODE_ENV === 'demo') {
+    if (process.env.REACT_APP_NODE_ENV === 'development') {
       envWarning = (
         <Container>
           <CustomAlert
             variant={ 'warning' }
             heading={ 'Demo mode' }
-            message={ '  This is Demo version of the app' }
-          />
+            message={ demoWarningMessage }/>
         </Container>);
     }
 
