@@ -39,7 +39,7 @@ class App extends Component {
   // eslint-disable-next-line class-methods-use-this
   render() {
     let envWarning = null;
-    if (process.env.REACT_APP_NODE_ENV === 'development') {
+    if (process.env.REACT_APP_NODE_ENV === 'demo') {
       envWarning = (
         <Container>
           <CustomAlert
