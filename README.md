@@ -20,6 +20,8 @@ The project is organised across these repository
 
 See [modular architecture section](./docs/guides/modular-architecture.md) for more details on the stack and the [Modular Architecture ADR for more info on the implementation](https://github.com/bbc/digital-paper-edit-client/blob/master/docs/ADR/2019-05-09-modular-architecture.md)
 
+The projects use [npm semantic versioning](https://docs.npmjs.com/about-semantic-versioning)
+
 
 ## Setup
 
