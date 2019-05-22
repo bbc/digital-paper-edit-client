@@ -33,7 +33,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "clean:cache": "npm cache clean --force"
+    "clean:cache": "npm cache clean --force",
+    "deploy:ghpages": "rimraf build && cross-env REACT_APP_NODE_ENV=demo npm run build && gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -43,5 +44,9 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "gh-pages": "^2.0.1"
+  }
 }

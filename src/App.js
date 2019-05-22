@@ -16,7 +16,9 @@ import TranscriptCorrect from './Components/Transcripts/TranscriptCorrect.js';
 import PaperEdits from './Components/PaperEdits/index.js';
 import PaperEdit from './Components/PaperEdits/PaperEdit';
 import PaperEditForm from './Components/PaperEdits/NewPaperEdit.js';
-
+import CustomAlert from './Components/lib/CustomAlert';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
 // import UserManual from './Components/UserManual';
 
 import './App.css';
@@ -31,7 +33,22 @@ class App extends Component {
   }
   // eslint-disable-next-line class-methods-use-this
   render() {
-    return (
+    let envWarning = null;
+    if (process.env.REACT_APP_NODE_ENV === 'demo') {
+      envWarning = (
+        <Container>
+          <CustomAlert
+            variant={ 'warning' }
+            heading={ 'Demo mode' }
+            message={ '  This is Demo version of the app' }
+          />
+        </Container>);
+    }
+
+    return (<>
+
+      {envWarning}
+
       <HashRouter>
         <Switch>
           <Route exact path="/" component={ Home } />
@@ -89,6 +106,7 @@ class App extends Component {
           {/* Help route  */}
         </Switch>
       </HashRouter>
+    </>
     );
   }
 }

@@ -192,6 +192,15 @@ _TBC_
 
 >See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+
+## Demo page on github pages
+
+To update demo on github pages [bbc.github.io/digital-paper-edit-client](https://bbc.github.io/digital-paper-edit-client)
+
+```
+npm run deploy:ghpages
+```
+
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) guidelines and [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) guidelines.
