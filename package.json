@@ -29,7 +29,9 @@
     ""
   ],
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cross-env REACT_APP_NODE_ENV=development react-scripts start",
+    "start:demo": "cross-env REACT_APP_NODE_ENV=demo react-scripts start",
+    "start:production": "cross-env REACT_APP_NODE_ENV=production react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
