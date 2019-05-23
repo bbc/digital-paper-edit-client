@@ -18,6 +18,14 @@ The project is organised across these repository
 - [`/bbc/digital-paper-edit-electron`](https://github.com/bbc/digital-paper-edit-electron) - Electron, Cross Platform Desktop app - Mac, Windows, Linux
 - [`bbc/digital-paper-edit-cep`](https://github.com/bbc/digital-paper-edit-cep) Adobe CEP (Common Extensibility Platform) - Premiere Pro Plugin Panel
 
+Microservices for web app backend
+
+- [`bbc/stt-proxy`](https://github.com/bbc/stt-proxy)
+- [`bbc/video-preview-converter`](https://github.com/bbc/video-preview-converter)
+- [`bbc/audio-converter`](https://github.com/bbc/audio-converter)
+
+[See here to see them as a list in github](https://github.com/topics/digital-paper-edit).
+
 See [modular architecture section](./docs/guides/modular-architecture.md) for more details on the stack and the [Modular Architecture ADR for more info on the implementation](https://github.com/bbc/digital-paper-edit-client/blob/master/docs/ADR/2019-05-09-modular-architecture.md)
 
 The projects use [npm semantic versioning](https://docs.npmjs.com/about-semantic-versioning)
