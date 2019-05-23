@@ -29,9 +29,9 @@ git clone git@github.com:bbc/digital-paper-edit-cep.git
 
 To download the micro services used in the backend
 ```
-git clone git@github.com:bbc/stt-proxy.git
-git clone git@github.com:bbc/video-preview-converter.git
-git clone 
+git clone git@github.com:bbc/digital-paper-edit-stt-proxy.git
+git clone git@github.com:bbc/digital-paper-edit-audio-converter.git
+git clone git@github.com:bbc/digital-paper-edit-video-preview-converter.git
 ```
 
 
@@ -62,15 +62,15 @@ Create a file named `digital-paper-edit.code-workspace` in the same root where y
         },
         {
             "name": "Microservice: STT Proxy",
-            "path": "stt-proxy"
+            "path": "digital-paper-edit-stt-proxy"
         },
         {
             "name": "Microservice: Video Preview Converter",
-            "path": "video-preview-converter"
+            "path": "digital-paper-edit-video-preview-converter"
         },
         {
             "name": "Microservice: Audio Converter",
-            "path": "audio-converter"
+            "path": "digital-paper-edit-audio-converter"
         }
     ]
 }
