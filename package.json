@@ -35,6 +35,7 @@
     "type": "git",
     "url": "git+https://github.com/bbc/digital-paper-edit-client.git"
   },
+  "license": "MIT",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
