@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-import { LinkContainer } from 'react-router-bootstrap';
-import Container from 'react-bootstrap/Container';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
-import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Badge from 'react-bootstrap/Badge';
 import Alert from 'react-bootstrap/Alert';
 
@@ -15,11 +10,8 @@ import {
   faExclamationCircle
 } from '@fortawesome/free-solid-svg-icons';
 
-import CustomNavbar from '../CustomNavbar/index.js';
-import CustomBreadcrumb from '../CustomBreadcrumb/index.js';
 import CustomCard from '../CustomCard/index.js';
 
-import CustomFooter from '../CustomFooter/index.js';
 import CustomAlert from '../CustomAlert/index.js';
 import capitaliseFirstLetter from '../../../Util/capitalise-first-letter/index.js';
 import includesText from '../../../Util/includes-text/index.js';
@@ -185,25 +177,9 @@ class ListPageTemplate extends Component {
     }
 
     return (
-      <Container style={ { marginBottom: '5em' } }>
-        <CustomNavbar links={ this.props.navbarLinks } />
-        <br />
-        <Row>
-          <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
-            <CustomBreadcrumb items={ this.props.breadCrumbItems } />
-          </Col>
-          <Col xs={ 12 } sm={ 3 } md={ 3 } ld={ 3 } xl={ 3 }>
-            <LinkContainer to={ this.props.linkToNew() }>
-              <Button variant="outline-secondary" size="lg" block>
-                New{' '}
-              </Button>
-            </LinkContainer>
-            <br />
-          </Col>
-        </Row>
+      <>
         {content}
-        <CustomFooter />
-      </Container>
+      </>
     );
   }
 }

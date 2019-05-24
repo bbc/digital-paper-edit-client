@@ -4,7 +4,7 @@ import Home from './Components/Home';
 
 import Projects from './Components/Projects/index.js';
 import Project from './Components/Projects/Project.js';
-import newProject from './Components/Projects/ProjectForm.js';
+// import newProject from './Components/Projects/ProjectForm.js';
 import Users from './Components/Users/index.js';
 
 import Transcripts from './Components/Transcripts/index.js';
@@ -35,14 +35,14 @@ class App extends Component {
       <HashRouter>
         <Switch>
           <Route exact path="/" component={ Projects } />
-          <Route exact path="/projects/new" component={ newProject } />
+          {/* <Route exact path="/projects/new" component={ newProject } /> */}
           <Route exact path="/projects" component={ Projects } />
           <Route exact path="/projects/:projectId" component={ Project } />
-          <Route
+          {/* <Route
             exact
             path="/projects/:projectId/edit"
             component={ newProject }
-          />
+          /> */}
           <Route exact path="/projects/:projectId/users" component={ Users } />
           <Route
             exact

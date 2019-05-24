@@ -66,7 +66,7 @@ npm install
 In root of the client project (`cd digital-paper-edit-client`) start React 
 
 ```
-npm start
+npm run start:dev
 ```
 
 To developer for the web app [you will need to start setup and the API server](https://github.com/bbc/digital-paper-edit-api#setup) as well.

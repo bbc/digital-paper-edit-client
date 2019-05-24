@@ -1,22 +1,26 @@
-import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
-import ListPageTemplate from '../lib/ListPageTemplate/index.js';
+import React from 'react';
+import Container from 'react-bootstrap/Container';
+import CustomNavbar from '../lib/CustomNavbar/index.js';
+import ListPage from '../lib/ListPage';
+import NewItemFormModal from '../lib/NewItemFormModal';
 import ApiWrapper from '../../ApiWrapper/index.js';
 
-class Projects extends Component {
+class Projects extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      projects: null
+      items: [],
+      isNewItemModalShow: false,
+      title: 'Test title 9',
+      description: 'DD',
+      itemId: null
     };
-    this.handleDelete = this.handleDelete.bind(this);
+    this.handleDeleteItem = this.handleDeleteItem.bind(this);
   }
-
   async componentDidMount () {
     // TODO: do we need to add user id in request?
     const result = await ApiWrapper.getAllProjects();
-
+    console.log(result);
     if (result) {
       // add a display property for component cards search
       const tmpList = result.map(project => {
@@ -24,73 +28,145 @@ class Projects extends Component {
 
         return project;
       });
-      this.setState({ projects: tmpList });
+      this.setState({ items: tmpList });
     }
     // TODO: some error handling
   };
 
-  async handleDelete(id) {
-    console.log('handleDelete id', id);
-    // TODO: API + server side request for delete
-    // on successful then update state
-    const result = await ApiWrapper.deleteProject(id);
-    const findId = (item) => item.id !== id;
-
-    if (result.status === 'ok') {
-      const filteredProjects = this.state.projects.filter(item => findId(item));
-      this.setState({
-        projects: filteredProjects
+  handleSaveItem = (item) => {
+    if (!item.id) {
+      ApiWrapper.createProject(item).then(response => {
+        if (response.status === 'ok') {
+          // Server returns project with UID generated server side
+          const projects = [ ...this.state.items ];
+          // need to add display true attribute for search to the new project
+          const newProject = response.project;
+          newProject.display = true;
+          projects.push(response.project);
+          this.setState({
+            isNewItemModalShow: false,
+            items: projects,
+            // reset item form
+            title: '',
+            itemId: null,
+            description: ''
+          });
+        }
       });
+    }
+    else {
+      ApiWrapper.updateProject(item.id, item).then(response => {
+        if (response.status === 'ok') {
+          const project = response.project;
+          // need to add display true attribute for search to the new project
+          project.display = true;
+          // // Server returns project with UID generated server side
+          // const projects = [ ...this.state.items ];
+          // // need to add display true attribute for search to the new project
+          // const newProject = response.project;
+          // newProject.display = true;
+          // projects.push(response.project);
+          const { items } = this.state;
+          this.findItemById(items, item);
+          const projectIndex = this.state.items.findIndex(item => item.id === project.id);
+          items[projectIndex] = project;
+          this.setState({
+            isNewItemModalShow: false,
+            items: items,
+            // reset item form
+            title: '',
+            itemId: null,
+            description: ''
+          });
+        }
+      });
+    }
+  }
+
+  findItemById = (list, id) => {
+    const result = list.filter((p) => {
+      return p.id === id;
+    });
+
+    return result[0];
+  }
+
+  handleEditItem = (itemId) => {
+    const item = this.findItemById(this.state.items, itemId);
+    this.setState({
+      title: item.title,
+      itemId: item.id,
+      description: item.description,
+      isNewItemModalShow: true
+    });
+    console.log('edit item', item);
+  }
+
+  async handleDeleteItem(itemId) {
+    const result = await ApiWrapper.deleteProject(itemId);
+    if (result.status === 'ok') {
+      const newItemsList = this.state.items.filter((p) => {
+        return p.id !== itemId;
+      });
+      this.setState({ items: newItemsList });
     } else {
       // TODO: some error handling, error message saying something went wrong
     }
-  };
+  }
 
-  // To be able to do REST for cards for - Projects, transcripts, paperedits
-  getShowLinkForCard = id => {
+  showLinkPathToItem = (id) => {
     return `/projects/${ id }`;
+  }
+
+  handleUpdateList = (list) => {
+    this.setState({ items: list });
+  }
+
+  handleShowCreateNewItemForm = () => {
+    // return '/projects/new';
+    this.setState({ isNewItemModalShow: true });
   };
 
-  linkToNew = () => {
-    return '/projects/new';
-  };
+  handleCloseModal = () => {
+    this.setState({
+      title:'',
+      itemId: null,
+      description: '',
+      isNewItemModalShow: false
+    });
+  }
 
   render() {
-    return (
-      <ListPageTemplate
-        icon={ <FontAwesomeIcon icon={ faFolder } /> }
-        itemsList={ this.state.projects }
-        handleDelete={ this.handleDelete }
-        modelName={ 'projects' }
-        getShowLinkForCard={ this.getShowLinkForCard }
-        linkToNew={ this.linkToNew }
-        // showLink for customCard?
-        navbarLinks={ [
-          {
-            name: (
-              <span>
-                {' '}
-                <FontAwesomeIcon icon={ faFolder } /> Projects
-              </span>
-            ),
-            link: '/projects'
-          },
-          {
-            name: (
-              <span>
-                {' '}
-                <FontAwesomeIcon icon={ faFolderPlus } /> NewProject
-              </span>
-            ),
-            link: '/projects/new'
-          }
-        ] }
-        breadCrumbItems={ [
-          {
-            name: 'Projects'
-          }
-        ] }
-      />
+    return (<>
+      <CustomNavbar/>
+      <Container style={ { marginBottom: '5em' } }>
+        <br/>
+        <ListPage
+          items={ this.state.items }
+          handleShowCreateNewItemForm={ this.handleShowCreateNewItemForm }
+          deleteItem={ this.createNew }
+          editItem={ this.createNew }
+          handleEdit={ this.handleEditItem }
+          handleDelete={ this.handleDeleteItem }
+          showLinkPath={ this.showLinkPathToItem }
+          handleUpdateList={ this.handleUpdateList }
+          breadcrumb={ [
+            {
+              name: 'Projects'
+            }
+          ] }
+        />
+        <NewItemFormModal
+          title={ this.state.title }
+          description={ this.state.description }
+          id={ this.state.itemId }
+          modalTitle={ this.state.itemId ? 'Edit Project' : 'New Project' }
+          show={ this.state.isNewItemModalShow }
+          handleCloseModal={ this.handleCloseModal }
+          handleSaveForm={ this.handleSaveItem }
+        />
+      </Container>
+    </>
     );
   }
 }

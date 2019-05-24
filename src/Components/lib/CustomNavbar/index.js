@@ -42,14 +42,14 @@ class CustomNavbar extends Component {
         <LinkContainer to="/">
           <Navbar.Brand>{process.env.REACT_APP_NAME}</Navbar.Brand>
         </LinkContainer>
-        <OverlayTrigger
+        {/* <OverlayTrigger
           trigger="click"
           rootClose
           placement="bottom"
           overlay={ popover }
         >
           <FontAwesomeIcon icon={ faEllipsisH } />
-        </OverlayTrigger>
+        </OverlayTrigger> */}
       </Navbar>
     );
   }
