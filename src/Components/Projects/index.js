@@ -1,8 +1,12 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
-import CustomNavbar from '../lib/CustomNavbar/index.js';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import CustomNavbar from '../lib/CustomNavbar';
 import ListPage from '../lib/ListPage';
 import NewItemFormModal from '../lib/NewItemFormModal';
+import CustomBreadcrumb from '../lib/CustomBreadcrumb';
+import CustomFooter from '../lib/CustomFooter';
 import ApiWrapper from '../../ApiWrapper/index.js';
 
 class Projects extends React.Component {
@@ -33,6 +37,7 @@ class Projects extends React.Component {
     // TODO: some error handling
   };
 
+  // The form works both for new/create and edit/update
   handleSaveItem = (item) => {
     if (!item.id) {
       ApiWrapper.createProject(item).then(response => {
@@ -61,11 +66,6 @@ class Projects extends React.Component {
           // need to add display true attribute for search to the new project
           project.display = true;
           // // Server returns project with UID generated server side
-          // const projects = [ ...this.state.items ];
-          // // need to add display true attribute for search to the new project
-          // const newProject = response.project;
-          // newProject.display = true;
-          // projects.push(response.project);
           const { items } = this.state;
           this.findItemById(items, item);
           const projectIndex = this.state.items.findIndex(item => item.id === project.id);
@@ -139,9 +139,18 @@ class Projects extends React.Component {
   render() {
     return (<>
       <CustomNavbar/>
-      <Container style={ { marginBottom: '5em' } }>
-        <br/>
+      <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
+        <Row>
+          <Col sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 }>
+            <CustomBreadcrumb items={ [
+              {
+                name: 'Projects'
+              }
+            ] } />
+          </Col>
+        </Row>
         <ListPage
+          model={ 'Project' }
           items={ this.state.items }
           handleShowCreateNewItemForm={ this.handleShowCreateNewItemForm }
           deleteItem={ this.createNew }
@@ -150,11 +159,6 @@ class Projects extends React.Component {
           handleDelete={ this.handleDeleteItem }
           showLinkPath={ this.showLinkPathToItem }
           handleUpdateList={ this.handleUpdateList }
-          breadcrumb={ [
-            {
-              name: 'Projects'
-            }
-          ] }
         />
         <NewItemFormModal
           title={ this.state.title }
@@ -166,6 +170,7 @@ class Projects extends React.Component {
           handleSaveForm={ this.handleSaveItem }
         />
       </Container>
+      <CustomFooter/>
     </>
     );
   }

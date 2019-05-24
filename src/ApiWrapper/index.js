@@ -14,6 +14,10 @@ class ApiWrapper {
     return `${ this.transcriptsUrl(projectId) }/${ transcriptId }${ queryParams }`.trim();
   };
 
+  paperEditsUrl = (projectId) => `${ this.projectsIdUrl(projectId) }/paperedits`;
+
+  paperEditsIdUrl = (projectId, paperEditId) => `${ this.projectsIdUrl(projectId) }/paperedits/${ paperEditId }`;
+
   annotationsUrl = (projectId, transcriptId) => `${ this.transcriptsIdUrl(projectId, transcriptId) }/annotations`;
 
   /**
@@ -103,6 +107,47 @@ class ApiWrapper {
 
     return json;
   }
+
+  /**
+   * PaperEdits
+   */
+
+  async getAllPaperEdits(projectId) {
+    console.log(this.paperEditsUrl(projectId));
+    const res = await corsFetch(this.paperEditsUrl(projectId));
+    const json = await res.json();
+    console.log(json);
+
+    return json.paperedits;
+  }
+
+  async getPaperEdit(projectId, id) {
+    const res = await corsFetch(this.paperEditsIdUrl(projectId, id));
+    const json = await res.json();
+
+    return json.paperedit;
+  }
+
+  async createPaperEdit(projectId, data) {
+    const res = await corsFetch(this.paperEditsUrl(projectId), 'POST', data, 'json');
+
+    return await res.json();
+  }
+
+  async updatePaperEdit(projectId, id, data) {
+    const res = await corsFetch(this.paperEditsIdUrl(projectId, id), 'PUT', data);
+    const json = await res.json();
+
+    return json;
+  }
+
+  async deletePaperEdit(projectId, id) {
+    const res = await corsFetch(this.paperEditsIdUrl(projectId, id), 'DELETE');
+    const json = await res.json();
+
+    return json;
+  }
+
 }
 
 // https://www.sitepoint.com/javascript-design-patterns-singleton/

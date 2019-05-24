@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { faFileAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ListPageTemplate from '../lib/ListPageTemplate/index.js';
@@ -10,7 +13,7 @@ class Transcripts extends Component {
     super(props);
     this.state = {
       transcriptsList: null,
-      projectId: this.props.match.params.projectId,
+      projectId: this.props.projectId,
       projectTitle: ''
     };
 
@@ -59,33 +62,45 @@ class Transcripts extends Component {
 
   render() {
     return (
-      <ListPageTemplate
-        icon={ <FontAwesomeIcon icon={ faFileAlt } /> }
-        itemsList={ this.state.transcriptsList }
-        handleDelete={ this.handleDelete }
-        modelName={ 'transcripts' }
-        getShowLinkForCard={ this.getShowLinkForCard }
-        linkToNew={ this.linkToNew }
-        // showLink for customCard?
-        navbarLinks={ navbarLinks(this.state.projectId) }
-        breadCrumbItems={
-          [ {
-            name: 'Projects',
-            link: '/projects'
-          },
-          {
+      <>
+        <Row>
+          <Col sm={ 8 } md={ 8 } ld={ 8 } xl={ 8 }>
+          </Col>
+          <Col xs={ 4 } sm={ 4 } md={ 4 } ld={ 4 } xl={ 4 }>
+            <Button
+              // onClick={ this.handleShowCreateNewItemForm }
+              variant="outline-secondary" size="sm" block>
+                New Transcript
+            </Button>
+          </Col>
+        </Row>
+        <ListPageTemplate
+          icon={ <FontAwesomeIcon icon={ faFileAlt } /> }
+          itemsList={ this.state.transcriptsList }
+          handleDelete={ this.handleDelete }
+          modelName={ 'transcripts' }
+          getShowLinkForCard={ this.getShowLinkForCard }
+          linkToNew={ this.linkToNew }
+          // showLink for customCard?
+          navbarLinks={ navbarLinks(this.state.projectId) }
+          breadCrumbItems={
+            [ {
+              name: 'Projects',
+              link: '/projects'
+            },
+            {
             // TODO: need to get project name
             // TODO: if using project name, only use first x char and add ...
-            name: `Project: ${ this.state.projectTitle }`,
-            link: `/projects/${ this.state.projectId }`
-          },
-          {
-            name: 'Transcripts'
+              name: `Project: ${ this.state.projectTitle }`,
+              link: `/projects/${ this.state.projectId }`
+            },
+            {
+              name: 'Transcripts'
+            }
+            ]
           }
-          ]
-        }
-      />
-
+        />
+      </>
     );
   }
 }
