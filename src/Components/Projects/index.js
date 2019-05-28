@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import CustomNavbar from '../lib/CustomNavbar';
 import ListPage from '../lib/ListPage';
-import NewItemFormModal from '../lib/NewItemFormModal';
+import ItemFormModal from '../lib/ItemFormModal';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb';
 import CustomFooter from '../lib/CustomFooter';
 import ApiWrapper from '../../ApiWrapper/index.js';
@@ -15,8 +15,8 @@ class Projects extends React.Component {
     this.state = {
       items: [],
       isNewItemModalShow: false,
-      title: 'Test title 9',
-      description: 'DD',
+      title: '',
+      description: '',
       itemId: null
     };
     this.handleDeleteItem = this.handleDeleteItem.bind(this);
@@ -68,7 +68,7 @@ class Projects extends React.Component {
           // // Server returns project with UID generated server side
           const { items } = this.state;
           this.findItemById(items, item);
-          const projectIndex = this.state.items.findIndex(item => item.id === project.id);
+          const projectIndex = this.state.items.findIndex(element => element.id === project.id);
           items[projectIndex] = project;
           this.setState({
             isNewItemModalShow: false,
@@ -160,7 +160,7 @@ class Projects extends React.Component {
           showLinkPath={ this.showLinkPathToItem }
           handleUpdateList={ this.handleUpdateList }
         />
-        <NewItemFormModal
+        <ItemFormModal
           title={ this.state.title }
           description={ this.state.description }
           id={ this.state.itemId }
