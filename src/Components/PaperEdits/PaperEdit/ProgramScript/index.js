@@ -9,7 +9,7 @@ import PreviewCanvas from './PreviewCanvas/index.js';
 const playlist = [
   { type:'video', offset:0, start:0, duration:10, src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4' },
   { type:'video', offset:0, start:5, duration:10, src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
-  { type:'video', offset:10, start:10, duration:10, src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' }
+  { type:'video', offset:10, start:10, duration:10, src:'https://download.ted.com/talks/KateDarling_2018S-950k.mp4' },
 ];
 
 class ProgramScript extends Component {

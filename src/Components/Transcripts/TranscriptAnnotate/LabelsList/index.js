@@ -37,9 +37,8 @@ class LabelsList extends Component {
       const newLabelsOptions = this.props.labelsOptions.filter((label) => {
         return label.id !== id;
       });
-      console.log('newLabelsOptions', newLabelsOptions);
-      // this.setState({ labelsOptions: newLabelsOptions });
-      this.props.onLabelsUpdated(newLabelsOptions);
+      // TODO: remove
+      this.props.onLabelDelete(id);
     } else {
       alert('Your label was not deleted');
     }
@@ -52,30 +51,30 @@ class LabelsList extends Component {
     const labelToEdit = this.props.labelsOptions.filter((label) => {
       return label.id === id;
     });
+    // this.props.onLabelsUpdate(newLabelsOptions);
     console.log('labelToEdit', labelToEdit);
     // alert('this functionality has not been implemented yet');
   }
   onLabelSaved = (newLabel) => {
-    console.log('onLabelSaved::', newLabel);
     const { labelsOptions } = this.props;
     // if updated - labelId is diff from null
     if (newLabel.id) {
-      console.log('updated?');
-      // find label // assign id
-      // newLabel.id = newLabel.labelId;
-      // TODO: refactor this, eg use id instead of labelId
-      // delete newLabel.labelId;
-      // update label
-      labelsOptions[newLabel.id] = newLabel;
+      // labelsOptions[newLabel.id] = newLabel;
       // update list of labels
-      this.props.onLabelsUpdated(labelsOptions);
+
+      // if updated - PUT
+      // TODO:
+      this.props.onLabelUpdate(newLabel);
+      // this.props.onLabelUpdated(labelsOptions);
     }
     // if created
+    // if created - POST
     else {
-      console.log('created?');
-      newLabel.id = labelsOptions[labelsOptions.length - 1].id + 1;
-      labelsOptions.push(newLabel);
-      this.props.onLabelsUpdated(labelsOptions);
+      // newLabel.id = labelsOptions[labelsOptions.length - 1].id + 1;
+      // labelsOptions.push(newLabel);
+      // TODO:
+      this.props.onLabelCreate(newLabel);
+      // this.props.onLabelUpdated(labelsOptions);
     }
   }
 
@@ -91,61 +90,60 @@ class LabelsList extends Component {
   render() {
     // TODO: add CSS to label and description to constrain width?
     // move edit and X to the rigth
-    const labelsListOptions = this.props.labelsOptions.map((label, index) => {
-      return (<ListGroup.Item key={ 'label_' + index }>
-        <Row>
-          {/* Col space for the label color */}
-          <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }
-            style={ { backgroundColor: label.color } }
-            title={ label.label }>
-          </Col>
-          <Col xs={ 7 } sm={ 7 } md={ 7 } lg={ 7 } xl={ 7 }>
-            {label.label}
-          </Col>
+    let labelsListOptions;
+    // Handle edge case if there's no labels
+    if (this.props.labelsOptions) {
 
-          <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }>
-            {/* Edit label */}
+      labelsListOptions = this.props.labelsOptions.map((label, index) => {
+        return (<ListGroup.Item key={ 'label_' + index }>
+          <Row>
+            {/* Col space for the label color */}
+            <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }
+              style={ { backgroundColor: label.color } }
+              title={ label.label }>
+            </Col>
+            <Col xs={ 7 } sm={ 7 } md={ 7 } lg={ 7 } xl={ 7 }>
+              {label.label}
+            </Col>
 
-            {label.label.toLowerCase() !== 'default' ?
-              <LabelModal
-                color={ label.color }
-                label={ label.label }
-                description={ label.description }
-                labelId={ label.id }
-                show={ this.state.isLabelmodalShown }
-                onLabelSaved={ this.onLabelSaved }
-                openBtn={ <span> <FontAwesomeIcon icon={ faPen } /></span> }
-              /> : <Button title={ 'edit label' } variant="link" size="sm" disabled>
-                <FontAwesomeIcon icon={ faPen } /> </Button> }
+            <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }>
+              {/* Edit label */}
 
-            {/* <Button title={ 'edit label' }variant="link" size="sm"
-              // onClick={ (e) => { this.editLabel(label.id, e); } }
-              disabled={ label.label.toLowerCase() === 'default' ? true : false }
-            >
-            </Button> */}
-          </Col>
-          <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }>
-            <Button title={ 'delete label' } variant="link" size="sm"
-              onClick={ (e) => {this.removeLabel(label.id, e);} }
-              disabled={ label.label.toLowerCase() === 'default' ? true : false }>
-              <FontAwesomeIcon icon={ faTimes } />
-            </Button>
-          </Col>
+              {label.label.toLowerCase() !== 'default' ?
+                <LabelModal
+                  color={ label.color }
+                  label={ label.label }
+                  description={ label.description }
+                  labelId={ label.id }
+                  show={ this.state.isLabelmodalShown }
+                  onLabelSaved={ this.onLabelSaved }
+                  openBtn={ <span> <FontAwesomeIcon icon={ faPen } /></span> }
+                /> : <Button title={ 'edit label' } variant="link" size="sm" disabled>
+                  <FontAwesomeIcon icon={ faPen } /> </Button> }
+            </Col>
+            <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }>
+              <Button title={ 'delete label' } variant="link" size="sm"
+                onClick={ (e) => {this.removeLabel(label.id, e);} }
+                disabled={ label.label.toLowerCase() === 'default' ? true : false }>
+                <FontAwesomeIcon icon={ faTimes } />
+              </Button>
+            </Col>
 
-        </Row>
-        <Row>
-          {/* Spacing to align title and color */}
-          <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }
-            title={ label.label }>
-          </Col>
-          <Col xs={ 10 } sm={ 10 } md={ 10 } lg={ 10 } xl={ 10 }>
-            <Form.Text className="text-muted">
-              {label.description}
-            </Form.Text>
-          </Col>
-        </Row>
-      </ListGroup.Item>);
-    });
+          </Row>
+          <Row>
+            {/* Spacing to align title and color */}
+            <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }
+              title={ label.label }>
+            </Col>
+            <Col xs={ 10 } sm={ 10 } md={ 10 } lg={ 10 } xl={ 10 }>
+              <Form.Text className="text-muted">
+                {label.description}
+              </Form.Text>
+            </Col>
+          </Row>
+        </ListGroup.Item>);
+      });
+    }
 
     const labelsList = (<ListGroup style={ { height: '30vh', overflow: 'scroll' } }>{labelsListOptions}
     </ListGroup>);

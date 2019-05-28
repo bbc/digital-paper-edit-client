@@ -23,13 +23,6 @@ class LabelForm extends Component {
     };
   }
 
-  //   shouldComponentUpdate = (nextProps, nextState) => {
-  //     // if (nextProps !== nextState) {
-  //     //   return true;
-  //     // }
-  //     return true;
-  //   }
-
   handleRandomiseColor =() => {
     this.setState({ color: randomColor() });
   }

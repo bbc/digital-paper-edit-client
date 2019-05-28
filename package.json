@@ -4,7 +4,7 @@
   "description": "Digital paper edit application, using transcriptions from automated STT, to do text based video editing on audio and video interviews. Modular architecture with  - React - Express - Electron - Adobe CEP",
   "main": "index.js",
   "dependencies": {
-    "@bbc/react-transcript-editor": "^1.0.2",
+    "@bbc/react-transcript-editor": "^1.0.4",
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
     "@fortawesome/free-solid-svg-icons": "^5.7.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
@@ -20,8 +20,8 @@
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.5",
-    "videocontext": "^0.53.0",
-    "react-select": "^2.4.3"
+    "react-select": "^2.4.3",
+    "videocontext": "^0.53.0"
   },
   "author": "Pietro Passarelli CC0 BBC 2019",
   "contributors": [
@@ -30,7 +30,7 @@
   "bugs": {
     "url": "https://github.com/bbc/digital-paper-edit-client/issues"
   },
-  "homepage": "https://github.com/bbc/digital-paper-edit-client",
+  "homepage": ".",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bbc/digital-paper-edit-client.git"

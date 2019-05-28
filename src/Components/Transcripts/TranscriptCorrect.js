@@ -4,11 +4,11 @@ import React, { Component } from 'react';
 // TODO: perhaps import TranscriptEditor on componentDidMount(?) to defer the load for later
 // https://facebook.github.io/create-react-app/docs/code-splitting
 import { TranscriptEditor } from '@bbc/react-transcript-editor';
-
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import { Redirect } from 'react-router-dom';
 import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 // import CustomFooter from '../lib/CustomFooter/index.js';
@@ -49,7 +49,19 @@ class TranscriptCorrect extends Component {
     // TODO: add Api call to save content of
     alert('save to server');
 
+    // TODO: decide how to deal with transcript corrections
+    // exporting digitalpaperedit in @bbc/react-transcript-editor@latest doesn't give you
+    // corrected text with timecodes, only "original" uncorrected text even if transcript might
+    // have been corrected, because of outstandin PR in bbc/react-transcript-editor
+    // https://github.com/bbc/react-transcript-editor/pull/144
+    // which should be addressed after https://github.com/bbc/react-transcript-editor/pull/160
+    //
+    // Other option is to export as `txtspeakertimecodes` or `txt` and reallign server side using Aeneas
+    //
+    // TranscriptEditor - export options: txtspeakertimecodes - draftjs - txt - digitalpaperedit
     const { data } = this.transcriptEditorRef.current.getEditorContent('digitalpaperedit');
+    data.title = this.state.transcriptTitle;
+    data.transcriptTitle = this.state.transcriptTitle;
     const queryParamsOptions = false;
     ApiWrapper.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, data).then((response) => {
       if (response.status === 'ok') {
@@ -78,53 +90,69 @@ class TranscriptCorrect extends Component {
     });
   }
 
+  redirectToAnnotatePage = () => {
+    // this.state.projectId this.state.transcriptId
+    this.setState({
+      redirect: true
+    });
+  }
+
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to={ `/projects/${ this.state.projectId }/transcripts/${ this.state.newTranscriptId }/annotate` } />;
+    }
+  }
+
   render() {
     return (
-      <Container style={ { marginBottom: '5em' } } fluid>
+      <>
+        {this.renderRedirect()}
+        <Container style={ { marginBottom: '5em' } } fluid>
 
-        <CustomNavbar
-          links={ navbarLinks(this.state.projectId) }
-        />
-        <br/>
+          <CustomNavbar
+            links={ navbarLinks(this.state.projectId) }
+          />
+          <br/>
 
-        <Row>
-          <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
-            <CustomBreadcrumb
-              items={ [ {
-                name: 'Projects',
-                link: '/projects'
-              },
-              {
-                // TODO: need to get project name?
-                // TODO: is this needed?
-                name: `Project: ${ this.state.projectTitle }`,
-                link: `/projects/${ this.state.projectId }`
-              },
-              {
-                name: 'Transcripts',
-                link:`/projects/${ this.state.projectId }/transcripts`
-              },
-              {
-                // TODO: transcript name
-                link:`/projects/${ this.state.projectId }/transcripts/${ this.state.transcriptId }`,
-                name: `${ this.state.transcriptTitle }`//'Transcript'
-              },
-              {
-                name: 'Correct'
-              }
-              ] }
-            />
-          </Col>
-          <Col xs={ 12 } sm={ 3 } md={ 3 } ld={ 3 } xl={ 3 }>
-            <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
-            Save
-            </Button>
-            <br/>
-          </Col>
-        </Row>
-        {this.state.savedNotification}
-        {/* <Row> */}
-        {this.state.transcriptJson !== null &&
+          <Row>
+            <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
+              <CustomBreadcrumb
+                items={ [ {
+                  name: 'Projects',
+                  link: '/projects'
+                },
+                {
+                  name: `Project: ${ this.state.projectTitle }`,
+                  link: `/projects/${ this.state.projectId }`
+                },
+                {
+                  name: 'Transcripts',
+                },
+                {
+                  name: `${ this.state.transcriptTitle }`
+                },
+                {
+                  name: 'Correct'
+                }
+                ] }
+              />
+            </Col>
+            <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
+              <Button variant="outline-secondary" onClick={ this.redirectToAnnotatePage } size="lg" block>
+              Annotate
+              </Button>
+              <br/>
+            </Col>
+            <Col xs={ 12 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
+              <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
+              Save
+              </Button>
+              <br/>
+            </Col>
+          </Row>
+          {this.state.savedNotification}
+          {/* <Row> */}
+          {this.state.transcriptJson !== null &&
           <TranscriptEditor
             transcriptData={ this.state.transcriptJson }// Transcript json
             // TODO: move url server side
@@ -132,14 +160,15 @@ class TranscriptCorrect extends Component {
             isEditable={ true }// se to true if you want to be able to edit the text
             sttJsonType={ 'digitalpaperedit' }// the type of STT Json transcript supported.
             //  TODO: check if name has changed in latest version
-            title={ this.state.projectTitle }
-            fileName={ this.state.projectTitle }// optional*
+            // title={ this.state.projectTitle }
+            // fileName={ this.state.projectTitle }// optional*
             ref={ this.transcriptEditorRef }
           />}
-        {/* </Row> */}
+          {/* </Row> */}
 
-        <CustomFooter />
-      </Container>
+          <CustomFooter />
+        </Container>
+      </>
     );
   }
 }
