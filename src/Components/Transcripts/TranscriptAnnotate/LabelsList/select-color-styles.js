@@ -18,7 +18,7 @@ const colourStyles = {
       tmpBackgroundColor = color.alpha(0.1).css();
     }
 
-    const tmpColor = data.color;
+    let tmpColor = data.color;
     if (isDisabled) {
       tmpColor = '#ccc';
     }
