@@ -7,6 +7,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHighlighter } from '@fortawesome/free-solid-svg-icons';
@@ -84,29 +85,15 @@ class TranscriptAnnotate extends Component {
       showParagraphsMatchingSearch: false,
       notification: null,
       annotations: [],
-      // TODO: this needs to be called using API
       labelsOptions: [],
-      // TODO: combine with transcript + timecodes
-      speakersOptions : [
-        // { value: 'TBC 00', label: 'TBC 00' },
-        // { value: 'TBC 1', label: 'TBC 1' },
-        // { value: 'Emily', label: 'Emily' },
-        // { value: 'Jennifer', label: 'Jennifer' },
-        // { value: 'Esther', label: 'Esther' },
-        // { value: 'Ben', label: 'Ben' },
-        // { value: 'Eleanor', label: 'Eleanor' },
-        // { value: 'Summer', label: 'Summer' },
-        // { value: 'Kohinoor', label: 'Kohinoor' },
-        // { value: 'Cooper', label: 'Cooper' }
-      ]
+      speakersOptions : [ ]
     };
   }
 
   componentDidMount = () => {
-    ApiWrapper.getAnnotations(this.state.projectId, this.state.transcriptId)
+    ApiWrapper.get_TranscriptLabelsAnnotations(this.state.projectId, this.state.transcriptId)
       // TODO: add error handling
       .then(json => {
-        console.log(json.labels);
         this.setState({
           projectTitle: json.projectTitle,
           transcriptJson: json.transcript,
@@ -176,7 +163,6 @@ class TranscriptAnnotate extends Component {
         .toLowerCase()
         .trim() }"]`;
       if (index < listOfSearchWords.length - 1) {
-        // console.log(index, listOfSearchWords.length);
         res += ', ';
       }
 
@@ -200,8 +186,36 @@ class TranscriptAnnotate extends Component {
     });
   };
 
-  onLabelsUpdated = (newLabelsOptions) => {
-    this.setState({ labelsOptions: newLabelsOptions });
+  onLabelCreate = (newLabel) => {
+    ApiWrapper.createLabel(this.state.projectId, newLabel)
+    // TODO: add error handling
+      .then(json => {
+        this.setState({
+          labelsOptions: json.labels
+        });
+      });
+  }
+
+  onLabelUpdate = (updatedLabel) => {
+    // TODO: PUT with API Wrapper
+
+    ApiWrapper.updateLabel(this.state.projectId, updatedLabel.id, updatedLabel)
+    // TODO: add error handling
+      .then(json => {
+        this.setState({
+          labelsOptions: json.labels
+        });
+      });
+  }
+
+  onLabelDelete = (labelIid) => {
+    ApiWrapper.deleteLabel(this.state.projectId, labelIid)
+    // TODO: add error handling
+      .then(json => {
+        this.setState({
+          labelsOptions: json.labels
+        });
+      });
   }
 
   handleTimeUpdate = (e) => {
@@ -210,6 +224,7 @@ class TranscriptAnnotate extends Component {
       currentTime
     });
   }
+
   onLoadedDataGetDuration = e => {
     const currentDuration = e.target.duration;
     const currentDurationWithOffset = currentDuration + this.state.timecodeOffset;
@@ -226,35 +241,39 @@ class TranscriptAnnotate extends Component {
     });
   }
 
-  saveToServer = () => {
-    // TODO API call save annotations to server
-    alert('save to server');
+  redirectToEditPage = () => {
+    // this.state.projectId this.state.transcriptId
+    this.setState({
+      redirect: true
+    });
   }
 
-  handleAnnotation = (e) => {
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to={ `/projects/${ this.state.projectId }/transcripts/${ this.state.transcriptId }/correct` } />;
+    }
+  }
+
+  handleCreateAnnotation = (e) => {
     const element = e.target;
     window.element = element;
     const selection = getTimeFromUserWordsSelection();
     if (selection) {
-      this.setState((state) => {
-        const { annotations } = state;
-        selection.labelId = parseInt(element.dataset.labelId);
-        const customNoteText = '';
-        selection.note = customNoteText ? customNoteText : '';
-        // TODO: Temporary workaround to calculate label Id
-        // there's got to be a more robust way to make id for label
-        // eg use: `const buf = crypto.randomBytes(16); buf.toString('hex');`
-        // and should this be done client side or server side?
-        const lastAnnotation = annotations[annotations.length - 1];
-        const lastAnnotationId = lastAnnotation.id;
-        const newAnnotationId = lastAnnotationId + 1;
-        selection.id = newAnnotationId;
-        annotations.push(selection);
+      const { annotations } = this.state;
+      selection.labelId = element.dataset.labelId;
+      selection.note = '';
+      const newAnnotation = selection;
+      ApiWrapper.createAnnotation(this.state.projectId, this.state.transcriptId, newAnnotation)
+        .then(json => {
+        // this.setState({
+        //   labelsOptions: json.labels
+        // });
+          newAnnotation.id = json.annotation.id;
+          annotations.push(newAnnotation);
 
-        return {
-          annotations: annotations
-        };
-      });
+          this.setState( { annotations: annotations });
+        });
+
     }
     else {
       alert('Select some text in the transcript to highlight ');
@@ -262,34 +281,41 @@ class TranscriptAnnotate extends Component {
 
   }
 
+  // TODO: add server side via ApiWrapper
   handleDeleteAnnotation = (annotationId) => {
     const { annotations } = this.state;
     const newAnnotationsSet = annotations.filter((annotation) => {
       return annotation.id !== annotationId;
     });
 
-    this.setState({
-      annotations: newAnnotationsSet
-    });
+    ApiWrapper.deleteAnnotation(this.state.projectId, this.state.transcriptId, annotationId)
+      .then(json => {
+        this.setState( { annotations: newAnnotationsSet });
+      });
   }
 
+  // TODO: add server side via ApiWrapper
   // similar to handleDeleteAnnotation filter to find annotation then replace text
   handleEditAnnotation = (annotationId) => {
     const { annotations } = this.state;
-    const newAnnotationsSet = annotations.filter((annotation) => {
-      return annotation.id !== annotationId;
-    });
-
     const newAnnotationToEdit = annotations.find((annotation) => {
       return annotation.id === annotationId;
     });
     const newNote = prompt('Edit the text note of the annotation', newAnnotationToEdit.note);
     if (newNote) {
       newAnnotationToEdit.note = newNote;
-      newAnnotationsSet.push(newAnnotationToEdit);
-      this.setState({
-        annotations: newAnnotationsSet
-      });
+      ApiWrapper.updateAnnotation(this.state.projectId, this.state.transcriptId, annotationId, newAnnotationToEdit)
+        .then(json => {
+          const newAnnotation = json.annotation;
+          // updating annotations client side by removing updating one
+          // and re-adding to array
+          // could be refactored using `findindex`
+          const newAnnotationsSet = annotations.filter((annotation) => {
+            return annotation.id !== annotationId;
+          });
+          newAnnotationsSet.push(newAnnotation);
+          this.setState( { annotations: newAnnotationsSet });
+        });
     }
     else {
       alert('all good nothing changed');
@@ -297,21 +323,20 @@ class TranscriptAnnotate extends Component {
   }
 
   handleLabelsSearchChange = (selectedOptionLabelSearch) => {
-    // console.log('selectedOptionLabelSearch', selectedOptionLabelSearch);
     this.setState({
       selectedOptionLabelSearch
     });
   }
 
   handleSpeakersSearchChange = (selectedOptionSpeakerSearch) => {
-    // console.log('selectedOptionSpeakerSearch', selectedOptionSpeakerSearch);
     this.setState({
       selectedOptionSpeakerSearch
     });
   }
 
   render() {
-    return (
+    return (<>
+      {this.renderRedirect()}
       <Container fluid={ true } style={ { backgroundColor: '#f9f9f9', marginBottom: '5em' } }>
         <style scoped>
           {''}
@@ -328,7 +353,7 @@ class TranscriptAnnotate extends Component {
         <br />
         {this.state.notification}
         <Row>
-          <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
+          <Col sm={ 12 } md={ 10 } ld={ 10 } xl={ 10 }>
             <CustomBreadcrumb
               items={ [
                 {
@@ -336,19 +361,14 @@ class TranscriptAnnotate extends Component {
                   link: '/projects'
                 },
                 {
-                  // TODO: need to get project name?
-                  // TODO: is this needed?
                   name: `Project: ${ this.state.projectTitle }`,
                   link: `/projects/${ this.state.projectId }`
                 },
                 {
                   name: 'Transcripts',
-                  link: `/projects/${ this.state.projectId }/transcripts`
                 },
                 {
-                  // Note: There is no individual transcript page only transcript index, annotate, and correct
                   name: `${ this.state.transcriptTitle }`,
-                  link: `/projects/${ this.state.projectId }/transcripts/${ this.state.transcriptId }`
                 },
                 {
                   name: 'Annotate'
@@ -356,9 +376,9 @@ class TranscriptAnnotate extends Component {
               ] }
             />
           </Col>
-          <Col xs={ 12 } sm={ 3 } md={ 3 } ld={ 3 } xl={ 3 }>
-            <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
-            Save
+          <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
+            <Button variant="outline-secondary" title="correct transcript text" onClick={ this.redirectToEditPage } size="lg" block>
+            Edit
             </Button>
             <br/>
           </Col>
@@ -366,7 +386,6 @@ class TranscriptAnnotate extends Component {
         <Row>
           <Col xs={ 12 } sm={ 12 } md={ 12 } lg={ 12 } xl={ 12 }>
             <MediaPlayer
-              title={ this.state.transcriptTitle ? this.state.transcriptTitle : '' }
               mediaDuration={ this.state.mediaDuration }
               hookSeek={ foo => (this.setCurrentTime = foo) }// <--
               hookPlayMedia={ foo => (this.playMedia = foo) }// <--
@@ -399,16 +418,18 @@ class TranscriptAnnotate extends Component {
             )}
 
             <LabelsList
-              labelsOptions={ this.state.labelsOptions }
-              onLabelsUpdated={ this.onLabelsUpdated }
+              labelsOptions={ this.state.labelsOptions && this.state.labelsOptions }
+              onLabelUpdate={ this.onLabelUpdate }
+              onLabelCreate={ this.onLabelCreate }
+              onLabelDelete={ this.onLabelDelete }
             />
 
             <br/>
             <Dropdown as={ ButtonGroup } style={ { width: '100%' } } >
-              <Button variant="warning" id="defaultHighlightBtn" data-label-id={ 0 } onClick={ this.handleAnnotation } > Highlight <FontAwesomeIcon icon={ faHighlighter } /></Button>
+              <Button variant="warning" id="defaultHighlightBtn" data-label-id={ 0 } onClick={ this.handleCreateAnnotation } > Highlight <FontAwesomeIcon icon={ faHighlighter } /></Button>
               <Dropdown.Toggle split variant="warning" id="dropdown-split-basic" data-lable-id={ 0 }/>
-              <Dropdown.Menu onClick={ this.handleAnnotation }>
-                {this.state.labelsOptions.map((label) => {
+              <Dropdown.Menu onClick={ this.handleCreateAnnotation }>
+                {this.state.labelsOptions && this.state.labelsOptions.map((label) => {
                   return (
                     <Dropdown.Item key={ `label_id_${ label.id }` } data-label-id={ label.id } >
                       <Row data-label-id={ label.id }>
@@ -446,8 +467,7 @@ class TranscriptAnnotate extends Component {
                 {/* TODO: instead of null, if transcript is not provided, eg offline or server error, then add custom alert */}
                 {this.state.transcriptJson
                 && <Paragraphs
-
-                  labelsOptions={ this.state.labelsOptions }
+                  labelsOptions={ this.state.labelsOptions && this.state.labelsOptions }
                   annotations={ this.state.annotations }
                   transcriptJson={ this.state.transcriptJson }
                   searchString={ this.state.searchString }
@@ -465,6 +485,7 @@ class TranscriptAnnotate extends Component {
         </Row>
         <CustomFooter />
       </Container>
+    </>
     );
   }
 }

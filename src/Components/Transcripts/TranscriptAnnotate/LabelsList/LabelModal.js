@@ -5,7 +5,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import { randomColor } from './css-color-names.js';
 import LabelForm from './LabelForm.js';
 
 class LabelModal extends Component {

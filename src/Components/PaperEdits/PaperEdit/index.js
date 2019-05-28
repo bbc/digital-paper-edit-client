@@ -13,29 +13,35 @@ import navbarLinks from '../../lib/custom-navbar-links';
 
 import Transcripts from './Transcripts/index.js';
 import ProgramScript from './ProgramScript/index.js';
+import ApiWrapper from '../../../ApiWrapper/index.js';
 
 class PaperEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      transcriptJson: null,
-      title: null,
       projectId:  this.props.match.params.projectId,
+      papereditId:  this.props.match.params.papereditId,
       projectTitle: '',
+      programmeTitle: '',
+      transcripts: [],
       isTranscriptsShown: true,
       isProgramScriptShown: true
     };
   }
 
   componentDidMount = () => {
-    // TODO get id from props match
-    fetch('http://localhost:5000/api/projects/1/paperedits/1', { mode: 'cors' })
-      .then(res => res.json())
+
+    ApiWrapper.get_ProgrammeScriptAndTranscripts(this.state.projectId, this.state.papereditId)
       .then((json) => {
         console.log(json);
-        this.setState({ paperEditJson: json.paperEdit, title: json.title, projectTitle: json.projectTitle });
+        this.setState({
+          programmeTitle: json.programmeScript.title,
+          projectTitle: json.project.title,
+          programmeScript: json.programmeScript,
+          transcripts: json.transcripts
+        });
       });
-    console.log(this.props.match.params);
+
   }
 
   toggleTranscripts =() => {
@@ -60,9 +66,10 @@ class PaperEdit extends Component {
     }
   }
 
-  // { span:5, offset: 2 }
-
-  // { span:5, offset: 0 }
+  saveToServer = () => {
+    // TODO: add Api call to save content of
+    alert('save to server');
+  }
 
   render() {
     return (
@@ -71,26 +78,32 @@ class PaperEdit extends Component {
           links={ navbarLinks(this.state.projectId) }
         />
         <br/>
-        <CustomBreadcrumb
-          items={ [ {
-            name: 'Projects',
-            link: '/projects'
-          },
-          {
-            // TODO: need to get project name?
-            // TODO: is this needed?
-            name: `Project: ${ this.state.projectTitle }`,
-            link: `/projects/${ this.state.projectId }`
-          },
-          {
-            name: 'PaperEdits',
-            link:`/projects/${ this.state.projectId }/paperedits`
-          },
-          {
-            name: `${ this.state.title }`
-          }
-          ] }
-        />
+        <Row>
+          <Col sm={ 12 } md={ 10 } ld={ 10 } xl={ 10 }>
+            <CustomBreadcrumb
+              items={ [ {
+                name: 'Projects',
+                link: '/projects'
+              },
+              {
+                name: `Project: ${ this.state.projectTitle }`,
+                link: `/projects/${ this.state.projectId }`
+              },
+              {
+                name: 'PaperEdits',
+              },
+              {
+                name: `${ this.state.programmeTitle }`
+              }
+              ] }
+            />
+          </Col>
+          <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
+            <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
+              Save
+            </Button>
+          </Col>
+        </Row>
 
         <Container fluid={ true }>
           <div className="d-flex flex-column">
@@ -108,16 +121,6 @@ class PaperEdit extends Component {
                  Program Script  <FontAwesomeIcon icon={ this.state.isProgramScriptShown ? faAngleDown : faAngleUp } />
               </Button>
             </ButtonGroup>
-
-            {/* <ToggleButtonGroup
-              type="checkbox"
-              value={ this.state.value }
-              onChange={ this.handleChange }
-              defaultValue={ [ 1, 2 ] }
-            >
-              <ToggleButton value={ 1 }>Transcripts  <FontAwesomeIcon icon={ this.state.isTranscriptsShown ? faAngleDown : faAngleUp } /> </ToggleButton>
-              <ToggleButton value={ 2 }>Program Script <FontAwesomeIcon icon={ this.state.isProgramScriptShown ? faAngleDown : faAngleUp } /></ToggleButton>
-            </ToggleButtonGroup> */}
 
           </div>
           <Row>
@@ -141,7 +144,9 @@ class PaperEdit extends Component {
               } }
               style={ { display: this.state.isTranscriptsShown ? 'block' : 'none' } }
             >
-              <Transcripts />
+              <Transcripts
+                transcripts={ this.state.transcripts }
+              />
             </Col>
             <Col
               xs={ { span: 12, offset:0 } }
@@ -163,7 +168,9 @@ class PaperEdit extends Component {
               } }
               style={ { display: this.state.isProgramScriptShown ? 'block' : 'none' } }
             >
-              <ProgramScript/>
+              <ProgramScript
+                programmeScript={ this.state.programmeScript }
+              />
             </Col>
           </Row>
 

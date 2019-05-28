@@ -27,6 +27,13 @@ git clone git@github.com:bbc/digital-paper-edit-infrastructure.git
 git clone git@github.com:bbc/digital-paper-edit-cep.git 
 ```
 
+To download the micro services used in the backend
+```
+git clone git@github.com:bbc/digital-paper-edit-stt-proxy.git
+git clone git@github.com:bbc/digital-paper-edit-audio-converter.git
+git clone git@github.com:bbc/digital-paper-edit-video-preview-converter.git
+```
+
 
 Create a file named `digital-paper-edit.code-workspace` in the same root where you have cloned the repositories, and add this json as content
 
@@ -42,24 +49,37 @@ Create a file named `digital-paper-edit.code-workspace` in the same root where y
             "path": "digital-paper-edit-api"
         },
         {
-            "name": "Electron",
+            "name": "Electron Desktop app",
             "path": "digital-paper-edit-electron"
         },
-         {
-            "name": "Adobe CEP",
+        {
+            "name": "Adobe CEP - Premiere Plugin",
             "path": "digital-paper-edit-cep"
         },
-         {
+        {
             "name": "AWS Infrastructure",
             "path": "digital-paper-edit-infrastructure"
+        },
+        {
+            "name": "Microservice: STT Proxy",
+            "path": "digital-paper-edit-stt-proxy"
+        },
+        {
+            "name": "Microservice: Video Preview Converter",
+            "path": "digital-paper-edit-video-preview-converter"
+        },
+        {
+            "name": "Microservice: Audio Converter",
+            "path": "digital-paper-edit-audio-converter"
         }
-    ],
-
+    ]
 }
+
 ```
 
 
 double clicking `digital-paper-edit.code-workspace` will open the workspace.
+
 
 ## `npm ScriptExplorer` 
 

@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-// import { progressBarFetch, setOriginalFetch, ProgressBar } from 'react-fetch-progressbar';
-import CustomNavbar from '../lib/CustomNavbar/index.js';
-import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
-import CustomFooter from '../lib/CustomFooter/index.js';
+import Modal from 'react-bootstrap/Modal';
 import ApiWrapper from '../../ApiWrapper/index.js';
-import navbarLinks from '../lib/custom-navbar-links';
 import CustomAlert from '../lib/CustomAlert/index.js';
 import './index.module.css';
 
@@ -19,15 +13,16 @@ class TranscriptForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      projectId: this.props.match.params.projectId,
+      projectId: this.props.projectId,
       validated: false,
       redirect: false,
       newTranscriptId: null,
       uploading: false,
       uploadCompleted: false,
       mediaFileSelected: false,
-      title: '',
-      description: '',
+      title: this.props.title,
+      description: this.props.description,
+      id: this.props.id,
       formData: null,
       savedNotification: null
     };
@@ -77,6 +72,8 @@ class TranscriptForm extends Component {
             redirect: true,
             newTranscriptId: response.transcriptId
           });
+          this.props.handleSaveForm(response.transcript);
+          // this.props.handleCloseModal();
 
         }).catch((e) => {
           console.log('error:::: ', e);
@@ -101,6 +98,8 @@ class TranscriptForm extends Component {
     const form = event.currentTarget;
     console.log('(form.checkValidity()', form.checkValidity());
     if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
       this.setState({ validated: true });
     }
 
@@ -108,49 +107,13 @@ class TranscriptForm extends Component {
       event.preventDefault();
       event.stopPropagation();
       this.sendRequest();
+
     }
   }
 
-  renderRedirect = () => {
-    if (
-      this.state.redirect &&
-      this.state.newTranscriptId &&
-      this.state.uploadCompleted
-    ) {
-      // Transcript most likely to still being in progress when creating a new one, because of time it takes to transcribe STT
-      // return <Redirect to={ `/projects/${ this.state.projectId }/transcripts/${ this.state.newTranscriptId }` } />;
-      return <Redirect to={ `/projects/${ this.state.projectId }/transcripts` } />;
-    }
-  };
-
   render() {
     return (
-      <Container>
-        {this.renderRedirect()}
-        {/* TODO: import navbar */}
-        <CustomNavbar links={ navbarLinks(this.state.projectId) } />
-
-        <br />
-        <CustomBreadcrumb
-          items={ [
-            {
-              name: 'Projects',
-              link: '/projects'
-            },
-            {
-              // TODO: need to get project name
-              name: 'Project:',
-              link: `/projects/${ this.state.projectId }`
-            },
-            {
-              name: 'Transcripts',
-              link: `/projects/${ this.state.projectId }/transcripts`
-            },
-            {
-              name: 'New'
-            }
-          ] }
-        />
+      <>
         {this.state.savedNotification}
 
         <Form
@@ -192,7 +155,6 @@ class TranscriptForm extends Component {
                 Please chose a description for your transcript
             </Form.Control.Feedback>
           </Form.Group>
-
           <Form.Group controlId="formTranscriptMediaFile">
             <Form.Control
               required
@@ -202,19 +164,20 @@ class TranscriptForm extends Component {
               onChange={ this.handleFileUpload }
             />
             <Form.Text className="text-muted">
-                Select an audio or video file to upload
+        Select an audio or video file to upload
             </Form.Text>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             <Form.Control.Feedback type="invalid">
-                Please chose a audio or video file to upload
+        Please chose a audio or video file to upload
             </Form.Control.Feedback>
           </Form.Group>
-          <Button variant="primary" type="submit">
+          <Modal.Footer>
+            <Button variant="primary" type="submit">
               Save
-          </Button>
+            </Button>
+          </Modal.Footer>
         </Form>
-        <CustomFooter />
-      </Container>
+      </>
     );
   }
 }

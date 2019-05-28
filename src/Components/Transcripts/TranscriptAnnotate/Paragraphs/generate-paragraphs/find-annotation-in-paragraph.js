@@ -16,46 +16,46 @@ const isAnnotationWithinParagraph = ( annotations, paragraphFirstWordTime, parag
  *  Case 2 - annotation start within the paragraph but ends in subsequent one
  * TODO:
  */
-const isAnnotationStartWithinParagraph = ( annotations, paragraphFirstWordTime, paragraphLastWordTime) => {
-  const results = annotations.find(annotation => {
-    return (
-      annotation.start >= paragraphFirstWordTime &&
-      annotation.start <= paragraphLastWordTime
-    );
-  });
+// const isAnnotationStartWithinParagraph = ( annotations, paragraphFirstWordTime, paragraphLastWordTime) => {
+//   const results = annotations.find(annotation => {
+//     return (
+//       annotation.start >= paragraphFirstWordTime &&
+//       annotation.start <= paragraphLastWordTime
+//     );
+//   });
 
-  return results;
-};
+//   return results;
+// };
 
 /**
  *  Case 3 - annotation ends within the paragraph  but starts in previous one
  *  TODO:
  */
-const isAnnotationEndWithinParagraph = ( annotations, paragraphFirstWordTime, paragraphLastWordTime) => {
-  const results = annotations.find(annotation => {
-    return (
-      annotation.end >= paragraphFirstWordTime &&
-      annotation.end <= paragraphLastWordTime
-    );
-  });
+// const isAnnotationEndWithinParagraph = ( annotations, paragraphFirstWordTime, paragraphLastWordTime) => {
+//   const results = annotations.find(annotation => {
+//     return (
+//       annotation.end >= paragraphFirstWordTime &&
+//       annotation.end <= paragraphLastWordTime
+//     );
+//   });
 
-  return results;
-};
+//   return results;
+// };
 
 /**
  *  Case 4 -annotation spans across the current paragraph  but starts in previous one and ends in subsequent one
  * TODO:
  */
-const isAnnotationAcrossParagraph = ( annotations, paragraphFirstWordTime, paragraphLastWordTime) => {
-  const results = annotations.find(annotation => {
-    return (
-      annotation.start <= paragraphFirstWordTime &&
-      annotation.end >= paragraphLastWordTime
-    );
-  });
+// const isAnnotationAcrossParagraph = ( annotations, paragraphFirstWordTime, paragraphLastWordTime) => {
+//   const results = annotations.find(annotation => {
+//     return (
+//       annotation.start <= paragraphFirstWordTime &&
+//       annotation.end >= paragraphLastWordTime
+//     );
+//   });
 
-  return results;
-};
+//   return results;
+// };
 
 /**
  *

@@ -12,13 +12,23 @@ It's a React, Express, Electron, Adobe CEP, AWS stack to be able to deploy one m
 
 The project is organised across these repository 
 
-- [`bbc/digital-paper-edit-client`](https://github.com/bbc/digital-paper-edit-client) - React Client 
-- [`bbc/digital-paper-edit-api`](https://github.com/bbc/digital-paper-edit-api) - Express server API
+- [`bbc/digital-paper-edit-client`](https://github.com/bbc/digital-paper-edit-client) - React Client - [npm](https://www.npmjs.com/package/@bbc/digital-paper-edit-client)
+- [`bbc/digital-paper-edit-api`](https://github.com/bbc/digital-paper-edit-api) - Express server API - [npm](https://www.npmjs.com/package/@bbc/digital-paper-edit-api)
 - [`bbc/digital-paper-edit-infrastructure`](https://github.com/bbc/digital-paper-edit-infrastructure) - AWS infrastructure for API server and Client.
-- [`/bbc/digital-paper-edit-electron`](https://github.com/bbc/digital-paper-edit-electron) - Electron, Cross Platform Desktop app - Mac, Windows, Linux
+- [`bbc/digital-paper-edit-electron`](https://github.com/bbc/digital-paper-edit-electron) - Electron, Cross Platform Desktop app - Mac, Windows, Linux
 - [`bbc/digital-paper-edit-cep`](https://github.com/bbc/digital-paper-edit-cep) Adobe CEP (Common Extensibility Platform) - Premiere Pro Plugin Panel
 
+Micro services for web app backend
+
+- [`bbc/digital-paper-edit-stt-proxy`](https://github.com/bbc/digital-paper-edit-stt-proxy)
+- [`bbc/digital-paper-edit-video-preview-converter`](https://github.com/bbc/digital-paper-edit-video-preview-converterr)
+- [`bbc/digital-paper-edit-audio-converter`](https://github.com/bbc/digital-paper-edit-audio-converter)
+
+[See here to see them as a list in github](https://github.com/topics/digital-paper-edit).
+
 See [modular architecture section](./docs/guides/modular-architecture.md) for more details on the stack and the [Modular Architecture ADR for more info on the implementation](https://github.com/bbc/digital-paper-edit-client/blob/master/docs/ADR/2019-05-09-modular-architecture.md)
+
+The projects use [npm semantic versioning](https://docs.npmjs.com/about-semantic-versioning)
 
 
 ## Setup
@@ -56,7 +66,7 @@ npm install
 In root of the client project (`cd digital-paper-edit-client`) start React 
 
 ```
-npm start
+npm run start:dev
 ```
 
 To developer for the web app [you will need to start setup and the API server](https://github.com/bbc/digital-paper-edit-api#setup) as well.
@@ -186,9 +196,13 @@ On commit this repo uses the [.travis.yml](./.travis.yml) config tu run the auto
 
 <!-- _How to deploy the code/app into test/staging/production_ -->
 
-_TBC_
+```
+npm run publish:public
+```
 
 <!-- See README for individual packages for more details -->
+
+for more info on Create React app deployment: 
 
 >See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 

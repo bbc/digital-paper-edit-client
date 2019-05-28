@@ -20,17 +20,21 @@ class AnnotationOverlayTrigger extends Component {
 
   render() {
     const { annotationLabelId } = this.props;
-    let label = this.props.labelsOptions.find((label) => {
-      return label.id === annotationLabelId;
-    });
-    // console.log('label:: ', label, annotationLabelId, this.props.labelsOptions, 'this.props.words', this.props.words, this.props.annotationNote);
-    // TODO: Quick fix - needs digging into why sometimes adding a new label crashes, and the `find` function above returns undefined
-    if (!label) {
-      label = this.props.labelsOptions[0];
-    }
+    let overlayContent;
+    // handling edge case when labels are not available
+    if (this.props.labelsOptions) {
+      let label = this.props.labelsOptions.find((label) => {
+        console.log(label.id, annotationLabelId);
 
-    return (
-      <OverlayTrigger rootClose={ true } trigger="click" placement="bottom"
+        return label.id === annotationLabelId;
+      });
+      // console.log('label:: ', label, annotationLabelId, this.props.labelsOptions, 'this.props.words', this.props.words, this.props.annotationNote);
+      // TODO: Quick fix - needs digging into why sometimes adding a new label crashes, and the `find` function above returns undefined
+      if (!label) {
+        label = this.props.labelsOptions[0];
+      }
+
+      overlayContent = <OverlayTrigger rootClose={ true } trigger="click" placement="bottom"
         overlay={
           <Popover id="popover-basic">
             <Row>
@@ -55,7 +59,13 @@ class AnnotationOverlayTrigger extends Component {
         }
       >
         <span style={ { borderBottom: `0.1em ${ label.color } solid` } } className={ 'highlight' }>{this.props.words}</span>
-      </OverlayTrigger>
+      </OverlayTrigger>;
+
+    }
+
+    return (<>
+      {overlayContent}
+    </>
     );
   }
 }
