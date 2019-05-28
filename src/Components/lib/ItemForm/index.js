@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-class NewItemForm extends Component {
+class ItemForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,15 +24,17 @@ class NewItemForm extends Component {
     if (!form.checkValidity()) {
       event.preventDefault();
       event.stopPropagation();
+      this.setState({ validated: true });
     }
-    this.setState({ validated: true });
 
-    const tmpItem = {
-      title: this.state.title,
-      description: this.state.description,
-      id: this.state.id
-    };
-    if (this.state.title !== '') {
+    if (form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+      const tmpItem = {
+        title: this.state.title,
+        description: this.state.description,
+        id: this.state.id
+      };
       this.props.handleSaveForm(tmpItem);
     }
 
@@ -60,7 +62,7 @@ class NewItemForm extends Component {
           <Form.Control
             required
             type="text"
-            placeholder="Enter a projec title"
+            placeholder="Enter a project title"
             value={ this.state.title }
             onChange={ this.handleTitleChange }
           />
@@ -101,4 +103,4 @@ class NewItemForm extends Component {
   }
 }
 
-export default NewItemForm;
+export default ItemForm;

@@ -4,9 +4,8 @@ import SimpleCard from '../SimpleCard';
 class List extends React.Component {
 
   render() {
-    let listItems;
-    // if (listItems) {
-    listItems = this.props.items.map((item) => {
+
+    const listItems = this.props.items.map((item) => {
       if (item.display) {
         return <SimpleCard
           key={ item.id }

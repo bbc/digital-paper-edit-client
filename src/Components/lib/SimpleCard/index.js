@@ -42,7 +42,9 @@ class SimpleCard extends Component {
             <LinkContainer to={ this.showLinkPath() } style={ { cursor: 'pointer' } } >
               <Col xs={ 8 } sm={ 10 } md={ 10 } ld={ 10 } xl={ 10 }>
                 <Card.Title>
-                  { this.props.title }
+                  <a href={ `#${ this.props.showLinkPath() }` }>
+                    {this.props.title}
+                  </a>
                 </Card.Title>
               </Col>
             </LinkContainer>

@@ -14,10 +14,11 @@ function CustomNavbar () {
       variant="light"
       fixed="top"
     >
-      <FontAwesomeIcon icon={ faFlask } />
-        &nbsp;&nbsp;
-      <LinkContainer to="/">
-        <Navbar.Brand>{process.env.REACT_APP_NAME}</Navbar.Brand>
+      <LinkContainer to="/projects">
+        <Navbar.Brand>
+          <FontAwesomeIcon icon={ faFlask } />
+          {'  '}{process.env.REACT_APP_NAME}
+        </Navbar.Brand>
       </LinkContainer>
     </Navbar>
   );

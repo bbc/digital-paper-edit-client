@@ -1,8 +1,8 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-import NewItemForm from '../NewItemForm';
+import ItemForm from '../ItemForm';
 
-class NewItemFormModal extends React.Component {
+class ItemFormModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,10 +14,6 @@ class NewItemFormModal extends React.Component {
     this.props.handleCloseModal();
   }
 
-  handleSaveForm = (tmpProject) => {
-    this.props.handleSaveForm(tmpProject);
-  }
-
   render() {
     return (
       <Modal show={ this.props.show } onHide={ this.handleClose }>
@@ -25,11 +21,11 @@ class NewItemFormModal extends React.Component {
           <Modal.Title>{this.props.modalTitle}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <NewItemForm
+          <ItemForm
             title={ this.props.title }
             description={ this.props.description }
             id={ this.props.id }
-            handleSaveForm={ this.handleSaveForm }
+            handleSaveForm={ this.props.handleSaveForm }
           />
         </Modal.Body>
       </Modal>
@@ -37,4 +33,4 @@ class NewItemFormModal extends React.Component {
   }
 }
 
-export default NewItemFormModal;
+export default ItemFormModal;
