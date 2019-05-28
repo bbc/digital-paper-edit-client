@@ -67,15 +67,15 @@ class SearchBar extends Component {
      });
    }
 
+   /* TODO: move searchBar to a Search Toolbar component? */
    render() {
-     {/* TODO: move this to a Search Toolbar component? */}
      const searchBar = <Card.Header>
        <InputGroup className="mb-3">
          {/* Search controls settings */}
          <DropdownButton
            as={ InputGroup.Prepend }
            variant="outline-secondary"
-           title={ <><FontAwesomeIcon icon={ faSlidersH } /><FontAwesomeIcon icon={ faSearch } /></> }
+           title={ <><FontAwesomeIcon icon={ faSearch } /><FontAwesomeIcon icon={ faSlidersH } /></> }
            id="input-group-dropdown-1">
            <Dropdown.Item onClick={ this.handleToggleSearchTextPreferences }>
              <FontAwesomeIcon icon={ faParagraph }/>
@@ -114,13 +114,10 @@ class SearchBar extends Component {
            label={ <>Show only matching Paragraphs </> }
            onClick={ this.handleShowParagraphsMatchingSearch }
          />
-         <Form.Text className="text-muted">
+         <Form.Text className="text-muted"
            label={ <><FontAwesomeIcon icon={ faParagraph }/>Show only matching Paragraphs </> }
            onClick={ this.handleShowParagraphsMatchingSearch }>
            <FontAwesomeIcon icon={ faParagraph }/> Show only paragraphs that contain search results
-         </Form.Text>
-         <Form.Text className="text-muted">
-             Show only paragraphs that contain search results
          </Form.Text>
        </Card.Header>)
        : '';

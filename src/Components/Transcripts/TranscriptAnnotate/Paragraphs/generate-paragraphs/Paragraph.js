@@ -5,10 +5,10 @@ import { shortTimecode } from '@bbc/react-transcript-editor/timecodeConverter';
 import styles from './index.module.css';
 
 /**
-     *  Paragraph display preferences based on search
-     *
-     *  styles to separate the look of non contiguous paragraphs?
-     */
+ *  Paragraph display preferences based on search
+ *
+ *  styles to separate the look of non contiguous paragraphs?
+ */
 
 class Paragraph extends Component {
 
