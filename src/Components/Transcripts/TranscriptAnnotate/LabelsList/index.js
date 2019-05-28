@@ -34,10 +34,6 @@ class LabelsList extends Component {
     // eslint-disable-next-line no-restricted-globals
     const response = confirm('Click OK to delete the label, Cancel if you changed your mind');
     if (response === true) {
-      const newLabelsOptions = this.props.labelsOptions.filter((label) => {
-        return label.id !== id;
-      });
-      // TODO: remove
       this.props.onLabelDelete(id);
     } else {
       alert('Your label was not deleted');
@@ -56,25 +52,13 @@ class LabelsList extends Component {
     // alert('this functionality has not been implemented yet');
   }
   onLabelSaved = (newLabel) => {
-    const { labelsOptions } = this.props;
     // if updated - labelId is diff from null
     if (newLabel.id) {
-      // labelsOptions[newLabel.id] = newLabel;
-      // update list of labels
-
-      // if updated - PUT
-      // TODO:
       this.props.onLabelUpdate(newLabel);
-      // this.props.onLabelUpdated(labelsOptions);
     }
     // if created
-    // if created - POST
     else {
-      // newLabel.id = labelsOptions[labelsOptions.length - 1].id + 1;
-      // labelsOptions.push(newLabel);
-      // TODO:
       this.props.onLabelCreate(newLabel);
-      // this.props.onLabelUpdated(labelsOptions);
     }
   }
 

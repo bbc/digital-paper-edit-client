@@ -6,7 +6,14 @@ import Project from './Components/Projects/Project.js';
 import TranscriptAnnotate from './Components/Transcripts/TranscriptAnnotate/index.js';
 import TranscriptCorrect from './Components/Transcripts/TranscriptCorrect.js';
 import PaperEdit from './Components/PaperEdits/PaperEdit';
+import CustomAlert from './Components/lib/CustomAlert';
+import Container from 'react-bootstrap/Container';
+import Alert from 'react-bootstrap/Alert';
+
 import './App.css';
+
+const demoWarningMessage = (<p> This is Demo version of the app <Alert.Link href="https://github.com/bbc/digital-paper-edit-client" target="_blank" rel="noopener noreferrer"
+>see project Github repository for more info</Alert.Link>.</p>);
 
 class App extends Component {
   constructor(props) {
@@ -19,7 +26,21 @@ class App extends Component {
 
   // eslint-disable-next-line class-methods-use-this
   render() {
-    return (
+    let envWarning = null;
+    if (process.env.REACT_APP_NODE_ENV === 'demo') {
+      envWarning = (
+        <Container>
+          <CustomAlert
+            variant={ 'warning' }
+            heading={ 'Demo mode' }
+            message={ demoWarningMessage }/>
+        </Container>);
+    }
+
+    return (<>
+
+      {envWarning}
+
       <HashRouter>
         <Switch>
           <Route exact path="/" component={ Projects } />
@@ -42,6 +63,7 @@ class App extends Component {
           />
         </Switch>
       </HashRouter>
+    </>
     );
   }
 }

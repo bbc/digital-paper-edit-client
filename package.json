@@ -37,11 +37,14 @@
   },
   "license": "MIT",
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cross-env REACT_APP_NODE_ENV=development react-scripts start",
+    "start:demo": "cross-env REACT_APP_NODE_ENV=demo react-scripts start",
+    "start:production": "cross-env REACT_APP_NODE_ENV=production react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "clean:cache": "npm cache clean --force",
+    "deploy:ghpages": "rimraf build && cross-env REACT_APP_NODE_ENV=demo npm run build && gh-pages -d build",
     "publish:public": "npm run build && cp package.json ./build/package.json && cp README.md ./build/README.md && npm publish build --access public"
   },
   "eslintConfig": {
@@ -52,5 +55,9 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "gh-pages": "^2.0.1"
+  }
 }
