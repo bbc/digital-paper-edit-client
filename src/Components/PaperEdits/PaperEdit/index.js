@@ -19,29 +19,29 @@ class PaperEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      transcriptJson: null,
-      title: null,
       projectId:  this.props.match.params.projectId,
       papereditId:  this.props.match.params.papereditId,
       projectTitle: '',
+      programmeTitle: '',
+      transcripts: [],
       isTranscriptsShown: true,
       isProgramScriptShown: true
     };
   }
 
   componentDidMount = () => {
-    // TODO get id from props match
-    // fetch(`http://localhost:5000/api/projects/${ this.state.projectId }/paperedits/${ this.state.papereditId }`, { mode: 'cors' })
-    ApiWrapper.getPaperEdit(this.state.projectId, this.state.papereditId )
-      // .then(res => res.json())
+
+    ApiWrapper.get_ProgrammeScriptAndTranscripts(this.state.projectId, this.state.papereditId)
       .then((json) => {
         console.log(json);
         this.setState({
-          paperEditJson: json.paperEdit,
-          title: json.title,
-          projectTitle: json.projectTitle
+          programmeTitle: json.programmeScript.title,
+          projectTitle: json.project.title,
+          programmeScript: json.programmeScript,
+          transcripts: json.transcripts
         });
       });
+
   }
 
   toggleTranscripts =() => {
@@ -86,17 +86,14 @@ class PaperEdit extends Component {
                 link: '/projects'
               },
               {
-                // TODO: need to get project name?
-                // TODO: is this needed?
                 name: `Project: ${ this.state.projectTitle }`,
                 link: `/projects/${ this.state.projectId }`
               },
               {
                 name: 'PaperEdits',
-                // link:`/projects/${ this.state.projectId }/paperedits`
               },
               {
-                name: `${ this.state.title }`
+                name: `${ this.state.programmeTitle }`
               }
               ] }
             />
@@ -125,16 +122,6 @@ class PaperEdit extends Component {
               </Button>
             </ButtonGroup>
 
-            {/* <ToggleButtonGroup
-              type="checkbox"
-              value={ this.state.value }
-              onChange={ this.handleChange }
-              defaultValue={ [ 1, 2 ] }
-            >
-              <ToggleButton value={ 1 }>Transcripts  <FontAwesomeIcon icon={ this.state.isTranscriptsShown ? faAngleDown : faAngleUp } /> </ToggleButton>
-              <ToggleButton value={ 2 }>Program Script <FontAwesomeIcon icon={ this.state.isProgramScriptShown ? faAngleDown : faAngleUp } /></ToggleButton>
-            </ToggleButtonGroup> */}
-
           </div>
           <Row>
             <Col
@@ -157,7 +144,9 @@ class PaperEdit extends Component {
               } }
               style={ { display: this.state.isTranscriptsShown ? 'block' : 'none' } }
             >
-              <Transcripts />
+              <Transcripts
+                transcripts={ this.state.transcripts }
+              />
             </Col>
             <Col
               xs={ { span: 12, offset:0 } }
@@ -179,7 +168,9 @@ class PaperEdit extends Component {
               } }
               style={ { display: this.state.isProgramScriptShown ? 'block' : 'none' } }
             >
-              <ProgramScript/>
+              <ProgramScript
+                programmeScript={ this.state.programmeScript }
+              />
             </Col>
           </Row>
 

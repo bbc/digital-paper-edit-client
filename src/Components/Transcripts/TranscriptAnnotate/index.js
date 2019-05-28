@@ -361,20 +361,14 @@ class TranscriptAnnotate extends Component {
                   link: '/projects'
                 },
                 {
-                  // TODO: need to get project name?
-                  // TODO: is this needed?
                   name: `Project: ${ this.state.projectTitle }`,
                   link: `/projects/${ this.state.projectId }`
                 },
                 {
-
                   name: 'Transcripts',
-                  // link: `/projects/${ this.state.projectId }/transcripts`
                 },
                 {
-                  // Note: There is no individual transcript page only transcript index, annotate, and correct
                   name: `${ this.state.transcriptTitle }`,
-                  // link: `/projects/${ this.state.projectId }/transcripts/${ this.state.transcriptId }`
                 },
                 {
                   name: 'Annotate'
@@ -392,7 +386,6 @@ class TranscriptAnnotate extends Component {
         <Row>
           <Col xs={ 12 } sm={ 12 } md={ 12 } lg={ 12 } xl={ 12 }>
             <MediaPlayer
-              // title={ this.state.transcriptTitle ? this.state.transcriptTitle : '' }
               mediaDuration={ this.state.mediaDuration }
               hookSeek={ foo => (this.setCurrentTime = foo) }// <--
               hookPlayMedia={ foo => (this.playMedia = foo) }// <--
@@ -474,7 +467,6 @@ class TranscriptAnnotate extends Component {
                 {/* TODO: instead of null, if transcript is not provided, eg offline or server error, then add custom alert */}
                 {this.state.transcriptJson
                 && <Paragraphs
-
                   labelsOptions={ this.state.labelsOptions && this.state.labelsOptions }
                   annotations={ this.state.annotations }
                   transcriptJson={ this.state.transcriptJson }

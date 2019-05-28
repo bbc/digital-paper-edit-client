@@ -10,24 +10,36 @@ class Transcripts extends Component {
 
   // eslint-disable-next-line class-methods-use-this
   render() {
+    const transcriptsElNav = this.props.transcripts.map((transcript, index) => {
+      return (
+        <Nav.Item key={ index }>
+          <Nav.Link eventKey={ index } title={ transcript.transcriptTitle }>{transcript.transcriptTitle}</Nav.Link>
+        </Nav.Item>
+      );
+    });
+    const transcriptsElTab = this.props.transcripts.map((transcript, index) => {
+      return (
+        <Tab.Pane eventKey={ index } >
+          <Transcript
+            title={ transcript.transcriptTitle }
+            transcript={ transcript.transcript }
+            url={ transcript.url }
+          />
+        </Tab.Pane>
+      );
+    });
+
     return (
       <>
         <Tab.Container id="left-tabs-example" defaultActiveKey="first">
           <Row>
             <Col sm={ 3 }
-            // style={ { display:'none' } }
+              // style={ { display:'none' } }
             >
               <h2>Transcripts</h2>
               <hr/>
               <Nav variant="pills" className="flex-column">
-                <Nav.Item>
-                  {/* TODO: CSS to truncat lenght of transcript name to
-                        to avoid overflow same as title name in @bbc/react-transcript-editor */}
-                  <Nav.Link eventKey="first" title="Transcript 1">Transcript 1</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="second" title="Transcript 2">Transcript 2</Nav.Link>
-                </Nav.Item>
+                {transcriptsElNav}
               </Nav>
             </Col>
             <Col sm={ 9 }
@@ -36,6 +48,7 @@ class Transcripts extends Component {
               <Tab.Content>
                 <h2>Search</h2>
                 <hr/>
+                {transcriptsElTab}
                 <Tab.Pane eventKey="first" >
                   <Transcript />
                 </Tab.Pane>

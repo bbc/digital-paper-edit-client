@@ -42,7 +42,7 @@ class ApiWrapper {
     const res = await corsFetch(this.projectsIdUrl(id));
     const json = await res.json();
 
-    return json.project;
+    return json;
   }
 
   async createProject(data) {
@@ -185,7 +185,6 @@ class ApiWrapper {
   /**
    * PaperEdits
    */
-
   async getAllPaperEdits(projectId) {
     console.log(this.paperEditsUrl(projectId));
     const res = await corsFetch(this.paperEditsUrl(projectId));
@@ -248,6 +247,30 @@ class ApiWrapper {
     return results;
   }
 
+  // Helper function to get program script & associated transcript
+  // https://flaviocopes.com/javascript-async-await-array-map/
+  async get_ProgrammeScriptAndTranscripts(projectId, papereditId) {
+    // get transcripts list, this contain id, title, description only
+    const transcriptsResult = await this.getTranscripts(projectId);
+    // use that list of ids to loop through and get json payload for each individual transcript
+    // as separate request
+    const transcriptsJson = await Promise.all(transcriptsResult.transcripts.map((transcript) => {
+      return this.getTranscript(projectId, transcript.id);
+    }));
+
+    // getting program script for paperEdit
+    const paperEditResult = await this.getPaperEdit(projectId, papereditId);
+    // getting project info - eg to get tile and description
+    const projectResult = await this.getProject(projectId);
+
+    const results = {
+      programmeScript: paperEditResult.programmeScript,
+      project: projectResult.project,
+      transcripts: transcriptsJson
+    };
+
+    return results;
+  }
 }
 
 // https://www.sitepoint.com/javascript-design-patterns-singleton/

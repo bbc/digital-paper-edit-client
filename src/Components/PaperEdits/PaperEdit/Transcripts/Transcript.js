@@ -15,13 +15,13 @@ class Transcript extends Component {
   render() {
     return (
       <>
-        <h3>Transcript 1</h3>
+        <h3>{this.props.title}</h3>
 
         {/* // Preview video - HTML5 Video element or  @bbc/react-transcript-editor/VideoPlayer
         // Media control - HTML5 default or @bbc/react-transcript-editor/MediaPlayer
         // Search Bar - from TranscriptAnnotate component
         // Text -  from TranscriptAnnotate component */}
-        <video src="https://download.ted.com/talks/KateDarling_2018S-950k.mp4" style={ { width: '100%', height:'10em', backgroundColor: 'black' } } controls/>
+        <video src={ this.props.url } style={ { width: '100%', height:'10em', backgroundColor: 'black' } } controls/>
         <article style={ { height: '60vh', overflow: 'scroll' } }>
           <Paragraph />
           <Row>

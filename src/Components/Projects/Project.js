@@ -26,7 +26,7 @@ class Project extends React.Component {
     // TODO: do we need to add user id in request?
     const result = await ApiWrapper.getProject(this.state.projectId);
     if (result) {
-      this.setState({ projectName: result.title });
+      this.setState({ projectName: result.project.title });
     }
     // TODO: some error handling
   };
