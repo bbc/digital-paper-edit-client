@@ -1,16 +1,7 @@
 import React, { Component } from 'react';
-import { faCut } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ListPageTemplate from '../lib/ListPageTemplate/index.js';
-import navbarLinks from '../lib/custom-navbar-links';
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import ListPage from '../lib/ListPage';
-import CustomNavbar from '../lib/CustomNavbar';
-import NewItemFormModal from '../lib/NewItemFormModal';
-import CustomFooter from '../lib/CustomFooter';
+import ItemFormModal from '../lib/ItemFormModal';
 import ApiWrapper from '../../ApiWrapper/index.js';
 
 class PaperEdits extends Component {
@@ -20,30 +11,12 @@ class PaperEdits extends Component {
       projectId: this.props.projectId,
       items: [],
       isNewItemModalShow: false,
-      title: 'Test Programme title 9',
-      description: 'DD',
+      title: '',
+      description: '',
       itemId: null
     };
     this.handleDeleteItem = this.handleDeleteItem.bind(this);
   }
-  // TODO: refactor using API wrapper
-  // componentDidMount = () => {
-  // TODO: add user id in request?
-  // TODO: add end point url in config
-  // TODO: move fetch into a API class - to handle electron backend switch
-  //   fetch('http://localhost:5000/api/projects/1/paperedits', { mode: 'cors' })
-  //     .then(res => res.json())
-  //     .then(json => {
-  //       // add a display property for component cards search
-  //       const tmpList = json.paperedits.map(item => {
-  //         item.display = true;
-
-  //         return item;
-  //       });
-  //       // projectTitle
-  //       this.setState({ items: tmpList });
-  //     });
-  // };
 
   async componentDidMount () {
     // TODO: do we need to add user id in request?
@@ -86,7 +59,6 @@ class PaperEdits extends Component {
       });
     }
     else {
-      console.log(this.state.projectId, item.id, item);
       ApiWrapper.updatePaperEdit(this.state.projectId, item.id, item).then(response => {
         if (response.status === 'ok') {
           const paperedit = response.paperedit;
@@ -94,12 +66,13 @@ class PaperEdits extends Component {
           paperedit.display = true;
           // // Server returns project with UID generated server side
           const { items } = this.state;
+          const newItemsList = [ ...items ];
           this.findItemById(items, item);
-          const papereditIndex = this.state.items.findIndex(item => item.id === paperedit.id);
-          items[papereditIndex] = paperedit;
+          const papereditIndex = items.findIndex(item => item.id === paperedit.id);
+          newItemsList[papereditIndex] = paperedit;
           this.setState({
             isNewItemModalShow: false,
-            items: items,
+            items: newItemsList,
             // reset item form
             title: '',
             itemId: null,
@@ -166,23 +139,20 @@ class PaperEdits extends Component {
 
   render() {
     return (
-
       <>
-        <CustomNavbar/>
         <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
-
           <ListPage
             model={ 'Paper Edit' }
             items={ this.state.items }
             handleShowCreateNewItemForm={ this.handleShowCreateNewItemForm }
-            deleteItem={ this.createNew }
-            editItem={ this.createNew }
+            // deleteItem={ this.createNew }
+            // editItem={ this.createNew }
             handleEdit={ this.handleEditItem }
             handleDelete={ this.handleDeleteItem }
             showLinkPath={ this.showLinkPathToItem }
             handleUpdateList={ this.handleUpdateList }
           />
-          <NewItemFormModal
+          <ItemFormModal
             title={ this.state.title }
             description={ this.state.description }
             id={ this.state.itemId }
@@ -192,7 +162,6 @@ class PaperEdits extends Component {
             handleSaveForm={ this.handleSaveItem }
           />
         </Container>
-        <CustomFooter/>
       </>
     );
   }

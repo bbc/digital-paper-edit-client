@@ -13,6 +13,7 @@ import navbarLinks from '../../lib/custom-navbar-links';
 
 import Transcripts from './Transcripts/index.js';
 import ProgramScript from './ProgramScript/index.js';
+import ApiWrapper from '../../../ApiWrapper/index.js';
 
 class PaperEdit extends Component {
   constructor(props) {
@@ -21,6 +22,7 @@ class PaperEdit extends Component {
       transcriptJson: null,
       title: null,
       projectId:  this.props.match.params.projectId,
+      papereditId:  this.props.match.params.papereditId,
       projectTitle: '',
       isTranscriptsShown: true,
       isProgramScriptShown: true
@@ -29,13 +31,17 @@ class PaperEdit extends Component {
 
   componentDidMount = () => {
     // TODO get id from props match
-    fetch('http://localhost:5000/api/projects/1/paperedits/1', { mode: 'cors' })
-      .then(res => res.json())
+    // fetch(`http://localhost:5000/api/projects/${ this.state.projectId }/paperedits/${ this.state.papereditId }`, { mode: 'cors' })
+    ApiWrapper.getPaperEdit(this.state.projectId, this.state.papereditId )
+      // .then(res => res.json())
       .then((json) => {
         console.log(json);
-        this.setState({ paperEditJson: json.paperEdit, title: json.title, projectTitle: json.projectTitle });
+        this.setState({
+          paperEditJson: json.paperEdit,
+          title: json.title,
+          projectTitle: json.projectTitle
+        });
       });
-    console.log(this.props.match.params);
   }
 
   toggleTranscripts =() => {
@@ -60,9 +66,10 @@ class PaperEdit extends Component {
     }
   }
 
-  // { span:5, offset: 2 }
-
-  // { span:5, offset: 0 }
+  saveToServer = () => {
+    // TODO: add Api call to save content of
+    alert('save to server');
+  }
 
   render() {
     return (
@@ -71,26 +78,35 @@ class PaperEdit extends Component {
           links={ navbarLinks(this.state.projectId) }
         />
         <br/>
-        <CustomBreadcrumb
-          items={ [ {
-            name: 'Projects',
-            link: '/projects'
-          },
-          {
-            // TODO: need to get project name?
-            // TODO: is this needed?
-            name: `Project: ${ this.state.projectTitle }`,
-            link: `/projects/${ this.state.projectId }`
-          },
-          {
-            name: 'PaperEdits',
-            link:`/projects/${ this.state.projectId }/paperedits`
-          },
-          {
-            name: `${ this.state.title }`
-          }
-          ] }
-        />
+        <Row>
+          <Col sm={ 12 } md={ 10 } ld={ 10 } xl={ 10 }>
+            <CustomBreadcrumb
+              items={ [ {
+                name: 'Projects',
+                link: '/projects'
+              },
+              {
+                // TODO: need to get project name?
+                // TODO: is this needed?
+                name: `Project: ${ this.state.projectTitle }`,
+                link: `/projects/${ this.state.projectId }`
+              },
+              {
+                name: 'PaperEdits',
+                // link:`/projects/${ this.state.projectId }/paperedits`
+              },
+              {
+                name: `${ this.state.title }`
+              }
+              ] }
+            />
+          </Col>
+          <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
+            <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
+              Save
+            </Button>
+          </Col>
+        </Row>
 
         <Container fluid={ true }>
           <div className="d-flex flex-column">
