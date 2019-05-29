@@ -14,7 +14,7 @@ Aim of the project is to make video and audio production:
 
 Can also see this as [GDocs slides](https://docs.google.com/presentation/d/1M6w8xNA5U4KtxQYrZ1gmPhBqwQbwMOnYavp3RV0HM4Q/edit#slide=id.g33ba2bc411_0_1)
 
-See [Domain knowledge section for more details](./domain-knowledge.md)
+See [Domain knowledge section for more details](./guides/domain-knowledge.md)
 
 
 # Program post-production workflow - Overview
