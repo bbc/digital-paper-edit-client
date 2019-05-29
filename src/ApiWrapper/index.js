@@ -254,8 +254,20 @@ class ApiWrapper {
     const transcriptsResult = await this.getTranscripts(projectId);
     // use that list of ids to loop through and get json payload for each individual transcript
     // as separate request
+
+    // TODO: also add annotations for each Transcripts
     const transcriptsJson = await Promise.all(transcriptsResult.transcripts.map((transcript) => {
-      return this.getTranscript(projectId, transcript.id);
+      // const annotations = this.getAllAnnotations(projectId, transcript.id);
+      const transcriptTmp = this.getTranscript(projectId, transcript.id);
+      // transcriptTmp.annotations = annotations;
+
+      return transcriptTmp;
+    }));
+
+    const annotationsJson = await Promise.all(transcriptsResult.transcripts.map((transcript) => {
+      const annotations = this.getAllAnnotations(projectId, transcript.id);
+
+      return annotations;
     }));
 
     // getting program script for paperEdit
@@ -263,10 +275,15 @@ class ApiWrapper {
     // getting project info - eg to get tile and description
     const projectResult = await this.getProject(projectId);
 
+    // TODO: get labels
+    const labelsResults = await this.getAllLabels(projectId);
+
     const results = {
       programmeScript: paperEditResult.programmeScript,
       project: projectResult.project,
-      transcripts: transcriptsJson
+      transcripts: transcriptsJson,
+      annotations: annotationsJson,
+      labels: labelsResults.labels
     };
 
     return results;
