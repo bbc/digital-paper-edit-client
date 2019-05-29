@@ -4,7 +4,7 @@
 
 An application to make it faster, easier and more accessible to edit audio and video interviews using automatically generated transcriptions form STT service.
 
-See [intro](./docs/intro.md) for more info on the project. And [user journey](./docs/guides/user-journey/user-journey.md) for a high level overview of the user journey.
+See [intro](./docs/intro.md) for more info on the project. And [user journey](./docs/user-journey/user-journey.md) for a high level overview of the user journey.
 
 ## Project Architecture 
 
@@ -20,9 +20,9 @@ The project is organised across these repository
 
 Micro services for web app backend
 
-- [`bbc/digital-paper-edit-stt-proxy`](https://github.com/bbc/digital-paper-edit-stt-proxy)
-- [`bbc/digital-paper-edit-video-preview-converter`](https://github.com/bbc/digital-paper-edit-video-preview-converterr)
-- [`bbc/digital-paper-edit-audio-converter`](https://github.com/bbc/digital-paper-edit-audio-converter)
+- [`bbc/digital-paper-edit-stt-proxy`](https://github.com/bbc/digital-paper-edit-stt-proxy) - An express server to connect to STT service
+- [`bbc/digital-paper-edit-video-preview-converter`](https://github.com/bbc/digital-paper-edit-video-preview-converterr) - An express server to generate an mp4 video preview using ffmpeg
+- [`bbc/digital-paper-edit-audio-converter`](https://github.com/bbc/digital-paper-edit-audio-converter) - An express server to generate an audio file with the stt specs to be able to send it to `STT Proxy`.
 
 [See here to see them as a list in github](https://github.com/topics/digital-paper-edit).
 
@@ -37,7 +37,7 @@ The projects use [npm semantic versioning](https://docs.npmjs.com/about-semantic
 
 _How to build and run the code/app_ -->
 
-See [Getting setup with the visual code workspace](docs/guides/visual-code-workspace-setup.md) to get up and running with the various repository needed for this project.
+See _optional_ [getting setup with the visual code workspace](docs/guides/visual-code-workspace-setup.md) to get up and running with the various repository needed for this project.
 
 
 ```
@@ -58,7 +58,7 @@ in root of project
 npm install
 ```
 
-## Usage
+## Usage - development
 
 <!-- `cd` into the individual repository inside [`./packages`](./packages) and npm start, or see respective README and package.json for how deal with each. -->
 
@@ -66,7 +66,7 @@ npm install
 In root of the client project (`cd digital-paper-edit-client`) start React 
 
 ```
-npm run start:dev
+npm run start
 ```
 
 To developer for the web app [you will need to start setup and the API server](https://github.com/bbc/digital-paper-edit-api#setup) as well.
@@ -85,6 +85,20 @@ make start-electron
 ``` -->
 
 
+## Usage - production
+
+The project is also publicly available in the npm registry [`@bbc/digital-paper-edit-client`](https://www.npmjs.com/package/@bbc/digital-paper-edit-client)
+
+ you can add it to your project
+```
+npm install @bbc/digital-paper-edit-client
+```
+
+and eg in an express server you can serve the static build as follows
+
+```
+app.use("/", express.static(path.join(__dirname, '..', 'node_modules/@bbc/digital-paper-edit-client')));
+```
 
 ## System Architecture
 
@@ -93,6 +107,7 @@ Client - React, is setup using [Create React App](https://facebook.github.io/cre
 >You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 >
 >To learn React, check out the [React documentation](https://reactjs.org/).
+
 
 
 ## Development env
@@ -191,6 +206,8 @@ On commit this repo uses the [.travis.yml](./.travis.yml) config tu run the auto
 [`.env`](./.env) contains environment variables config for the React client side app.
 
 <mark>Do not store credentials in `.env` during development.</mark>
+
+`REACT_APP_NAME` App name is used in browser title and navbar component.
 
 ## Deployment
 

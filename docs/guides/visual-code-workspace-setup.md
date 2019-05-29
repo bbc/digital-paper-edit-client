@@ -1,6 +1,7 @@
 # Visual Code Workspace - draft
 
-**Optionally** you can use [multi root VS Code Workspace](https://code.visualstudio.com/docs/editor/multi-root-workspaces)
+This walks you through using [multi root VS Code Workspace](https://code.visualstudio.com/docs/editor/multi-root-workspaces) for this project. 
+It's an optional step provided for convenience, you are welcome to use any other code editor you are most conformable with. 
 
 **Pre-requisite** 
 - [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
