@@ -19,7 +19,7 @@ class Transcripts extends Component {
     });
     const transcriptsElTab = this.props.transcripts.map((transcript, index) => {
       return (
-        <Tab.Pane eventKey={ index } >
+        <Tab.Pane key={ transcript.id } eventKey={ index } >
           <Transcript
             title={ transcript.transcriptTitle }
             transcript={ transcript.transcript }

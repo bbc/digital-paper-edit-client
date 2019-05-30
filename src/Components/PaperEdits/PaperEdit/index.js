@@ -33,7 +33,6 @@ class PaperEdit extends Component {
 
     ApiWrapper.get_ProgrammeScriptAndTranscripts(this.state.projectId, this.state.papereditId)
       .then((json) => {
-        console.log(json);
         this.setState({
           programmeTitle: json.programmeScript.title,
           projectTitle: json.project.title,
@@ -107,7 +106,7 @@ class PaperEdit extends Component {
 
         <Container fluid={ true }>
           <div className="d-flex flex-column">
-            <ButtonGroup size="sm" className="mt-12" block>
+            <ButtonGroup size="sm" className="mt-12">
               <Button
                 onClick={ this.toggleTranscripts }
                 variant={ this.state.isTranscriptsShown ? 'primary' : 'outline-primary' }

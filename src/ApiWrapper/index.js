@@ -29,9 +29,7 @@ class ApiWrapper {
   /**
    * Projects
    */
-
   async getAllProjects() {
-    console.log(this.projectsUrl);
     const res = await corsFetch(this.projectsUrl);
     const json = await res.json();
 
@@ -79,7 +77,6 @@ class ApiWrapper {
   async createTranscript(projectId, data) {
     const res = await corsFetch(this.transcriptsUrl(projectId), 'POST', data);
     const json = await res.json();
-    console.log('createTranscript json', json);
 
     return json;
   }
@@ -186,10 +183,8 @@ class ApiWrapper {
    * PaperEdits
    */
   async getAllPaperEdits(projectId) {
-    console.log(this.paperEditsUrl(projectId));
     const res = await corsFetch(this.paperEditsUrl(projectId));
     const json = await res.json();
-    console.log(json);
 
     return json.paperedits;
   }
@@ -270,19 +265,33 @@ class ApiWrapper {
       return annotations;
     }));
 
+    // add annotations to transcript
+    transcriptsJson.forEach((tr) => {
+      // get annotations for transcript
+      const currentAnnotationsSet = annotationsJson.find((a) => {
+
+        return a.transcriptId === tr.id;
+      });
+      // if there are annotations for this transcript add them to it
+      if (currentAnnotationsSet) {
+        tr.annotations = currentAnnotationsSet.annotations;
+
+        return;
+      }
+    });
+
     // getting program script for paperEdit
     const paperEditResult = await this.getPaperEdit(projectId, papereditId);
     // getting project info - eg to get tile and description
     const projectResult = await this.getProject(projectId);
-
-    // TODO: get labels
+    // Get labels
     const labelsResults = await this.getAllLabels(projectId);
-
+    // package results
     const results = {
       programmeScript: paperEditResult.programmeScript,
       project: projectResult.project,
+      // each transcript contains its annotations
       transcripts: transcriptsJson,
-      annotations: annotationsJson,
       labels: labelsResults.labels
     };
 
