@@ -1,4 +1,6 @@
-import React, { Component } from './node_modules/react';
+import React, { Component } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMicrophoneAlt } from '@fortawesome/free-solid-svg-icons';
 
 class VoiceOver extends Component {
   constructor(props) {
@@ -10,7 +12,13 @@ class VoiceOver extends Component {
 
   render() {
     return (
-      <h1>VoiceOver</h1>
+      <>
+        <p className={ 'text-muted' }>
+          <i>
+            <FontAwesomeIcon icon={ faMicrophoneAlt } /> { this.props.text }
+          </i>
+        </p>
+      </>
     );
   }
 }

@@ -42,7 +42,7 @@ class Paragraph extends Component {
         className="paragraph"
         data-paragraph-text={ this.props.paragraphTextWithoutPunctuation }
       >
-        <Col xs={ 8 } sm={ 8 } md={ 3 } lg={ 3 } xl={ 2 }>
+        <Col xs={ 8 } sm={ 8 } md={ 3 } lg={ 3 } xl={ 2 } className={ 'text-truncate' } title={ this.props.speakerName }>
           <span className={ [ styles.speaker, styles.unselectable ].join(' ') }
             tabIndex="0"
           >{this.props.speakerName}</span>
