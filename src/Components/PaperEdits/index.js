@@ -21,7 +21,6 @@ class PaperEdits extends Component {
   async componentDidMount () {
     // TODO: do we need to add user id in request?
     const result = await ApiWrapper.getAllPaperEdits(this.state.projectId);
-    console.log('result:: ', result);
     if (result) {
       // add a display property for component cards search
       const tmpList = result.map(paperEdit => {
@@ -29,7 +28,6 @@ class PaperEdits extends Component {
 
         return paperEdit;
       });
-      console.log(tmpList);
       this.setState({ items: tmpList });
     }
     // TODO: some error handling

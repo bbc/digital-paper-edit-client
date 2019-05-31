@@ -26,7 +26,9 @@ class ProgrammeScript extends Component {
         case 'note':
           return <Note key={ el.id } text={ el.text } />;
         default:
-          console.error('invilid programme element type');
+          console.error('invalid programme element type');
+
+          return null;
         }
       });
     }
