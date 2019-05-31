@@ -82,6 +82,12 @@ class ApiWrapper {
   async getTranscript(projectId, transcriptId, queryParamsOptions) {
     const res = await corsFetch(this.transcriptsIdUrl(projectId, transcriptId, queryParamsOptions));
     const json = await res.json();
+    // get project title
+    const resProject = await this.getProject(projectId);
+    // console.log('resProject', resProject.project.title, json);
+    json.projectTitle = resProject.project.title;
+    json.transcriptTitle = json.title;
+    delete json.title;
 
     return json;
   }
