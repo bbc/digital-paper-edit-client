@@ -24,8 +24,9 @@ class PaperEdit extends Component {
       projectTitle: '',
       programmeTitle: '',
       transcripts: [],
+      labelsOptions: [],
       isTranscriptsShown: true,
-      isProgramScriptShown: true
+      isProgramScriptShown: true,
     };
   }
 
@@ -33,11 +34,13 @@ class PaperEdit extends Component {
 
     ApiWrapper.get_ProgrammeScriptAndTranscripts(this.state.projectId, this.state.papereditId)
       .then((json) => {
+        console.log('get_ProgrammeScriptAndTranscripts', json);
         this.setState({
           programmeTitle: json.programmeScript.title,
           projectTitle: json.project.title,
-          programmeScript: json.programmeScript,
-          transcripts: json.transcripts
+          // programmeScript: json.programmeScript,
+          transcripts: json.transcripts,
+          labelsOptions: json.labels
         });
       });
 
@@ -77,6 +80,7 @@ class PaperEdit extends Component {
           links={ navbarLinks(this.state.projectId) }
         />
         <br/>
+
         <Row>
           <Col sm={ 12 } md={ 10 } ld={ 10 } xl={ 10 }>
             <CustomBreadcrumb
@@ -143,9 +147,12 @@ class PaperEdit extends Component {
               } }
               style={ { display: this.state.isTranscriptsShown ? 'block' : 'none' } }
             >
-              <Transcripts
-                transcripts={ this.state.transcripts }
-              />
+              { this.state.transcripts.length ?
+                <Transcripts
+                  transcripts={ this.state.transcripts }
+                  labelsOptions={ this.state.labelsOptions }
+                />
+                : ''}
             </Col>
             <Col
               xs={ { span: 12, offset:0 } }
@@ -168,13 +175,13 @@ class PaperEdit extends Component {
               style={ { display: this.state.isProgramScriptShown ? 'block' : 'none' } }
             >
               <ProgramScript
-                programmeScript={ this.state.programmeScript }
+                projectId={ this.state.projectId }
+                papereditId={ this.state.papereditId }
+                transcripts={ this.state.transcripts }
               />
             </Col>
           </Row>
-
         </Container>
-
         <CustomFooter />
       </Container>
     );
