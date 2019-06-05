@@ -45,7 +45,6 @@ class LabelModal extends Component {
             <Modal.Title><FontAwesomeIcon icon={ faTag } />  Label </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-
             <LabelForm
               onLabelSaved={ this.props.onLabelSaved }
               label={ this.props.label }
@@ -54,7 +53,6 @@ class LabelModal extends Component {
               labelId={ this.props.labelId }
               handleClose={ this.handleClose }
             />
-
           </Modal.Body>
         </Modal>
       </>

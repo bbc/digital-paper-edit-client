@@ -1,37 +1,40 @@
 // helper funciton for adding colors to labels in react-select component
 // https://react-select.com/styles
-import chroma from 'chroma-js';
+// import chroma from 'chroma-js';
 
 const colourStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white' }),
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-    const color = chroma(data.color);
+    // const color = chroma(data.color);
 
-    let tmpBackgroundColor = null;// 'black;
-    if (isDisabled) {
-      tmpBackgroundColor = null;
-    }
-    if (isSelected) {
-      tmpBackgroundColor = data.color;
-    }
-    if (isFocused) {
-      tmpBackgroundColor = color.alpha(0.1).css();
-    }
+    const tmpBackgroundColor = null;// 'black;
+    // if (isDisabled) {
+    //   tmpBackgroundColor = null;
+    // }
+    // if (isSelected) {
+    //   tmpBackgroundColor = data.color;
+    // }
+    // if (isFocused) {
+    //   tmpBackgroundColor = color.alpha(0.1).css();
+    // }
 
-    let tmpColor = data.color;
-    if (isDisabled) {
-      tmpColor = '#ccc';
-    }
-    if (isSelected) {
-      tmpColor = chroma.contrast(color, 'white') > 2
-        ? 'white'
-        : 'black';
-    }
+    const tmpColor = data.color;
+    // if (isDisabled) {
+    //   tmpColor = '#ccc';
+    // }
+    // if (isSelected) {
+    //   tmpColor = chroma.contrast(color, 'white') > 2
+    //     ? 'white'
+    //     : 'black';
+    // }
 
     return {
       ...styles,
       backgroundColor: tmpBackgroundColor,
-      color: tmpColor,
+      borderLeft: '1.5em solid',
+      borderColor: tmpColor,
+      marginBottom: '0.4em',
+      // color: tmpColor,
       cursor: isDisabled ? 'not-allowed' : 'default'
     };
   },
@@ -61,24 +64,28 @@ const colourStyles = {
   //   return { ...provided, opacity, transition };
   // },
   multiValue: (styles, { data }) => {
-    const color = chroma(data.color);
+    // const color = chroma(data.color);
 
     return {
       ...styles,
-      backgroundColor: color.alpha(0.1).css()
+      // backgroundColor: color.alpha(0.1).css()
+      backgroundColor: 'white',
+      border: '0.05em solid',
+      borderLeft: '1.2em solid',
+      borderColor: data.color,
     };
   },
   multiValueLabel: (styles, { data }) => ({
     ...styles,
-    color: data.color
+    // color: data.color
   }),
   multiValueRemove: (styles, { data }) => ({
     ...styles,
-    color: data.color,
-    ':hover': {
-      backgroundColor: data.color,
-      color: 'white'
-    }
+    // color: data.color,
+    // ':hover': {
+    //   backgroundColor: data.color,
+    //   color: 'white'
+    // }
   })
 };
 
