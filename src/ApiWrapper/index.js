@@ -235,7 +235,8 @@ class ApiWrapper {
 
     // Combine results
     const results = {
-      // TODO: add a call to project to get title
+      transcriptId: transcriptId,
+      projectId: projectId,
       projectTitle: transcriptResult.projectTitle,
       transcriptTitle: transcriptResult.transcriptTitle,
       url: transcriptResult.url,
@@ -283,7 +284,11 @@ class ApiWrapper {
 
         return;
       }
+      else {
+        tr.annotations = [];
+      }
     });
+    console.log('ApiWrapper transcriptsJson', transcriptsJson);
 
     // getting program script for paperEdit
     const paperEditResult = await this.getPaperEdit(projectId, papereditId);
@@ -299,6 +304,7 @@ class ApiWrapper {
       transcripts: transcriptsJson,
       labels: labelsResults.labels
     };
+    console.log('ApiWrapper - results', results);
 
     return results;
   }
