@@ -30,13 +30,11 @@ class Transcripts extends Component {
     const result = await ApiWrapper.getTranscripts(this.state.projectId);
     // TODO: add error handling
     if (result) {
-      console.log('resultTranscripts', result);
       const tmpList = result.transcripts.map((item) => {
         item.display = true;
 
         return item;
       });
-      console.log('tmpList', tmpList);
       this.setState({
         projectTitle: result.projectTitle,
         items: tmpList
@@ -44,7 +42,10 @@ class Transcripts extends Component {
     }
   }
 
-  // TODO: add server side POST using wrapperAPI
+  // side POST using wrapperAPI done
+  // inside --> newTranscriptFormModal --> TranscriptForm
+  // component - could be refactored
+  // but needs to take into account file upload from form in TranscriptForm
   handleSaveItem = (item) => {
     const newItem = item;
     newItem.display = true;
@@ -62,9 +63,9 @@ class Transcripts extends Component {
     });
   }
 
-  // TODO: add server side PUT using wrapperAPI
   handleSaveEditedItem = (transcript) => {
     const newEditedITem = transcript;
+    console.log('newEditedITem', newEditedITem);
     // display attribute for search
     newEditedITem.display = true;
     // Update existing
@@ -74,10 +75,20 @@ class Transcripts extends Component {
     // preserve status info
     transcript.status = newItemsList[itemIdex].status;
     newItemsList[itemIdex] = transcript;
-    this.setState({
-      items: newItemsList,
-      isEditItemModalShow: false
-    });
+    const queryParamsOptions = false;
+    const transcriptId = newEditedITem.id;
+    // TODO: add error handling, eg message, wasn't able to update etc..
+    ApiWrapper.updateTranscript(this.state.projectId, transcriptId, queryParamsOptions, newEditedITem)
+      .then((response) => {
+        if (response.status === 'ok') {
+          console.log(response.transcript, newItemsList);
+          this.setState({
+            items: newItemsList,
+            isEditItemModalShow: false
+          });
+        }
+      });
+
   }
 
   findItemById = (list, id) => {
@@ -88,8 +99,8 @@ class Transcripts extends Component {
     return result[0];
   }
 
+  // opens the modal for editing item
   handleEditItem = (itemId) => {
-    console.log('handleEditItem', itemId);
     const item = this.findItemById(this.state.items, itemId);
     this.setState({
       title: item.title,
@@ -97,7 +108,6 @@ class Transcripts extends Component {
       description: item.description,
       isEditItemModalShow: true
     });
-    console.log('edit item', item);
   }
 
   async handleDelete (transcriptId ) {

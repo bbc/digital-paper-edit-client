@@ -69,7 +69,6 @@ const getCorsConfig = (method, data = {}, applicationType) => {
 async function corsFetch(url, method = 'GET', data = {}, applicationType) {
   validateRESTMethod(method);
   const corsConfig = getCorsConfig(method, data, applicationType);
-  console.log(url, JSON.stringify(corsConfig, null, 2));
 
   return await fetch(url, corsConfig);
 }

@@ -5,16 +5,12 @@ import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Nav from 'react-bootstrap/Nav';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faTags,
   faTag,
-  faAngleDown,
-  faAngleUp,
   faTimes,
   faPen,
-  faSlidersH
+  faCog
 } from '@fortawesome/free-solid-svg-icons';
 
 import LabelModal from './LabelModal.js';
@@ -25,7 +21,7 @@ class LabelsList extends Component {
     super(props);
 
     this.state = {
-      labelsListOpen: false,
+      // isLabelsListOpen: false,
       isLabelmodalShown: false
     };
   }
@@ -134,20 +130,14 @@ class LabelsList extends Component {
 
     return (<>
 
-      <Card>
-        <Card.Header
-          variant="outline-primary"
-          onClick={ () => {this.setState((state) => {return { labelsListOpen: !state.labelsListOpen };});} }>
-          <Nav justify variant="pills">
-            <Nav.Item>
-              <FontAwesomeIcon icon={ faTags } />  <FontAwesomeIcon icon={ faSlidersH } />  Labels
-            </Nav.Item>
-            <Nav.Item>
-              <FontAwesomeIcon icon={ this.state.labelsListOpen ? faAngleDown : faAngleUp } />
-            </Nav.Item>
-          </Nav>
-        </Card.Header>
-        {this.state.labelsListOpen ? <> { labelsList }
+      {this.props.isLabelsListOpen ? <>
+        <br/>
+        <Card>
+          <Card.Header>
+            <FontAwesomeIcon icon={ faTag } />
+            <FontAwesomeIcon icon={ faCog } /> Labels Options
+          </Card.Header>
+          { labelsList }
           <Card.Footer className="text-muted">
             <LabelModal
               color={ randomColor() }
@@ -156,10 +146,12 @@ class LabelsList extends Component {
               labelId={ null }
               show={ this.state.isLabelmodalShown }
               onLabelSaved={ this.onLabelSaved }
-              openBtn={ <span>Create New Label <FontAwesomeIcon icon={ faTag } />{' '}</span> }
+              openBtn={ <Button variant="outline-secondary" block><FontAwesomeIcon icon={ faTag } /> Create New Label</Button> }
             />
-          </Card.Footer> </> : ''}
-      </Card>
+          </Card.Footer>
+        </Card>
+      </> : ''}
+
     </>
     );
   }

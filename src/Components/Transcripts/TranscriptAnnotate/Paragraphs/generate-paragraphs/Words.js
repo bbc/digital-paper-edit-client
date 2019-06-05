@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import removePunctuation from '../../../../../Util/remove-punctuation/index.js';
 class Words extends Component {
   render() {
+    const { transcriptId, speaker } = this.props;
+    // console.log('this.props.paragraph', this.props.transcriptId);
     const result = this.props.paragraph.map(word => {
       return (
         <span
@@ -15,6 +17,8 @@ class Words extends Component {
           data-text={ removePunctuation(word.text) }
           // data-text={ word.text }
           data-end={ word.end }
+          data-transcript-id={ transcriptId }
+          data-speaker={ speaker }
           key={ 'key_' + word.id + '_' + word.end }
           // tabIndex="0"
           role="button"

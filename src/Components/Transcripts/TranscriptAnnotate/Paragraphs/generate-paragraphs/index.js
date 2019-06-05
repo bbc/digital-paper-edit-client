@@ -12,7 +12,7 @@ import computeParagraphDisplayPreference from './compute-paragraph-display-prefe
 function generateParagraphs(props) {
   let wordsElements;
   let paragraphDisplayPreference = {};
-  const { annotations } = props;
+  const { annotations, transcriptId } = props;
 
   /**
    *  Group words into paragraphs
@@ -40,7 +40,7 @@ function generateParagraphs(props) {
      * findAnnotationInParagraph returns false if it doesn't find any
      */
     const annotation = findAnnotationInParagraph(annotations, paragraph.words);
-    console.log('annotation', annotation);
+    // console.log('annotation', annotation);
     const isTextSearch = paragraphTextWithoutPunctuation.includes(props.searchString.toLowerCase());
 
     let isSpeakerSearch = false;
@@ -82,6 +82,8 @@ function generateParagraphs(props) {
 
       const wordsBeforeEl = wordsBefore ? (
         <Words
+          transcriptId={ transcriptId }
+          speaker={ paragraph.speaker }
           key={ 'key-' + index }
           paragraph={ wordsBefore }
           handleKeyDownWords={ e => {
@@ -92,6 +94,8 @@ function generateParagraphs(props) {
 
       const wordsInAnnotationEl = (
         <Words
+          transcriptId={ transcriptId }
+          speaker={ paragraph.speaker }
           key={ 'key--' + index }
           paragraph={ wordsInAnnotation }
           handleKeyDownWords={ e => {
@@ -102,6 +106,8 @@ function generateParagraphs(props) {
 
       const wordsAfterEl = wordsAfter ? (
         <Words
+          transcriptId={ transcriptId }
+          speaker={ paragraph.speaker }
           key={ 'key---' + index }
           paragraph={ wordsAfter }
           handleKeyDownWords={ e => {
@@ -130,6 +136,8 @@ function generateParagraphs(props) {
        */
       wordsElements = (
         <Words
+          transcriptId={ transcriptId }
+          speaker={ paragraph.speaker }
           key={ 'key-----' + index }
           // TODO: rename to wordsInParagraph? or ListOfWords?
           paragraph={ paragraph.words }

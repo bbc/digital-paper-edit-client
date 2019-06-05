@@ -29,9 +29,7 @@ class ApiWrapper {
   /**
    * Projects
    */
-
   async getAllProjects() {
-    console.log(this.projectsUrl);
     const res = await corsFetch(this.projectsUrl);
     const json = await res.json();
 
@@ -68,7 +66,6 @@ class ApiWrapper {
   /**
    * Transcripts
    */
-
   async getTranscripts(projectId) {
     const res = await corsFetch(this.transcriptsUrl(projectId));
     const json = await res.json();
@@ -79,13 +76,18 @@ class ApiWrapper {
   async createTranscript(projectId, data) {
     const res = await corsFetch(this.transcriptsUrl(projectId), 'POST', data);
     const json = await res.json();
-    console.log('createTranscript json', json);
 
     return json;
   }
   async getTranscript(projectId, transcriptId, queryParamsOptions) {
     const res = await corsFetch(this.transcriptsIdUrl(projectId, transcriptId, queryParamsOptions));
     const json = await res.json();
+    // get project title
+    const resProject = await this.getProject(projectId);
+    // console.log('resProject', resProject.project.title, json);
+    json.projectTitle = resProject.project.title;
+    json.transcriptTitle = json.title;
+    delete json.title;
 
     return json;
   }
@@ -186,10 +188,8 @@ class ApiWrapper {
    * PaperEdits
    */
   async getAllPaperEdits(projectId) {
-    console.log(this.paperEditsUrl(projectId));
     const res = await corsFetch(this.paperEditsUrl(projectId));
     const json = await res.json();
-    console.log(json);
 
     return json.paperedits;
   }
@@ -235,7 +235,8 @@ class ApiWrapper {
 
     // Combine results
     const results = {
-      // TODO: add a call to project to get title
+      transcriptId: transcriptId,
+      projectId: projectId,
       projectTitle: transcriptResult.projectTitle,
       transcriptTitle: transcriptResult.transcriptTitle,
       url: transcriptResult.url,
@@ -254,20 +255,56 @@ class ApiWrapper {
     const transcriptsResult = await this.getTranscripts(projectId);
     // use that list of ids to loop through and get json payload for each individual transcript
     // as separate request
+
+    // TODO: also add annotations for each Transcripts
     const transcriptsJson = await Promise.all(transcriptsResult.transcripts.map((transcript) => {
-      return this.getTranscript(projectId, transcript.id);
+      // const annotations = this.getAllAnnotations(projectId, transcript.id);
+      const transcriptTmp = this.getTranscript(projectId, transcript.id);
+      // transcriptTmp.annotations = annotations;
+
+      return transcriptTmp;
     }));
+
+    const annotationsJson = await Promise.all(transcriptsResult.transcripts.map((transcript) => {
+      const annotations = this.getAllAnnotations(projectId, transcript.id);
+
+      return annotations;
+    }));
+
+    // add annotations to transcript
+    transcriptsJson.forEach((tr) => {
+      // get annotations for transcript
+      const currentAnnotationsSet = annotationsJson.find((a) => {
+
+        return a.transcriptId === tr.id;
+      });
+      // if there are annotations for this transcript add them to it
+      if (currentAnnotationsSet) {
+        tr.annotations = currentAnnotationsSet.annotations;
+
+        return;
+      }
+      else {
+        tr.annotations = [];
+      }
+    });
+    console.log('ApiWrapper transcriptsJson', transcriptsJson);
 
     // getting program script for paperEdit
     const paperEditResult = await this.getPaperEdit(projectId, papereditId);
     // getting project info - eg to get tile and description
     const projectResult = await this.getProject(projectId);
-
+    // Get labels
+    const labelsResults = await this.getAllLabels(projectId);
+    // package results
     const results = {
       programmeScript: paperEditResult.programmeScript,
       project: projectResult.project,
-      transcripts: transcriptsJson
+      // each transcript contains its annotations
+      transcripts: transcriptsJson,
+      labels: labelsResults.labels
     };
+    console.log('ApiWrapper - results', results);
 
     return results;
   }

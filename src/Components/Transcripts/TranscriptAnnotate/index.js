@@ -10,7 +10,10 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faHighlighter } from '@fortawesome/free-solid-svg-icons';
+  faHighlighter,
+  faTag,
+  faCog
+} from '@fortawesome/free-solid-svg-icons';
 
 import MediaPlayer from '@bbc/react-transcript-editor/MediaPlayer';
 import VideoPlayer from '@bbc/react-transcript-editor/VideoPlayer';
@@ -86,7 +89,8 @@ class TranscriptAnnotate extends Component {
       notification: null,
       annotations: [],
       labelsOptions: [],
-      speakersOptions : [ ]
+      speakersOptions : [ ],
+      isLabelsListOpen: false
     };
   }
 
@@ -94,6 +98,7 @@ class TranscriptAnnotate extends Component {
     ApiWrapper.get_TranscriptLabelsAnnotations(this.state.projectId, this.state.transcriptId)
       // TODO: add error handling
       .then(json => {
+        console.log('TranscriptAnnotate', json.transcriptId);
         this.setState({
           projectTitle: json.projectTitle,
           transcriptJson: json.transcript,
@@ -280,8 +285,6 @@ class TranscriptAnnotate extends Component {
     }
 
   }
-
-  // TODO: add server side via ApiWrapper
   handleDeleteAnnotation = (annotationId) => {
     const { annotations } = this.state;
     const newAnnotationsSet = annotations.filter((annotation) => {
@@ -331,6 +334,14 @@ class TranscriptAnnotate extends Component {
   handleSpeakersSearchChange = (selectedOptionSpeakerSearch) => {
     this.setState({
       selectedOptionSpeakerSearch
+    });
+  }
+
+  handleLabelListOpen = () => {
+    this.setState((state) => {
+      return {
+        isLabelsListOpen: !state.isLabelsListOpen
+      };
     });
   }
 
@@ -416,36 +427,54 @@ class TranscriptAnnotate extends Component {
                 onLoadedDataGetDuration={ this.onLoadedDataGetDuration }
               />
             )}
-
-            <LabelsList
-              labelsOptions={ this.state.labelsOptions && this.state.labelsOptions }
-              onLabelUpdate={ this.onLabelUpdate }
-              onLabelCreate={ this.onLabelCreate }
-              onLabelDelete={ this.onLabelDelete }
-            />
-
-            <br/>
-            <Dropdown as={ ButtonGroup } style={ { width: '100%' } } >
-              <Button variant="warning" id="defaultHighlightBtn" data-label-id={ 0 } onClick={ this.handleCreateAnnotation } > Highlight <FontAwesomeIcon icon={ faHighlighter } /></Button>
-              <Dropdown.Toggle split variant="warning" id="dropdown-split-basic" data-lable-id={ 0 }/>
-              <Dropdown.Menu onClick={ this.handleCreateAnnotation }>
-                {this.state.labelsOptions && this.state.labelsOptions.map((label) => {
-                  return (
-                    <Dropdown.Item key={ `label_id_${ label.id }` } data-label-id={ label.id } >
-                      <Row data-label-id={ label.id }>
-                        <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } style={ { backgroundColor: label.color } } data-label-id={ label.id }></Col>
-                        <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } data-label-id={ label.id }>{label.label}</Col>
-                      </Row>
-                    </Dropdown.Item>
-                  );
-                })}
-              </Dropdown.Menu>
-            </Dropdown>
-
-            <Form.Text className="text-muted">
+            <Row>
+              <Col xs={ 9 } sm={ 9 } md={ 8 } lg={ 9 } xl={ 9 }>
+                <Dropdown as={ ButtonGroup } style={ { width: '100%' } } >
+                  <Button variant="warning" id="defaultHighlightBtn" data-label-id={ 0 } onClick={ this.handleCreateAnnotation } ><FontAwesomeIcon icon={ faHighlighter } flip="horizontal"/> Highlight</Button>
+                  <Dropdown.Toggle split variant="warning" id="dropdown-split-basic" data-lable-id={ 0 }/>
+                  <Dropdown.Menu onClick={ this.handleCreateAnnotation }>
+                    {this.state.labelsOptions && this.state.labelsOptions.map((label) => {
+                      return (
+                        <Dropdown.Item key={ `label_id_${ label.id }` } data-label-id={ label.id } >
+                          <Row data-label-id={ label.id }>
+                            <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } style={ { backgroundColor: label.color } } data-label-id={ label.id }></Col>
+                            <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } data-label-id={ label.id }>{label.label}</Col>
+                          </Row>
+                        </Dropdown.Item>
+                      );
+                    })}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Col>
+              <Col xs={ 3 } sm={ 3 } md={ 4 } lg={ 3 } xl={ 3 }>
+                <Button
+                  variant="outline-secondary"
+                  block
+                  onClick={ this.handleLabelListOpen }
+                  title={ 'View labels options' }><FontAwesomeIcon icon={ faTag } /><FontAwesomeIcon icon={ faCog } />
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={ 12 } sm={ 12 } md={ 12 } lg={ 12 } xl={ 12 }>
+                <Form.Text className="text-muted">
             Select some text in the transcript then click the highlight button.
-              <br/>You can choose btween default or custom labels to categorise your annotations.
-            </Form.Text>
+                  <br/>You can choose btween default or custom labels to categorise your annotations.
+                </Form.Text>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={ 12 } sm={ 12 } md={ 12 } lg={ 12 } xl={ 12 }>
+                <LabelsList
+                  isLabelsListOpen={ this.state.isLabelsListOpen }
+                  labelsOptions={ this.state.labelsOptions && this.state.labelsOptions }
+                  onLabelUpdate={ this.onLabelUpdate }
+                  onLabelCreate={ this.onLabelCreate }
+                  onLabelDelete={ this.onLabelDelete }
+                />
+              </Col>
+            </Row>
+            <br/>
 
           </Col>
           <Col xs={ 12 } sm={ 9 } md={ 9 } lg={ 9 } xl={ 9 }>
@@ -474,6 +503,7 @@ class TranscriptAnnotate extends Component {
                   showParagraphsMatchingSearch={ this.state.showParagraphsMatchingSearch }
                   selectedOptionLabelSearch={ this.state.selectedOptionLabelSearch }
                   selectedOptionSpeakerSearch={ this.state.selectedOptionSpeakerSearch }
+                  transcriptId={ this.state.transcriptId }
                   handleTimecodeClick={ this.handleTimecodeClick }
                   handleWordClick={ this.handleWordClick }
                   handleDeleteAnnotation={ this.handleDeleteAnnotation }

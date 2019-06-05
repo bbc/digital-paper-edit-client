@@ -33,8 +33,8 @@ class PaperCutsPlayerViewer extends React.PureComponent {
   }
 
   loadPlaylist = () => {
-    this.playlist.forEach(({ type, offset, start, duration, src }) => {
-      const node = this.videoContext[type](src, offset);
+    this.playlist.forEach(({ type, sourceStart, start, duration, src }) => {
+      const node = this.videoContext[type](src, sourceStart);
       node.startAt(start);
       node.stopAt(start + duration);
       node.connect(this.videoContext.destination);

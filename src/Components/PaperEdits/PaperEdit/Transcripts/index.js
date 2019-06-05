@@ -3,6 +3,11 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faClock,
+  faExclamationTriangle
+} from '@fortawesome/free-solid-svg-icons';
 
 import Transcript from './Transcript.js';
 
@@ -10,19 +15,32 @@ class Transcripts extends Component {
 
   // eslint-disable-next-line class-methods-use-this
   render() {
+    console.log(',this.props Transcripts SS', this.props);
     const transcriptsElNav = this.props.transcripts.map((transcript, index) => {
       return (
-        <Nav.Item key={ index }>
-          <Nav.Link eventKey={ index } title={ transcript.transcriptTitle }>{transcript.transcriptTitle}</Nav.Link>
+        <Nav.Item key={ transcript.id }>
+
+          <Nav.Link
+            disabled={ transcript.status !== 'done' ? true : false }
+            // title={ transcript.status !== 'done' ? transcript.status : transcript.title }
+            eventKey={ transcript.id }
+          >
+            { transcript.status === 'in-progress' ? <FontAwesomeIcon icon={ faClock }/> : '' }
+            { transcript.status === 'error' ? <FontAwesomeIcon icon={ faExclamationTriangle }/> : '' }
+            { `  ${ transcript.transcriptTitle }` }
+          </Nav.Link>
         </Nav.Item>
       );
     });
     const transcriptsElTab = this.props.transcripts.map((transcript, index) => {
       return (
-        <Tab.Pane eventKey={ index } >
+        <Tab.Pane key={ transcript.id } eventKey={ transcript.id } >
           <Transcript
+            labelsOptions={ this.props.labelsOptions }
             title={ transcript.transcriptTitle }
             transcript={ transcript.transcript }
+            transcriptId={ transcript.id }
+            annotations={ transcript.annotations }
             url={ transcript.url }
           />
         </Tab.Pane>
@@ -31,34 +49,25 @@ class Transcripts extends Component {
 
     return (
       <>
-        <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+        <Tab.Container
+          defaultActiveKey={ this.props.transcripts[0] ? this.props.transcripts[0].id : 'first' }
+        >
           <Row>
-            <Col sm={ 3 }
-              // style={ { display:'none' } }
-            >
+            <Col sm={ 3 }>
               <h2>Transcripts</h2>
               <hr/>
               <Nav variant="pills" className="flex-column">
                 {transcriptsElNav}
               </Nav>
             </Col>
-            <Col sm={ 9 }
-              // onClick={ (e) => {console.log('onClick', e);} }
-            >
+            <Col sm={ 9 }>
               <Tab.Content>
-                <h2>Search</h2>
-                <hr/>
                 {transcriptsElTab}
-                <Tab.Pane eventKey="first" >
-                  <Transcript />
-                </Tab.Pane>
-                <Tab.Pane eventKey="second">
-                  <Transcript />
-                </Tab.Pane>
               </Tab.Content>
             </Col>
           </Row>
         </Tab.Container>
+
       </>
     );
   }
