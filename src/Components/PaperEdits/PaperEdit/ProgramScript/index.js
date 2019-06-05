@@ -10,7 +10,6 @@ import ProgrammeScript from './ProgrammeScript.js';
 import getDataFromUserWordsSelection from './get-data-from-user-selection.js';
 import ApiWrapper from '../../../../ApiWrapper/index.js';
 
-
 class ProgramScript extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +17,7 @@ class ProgramScript extends Component {
       programmeScript: null,
       resetPreview: false,
       // demo content
-     playlist:[
+      playlist:[
         // start - is relative to timeline
         // duration - of clip in playlist
         // sourceStart - time from start of clip in playlist
@@ -80,19 +79,23 @@ class ProgramScript extends Component {
     const programmeScriptPaperCuts = this.state.programmeScript.elements.map((element) => {
       if (element.type === 'paper-cut') {
         // Get clipName for current transcript
-        const currentTranscript = this.props.transcripts.find((tr)=>{
+        const currentTranscript = this.props.transcripts.find((tr) => {
           return tr.id === element.transcriptId;
-        })
+        });
 
-        return {
+        const result = {
           startTime: element.start,
           endTime: element.end,
           reelName: 'NA',
           clipName: `${ currentTranscript.clipName }`,
           fps: 25
         };
+
+        return result;
       }
-    }).filter((el) => {return el !== undefined;});
+
+      return null;
+    }).filter((el) => {return el !== null;});
     // adding ids to EDL
     const programmeScriptPaperCutsWithId = programmeScriptPaperCuts.map((el, index) => {
       el.id = index + 1;
@@ -102,49 +105,52 @@ class ProgramScript extends Component {
     edlSq.events.push(...programmeScriptPaperCutsWithId);
     const edl = new EDL(edlSq);
     console.log(edl.compose());
-    downloadjs(edl.compose(), `${this.state.programmeScript.title}.edl`, "text/plain");
+    downloadjs(edl.compose(), `${ this.state.programmeScript.title }.edl`, 'text/plain');
   }
 
-  handleUpdatePreview = () =>{
+  handleUpdatePreview = () => {
     let timelineStartTime = 0;
-  //  const { playlist } = this.state;
+    //  const { playlist } = this.state;
     // { type:'video', start:0, sourceStart: 30, duration:10, src:'https://download.ted.com/talks/MorganVague_2018X.mp4' },
     const playlist = this.state.programmeScript.elements.map((element) => {
       if (element.type === 'paper-cut') {
         // Get clipName for current transcript
-        const currentTranscript = this.props.transcripts.find((tr)=>{
+        const currentTranscript = this.props.transcripts.find((tr) => {
           return tr.id === element.transcriptId;
-        })
-        const duration =  element.end - element.start;
+        });
+        const duration = element.end - element.start;
         // TODO: handle audio only type (eg for radio), get from transcript json?
-        const result = { 
+        const result = {
           type:'video',
-          start: timelineStartTime, 
+          start: timelineStartTime,
           sourceStart: element.start,
           duration: duration,
           src: currentTranscript.url
         };
 
         timelineStartTime += duration;
+
         return result;
       }
-    }).filter((el) => {return el !== undefined;});
+
+      return null;
+    }).filter((el) => {return el !== null;});
 
     // Workaround to mound and unmoun the `PreviewCanvas` component
     // to update the playlist
     this.setState({
       resetPreview: true
-    }, () =>{
-      console.log('handleUpdatePreview',playlist)
+    }, () => {
+      console.log('handleUpdatePreview', playlist);
       this.setState({
         resetPreview: false,
         playlist: playlist
-      })
-    })
-    console.log('handleUpdatePreview',playlist)
+      });
+    });
+    console.log('handleUpdatePreview', playlist);
     this.setState({
       playlist: playlist
-    })
+    });
   }
 
   render() {
@@ -154,9 +160,9 @@ class ProgramScript extends Component {
           {this.state.programmeScript ? this.state.programmeScript.title : ''}
         </small></h2>
         {/* <hr/> */}
-        { !this.state.resetPreview? 
-        <PreviewCanvas playlist={ this.state.playlist } width={ '300' }/> 
-        : null }
+        { !this.state.resetPreview ?
+          <PreviewCanvas playlist={ this.state.playlist } width={ '300' }/>
+          : null }
         <br/>
         <Button variant="outline-secondary"
           onClick={ this.handleAddTranscriptSelectionToProgrammeScript }
