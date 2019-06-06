@@ -30,6 +30,30 @@ See [modular architecture section](./docs/guides/modular-architecture.md) for mo
 
 The projects use [npm semantic versioning](https://docs.npmjs.com/about-semantic-versioning)
 
+## Project boards
+
+Between the 5th of June and 17th of July, there is a sprint board used for organising the backlog for each two weeks sprint cycle.
+
+- [BBC News Labs - Digital Paper Edit - Sprint Board](https://github.com/orgs/bbc/projects/33) is a github project board [with linked repository](https://help.github.com/en/articles/linking-a-repository-to-a-project-board) where issues are added from the relevant repository listed in architecture section.
+
+The project is divided into [concurrent milestones as described here](https://github.com/bbc/digital-paper-edit-client/milestones)
+
+And there are [github project board for each milestone](https://github.com/bbc/digital-paper-edit-client/projects)
+
+- [1 - Transcript - Editing](https://github.com/bbc/digital-paper-edit-client/projects/2)
+- [2 - Transcript - Annotating](https://github.com/bbc/digital-paper-edit-client/projects/3)
+- [3 - Paper-editing](https://github.com/bbc/digital-paper-edit-client/projects/4)
+
+With UX being an overarching thing that cuts across these different parts
+- [UX](https://github.com/bbc/digital-paper-edit-client/projects/1)
+
+
+## UX
+
+As a side note on UX the project follows Lean UX as explained in the Lean UX book, see this extract from [`Collaborative Design in Practice` chapter in Lean UX](https://www.oreilly.com/library/view/lean-ux/9781449366834/ch04.html) for an explanation
+
+>In 2010, I was designing a dashboard for a web app targeted at TheLadders’ recruiter and employer audience. There was a lot of information to fit on one screen and I was struggling to make it all work. Instead of burning too much time at my desk pushing pixels, I grabbed a whiteboard and called the lead developer over. I sketched my original idea about how to lay out all the content and functionality for this dashboard. We discussed it and then I handed him the marker. He sketched his ideas on the same whiteboard. We went back and forth, ultimately converging on a layout and interac- tion schema that was not only usable but feasible given our two-week sprint timeframes (see Figure 4-2). At the end of that two-hour session, we returned to our desks and started working. I refined our sketch into a more formal wireframe and workflow and he began to write the infrastructure code necessary to get the data we needed to the presentation layer.
+> We had built a shared understanding through our collaborative design ses- sion. We both knew what we were going to build and what it needed to do. We didn’t need to wait to document it. This approach allowed us to get the first version of this idea built within our two-week timeframe.
 
 ## Setup
 
