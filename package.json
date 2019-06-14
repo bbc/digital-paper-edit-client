@@ -33,7 +33,7 @@
   "bugs": {
     "url": "https://github.com/bbc/digital-paper-edit-client/issues"
   },
-  "homepage": ".",
+  "homepage": "./",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bbc/digital-paper-edit-client.git"
