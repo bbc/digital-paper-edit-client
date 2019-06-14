@@ -1,8 +1,8 @@
 # Modular Architecture (breaking down repositories and packages)
 
 * Status: accepted
-* Deciders: Pietro, Eimi, Dan (Data solutions)
-* Date: 2019-05-10
+* Deciders: Pietro, Eimi, Dan (Data solutions), James, Alli
+* Date: 2019-06-13
 
 Technical Story: Exploring a better way to organise the project than in a monorepo.
 
@@ -26,72 +26,79 @@ There are 3 logically separated packages:
 
 * Option 1 - bundle everything (UI, API, Infra) into an RPM.
 * Option 2 - separate the UI to a new github repository, bundle it as an NPM package. Keep infrastructure in the same repository as API. API will pull in UI as a dependency.
-* Option 3 - separate the UI, API and infrastructure. Bundle UI and API separately as NPM packages  Infrastructure will have UI and API packages as dependencies.
-
+* Option 3 - separate the UI, API and infrastructure. Bundle UI and API separately as NPM packages. Infrastructure will have UI and API packages as dependencies.
+* Option 4 - separate the UI, API and infrastructure. Bundle only UI as NPM package, and API will be bundled as RPM. Infrastructure repo will have UI as a dependency.
 
 ## Decision Outcome
 
-We selected Option 3.
+We opted for Option 4 after another iteration of the architectual flow.
+Initially we went for option 3 because we wanted to have a uniform approach for possible future users.
+However, after much consideration, we collectively agreed to remove NPM packaging for the API (and the microservices).
+
+Similarly to option 3, we are still keeping the AWS stacks separate in the infrastructure repository.
+We will be using Travis CI for the NPM build.
+We will be using Jenkins (not publicly accessible) for the RPM build and releasing to Cosmos.
+We will be using Speculate, which is an open-source BBC project to generate SPEC files, which adds little overhead in the projects.
+We will not automate the release of NPM, but as a manual step which also does testing.
+We will retain the public state of each repository and not be concerned with "ready" state of our repositories.
+
+### Why move out API from NPM? (Cons)
+* Unknown benefits to external person
+* Using NPM for versioning (this can be done through other means)
+* Possibly atypical use of NPM (although this is inconclusive)
+
+They can fork the repository to try out the services.
+
+### Reasons for option 3 initially
 There is a separation to all the packages, which means it will be simpler to version, test and contribute to individual packages. The API repository will contain different infrastructural flavours of the business logic. There will be a browser (Cloud) package, CEP package, and Electron package that does the same thing. Each is compatible with the UI. To package these similar packages, we can look at `lerna`. The browser flavoured package will have another Express server in the repository to simplify local testing. Infrastructure, which will have UI and API as dependencies will not have an Express server inside.
 
 A potential problem here is that during development, the packages will have features not implemented in the other packages. In order to have parallel set of features, we will add BDD tests to automatically test that all the packages have the same features which are functional.
 
 We are also keeping the AWS Infrastructure public, as the generic cloudformation JSON has no confidential or security issues in it.
 
+#### Why release API in NPM? (Pros)
+* Abstraction
+* Clear separation of concerns (RPM)
+* Simpler to set up for external people (???)
 
-### Deployment flow
+### RPM deployment flow
 
 ```
-Infrastructure Repo
-+------------------------------+
-|                              |            +-----------+         +---------+           +------------+
-| * Dependency to UI and API   |            |           |         |         |           |            |
-| * AWS/Cosmos specific        +----------->+  Jenkins  +-------->+   RPM   +---------->+   Cosmos   |
-|   configuration files        |            |           |         |         |           |            |
-|                              |            +-----------+         +--+---+--+           +------------+
-+------------------------------+                                     |   |
-                                                                     |   |
-                                                                     |   |
-    UI Repo                                                          |   | pull
-    +-------------------+                                            |   |
-    |                   |                                            |   |
-    | * React App       +----------------------+                     |   |
-    | * Express Server  |                      v          push       v   v
-    |                   |                 +----+------+           +--+---+--+
-    +-------------------+                 |           +---------->+         |
-                                          |  Jenkins  |           |   NPM   |
-                                          |           +---------->+         |
-    API Repo                              +-----+-----+           +---------+
-    +--------------------+                      ^
-    |                    |                      |
-    | * Express Server   +----------------------+
-    |                    |
-    +--------------------+
++-------------------------+
+| Infrastructure          |           +----------------+
+|                         |           |                |      +-------+
+| /api                    |           |                |      |       |
+| /client                 +---------->+    Jenkins     +----->+  RPM  |
+| - speculate (SPEC gen)  |           |                |      |       |
+| /... microservices      |           |                |      +-------+
+|                         |           +----+------+----+
++-------------------------+                ^      |
+                                           |      |
+                                           |      |
++-------------------------+                |      |
+| API                     |                |      |    Pulls client from NPM
+|                         |                |      |    when creating RPM for client
+| package.json            +----------------+      +--------------+
+| - speculate (SPEC gen)  |                                      |
+|                         |                                      |
++-------------------------+                                      |
+                                                                 |
+                                                                 |
++-------------------------+        +-----------------+           v
+| Client                  |        |                 |       +---+---+
+|                         |        |                 |       |       |
+|                         +------->+    Travis CI    +------>+  NPM  |
+|                         |        |                 |       |       |
+|                         |        |                 |       +-------+
++-------------------------+        +-----------------+
+
 http://asciiflow.com/
-
-
 ```
 
-### Once deployed
-There will be *two* express servers in an EC2 instance.
-```
-              EC2
-              +-----------------------------------+
-              | +------------+     +------------+ |
-              | | Express    |     | Express    | |
-              | |  +------+  |     |            | |
-              | |  |      |  |     |            | |
-User+------------->+React |  +---->+    API     +-------->...
-              | |  |UI    |  |     |   Server   | |
-              | |  |      |  |     |            | |
-              | |  +------+  |     |            | |
-              | |            |     |            | |
-              | +------------+     +------------+ |
-              +-----------------------------------+
+Jenkins will then be used to deploy the RPMs to each BBC Cosmos project.
 
-```
 ### Repo naming conventions
-Prefix can be `digital-paper-edit` or `rough-cut-pro` pending name changes
+Prefix will be `digital-paper-edit`:
 
 - client: `-client`
 - server: `-api`
