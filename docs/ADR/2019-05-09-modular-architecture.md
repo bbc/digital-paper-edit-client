@@ -96,6 +96,24 @@ http://asciiflow.com/
 ```
 
 Jenkins will then be used to deploy the RPMs to each BBC Cosmos project.
+Once deployed, this will be two separate EC2 instances.
+```
++---------------------------+           +-----------------------------+
+|Client                     |           |API                          |
+|   +-------------------+   |           |   +---------------------+   |
+|   |Express            |   |           |   |Express              |   |
+|   | +---------------+ |   |           |   |                     |   |
+|   | |NPM package    | |   |           |   |                     |   |
+|   | |with static    | |   |           |   |                     |   |
+|   | |files of Client| |   +---------->+   |                     |   +--------->...
+|   | |               | |   |           |   |                     |   |
+|   | |               | |   |           |   |                     |   |
+|   | +---------------+ |   |           |   |                     |   |
+|   |                   |   |           |   |                     |   |
+|   +-------------------+   |           |   +---------------------+   |
+|                           |           |                             |
++---------------------------+           +-----------------------------+
+```
 
 ### Repo naming conventions
 Prefix will be `digital-paper-edit`:
