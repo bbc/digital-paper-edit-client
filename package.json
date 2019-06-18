@@ -41,9 +41,9 @@
   },
   "license": "MIT",
   "scripts": {
+    "start": "node server.js",
     "start:dev": "cross-env REACT_APP_NODE_ENV=development react-scripts start",
     "start:demo": "cross-env REACT_APP_NODE_ENV=demo react-scripts start",
-    "start": "cross-env NODE_ENV=$environment node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -69,6 +69,14 @@
   "spec": {
     "requires": [
       "cloud-httpd24-ssl-services-devs-staff"
+    ],
+    "executable": [
+      "./bake-scripts/*"
+    ],
+    "post": [
+      "mkdir -p /etc/bake-scripts/digital-paper-edit-client",
+      "cp -rf /usr/lib/digital-paper-edit-client/bake-scripts/* /etc/bake-scripts/digital-paper-edit-client/",
+      "./scripts/create-service-config.py"
     ]
   },
   "private": true
