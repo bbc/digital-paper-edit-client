@@ -76,7 +76,7 @@
     "post": [
       "mkdir -p /etc/bake-scripts/digital-paper-edit-client",
       "cp -rf /usr/lib/digital-paper-edit-client/bake-scripts/* /etc/bake-scripts/digital-paper-edit-client/",
-      "./scripts/create-service-config.py"
+      "./scripts/environment-config.py"
     ]
   },
   "private": true

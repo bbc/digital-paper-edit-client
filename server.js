@@ -2,7 +2,7 @@ const path = require('path');
 const express = require('express');
 
 const ENV = process.env.NODE_ENV || 'dev';
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 const app = express();
 
