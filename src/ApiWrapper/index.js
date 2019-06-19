@@ -2,7 +2,7 @@ import querystring from 'querystring';
 import corsFetch from './cors_wrapper.js';
 
 class ApiWrapper {
-  baseUrl = process.env.REACT_APP_SERVER_URL;
+  baseUrl = window.env.API_URL;
 
   projectsUrl = `${ this.baseUrl }/api/projects`;
   projectsIdUrl = (projectId) => `${ this.projectsUrl }/${ projectId }`;
