@@ -113,3 +113,6 @@ packages/client/build/
 
 
 /build
+SPECS
+SOURCES
+*.service
