@@ -30,6 +30,7 @@ See [modular architecture section](./docs/guides/modular-architecture.md) for mo
 
 The projects use [npm semantic versioning](https://docs.npmjs.com/about-semantic-versioning)
 
+![](https://raw.githubusercontent.com/bbc/digital-paper-edit-infrastructure/master/docs/adr/newest_arch.png)
 
 ## Setup
 
