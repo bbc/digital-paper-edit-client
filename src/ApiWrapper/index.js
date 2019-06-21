@@ -2,7 +2,11 @@ import querystring from 'querystring';
 import corsFetch from './cors_wrapper.js';
 
 class ApiWrapper {
-  baseUrl = window.env.API_URL;
+  constructor() {
+    this.baseUrl = window.env.API_URL;
+
+    window.env.API_URL = null;
+  }
 
   projectsUrl = `${ this.baseUrl }/api/projects`;
   projectsIdUrl = (projectId) => `${ this.projectsUrl }/${ projectId }`;

@@ -18,6 +18,7 @@ const demoWarningMessage = (<p> This is Demo version of the app <Alert.Link href
 class App extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       transcriptJson: null
     };
