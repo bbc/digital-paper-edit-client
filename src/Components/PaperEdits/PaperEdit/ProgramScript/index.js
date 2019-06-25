@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import cuid from 'cuid';
 import Tab from 'react-bootstrap/Tab';
 import PreviewCanvas from './PreviewCanvas/index.js';
 import Button from 'react-bootstrap/Button';
 import EDL from 'edl_composer';
 import downloadjs from 'downloadjs';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faFileExport,
+  faRecycle,
+  faPlus
+} from '@fortawesome/free-solid-svg-icons';
+
 import ToolBar from './ToolBar';
 import ProgrammeScript from './ProgrammeScript.js';
 import getDataFromUserWordsSelection from './get-data-from-user-selection.js';
@@ -164,24 +173,52 @@ class ProgramScript extends Component {
           <PreviewCanvas playlist={ this.state.playlist } width={ '300' }/>
           : null }
         <br/>
-        <Button variant="outline-secondary"
-          onClick={ this.handleAddTranscriptSelectionToProgrammeScript }
-        >
-          Get selection
-        </Button>
-        <Button variant="outline-secondary"
-          onClick={ this.handleExportEDL }
-        >
-          Export EDL
-        </Button>
 
-        <Button variant="outline-secondary"
-          onClick={ this.handleUpdatePreview }
-        >
-         Update Preview
-        </Button>
+        <Row>
+          <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
+            <Button variant="outline-secondary"
+              onClick={ this.handleExportEDL }
+              size="sm"
+              block
+              title="export EDL, edit decision list, to import the programme script as a sequence in video editing software - Avid, Premiere, Davinci Resolve, for FCPX choose FCPX XML"
+            >
+              <FontAwesomeIcon icon={ faFileExport } /> EDL - Video
+            </Button>
+          </Col>
+          <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
+            <Button variant="outline-secondary"
+              onClick={ () => { alert('this function has not been implemented yet');} }
+              size="sm"
+              block
+              title="export EDL, edit decision list, to import the programme script as a sequence in audio editing software - TBC"
+            >
+              <FontAwesomeIcon icon={ faFileExport } /> EDL - Audio
+            </Button>
+          </Col>
+          <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
+            <Button variant="outline-secondary"
+              onClick={ () => { alert('this function has not been implemented yet');} }
+              size="sm"
+              block
+              title="export FCPX XML, to import the programme script as a sequence in Final Cut Pro X, video editing software"
+            >
+              <FontAwesomeIcon icon={ faFileExport } /> FCPX
+            </Button>
+          </Col>
+          <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
+            <Button variant="outline-secondary"
+              onClick={ this.handleUpdatePreview }
+              size="sm"
+              title="update preview"
+              block
+            >
+              <FontAwesomeIcon icon={ faRecycle } /> Preview
+            </Button>
+          </Col>
+        </Row>
         <br/>
-        <ToolBar />
+        <ToolBar
+          handleAddTranscriptSelectionToProgrammeScript={ this.handleAddTranscriptSelectionToProgrammeScript } />
         <hr/>
         <article style={ { height: '60vh', overflow: 'scroll' } }>
           <ProgrammeScript programmeScript={ this.state.programmeScript } />
