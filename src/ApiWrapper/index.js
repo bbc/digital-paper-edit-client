@@ -4,11 +4,10 @@ import corsFetch from './cors_wrapper.js';
 class ApiWrapper {
   constructor() {
     this.baseUrl = window.env.API_URL;
-
     window.env.API_URL = null;
-  }
 
-  projectsUrl = `${ this.baseUrl }/api/projects`;
+    this.projectsUrl = `${ this.baseUrl }/api/projects`;
+  }
   projectsIdUrl = (projectId) => `${ this.projectsUrl }/${ projectId }`;
 
   transcriptsUrl = (projectId) => `${ this.projectsIdUrl(projectId) }/transcripts`;
