@@ -32,10 +32,8 @@ class ApiWrapper {
    * Projects
    */
   async getAllProjects() {
-    console.log(this.projectsUrl);
     const res = await corsFetch(this.projectsUrl);
     const json = await res.json();
-    console.log('getAllProjects::', json);
 
     return json.projects;
   }
