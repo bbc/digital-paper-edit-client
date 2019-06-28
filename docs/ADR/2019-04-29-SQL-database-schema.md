@@ -20,10 +20,12 @@ Eg have 3 version of the schema for the 3 main milestones:
 
 [DB Designer](https://dbdesigner.page.link/cq9FMHVVxsYqTasf7) - let's you export SQL code to Create and drop tables.
 
+![DB schema v1](db-schema-v1.png)
 
 ## Decision Drivers <!-- optional -->
 
 * easy to reason around
+* easy to version and extend with subsequent migrations
 * … <!-- numbers of drivers can vary -->
 
 ## Considered Options
