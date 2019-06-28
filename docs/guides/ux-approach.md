@@ -1,4 +1,4 @@
-## UX Approach
+## UX Approach
 
 As a side note on UX the project follows Lean UX as explained in the Lean UX book, see this extract from [`Collaborative Design in Practice` chapter in Lean UX](https://www.oreilly.com/library/view/lean-ux/9781449366834/ch04.html) for an explanation
 
