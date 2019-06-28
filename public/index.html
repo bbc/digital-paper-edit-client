@@ -25,11 +25,15 @@
     <title>%REACT_APP_NAME%</title>
   </head>
   <body>
-   
+
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-
-   
+    <!--
+      Load "env.js" script before the main JavaScript bundle.
+      You can use it to define "runtime" environment variables.
+      Please open this file for more details.
+    -->
+    <script src="%PUBLIC_URL%/env.js"></script>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -40,13 +44,12 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  
   </body>
   <script>
     // Added after body as a workaround to override the window.DB defined inside React bundle
     // Modular Architecture workaround
     // If React front end used inside Electron, then use local API for DB and utils
-    // TODO: at later stage could consider modifying webpack config to output 
+    // TODO: at later stage could consider modifying webpack config to output
     // react bundle version for web and for electron
     if(window.process && window.process.versions.electron){
       window.DB = require(window.process.cwd()+'/db/db.js');

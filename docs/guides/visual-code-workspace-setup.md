@@ -95,3 +95,8 @@ You can also use the convinient `npm ScriptExplorer`
 
 [see here for more details](http://www.matthiassommer.it/programming/testing/run-npm-scripts-in-visual-studio-code-with-a-click-of-a-button/)
 
+
+## Visual Code Live Share - plugin - _optional_
+
+Optionally, if you are using Visual Code you can setup [live share](https://visualstudio.microsoft.com/services/live-share/) for pair programming.
+[See here for more details](https://docs.microsoft.com/en-us/visualstudio/liveshare/quickstart/share), and the [marketplace live share plugin](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare).

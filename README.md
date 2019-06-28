@@ -30,7 +30,8 @@ See [modular architecture section](./docs/guides/modular-architecture.md) for mo
 
 The projects use [npm semantic versioning](https://docs.npmjs.com/about-semantic-versioning)
 
-## Project boards
+![](https://raw.githubusercontent.com/bbc/digital-paper-edit-infrastructure/master/docs/adr/newest_arch.png)
+
 
 Between the 5 June and 17 July there is a sprint board used for organising the backlog for each two-week sprint cycle.
 
@@ -49,6 +50,7 @@ With UX being an overarching milestone that cuts across these different parts
 
 
 See [UX Approach](./docs/guides/ux-approach.md) in docs guides for more info.
+
 
 ## Setup
 

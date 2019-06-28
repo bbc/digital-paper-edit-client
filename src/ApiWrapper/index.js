@@ -2,10 +2,15 @@ import querystring from 'querystring';
 import corsFetch from './cors_wrapper.js';
 
 class ApiWrapper {
-  projectsUrl = `${ process.env.REACT_APP_SERVER_URL }/api/projects`
-  projectsIdUrl = (projectId) => `${ this.projectsUrl }/${ projectId }`;
-  transcriptsUrl = (projectId) => `${ this.projectsIdUrl(projectId) }/transcripts`;
+  constructor() {
+    this.baseUrl = window.env.API_URL;
+    window.env.API_URL = null;
 
+    this.projectsUrl = `${ this.baseUrl }/api/projects`;
+  }
+  projectsIdUrl = (projectId) => `${ this.projectsUrl }/${ projectId }`;
+
+  transcriptsUrl = (projectId) => `${ this.projectsIdUrl(projectId) }/transcripts`;
   transcriptsIdUrl = (projectId, transcriptId, queryParamsOptions) => {
     const queryParams = queryParamsOptions
       ? `?${ querystring.stringify(queryParamsOptions) }`
@@ -15,15 +20,12 @@ class ApiWrapper {
   };
 
   paperEditsUrl = (projectId) => `${ this.projectsIdUrl(projectId) }/paperedits`;
-
   paperEditsIdUrl = (projectId, paperEditId) => `${ this.projectsIdUrl(projectId) }/paperedits/${ paperEditId }`;
 
   annotationsUrl = (projectId, transcriptId) => `${ this.transcriptsIdUrl(projectId, transcriptId) }/annotations`;
-
   annotationsIdUrl = (projectId, transcriptId, annotationId) => `${ this.transcriptsIdUrl(projectId, transcriptId) }/annotations/${ annotationId }`;
 
   labelsUrl = (projectId) => `${ this.projectsIdUrl(projectId) }/labels`;
-
   labelsIdUrl = (projectId, labelsId) => `${ this.projectsIdUrl(projectId) }/labels/${ labelsId }`;
 
   /**
@@ -312,5 +314,7 @@ class ApiWrapper {
 
 // https://www.sitepoint.com/javascript-design-patterns-singleton/
 const apiWrapper = new ApiWrapper();
+
 Object.freeze(apiWrapper);
+
 export default apiWrapper;
