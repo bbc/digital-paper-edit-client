@@ -5,16 +5,22 @@ import cuid from 'cuid';
 import Tab from 'react-bootstrap/Tab';
 import PreviewCanvas from './PreviewCanvas/index.js';
 import Button from 'react-bootstrap/Button';
+import Dropdown from 'react-bootstrap/Dropdown';
 import EDL from 'edl_composer';
+import generateADL from '@bbc/aes31-adl-composer';
+import jsonToFCPX from '@bbc/fcpx-xml-composer';
 import downloadjs from 'downloadjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFileExport,
-  faRecycle,
-  faPlus
+  faMicrophoneAlt,
+  faStickyNote,
+  faHeading,
+  faPlus,
+  faSync,
+  faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
 
-import ToolBar from './ToolBar';
 import ProgrammeScript from './ProgrammeScript.js';
 import getDataFromUserWordsSelection from './get-data-from-user-selection.js';
 import ApiWrapper from '../../../../ApiWrapper/index.js';
@@ -77,9 +83,10 @@ class ProgramScript extends Component {
     }
   }
 
-  // https://www.npmjs.com/package/downloadjs
-  // https://www.npmjs.com/package/edl_composer
-  handleExportEDL = () => {
+  /**
+   * Helper function to create json EDL for other EDL/ADL/FPCX export
+   */
+  getSequenceJsonEDL = () => {
     const edlSq = {
       'title': this.state.programmeScript.title,
       'events': [ ]
@@ -112,9 +119,55 @@ class ProgramScript extends Component {
       return el;
     });
     edlSq.events.push(...programmeScriptPaperCutsWithId);
+
+    return edlSq;
+  }
+
+  // https://www.npmjs.com/package/downloadjs
+  // https://www.npmjs.com/package/edl_composer
+  handleExportEDL = () => {
+    const edlSq = this.getSequenceJsonEDL();
     const edl = new EDL(edlSq);
     console.log(edl.compose());
     downloadjs(edl.compose(), `${ this.state.programmeScript.title }.edl`, 'text/plain');
+  }
+
+  handleExportADL = () => {
+    // alert('this function has not been implemented yet');
+    const edlSq = this.getSequenceJsonEDL();
+    // const result = generateADL(edlSq);
+    const result = generateADL({
+      projectOriginator: 'Digital Paper Edit',
+      // TODO: it be good to change sequence for the ADL to be same schema
+      // as the one for EDL and FCPX - for now just adjusting
+      edits: edlSq.events.map((event) => {
+        return {
+          start: event.startTime,
+          end: event.endTime,
+          clipName: event.clipName,
+          // TODO: could add a label if present
+          label: ''
+        };
+      }),
+      // TODO: sampleRate should be pulled from the sequence
+      sampleRate: '44100',
+      // TODO: frameRate should be pulled from the sequence
+      frameRate: 25,
+      projectName: edlSq.title
+    });
+    downloadjs(result, `${ this.state.programmeScript.title }.adl`, 'text/plain');
+  }
+
+  handleExportFCPX = () => {
+    // alert('this function has not been implemented yet');
+    const edlSq = this.getSequenceJsonEDL();
+
+    const result = jsonToFCPX(edlSq);
+    downloadjs(result, `${ this.state.programmeScript.title }.fcpxml`, 'text/plain');
+  }
+
+  handleExportTxt = () => {
+    alert('this function has not been implemented yet');
   }
 
   handleUpdatePreview = () => {
@@ -174,51 +227,87 @@ class ProgramScript extends Component {
           : null }
         <br/>
 
-        <Row>
+        <Row noGutters>
           <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
-            <Button variant="outline-secondary"
-              onClick={ this.handleExportEDL }
-              size="sm"
-              block
-              title="export EDL, edit decision list, to import the programme script as a sequence in video editing software - Avid, Premiere, Davinci Resolve, for FCPX choose FCPX XML"
+            <Button
+              // block
+              variant="outline-secondary"
+              onClick={ this.handleAddTranscriptSelectionToProgrammeScript }
+              title="Add a text selection, select text in the transcript, then click this button to add it to the programme script"
             >
-              <FontAwesomeIcon icon={ faFileExport } /> EDL - Video
+              <FontAwesomeIcon icon={ faPlus } /> Selection
             </Button>
           </Col>
           <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
-            <Button variant="outline-secondary"
-              onClick={ () => { alert('this function has not been implemented yet');} }
-              size="sm"
-              block
-              title="export EDL, edit decision list, to import the programme script as a sequence in audio editing software - TBC"
-            >
-              <FontAwesomeIcon icon={ faFileExport } /> EDL - Audio
-            </Button>
-          </Col>
-          <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
-            <Button variant="outline-secondary"
-              onClick={ () => { alert('this function has not been implemented yet');} }
-              size="sm"
-              block
-              title="export FCPX XML, to import the programme script as a sequence in Final Cut Pro X, video editing software"
-            >
-              <FontAwesomeIcon icon={ faFileExport } /> FCPX
-            </Button>
+            <Dropdown block>
+              <Dropdown.Toggle variant="outline-secondary">
+                <FontAwesomeIcon icon={ faPlus } />
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                //
+                >
+                  <FontAwesomeIcon icon={ faHeading } /> Heading
+                </Dropdown.Item>
+                <Dropdown.Item
+                //
+                >
+                  <FontAwesomeIcon icon={ faMicrophoneAlt } /> Voice Over
+                </Dropdown.Item>
+                <Dropdown.Item
+                  //
+                >
+                  <FontAwesomeIcon icon={ faStickyNote } /> Note
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </Col>
           <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
             <Button variant="outline-secondary"
               onClick={ this.handleUpdatePreview }
-              size="sm"
+              // size="sm"
               title="update preview"
-              block
+              // block
             >
-              <FontAwesomeIcon icon={ faRecycle } /> Preview
+              <FontAwesomeIcon icon={ faSync } /> Preview
             </Button>
           </Col>
+          <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
+            <Dropdown>
+              <Dropdown.Toggle variant="outline-secondary">
+                <FontAwesomeIcon icon={ faFileExport } /> Export
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={ this.handleExportEDL }
+                  title="export EDL, edit decision list, to import the programme script as a sequence in video editing software - Avid, Premiere, Davinci Resolve, for FCPX choose FCPX XML"
+                >
+                    EDL - Video <FontAwesomeIcon icon={ faInfoCircle } />
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={ this.handleExportADL }
+                  title="export ADL, audio decision list, to import the programme script as a sequence in audio editing software such as SADiE"
+                >
+                  {/* <FontAwesomeIcon icon={ faFileExport } />  */}
+                  ADL - Audio  <FontAwesomeIcon icon={ faInfoCircle } />
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={ this.handleExportFCPX }
+                  title="export FCPX XML, to import the programme script as a sequence in Final Cut Pro X, video editing software"
+                >
+                  FCPX <FontAwesomeIcon icon={ faInfoCircle } />
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={ this.handleExportTxt }
+                  title="export Text, export the programme script as a text version"
+                >
+                  Text <FontAwesomeIcon icon={ faInfoCircle } />
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Col>
         </Row>
-        <br/>
-        <ToolBar
-          handleAddTranscriptSelectionToProgrammeScript={ this.handleAddTranscriptSelectionToProgrammeScript } />
         <hr/>
         <article style={ { height: '60vh', overflow: 'scroll' } }>
           <ProgrammeScript programmeScript={ this.state.programmeScript } />
