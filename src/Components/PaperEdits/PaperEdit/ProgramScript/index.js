@@ -53,6 +53,16 @@ class ProgramScript extends Component {
       });
   }
 
+  handleProgrammeScriptOrderChange = (list) => {
+    console.log('handleProgrammeScriptOrderChange', list);
+    this.setState(({ programmeScript }) => {
+      programmeScript.elements = list;
+
+      return {
+        programmeScript: programmeScript
+      };});
+  }
+
   // TODO: needs to handle when selection spans across multiple paragraphs
   handleAddTranscriptSelectionToProgrammeScript = () => {
     const result = getDataFromUserWordsSelection();
@@ -310,7 +320,10 @@ class ProgramScript extends Component {
         </Row>
         <hr/>
         <article style={ { height: '60vh', overflow: 'scroll' } }>
-          <ProgrammeScript programmeScript={ this.state.programmeScript } />
+          { this.state.programmeScript ? <ProgrammeScript
+            programmeScriptElements={ this.state.programmeScript.elements }
+            handleProgrammeScriptOrderChange={ this.handleProgrammeScriptOrderChange } />
+            : null }
         </article>
       </Tab.Content>
     );
