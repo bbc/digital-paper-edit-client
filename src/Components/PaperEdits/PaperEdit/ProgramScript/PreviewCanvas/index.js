@@ -52,9 +52,13 @@ class PreviewCanvas extends React.PureComponent {
           />
         </Row>
         <Row
-          className={ 'justify-content-center' }
-          style={ {
-            marginTop: '0.4em' } }
+          // noGutters
+          // className={ 'justify-content-center' }
+          style={
+            {
+              marginTop: '0.4em'
+            }
+          }
         >
           <VideoContextControls
             videoContext={ this.videoContext && this.videoContext }

@@ -39,16 +39,26 @@ class Controls extends React.PureComponent {
     return (
       <>
         <Col
-          className={ 'col-auto' }>
-          <Button variant="outline-primary"
+          sm={ 6 } md={ 6 } ld={ 6 } xl={ 6 }
+          // className={ 'col-auto' }
+        >
+          <Button
+            size="sm"
+            block
+            variant="outline-secondary"
             onClick={ this.state.isPlaying ? this.handlePause : this.handlePlay }
           >
             { this.state.isPlaying ? pauseIcon : playIcon }
           </Button>
         </Col>
         <Col
-          className={ 'col-auto' }>
-          <Button variant="outline-primary"
+          sm={ 6 } md={ 6 } ld={ 6 } xl={ 6 }
+          // className={ 'col-auto' }
+        >
+          <Button
+            size="sm"
+            block
+            variant="outline-secondary"
             onClick={ this.handleStop }
           >
             { stopIcon }
