@@ -83,13 +83,41 @@ class ProgramScript extends Component {
     );
   }
 
+  handleAddTranscriptElementToProgrammeScript = (elementType) => {
+    const { programmeScript } = this.state;
+    const elements = this.state.programmeScript.elements;
+    // TODO: refactor - with helper functions
+    if (elementType === 'title'
+      || elementType === 'note'
+      || elementType === 'voice-over') {
+      const text = prompt('Add some text for a section title', 'Section Two');
+      console.log(text);
+
+      elements.push({
+        id: cuid(),
+        index: elements.length,
+        type: elementType,
+        text: text
+      });
+      programmeScript.elements = elements;
+      // TODO: save to server
+      this.setState({
+        programmeScript: programmeScript
+      });
+    }
+  }
+
   // TODO: save to server
   // TODO: needs to handle when selection spans across multiple paragraphs
   handleAddTranscriptSelectionToProgrammeScript = () => {
     const result = getDataFromUserWordsSelection();
     console.log('getDataFromUserWordsSelection::', result);
     if (result) {
-      console.log(result);
+      console.log(JSON.stringify(result, null, 2));
+      // result.words
+      // TODO: if there's just one speaker in selection do following
+      // if it's multiple split list of words into multiple groups
+      // and add a papercut for each to the programme script
       const { programmeScript } = this.state;
       const elements = this.state.programmeScript.elements;
       // papercut could be abstracted as helper function
@@ -268,7 +296,7 @@ class ProgramScript extends Component {
         result += `[ ${ event.text }]\n\n`;
       }
       else if (event.type === 'paper-cut') {
-        result += `${ timecodes.fromSeconds(event.startTime) }\t${ timecodes.fromSeconds(event.endTime) }\t${ event.speaker }\t - ${ event.clipName }\n${ event.words.map((word) => {return `${ word.text } `;}) }\n\n`;
+        result += `${ timecodes.fromSeconds(event.startTime) }\t${ timecodes.fromSeconds(event.endTime) }\t${ event.speaker }\t-\t${ event.clipName }\n${ event.words.map((word) => {return word.text;}).join(' ') }\n\n`;
       }
     });
 
@@ -278,7 +306,7 @@ class ProgramScript extends Component {
   handleExportJson = () => {
     const programmeScriptJson = this.getProgrammeScriptJson();
     const programmeScriptText = JSON.stringify(programmeScriptJson, null, 2);
-    downloadjs(programmeScriptText, `${ this.state.programmeScript.title }.txt`, 'text/plain');
+    downloadjs(programmeScriptText, `${ this.state.programmeScript.title }.json`, 'text/plain');
   }
 
   handleExportTxt = () => {
@@ -362,17 +390,20 @@ class ProgramScript extends Component {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                //
+                  onClick={ () => {this.handleAddTranscriptElementToProgrammeScript('title');} }
+                  title="Add a title header element to the programme script"
                 >
                   <FontAwesomeIcon icon={ faHeading } /> Heading
                 </Dropdown.Item>
                 <Dropdown.Item
-                //
+                  onClick={ () => {this.handleAddTranscriptElementToProgrammeScript('voice-over');} }
+                  title="Add a title voice over element to the programme script"
                 >
                   <FontAwesomeIcon icon={ faMicrophoneAlt } /> Voice Over
                 </Dropdown.Item>
                 <Dropdown.Item
-                  //
+                  onClick={ () => {this.handleAddTranscriptElementToProgrammeScript('note');} }
+                  title="Add a note element to the programme script"
                 >
                   <FontAwesomeIcon icon={ faStickyNote } /> Note
                 </Dropdown.Item>
