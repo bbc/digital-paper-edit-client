@@ -12,7 +12,7 @@ import jsonToFCPX from '@bbc/fcpx-xml-composer';
 import downloadjs from 'downloadjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faFileExport,
+  faShare,
   faMicrophoneAlt,
   faStickyNote,
   faHeading,
@@ -285,9 +285,8 @@ class ProgramScript extends Component {
           <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
             <Dropdown>
               <Dropdown.Toggle variant="outline-secondary">
-                <FontAwesomeIcon icon={ faFileExport } /> Export
+                <FontAwesomeIcon icon={ faShare } /> Export
               </Dropdown.Toggle>
-
               <Dropdown.Menu>
                 <Dropdown.Item
                   onClick={ this.handleExportEDL }

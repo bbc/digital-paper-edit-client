@@ -1,15 +1,44 @@
 import React, { Component } from 'react';
-import { sortableContainer, sortableElement } from 'react-sortable-hoc';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import {
+  sortableContainer,
+  sortableElement,
+  sortableHandle
+} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import VoiceOver from './VoiceOver';
 import PaperCut from './PaperCut';
 import TitleHeading from './TitleHeading';
 import Note from './Note';
 
-const SortableItem = sortableElement(({ value }) => <li>{value}</li>);
+import {
+  faGripLines,
+  faGripHorizontal,
+  faTrash
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+const DragHandle = sortableHandle(() => <span> <FontAwesomeIcon icon={ faGripLines } /> </span>);
+
+const SortableItem = sortableElement(({ value }) => {
+  return (<li>
+    <Row>
+      <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
+        <DragHandle />
+      </Col>
+      <Col sm={ 10 } md={ 10 } ld={ 10 } xl={ 10 }>
+        {value}
+      </Col>
+      <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
+        {/* TODO: pass a prop to remove element from list */}
+        <FontAwesomeIcon className={ 'text-muted' } icon={ faTrash } onClick={ () => {alert('clicked trash');} }/>
+      </Col>
+    </Row></li>);
+});
 
 const SortableContainer = sortableContainer(({ children }) => {
-  return <ul>{children}</ul>;
+  return <ul style={ { listStyle: 'none' } }>{children}</ul>;
 });
 
 class ProgrammeScript extends Component {
@@ -55,7 +84,7 @@ class ProgrammeScript extends Component {
     }
 
     if (this.props.programmeScriptElements) {
-      sortableProgramme = <SortableContainer onSortEnd={ this.onSortEnd }>
+      sortableProgramme = <SortableContainer useDragHandle onSortEnd={ this.onSortEnd }>
         {programme.map((value, index) => (
           <SortableItem key={ `item-${ index }` } index={ index } value={ value } />
         ))}
@@ -65,8 +94,7 @@ class ProgrammeScript extends Component {
     return (
       <>
         {/* {programme} */}
-        {sortableProgramme}
-
+        { sortableProgramme }
       </>
     );
   }
