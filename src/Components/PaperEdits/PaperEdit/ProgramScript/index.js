@@ -20,7 +20,7 @@ import {
   faSync,
   faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
-
+import timecodes from 'node-timecodes';
 import ProgrammeScript from './ProgrammeScript.js';
 import getDataFromUserWordsSelection from './get-data-from-user-selection.js';
 import ApiWrapper from '../../../../ApiWrapper/index.js';
@@ -136,7 +136,12 @@ class ProgramScript extends Component {
           endTime: element.end,
           reelName: 'NA',
           clipName: `${ currentTranscript.clipName }`,
-          fps: 25
+          // TODO: frameRate should be pulled from the clips in the sequence
+          // Changing to 24 fps because that is the frame rate of the ted talk examples from youtube
+          // but again frameRate should not be hard coded
+          fps: 24,
+          // TODO: if there is an offset this should added here, for now hard coding 0
+          offset: 0
         };
 
         return result;
@@ -183,8 +188,10 @@ class ProgramScript extends Component {
       }),
       // TODO: sampleRate should be pulled from the sequence
       sampleRate: '44100',
-      // TODO: frameRate should be pulled from the sequence
-      frameRate: 25,
+      // TODO: frameRate should be pulled from the clips in the sequence
+      // Changing to 24 fps because that is the frame rate of the ted talk examples from youtube
+      // but again frameRate should not be hard coded
+      frameRate: 24,
       projectName: edlSq.title
     });
     downloadjs(result, `${ this.state.programmeScript.title }.adl`, 'text/plain');
@@ -193,13 +200,90 @@ class ProgramScript extends Component {
   handleExportFCPX = () => {
     // alert('this function has not been implemented yet');
     const edlSq = this.getSequenceJsonEDL();
-
+    console.log(edlSq);
     const result = jsonToFCPX(edlSq);
     downloadjs(result, `${ this.state.programmeScript.title }.fcpxml`, 'text/plain');
   }
 
+  getProgrammeScriptJson = () => {
+    // alert('this function has not been implemented yet');
+    const edlSq = {
+      'title': this.state.programmeScript.title,
+      'events': [ ]
+    };
+
+    const programmeScriptPaperCuts = this.state.programmeScript.elements.map((element) => {
+      if (element.type === 'paper-cut') {
+        console.log('paper-cut::', element);
+        // Get clipName for current transcript
+        const currentTranscript = this.props.transcripts.find((tr) => {
+          return tr.id === element.transcriptId;
+        });
+
+        const result = {
+          ...element,
+          startTime: element.start,
+          endTime: element.end,
+          reelName: 'NA',
+          clipName: `${ currentTranscript.clipName }`,
+          // TODO: frameRate should be pulled from the clips in the sequence
+          // Changing to 24 fps because that is the frame rate of the ted talk examples from youtube
+          // but again frameRate should not be hard coded
+          fps: 24,
+          // TODO: if there is an offset this should added here, for now hard coding 0
+          offset: 0
+        };
+
+        return result;
+      }
+      else {
+        return element;
+      }
+
+    }).filter((el) => {return el !== null;});
+    // adding ids to EDL
+    const programmeScriptPaperCutsWithId = programmeScriptPaperCuts.map((el, index) => {
+      el.id = index + 1;
+
+      return el;
+    });
+    edlSq.events.push(...programmeScriptPaperCutsWithId);
+    console.log(edlSq);
+
+    return edlSq;
+  }
+
+  programmeScriptJsonToText = (edlsqJson) => {
+    let result = `# ${ edlsqJson.title }\n\n`;
+    edlsqJson.events.map((event) => {
+      if (event.type === 'title') {
+        result += `## ${ event.text }\n\n`;
+      }
+      else if (event.type === 'voice-over') {
+        result += `_${ event.text }_\n\n`;
+
+      }
+      else if (event.type === 'note') {
+        result += `[ ${ event.text }]\n\n`;
+      }
+      else if (event.type === 'paper-cut') {
+        result += `${ timecodes.fromSeconds(event.startTime) }\t${ timecodes.fromSeconds(event.endTime) }\t${ event.speaker }\t - ${ event.clipName }\n${ event.words.map((word) => {return `${ word.text } `;}) }\n\n`;
+      }
+    });
+
+    return result;
+  }
+
+  handleExportJson = () => {
+    const programmeScriptJson = this.getProgrammeScriptJson();
+    const programmeScriptText = JSON.stringify(programmeScriptJson, null, 2);
+    downloadjs(programmeScriptText, `${ this.state.programmeScript.title }.txt`, 'text/plain');
+  }
+
   handleExportTxt = () => {
-    alert('this function has not been implemented yet');
+    const programmeScriptJson = this.getProgrammeScriptJson();
+    const programmeScriptText = this.programmeScriptJsonToText(programmeScriptJson);
+    downloadjs(programmeScriptText, `${ this.state.programmeScript.title }.txt`, 'text/plain');
   }
 
   handleUpdatePreview = () => {
@@ -334,6 +418,12 @@ class ProgramScript extends Component {
                   title="export Text, export the programme script as a text version"
                 >
                   Text <FontAwesomeIcon icon={ faInfoCircle } />
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={ this.handleExportJson }
+                  title="export Json, export the programme script as a json file"
+                >
+                  Json <FontAwesomeIcon icon={ faInfoCircle } />
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
