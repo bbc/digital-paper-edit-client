@@ -87,6 +87,7 @@ class ProgramScript extends Component {
   // TODO: needs to handle when selection spans across multiple paragraphs
   handleAddTranscriptSelectionToProgrammeScript = () => {
     const result = getDataFromUserWordsSelection();
+    console.log('getDataFromUserWordsSelection::', result);
     if (result) {
       console.log(result);
       const { programmeScript } = this.state;
@@ -413,12 +414,20 @@ class ProgramScript extends Component {
                 >
                   FCPX <FontAwesomeIcon icon={ faInfoCircle } />
                 </Dropdown.Item>
+                <Dropdown.Divider />
                 <Dropdown.Item
                   onClick={ this.handleExportTxt }
                   title="export Text, export the programme script as a text version"
                 >
-                  Text <FontAwesomeIcon icon={ faInfoCircle } />
+                  Text File <FontAwesomeIcon icon={ faInfoCircle } />
                 </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={ () => {alert('export word doc not implemented yet');} }
+                  title="export docx, export the programme script as a word document"
+                >
+                  Word Document <FontAwesomeIcon icon={ faInfoCircle } />
+                </Dropdown.Item>
+                <Dropdown.Divider />
                 <Dropdown.Item
                   onClick={ this.handleExportJson }
                   title="export Json, export the programme script as a json file"

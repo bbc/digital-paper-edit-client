@@ -113,15 +113,15 @@ class PaperEdit extends Component {
             <ButtonGroup size="sm" className="mt-12">
               <Button
                 onClick={ this.toggleTranscripts }
-                variant={ this.state.isTranscriptsShown ? 'primary' : 'outline-primary' }
+                variant={ this.state.isTranscriptsShown ? 'secondary' : 'outline-secondary' }
               >
-                Transcripts <FontAwesomeIcon icon={ this.state.isTranscriptsShown ? faAngleDown : faAngleUp } />
+                Transcripts <FontAwesomeIcon icon={ this.state.isTranscriptsShown ? faAngleDown : faAngleUp } /> { this.state.isTranscriptsShown ? 'hide' : 'show'}
               </Button>
               <Button
                 onClick={ this.toggleProgramScript }
-                variant={ this.state.isProgramScriptShown ? 'primary' : 'outline-primary' }
+                variant={ this.state.isProgramScriptShown ? 'secondary' : 'outline-secondary' }
               >
-                 Program Script  <FontAwesomeIcon icon={ this.state.isProgramScriptShown ? faAngleDown : faAngleUp } />
+                 Program Script  <FontAwesomeIcon icon={ this.state.isProgramScriptShown ? faAngleDown : faAngleUp } />  { this.state.isProgramScriptShown ? 'hide' : 'show'}
               </Button>
             </ButtonGroup>
 
