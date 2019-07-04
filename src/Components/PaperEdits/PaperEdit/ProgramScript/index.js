@@ -68,7 +68,8 @@ class ProgramScript extends Component {
 
   // TODO: save to server
   handleDeleteProgrammeScriptElement = (i) => {
-    alert('handle delete');
+    // TODO: add a prompt, like are you shure you want to delete, confirm etc..?
+    // alert('handle delete');
     console.log(i);
     this.setState(({ programmeScript }) => {
       const index = i;
@@ -83,6 +84,30 @@ class ProgramScript extends Component {
     );
   }
 
+  handleEditProgrammeScriptElement = (i) => {
+    console.log(i);
+    const { programmeScript } = this.state;
+    const elements = programmeScript.elements;
+    const currentElement = elements[i];
+    const newText = prompt('Edit', currentElement.text);
+    console.log(newText);
+    if (newText) {
+      currentElement.text = newText;
+      elements[i] = currentElement;
+      programmeScript.elements = elements;
+      // TODO: save to server
+      this.setState({
+        programmeScript: programmeScript
+      });
+      // TODO: consider using set state function to avoid race condition? if needed?
+      // this.setState(({ programmeScript }) => {
+      //   return {
+      //     programmeScript: programmeScript
+      //   };
+      // });
+    }
+  }
+
   handleAddTranscriptElementToProgrammeScript = (elementType) => {
     const { programmeScript } = this.state;
     const elements = this.state.programmeScript.elements;
@@ -90,7 +115,7 @@ class ProgramScript extends Component {
     if (elementType === 'title'
       || elementType === 'note'
       || elementType === 'voice-over') {
-      const text = prompt('Add some text for a section title', 'Section Two');
+      const text = prompt('Add some text for a section title', 'Some place holder text');
       console.log(text);
 
       elements.push({
@@ -475,6 +500,7 @@ class ProgramScript extends Component {
             programmeScriptElements={ this.state.programmeScript.elements }
             handleProgrammeScriptOrderChange={ this.handleProgrammeScriptOrderChange }
             handleDeleteProgrammeScriptElement={ this.handleDeleteProgrammeScriptElement }
+            handleEditProgrammeScriptElement={ this.handleEditProgrammeScriptElement }
           />
             : null }
         </article>

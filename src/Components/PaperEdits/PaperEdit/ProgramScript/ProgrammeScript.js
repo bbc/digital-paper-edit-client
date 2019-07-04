@@ -15,20 +15,26 @@ import Note from './Note';
 import {
   faGripLines,
   faGripHorizontal,
+  faPen,
   faTrash
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const DragHandle = sortableHandle(() => <span> <FontAwesomeIcon icon={ faGripLines } /> </span>);
 
-const SortableItem = sortableElement(({ value, index, handleDelete }) => {
+const SortableItem = sortableElement(({ value, index, type, handleDelete, handleEdit }) => {
   return (<li>
     <Row>
       <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
         <DragHandle />
       </Col>
-      <Col sm={ 10 } md={ 10 } ld={ 10 } xl={ 10 }>
+      <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
         {value}
+      </Col>
+      <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
+        {/* TODO: if paper-cut  then don't show edit/pen icon */}
+        {type !== 'paper-cut' ? <FontAwesomeIcon className={ 'text-muted' } icon={ faPen } onClick={ () => { handleEdit(index); } } /> : null}
+
       </Col>
       <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
         {/* TODO: pass a prop to remove element from list */}
@@ -68,13 +74,13 @@ class ProgrammeScript extends Component {
       programme = this.props.programmeScriptElements.map((el) => {
         switch (el.type) {
         case 'title':
-          return <TitleHeading key={ el.id } title={ el.text } />;
+          return { el:<TitleHeading key={ el.id } title={ el.text } />, type: el.type };
         case 'voice-over':
-          return <VoiceOver key={ el.id } text={ el.text } />;
+          return { el:<VoiceOver key={ el.id } text={ el.text } />, type: el.type };
         case 'paper-cut':
-          return <PaperCut key={ el.id } speaker={ el.speaker } words={ el.words }/>;
+          return { el: <PaperCut key={ el.id } speaker={ el.speaker } words={ el.words }/>, type: el.type };
         case 'note':
-          return <Note key={ el.id } text={ el.text } />;
+          return { el: <Note key={ el.id } text={ el.text } />, type: el.type };
         default:
           console.error('invalid programme element type');
 
@@ -89,8 +95,10 @@ class ProgrammeScript extends Component {
           <SortableItem
             key={ `item-${ index }` }
             index={ index }
-            value={ value }
+            value={ value.el }
+            type={ value.type }
             handleDelete={ this.props.handleDeleteProgrammeScriptElement }
+            handleEdit={ this.props.handleEditProgrammeScriptElement }
           />
         ))}
       </SortableContainer>;
