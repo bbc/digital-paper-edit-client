@@ -22,7 +22,7 @@ const getCorsConfig = (method, data = {}, applicationType) => {
   if (method === 'PUT') {
     corsConfig = {
       method: method,
-      credentials: 'include',
+      credentials: 'omit',
       mode: 'cors',
       body: JSON.stringify(data),
       headers: {
@@ -37,7 +37,7 @@ const getCorsConfig = (method, data = {}, applicationType) => {
       // mode: 'no-cors',
       // cache: 'no-cache',
       // credentials: 'same-origin',
-      credentials: 'include',
+      credentials: 'omit',
       // headers: {
       //   'Content-Type': 'application/json'
       // },
@@ -56,13 +56,13 @@ const getCorsConfig = (method, data = {}, applicationType) => {
     // if sending something else like a video or audio file in form body
     else {
       corsConfig.body = data;
-      corsConfig.credentials = 'include';
+      corsConfig.credentials = 'omit';
     }
   }
   else {
     corsConfig = {
       method: method,
-      credentials: 'include',
+      credentials: 'omit',
       mode: 'cors'
     };
   }
