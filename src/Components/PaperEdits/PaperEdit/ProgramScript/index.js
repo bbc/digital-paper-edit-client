@@ -53,6 +53,7 @@ class ProgramScript extends Component {
       });
   }
 
+  // TODO: save to server
   handleProgrammeScriptOrderChange = (list) => {
     console.log('handleProgrammeScriptOrderChange', list);
     this.setState(({ programmeScript }) => {
@@ -60,9 +61,29 @@ class ProgramScript extends Component {
 
       return {
         programmeScript: programmeScript
-      };});
+      };
+    }
+    );
   }
 
+  // TODO: save to server
+  handleDeleteProgrammeScriptElement = (i) => {
+    alert('handle delete');
+    console.log(i);
+    this.setState(({ programmeScript }) => {
+      const index = i;
+      const list = programmeScript.elements;
+      list.splice(index, 1);
+      programmeScript.elements = list;
+
+      return {
+        programmeScript: programmeScript
+      };
+    }
+    );
+  }
+
+  // TODO: save to server
   // TODO: needs to handle when selection spans across multiple paragraphs
   handleAddTranscriptSelectionToProgrammeScript = () => {
     const result = getDataFromUserWordsSelection();
@@ -83,6 +104,7 @@ class ProgramScript extends Component {
         labelId: []
       });
       programmeScript.elements = elements;
+      // TODO: save to server
       this.setState({
         programmeScript: programmeScript
       });
@@ -321,7 +343,9 @@ class ProgramScript extends Component {
         <article style={ { height: '60vh', overflow: 'scroll' } }>
           { this.state.programmeScript ? <ProgrammeScript
             programmeScriptElements={ this.state.programmeScript.elements }
-            handleProgrammeScriptOrderChange={ this.handleProgrammeScriptOrderChange } />
+            handleProgrammeScriptOrderChange={ this.handleProgrammeScriptOrderChange }
+            handleDeleteProgrammeScriptElement={ this.handleDeleteProgrammeScriptElement }
+          />
             : null }
         </article>
       </Tab.Content>

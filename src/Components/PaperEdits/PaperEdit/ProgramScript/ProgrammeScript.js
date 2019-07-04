@@ -21,7 +21,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const DragHandle = sortableHandle(() => <span> <FontAwesomeIcon icon={ faGripLines } /> </span>);
 
-const SortableItem = sortableElement(({ value }) => {
+const SortableItem = sortableElement(({ value, index, handleDelete }) => {
   return (<li>
     <Row>
       <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
@@ -32,7 +32,7 @@ const SortableItem = sortableElement(({ value }) => {
       </Col>
       <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
         {/* TODO: pass a prop to remove element from list */}
-        <FontAwesomeIcon className={ 'text-muted' } icon={ faTrash } onClick={ () => {alert('clicked trash');} }/>
+        <FontAwesomeIcon className={ 'text-muted' } icon={ faTrash } onClick={ () => {handleDelete(index);} } />
       </Col>
     </Row></li>);
 });
@@ -86,7 +86,12 @@ class ProgrammeScript extends Component {
     if (this.props.programmeScriptElements) {
       sortableProgramme = <SortableContainer useDragHandle onSortEnd={ this.onSortEnd }>
         {programme.map((value, index) => (
-          <SortableItem key={ `item-${ index }` } index={ index } value={ value } />
+          <SortableItem
+            key={ `item-${ index }` }
+            index={ index }
+            value={ value }
+            handleDelete={ this.props.handleDeleteProgrammeScriptElement }
+          />
         ))}
       </SortableContainer>;
     }
