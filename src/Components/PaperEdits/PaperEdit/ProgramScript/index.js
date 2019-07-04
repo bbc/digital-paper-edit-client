@@ -121,18 +121,33 @@ class ProgramScript extends Component {
       const text = prompt('Add some text for a section title', 'Some place holder text');
       console.log(text);
 
-      elements.push({
+      const indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
+      const newElement = {
         id: cuid(),
         index: elements.length,
         type: elementType,
         text: text
-      });
+      };
+      elements.splice(indexOfInsertPoint, 0, newElement);
       programmeScript.elements = elements;
       // TODO: save to server
       this.setState({
         programmeScript: programmeScript
       });
     }
+  }
+
+  getIndexPositionOfInsertPoint = () => {
+    const { programmeScript } = this.state;
+    const elements = programmeScript.elements;
+    // find insert point in list,
+    const insertPointElement = elements.find((el) => {
+      return el.type === 'insert-point';
+    });
+    // get insertpoint index
+    const indexOfInsertPoint = elements.indexOf(insertPointElement);
+
+    return indexOfInsertPoint;
   }
 
   // TODO: save to server
@@ -147,17 +162,10 @@ class ProgramScript extends Component {
       // if it's multiple split list of words into multiple groups
       // and add a papercut for each to the programme script
       const { programmeScript } = this.state;
-      const elements = this.state.programmeScript.elements;
+      const elements = programmeScript.elements;
       // TODO: insert at insert point
 
-      // find insert point in list,
-      const insertPointElement = elements.find((el) => {
-        return el.type === 'insert-point';
-      });
-      console.log(insertPointElement);
-      // get insertpoint index
-      const indexOfInsertPoint = elements.indexOf(insertPointElement);
-      console.log(indexOfInsertPoint);
+      const indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
       // create new element
       const newElement = {
         id: cuid(),
@@ -170,12 +178,8 @@ class ProgramScript extends Component {
         transcriptId: result.transcriptId,
         labelId: []
       };
-      // add just above of insert point
-      // TODO:
-      // elements[indexOfInsertPoint] =
-      // papercut could be abstracted as helper function
+      // add element just above of insert point
       elements.splice(indexOfInsertPoint, 0, newElement);
-      // elements.push(newElement);
       programmeScript.elements = elements;
       // TODO: save to server
       this.setState({
