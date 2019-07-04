@@ -47,8 +47,11 @@ class ProgramScript extends Component {
     ApiWrapper.getPaperEdit(this.props.projectId, this.props.papereditId)
       .then((json) => {
         console.log('get_ProgrammeScriptAndTranscripts--', json);
+        const programmeScript = json.programmeScript;
+        // Adding an insert point at the end of the list
+        programmeScript.elements.push({ type: 'insert-point', text: 'Insert Point to add selection' });
         this.setState({
-          programmeScript: json.programmeScript
+          programmeScript: programmeScript
         });
       });
   }
@@ -145,8 +148,18 @@ class ProgramScript extends Component {
       // and add a papercut for each to the programme script
       const { programmeScript } = this.state;
       const elements = this.state.programmeScript.elements;
-      // papercut could be abstracted as helper function
-      elements.push({
+      // TODO: insert at insert point
+
+      // find insert point in list,
+      const insertPointElement = elements.find((el) => {
+        return el.type === 'insert-point';
+      });
+      console.log(insertPointElement);
+      // get insertpoint index
+      const indexOfInsertPoint = elements.indexOf(insertPointElement);
+      console.log(indexOfInsertPoint);
+      // create new element
+      const newElement = {
         id: cuid(),
         index: elements.length,
         type: 'paper-cut',
@@ -156,7 +169,13 @@ class ProgramScript extends Component {
         words: result.words,
         transcriptId: result.transcriptId,
         labelId: []
-      });
+      };
+      // add just above of insert point
+      // TODO:
+      // elements[indexOfInsertPoint] =
+      // papercut could be abstracted as helper function
+      elements.splice(indexOfInsertPoint, 0, newElement);
+      // elements.push(newElement);
       programmeScript.elements = elements;
       // TODO: save to server
       this.setState({
@@ -385,6 +404,17 @@ class ProgramScript extends Component {
     });
   }
 
+  handleDoubleClickOnProgrammeScript = (e) => {
+
+    if (e.target.className === 'words') {
+      const wordCurrentTime = e.target.dataset.start;
+      // TODO: set current time in preview canvas
+      // Video context probably needs more info like, which clip/track in the sequence?
+      // investigate how to set currentTime in video context
+      console.log('wordCurrentTime::', wordCurrentTime);
+    }
+  }
+
   render() {
     return (
       <Tab.Content>
@@ -495,12 +525,16 @@ class ProgramScript extends Component {
           </Col>
         </Row>
         <hr/>
-        <article style={ { height: '60vh', overflow: 'scroll' } }>
+        <article
+          style={ { height: '60vh', overflow: 'scroll' } }
+          onDoubleClick={ this.handleDoubleClickOnProgrammeScript }
+        >
           { this.state.programmeScript ? <ProgrammeScript
             programmeScriptElements={ this.state.programmeScript.elements }
             handleProgrammeScriptOrderChange={ this.handleProgrammeScriptOrderChange }
             handleDeleteProgrammeScriptElement={ this.handleDeleteProgrammeScriptElement }
             handleEditProgrammeScriptElement={ this.handleEditProgrammeScriptElement }
+
           />
             : null }
         </article>

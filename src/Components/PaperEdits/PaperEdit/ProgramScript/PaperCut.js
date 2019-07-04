@@ -17,7 +17,14 @@ class PaperCut extends Component {
     if (this.props.words) {
       // TODO could wrap words in span and add timecodes
       // to make it cliccable on programme script
-      words = this.props.words.map((w) => {return w.text + ' ';});
+      words = this.props.words.map((w) => {return (
+        // eslint-disable-next-line react/jsx-key
+        <span
+          className="words"
+          title={ `stat: ${ w.start }- end: ${ w.end }` }
+          data-start={ w.start }
+          data-end={ w.end }
+        >{w.text} </span>);});
     }
 
     return (

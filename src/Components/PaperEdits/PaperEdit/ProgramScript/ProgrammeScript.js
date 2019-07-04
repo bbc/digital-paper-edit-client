@@ -16,29 +16,33 @@ import {
   faGripLines,
   faGripHorizontal,
   faPen,
-  faTrash
+  faTrash,
+  faArrowAltCircleLeft,
+  faArrowAltCircleRight
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+const InsertPoint = (({ text }) => <span style={ { width: '100%', backgroundColor: 'orange', color: 'white' } }> <FontAwesomeIcon icon={ faArrowAltCircleRight } /> {text}  <FontAwesomeIcon icon={ faArrowAltCircleLeft } /></span>);
 
 const DragHandle = sortableHandle(() => <span> <FontAwesomeIcon icon={ faGripLines } /> </span>);
 
 const SortableItem = sortableElement(({ value, index, type, handleDelete, handleEdit }) => {
   return (<li>
     <Row>
-      <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
+      <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
         <DragHandle />
       </Col>
-      <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
+      <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
         {value}
       </Col>
-      <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
+      <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
         {/* TODO: if paper-cut  then don't show edit/pen icon */}
-        {type !== 'paper-cut' ? <FontAwesomeIcon className={ 'text-muted' } icon={ faPen } onClick={ () => { handleEdit(index); } } /> : null}
+        {type !== 'paper-cut' && type !== 'insert-point' ? <FontAwesomeIcon className={ 'text-muted' } icon={ faPen } onClick={ () => { handleEdit(index); } } /> : null}
 
       </Col>
-      <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
+      <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
         {/* TODO: pass a prop to remove element from list */}
-        <FontAwesomeIcon className={ 'text-muted' } icon={ faTrash } onClick={ () => {handleDelete(index);} } />
+        {type !== 'insert-point' ? <FontAwesomeIcon className={ 'text-muted' } icon={ faTrash } onClick={ () => {handleDelete(index);} } /> : null}
       </Col>
     </Row></li>);
 });
@@ -81,6 +85,8 @@ class ProgrammeScript extends Component {
           return { el: <PaperCut key={ el.id } speaker={ el.speaker } words={ el.words }/>, type: el.type };
         case 'note':
           return { el: <Note key={ el.id } text={ el.text } />, type: el.type };
+        case 'insert-point':
+          return { el: <InsertPoint text={ el.text } />, type: el.type };
         default:
           console.error('invalid programme element type');
 
