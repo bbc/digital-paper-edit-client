@@ -115,7 +115,7 @@ class PaperEdit extends Component {
                 onClick={ this.toggleTranscripts }
                 variant={ this.state.isTranscriptsShown ? 'secondary' : 'outline-secondary' }
               >
-                Transcripts <FontAwesomeIcon icon={ this.state.isTranscriptsShown ? faAngleDown : faAngleUp } /> { this.state.isTranscriptsShown ? 'hide' : 'show'}
+               Transcripts <FontAwesomeIcon icon={ this.state.isTranscriptsShown ? faAngleDown : faAngleUp } /> { this.state.isTranscriptsShown ? 'hide' : 'show'}
               </Button>
               <Button
                 onClick={ this.toggleProgramScript }
@@ -130,19 +130,19 @@ class PaperEdit extends Component {
             <Col
               xs={ { span: 12, offset:0 } }
               sm={ {
-                span:7,
-                offset: this.state.isProgramScriptShown ? 0 : 2
+                span: this.state.isProgramScriptShown ? 7 : 12,
+                offset: this.state.isProgramScriptShown ? 0 : 0
               } }
               md={ {
                 span: this.state.isProgramScriptShown ? 7 : 12,
                 offset: this.state.isProgramScriptShown ? 0 : 0
               } }
               lg={ {
-                span: this.state.isProgramScriptShown ? 7 : 8,
+                span: this.state.isProgramScriptShown ? 7 : 10,
                 offset: this.state.isProgramScriptShown ? 0 : 1
               } }
               xl={ {
-                span: this.state.isProgramScriptShown ? 7 : 9,
+                span: this.state.isProgramScriptShown ? 7 : 10,
                 offset: this.state.isProgramScriptShown ? 0 : 1
               } }
               style={ { display: this.state.isTranscriptsShown ? 'block' : 'none' } }
@@ -157,19 +157,19 @@ class PaperEdit extends Component {
             <Col
               xs={ { span: 12, offset:0 } }
               sm={ {
-                span: this.state.isTranscriptsShown ? 5 : 7,
-                offset: this.state.isTranscriptsShown ? 0 : 3
+                span: this.state.isTranscriptsShown ? 5 : 12,
+                offset: this.state.isTranscriptsShown ? 0 : 0
               } }
               md={ {
                 span: this.state.isTranscriptsShown ? 5 : 12,
                 offset: this.state.isTranscriptsShown ? 0 : 0
               } }
               lg={ {
-                span: this.state.isTranscriptsShown ? 5 : 7,
+                span: this.state.isTranscriptsShown ? 5 : 10,
                 offset: this.state.isTranscriptsShown ? 0 : 1
               } }
               xl={ {
-                span: this.state.isTranscriptsShown ? 5 : 7,
+                span: this.state.isTranscriptsShown ? 5 : 8,
                 offset: this.state.isTranscriptsShown ? 0 : 2
               } }
               style={ { display: this.state.isProgramScriptShown ? 'block' : 'none' } }

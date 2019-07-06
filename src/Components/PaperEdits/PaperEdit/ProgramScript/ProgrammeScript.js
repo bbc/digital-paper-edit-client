@@ -28,27 +28,29 @@ const DragHandle = sortableHandle(() => <span> <FontAwesomeIcon icon={ faGripLin
 const SortableItem = sortableElement(({ value, index, type, handleDelete, handleEdit }) => {
   return (<li>
     <Row>
-      <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
+      <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
         <DragHandle />
       </Col>
-      <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
+      <Col xs={ 8 } sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
         {value}
       </Col>
-      <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
+      <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
         {/* TODO: if paper-cut  then don't show edit/pen icon */}
         {type !== 'paper-cut' && type !== 'insert-point' ? <FontAwesomeIcon className={ 'text-muted' } icon={ faPen } onClick={ () => { handleEdit(index); } } /> : null}
 
       </Col>
-      <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
+      <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
         {/* TODO: pass a prop to remove element from list */}
         {type !== 'insert-point' ? <FontAwesomeIcon className={ 'text-muted' } icon={ faTrash } onClick={ () => {handleDelete(index);} } /> : null}
         {type === 'insert-point' ? <FontAwesomeIcon style={ { color: 'white' } } icon={ faArrowAltCircleLeft } /> : null}
       </Col>
-    </Row></li>);
+    </Row>
+  </li>);
 });
 
 const SortableContainer = sortableContainer(({ children }) => {
-  return <ul style={ { listStyle: 'none' } }>{children}</ul>;
+
+  return <ul style={ { listStyle: 'none', padding: '0px' } }>{children}</ul>;
 });
 
 class ProgrammeScript extends Component {
@@ -82,7 +84,7 @@ class ProgrammeScript extends Component {
         case 'voice-over':
           return { el:<VoiceOver key={ el.id } text={ el.text } />, type: el.type };
         case 'paper-cut':
-          return { el: <PaperCut key={ el.id } speaker={ el.speaker } words={ el.words }/>, type: el.type };
+          return { el: <PaperCut key={ el.id } el={ el } speaker={ el.speaker } words={ el.words }/>, type: el.type };
         case 'note':
           return { el: <Note key={ el.id } text={ el.text } />, type: el.type };
         case 'insert-point':

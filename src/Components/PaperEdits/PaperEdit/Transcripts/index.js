@@ -19,11 +19,11 @@ class Transcripts extends Component {
     const transcriptsElNav = this.props.transcripts.map((transcript, index) => {
       return (
         <Nav.Item key={ transcript.id }>
-
           <Nav.Link
             disabled={ transcript.status !== 'done' ? true : false }
             // title={ transcript.status !== 'done' ? transcript.status : transcript.title }
             eventKey={ transcript.id }
+
           >
             { transcript.status === 'in-progress' ? <FontAwesomeIcon icon={ faClock }/> : '' }
             { transcript.status === 'error' ? <FontAwesomeIcon icon={ faExclamationTriangle }/> : '' }
@@ -54,7 +54,12 @@ class Transcripts extends Component {
         >
           <Row>
             <Col sm={ 3 }>
-              <h2>Transcripts</h2>
+              <h2
+                className={ [ 'text-truncate', 'text-muted' ].join(' ') }
+                // className={ 'text-truncate' }
+                title={ 'Transcripts' }
+              >
+                Transcripts</h2>
               <hr/>
               <Nav variant="pills" className="flex-column">
                 {transcriptsElNav}

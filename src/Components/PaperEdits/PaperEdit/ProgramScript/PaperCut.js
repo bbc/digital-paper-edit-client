@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import { shortTimecode } from '@bbc/react-transcript-editor/timecodeConverter';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faTag } from '@fortawesome/free-solid-svg-icons';
 
@@ -30,7 +31,11 @@ class PaperCut extends Component {
     return (
       <>
         <Row>
-          <Col sm={ 3 } className={ 'text-truncate text-muted' } title={ this.props.speaker.toUpperCase() } style={ { userSelect: 'none' } }>
+          <Col sm={ 3 } className={ 'text-truncate text-muted' }
+          // TODO: could add timecode from eg -  ${ shortTimecode(this.props.words[0].start) }
+          // TODO: Could add transcript name along side the timecode for the paper-cut
+            title={ `${ this.props.speaker.toUpperCase() }` }
+            style={ { userSelect: 'none' } }>
             <strong>{this.props.speaker.toUpperCase()}</strong>
             {/* <br/> */}
             {/* <u style={ { cursor: 'pointer' } }>00:01:20</u> */}

@@ -42,24 +42,30 @@ class Paragraph extends Component {
         className="paragraph"
         data-paragraph-text={ this.props.paragraphTextWithoutPunctuation }
       >
-        <Col xs={ 8 } sm={ 8 } md={ 3 } lg={ 3 } xl={ 2 } className={ 'text-truncate' } title={ this.props.speakerName }>
-          <span className={ [ styles.speaker, styles.unselectable ].join(' ') }
+        <Col xs={ 12 } sm={ 12 } md={ 3 } lg={ 3 } xl={ 2 }
+          style={ { cursor: 'pointer', width: '100%' } }
+          className={ 'text-truncate' }
+          title={ `${ this.props.speakerName.toUpperCase() } -  ${ shortTimecode(this.props.paragraph[0].start) }` }>
+          <span
+            className={ [ styles.speaker, styles.unselectable, 'timecode' ].join(' ') }
+            data-start={ this.props.paragraph[0].start }
             tabIndex="0"
           >{this.props.speakerName}</span>
         </Col>
-        <Col xs={ 4 } sm={ 4 } md={ 2 } lg={ 2 } xl={ 1 }
+        {/* <Col xs={ 4 } sm={ 4 } md={ 2 } lg={ 2 } xl={ 1 }
           style={ { padding: '0em', textAlign: 'center' } }
           className={ styles.unselectable }
         >
           <span
             style={ { cursor: 'pointer', width: '100%' } }
-            data-start={ this.props.paragraph[0].start } className={ 'timecode' }
+            data-start={ this.props.paragraph[0].start }
+            className={ 'timecode' }
             tabIndex="0"
-            onKeyDown={ this.props.handleKeyDownTimecodes }>
+            >
             { shortTimecode(this.props.paragraph[0].start) }
           </span>
-        </Col>
-        <Col xs={ 12 } sm={ 12 } md={ 7 } lg={ 7 } xl={ 9 }>
+        </Col> */}
+        <Col xs={ 12 } sm={ 12 } md={ 9 } lg={ 9 } xl={ 10 }>
           {this.props.wordsElements}
         </Col>
       </Row>

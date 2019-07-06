@@ -130,7 +130,7 @@ class TranscriptAnnotate extends Component {
   };
 
   handleTimecodeClick= e => {
-    if ( e.target.className === 'timecode') {
+    if ( e.target.classList.contains('timecode')) {
       const wordEl = e.target;
       this.videoRef.current.currentTime = wordEl.dataset.start;
       this.videoRef.current.play();

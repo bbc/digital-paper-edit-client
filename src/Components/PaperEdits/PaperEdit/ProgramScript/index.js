@@ -375,7 +375,7 @@ class ProgramScript extends Component {
         result += `[ ${ event.text }]\n\n`;
       }
       else if (event.type === 'paper-cut') {
-        result += `${ timecodes.fromSeconds(event.startTime) }\t${ timecodes.fromSeconds(event.endTime) }\t${ event.speaker }\t-\t${ event.clipName }\n${ event.words.map((word) => {return word.text;}).join(' ') }\n\n`;
+        result += `${ timecodes.fromSeconds(event.startTime) }\t${ timecodes.fromSeconds(event.endTime) }\t${ event.speaker }\t-\t${ event.clipName }     \n${ event.words.map((word) => {return word.text;}).join(' ') }\n\n`;
       }
     });
 
@@ -453,9 +453,14 @@ class ProgramScript extends Component {
   render() {
     return (
       <Tab.Content>
-        <h2>Programme:  <small className="text-muted">
+        <h2
+          className={ [ 'text-truncate', 'text-muted' ].join(' ') }
+          title={ `Programme Script Title: ${ this.state.programmeScript ? this.state.programmeScript.title : '' }` }>
+          {/* Programme:  */}
+          {/* <small> */}
           {this.state.programmeScript ? this.state.programmeScript.title : ''}
-        </small></h2>
+          {/* </small> */}
+        </h2>
         {/* <hr/> */}
         { !this.state.resetPreview ?
           <PreviewCanvas playlist={ this.state.playlist } width={ '300' }/>

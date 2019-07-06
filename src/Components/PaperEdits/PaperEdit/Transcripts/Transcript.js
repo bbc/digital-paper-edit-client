@@ -57,9 +57,8 @@ class Transcript extends Component {
 
   // functions repeadrted from TranscriptAnnotate/index.js
   handleTimecodeClick= e => {
-    if ( e.target.className === 'timecode') {
+    if (e.target.classList.contains('timecode')) {
       const wordEl = e.target;
-      console.log('handleTimecodeClick', wordEl.dataset.start);
       this.videoRef.current.currentTime = wordEl.dataset.start;
       this.videoRef.current.play();
     }
@@ -189,7 +188,10 @@ class Transcript extends Component {
           {`${ this.state.sentenceToSearchCSS } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
           {`${ this.state.sentenceToSearchCSSInHighlights } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
         </style>
-        <h2>
+        <h2
+          className={ [ 'text-truncate', 'text-muted' ].join(' ') }
+          title={ `Transcript Title: ${ this.props.title }` }
+        >
           {/* <FontAwesomeIcon icon={ this.state.isVideoTranscriptPreviewShow === 'none' ? faEye : faEyeSlash } onClick={ this.handleVideoTranscriptPreviewDisplay }/> */}
           {this.props.title}
         </h2>
