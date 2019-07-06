@@ -23,6 +23,7 @@ import {
 import timecodes from 'node-timecodes';
 import ProgrammeScript from './ProgrammeScript.js';
 import getDataFromUserWordsSelection from './get-data-from-user-selection.js';
+import { divideWordsSelectionsIntoParagraphs, isOneParagraph } from './divide-words-selections-into-paragraphs/index.js';
 import ApiWrapper from '../../../../ApiWrapper/index.js';
 
 class ProgramScript extends Component {
@@ -36,9 +37,9 @@ class ProgramScript extends Component {
         // start - is relative to timeline
         // duration - of clip in playlist
         // sourceStart - time from start of clip in playlist
-        { type:'video', start:0, sourceStart: 30, duration:10, src:'https://download.ted.com/talks/MorganVague_2018X.mp4' },
-        { type:'video', start:10, sourceStart: 40, duration:10, src:'https://download.ted.com/talks/IvanPoupyrev_2019.mp4' },
-        { type:'video', start:20, sourceStart: 50, duration:10, src:'https://download.ted.com/talks/KateDarling_2018S-950k.mp4' },
+        // { type:'video', start:0, sourceStart: 30, duration:10, src:'https://download.ted.com/talks/MorganVague_2018X.mp4' },
+        // { type:'video', start:10, sourceStart: 40, duration:10, src:'https://download.ted.com/talks/IvanPoupyrev_2019.mp4' },
+        // { type:'video', start:20, sourceStart: 50, duration:10, src:'https://download.ted.com/talks/KateDarling_2018S-950k.mp4' },
       ]
     };
   }
@@ -52,8 +53,14 @@ class ProgramScript extends Component {
         programmeScript.elements.push({ type: 'insert-point', text: 'Insert Point to add selection' });
         this.setState({
           programmeScript: programmeScript
-        });
+        }
+        // TODO: figure out how to update preview
+        // , () => {
+        //   this.handleUpdatePreview();
+        // }
+        );
       });
+
   }
 
   // TODO: save to server
@@ -157,6 +164,7 @@ class ProgramScript extends Component {
     console.log('getDataFromUserWordsSelection::', result);
     if (result) {
       console.log(JSON.stringify(result, null, 2));
+
       // result.words
       // TODO: if there's just one speaker in selection do following
       // if it's multiple split list of words into multiple groups
@@ -166,21 +174,44 @@ class ProgramScript extends Component {
       // TODO: insert at insert point
 
       const indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
-      // create new element
-      const newElement = {
-        id: cuid(),
-        index: elements.length,
-        type: 'paper-cut',
-        start:result.start,
-        end: result.end,
-        speaker: result.speaker,
-        words: result.words,
-        transcriptId: result.transcriptId,
-        labelId: []
-      };
-      // add element just above of insert point
-      elements.splice(indexOfInsertPoint, 0, newElement);
-      programmeScript.elements = elements;
+      if (isOneParagraph(result.words)) {
+        // create new element
+        // TODO: Create new element could be refactored into helper function
+        const newElement = {
+          id: cuid(),
+          index: elements.length,
+          type: 'paper-cut',
+          start:result.start,
+          end: result.end,
+          speaker: result.speaker,
+          words: result.words,
+          transcriptId: result.transcriptId,
+          labelId: []
+        };
+        // add element just above of insert point
+        elements.splice(indexOfInsertPoint, 0, newElement);
+        programmeScript.elements = elements;
+      }
+      else {
+        const paragraphs = divideWordsSelectionsIntoParagraphs(result.words);
+        paragraphs.reverse().forEach((paragraph) => {
+          const newElement = {
+            id: cuid(),
+            index: elements.length,
+            type: 'paper-cut',
+            start:paragraph[0].start,
+            end: paragraph[paragraph.length - 1].end,
+            speaker: paragraph[0].speaker,
+            words: paragraph,
+            transcriptId: paragraph[0].transcriptId,
+            // TODO: ignoring labels for now
+            labelId: []
+          };
+          // add element just above of insert point
+          elements.splice(indexOfInsertPoint, 0, newElement);
+          programmeScript.elements = elements;
+        });
+      }
       // TODO: save to server
       this.setState({
         programmeScript: programmeScript

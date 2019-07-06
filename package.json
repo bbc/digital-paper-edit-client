@@ -29,7 +29,7 @@
     "react-scripts": "3.0.1",
     "react-select": "^2.4.3",
     "react-sortable-hoc": "^1.9.1",
-    "videocontext": "^0.53.0"
+    "videocontext": "^0.53.1"
   },
   "author": "Pietro Passarelli CC0 BBC 2019",
   "contributors": [

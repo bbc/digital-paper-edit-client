@@ -30,8 +30,8 @@ class PaperCut extends Component {
     return (
       <>
         <Row>
-          <Col sm={ 3 } className={ 'text-truncate' } title={ this.props.speaker }>
-            <strong>{this.props.speaker}</strong>
+          <Col sm={ 3 } className={ 'text-truncate text-muted' } title={ this.props.speaker.toUpperCase() } style={ { userSelect: 'none' } }>
+            <strong>{this.props.speaker.toUpperCase()}</strong>
             {/* <br/> */}
             {/* <u style={ { cursor: 'pointer' } }>00:01:20</u> */}
             {/* <br/> */}

@@ -14,7 +14,6 @@ import Note from './Note';
 
 import {
   faGripLines,
-  faGripHorizontal,
   faPen,
   faTrash,
   faArrowAltCircleLeft,
@@ -22,7 +21,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const InsertPoint = (({ text }) => <span style={ { width: '100%', backgroundColor: 'orange', color: 'white' } }> <FontAwesomeIcon icon={ faArrowAltCircleRight } /> {text}  <FontAwesomeIcon icon={ faArrowAltCircleLeft } /></span>);
+const InsertPoint = (({ text }) => <span style={ { width: '100%', backgroundColor: 'orange', color: 'white' } }> <FontAwesomeIcon icon={ faArrowAltCircleRight } /> {text} </span>);
 
 const DragHandle = sortableHandle(() => <span> <FontAwesomeIcon icon={ faGripLines } /> </span>);
 
@@ -43,6 +42,7 @@ const SortableItem = sortableElement(({ value, index, type, handleDelete, handle
       <Col sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
         {/* TODO: pass a prop to remove element from list */}
         {type !== 'insert-point' ? <FontAwesomeIcon className={ 'text-muted' } icon={ faTrash } onClick={ () => {handleDelete(index);} } /> : null}
+        {type === 'insert-point' ? <FontAwesomeIcon style={ { color: 'white' } } icon={ faArrowAltCircleLeft } /> : null}
       </Col>
     </Row></li>);
 });
