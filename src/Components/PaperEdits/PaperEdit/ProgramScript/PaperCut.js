@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { shortTimecode } from '@bbc/react-transcript-editor/timecodeConverter';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faTag } from '@fortawesome/free-solid-svg-icons';
 
 class PaperCut extends Component {
   constructor(props) {
