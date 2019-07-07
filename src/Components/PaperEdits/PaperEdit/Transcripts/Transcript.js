@@ -10,10 +10,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHighlighter,
-  faTag,
-  faTags,
   faCog,
-  faPlus
 } from '@fortawesome/free-solid-svg-icons';
 import SearchBar from './SearchBar/index.js';
 import Paragraphs from './Paragraphs/index.js';

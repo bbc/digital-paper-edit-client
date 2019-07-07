@@ -362,24 +362,26 @@ class ProgramScript extends Component {
   }
 
   programmeScriptJsonToText = (edlsqJson) => {
-    let result = `# ${ edlsqJson.title }\n\n`;
-    edlsqJson.events.map((event) => {
+    const title = `# ${ edlsqJson.title }\n\n`;
+    const body = edlsqJson.events.map((event) => {
       if (event.type === 'title') {
-        result += `## ${ event.text }\n\n`;
+        return `## ${ event.text }`;
       }
       else if (event.type === 'voice-over') {
-        result += `_${ event.text }_\n\n`;
+        return `_${ event.text }_`;
 
       }
       else if (event.type === 'note') {
-        result += `[ ${ event.text }]\n\n`;
+        return `[ ${ event.text }]`;
       }
       else if (event.type === 'paper-cut') {
-        result += `${ timecodes.fromSeconds(event.startTime) }\t${ timecodes.fromSeconds(event.endTime) }\t${ event.speaker }\t-\t${ event.clipName }     \n${ event.words.map((word) => {return word.text;}).join(' ') }\n\n`;
+        return `${ timecodes.fromSeconds(event.startTime) }\t${ timecodes.fromSeconds(event.endTime) }\t${ event.speaker }\t-\t${ event.clipName }     \n${ event.words.map((word) => {return word.text;}).join(' ') }`;
       }
+
+      return null;
     });
 
-    return result;
+    return `${ title }${ body.join('\n\n') }`;
   }
 
   handleExportJson = () => {
