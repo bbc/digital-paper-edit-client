@@ -27,10 +27,11 @@ class PaperEdit extends Component {
       labelsOptions: [],
       isTranscriptsShown: true,
       isProgramScriptShown: true,
+      annotations:[]
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
 
     ApiWrapper.get_ProgrammeScriptAndTranscripts(this.state.projectId, this.state.papereditId)
       .then((json) => {
@@ -44,6 +45,8 @@ class PaperEdit extends Component {
         });
       });
 
+    // const { labels } = await ApiWrapper.getAllLabels(this.state.projectId);
+    // this.setState({ labelsOptions: labels });
   }
 
   toggleTranscripts =() => {
@@ -149,8 +152,13 @@ class PaperEdit extends Component {
             >
               { this.state.transcripts.length ?
                 <Transcripts
+                  projectId={ this.state.projectId }
                   transcripts={ this.state.transcripts }
                   labelsOptions={ this.state.labelsOptions }
+                  // annotations={ this.state.annotations ? this.state.annotations : [] }
+                  // handleCreateAnnotation={ this.handleCreateAnnotation }
+                  // handleEditAnnotation={ this.handleEditAnnotation }
+                  // handleDeleteAnnotation={ this.handleDeleteAnnotation }
                 />
                 : ''}
             </Col>

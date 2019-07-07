@@ -36,6 +36,7 @@ class Transcripts extends Component {
       return (
         <Tab.Pane key={ transcript.id } eventKey={ transcript.id } >
           <Transcript
+            projectId={ this.props.projectId }
             labelsOptions={ this.props.labelsOptions }
             title={ transcript.transcriptTitle }
             transcript={ transcript.transcript }
@@ -62,12 +63,12 @@ class Transcripts extends Component {
                 Transcripts</h2>
               <hr/>
               <Nav variant="pills" className="flex-column">
-                {transcriptsElNav}
+                { transcriptsElNav }
               </Nav>
             </Col>
             <Col sm={ 9 }>
               <Tab.Content>
-                {transcriptsElTab}
+                { transcriptsElTab }
               </Tab.Content>
             </Col>
           </Row>
