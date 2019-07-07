@@ -125,7 +125,7 @@ class Transcripts extends Component {
   }
 
   showLinkPathToItem = (id) => {
-    return `/projects/${ this.state.projectId }/transcripts/${ id }/annotate`;
+    return `/projects/${ this.state.projectId }/transcripts/${ id }/correct`;
   }
 
   handleUpdateList = (list) => {

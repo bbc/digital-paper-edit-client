@@ -57,7 +57,7 @@ class Project extends React.Component {
             <Tab eventKey="transcripts" title="Transcripts">
               <Transcripts projectId={ this.state.projectId }/>
             </Tab>
-            <Tab eventKey="programmes" title="Programmes">
+            <Tab eventKey="programmes" title="Programmes script">
               <PaperEdits projectId={ this.state.projectId } />
             </Tab>
           </Tabs>
