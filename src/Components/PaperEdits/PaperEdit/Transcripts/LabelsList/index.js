@@ -9,6 +9,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTag,
+  faTags,
   faTimes,
   faPen,
   faCog
@@ -76,7 +77,7 @@ class LabelsList extends Component {
     if (this.props.labelsOptions) {
 
       labelsListOptions = this.props.labelsOptions.map((label, index) => {
-        return (<Dropdown.Item key={ 'label_' + index }>
+        return (<ListGroup.Item style={ { width: '100%' } } key={ 'label_' + index }>
           <Row>
             {/* Col space for the label color */}
             <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }
@@ -84,7 +85,8 @@ class LabelsList extends Component {
               title={ label.label }
             >
             </Col>
-            <Col xs={ 6 } sm={ 6 } md={ 6 } lg={ 6 } xl={ 6 } className="text-truncate"
+            <Col xs={ 6 } sm={ 6 } md={ 6 } lg={ 6 } xl={ 6 }
+            // className="text-truncate"
               title={ label.label }
             >
               {label.label}
@@ -122,17 +124,17 @@ class LabelsList extends Component {
             </Col>
             <Col xs={ 10 } sm={ 10 } md={ 10 } lg={ 10 } xl={ 10 }>
               <Form.Text
-                className={ [ 'text-muted', 'text-truncate' ].join(' ') }
+                // className={ [ 'text-muted', 'text-truncate' ].join(' ') }
                 title={ label.description }>
                 {label.description}
               </Form.Text>
             </Col>
           </Row>
-        </Dropdown.Item>);
+        </ListGroup.Item>);
       });
     }
 
-    const labelsList = (<ListGroup style={ { height: '50vh', overflowY: 'scroll', overflowX: 'hidden' } }>{labelsListOptions}
+    const labelsList = (<ListGroup style={ { height: '50vh', width: '20vw', overflowY: 'scroll', overflowX: 'hidden' } }>{labelsListOptions}
     </ListGroup>);
     // const labelsList = labelsListOptions;
 
@@ -140,24 +142,23 @@ class LabelsList extends Component {
 
       {this.props.isLabelsListOpen ? <>
         {/* <br/> */}
-        {/* <Card>
+        <Card>
           <Card.Header>
-            <FontAwesomeIcon icon={ faTag } />
-            <FontAwesomeIcon icon={ faCog } /> Labels Options
-          </Card.Header> */}
-        { labelsList }
-        {/* <Card.Footer className="text-muted"> */}
-        <LabelModal
-          color={ randomColor() }
-          label={ '' }
-          description={ '' }
-          labelId={ null }
-          show={ this.state.isLabelmodalShown }
-          onLabelSaved={ this.onLabelSaved }
-          openBtn={ <Button variant="outline-secondary" block><FontAwesomeIcon icon={ faTag } /> Create New Label</Button> }
-        />
-        {/* </Card.Footer> */}
-        {/* </Card> */}
+            <FontAwesomeIcon icon={ faTags } /> <FontAwesomeIcon icon={ faCog } /> Labels
+          </Card.Header>
+          { labelsList }
+          <Card.Footer className="text-muted">
+            <LabelModal
+              color={ randomColor() }
+              label={ '' }
+              description={ '' }
+              labelId={ null }
+              show={ this.state.isLabelmodalShown }
+              onLabelSaved={ this.onLabelSaved }
+              openBtn={ <Button variant="outline-secondary" block><FontAwesomeIcon icon={ faTag } /> Create New Label</Button> }
+            />
+          </Card.Footer>
+        </Card>
       </> : ''}
 
     </>

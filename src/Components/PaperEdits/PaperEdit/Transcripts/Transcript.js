@@ -15,7 +15,7 @@ import {
   faCog,
   faPlus
 } from '@fortawesome/free-solid-svg-icons';
-import SearchBar from '../../../Transcripts/TranscriptAnnotate/SearchBar/index.js';
+import SearchBar from './SearchBar/index.js';
 import Paragraphs from './Paragraphs/index.js';
 import LabelsList from './LabelsList/index.js';
 import onlyCallOnce from '../../../../Util/only-call-once/index.js';
@@ -92,6 +92,7 @@ class Transcript extends Component {
   }
 
   onLabelUpdate = (updatedLabel) => {
+    console.log('updatedLabel', updatedLabel);
     // TODO: PUT with API Wrapper
     ApiWrapper.updateLabel(this.props.projectId, updatedLabel.id, updatedLabel)
     // TODO: add error handling
