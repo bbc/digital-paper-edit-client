@@ -27,7 +27,7 @@ class PaperEdit extends Component {
       labelsOptions: [],
       isTranscriptsShown: true,
       isProgramScriptShown: true,
-      annotations:[]
+      // annotations:[]
     };
   }
 
@@ -155,10 +155,6 @@ class PaperEdit extends Component {
                   projectId={ this.state.projectId }
                   transcripts={ this.state.transcripts }
                   labelsOptions={ this.state.labelsOptions }
-                  // annotations={ this.state.annotations ? this.state.annotations : [] }
-                  // handleCreateAnnotation={ this.handleCreateAnnotation }
-                  // handleEditAnnotation={ this.handleEditAnnotation }
-                  // handleDeleteAnnotation={ this.handleDeleteAnnotation }
                 />
                 : ''}
             </Col>

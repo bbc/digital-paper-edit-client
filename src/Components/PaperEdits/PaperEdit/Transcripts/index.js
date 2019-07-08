@@ -37,11 +37,10 @@ class Transcripts extends Component {
         <Tab.Pane key={ transcript.id } eventKey={ transcript.id } >
           <Transcript
             projectId={ this.props.projectId }
+            transcriptId={ transcript.id }
             labelsOptions={ this.props.labelsOptions }
             title={ transcript.transcriptTitle }
             transcript={ transcript.transcript }
-            transcriptId={ transcript.id }
-            annotations={ transcript.annotations }
             url={ transcript.url }
           />
         </Tab.Pane>

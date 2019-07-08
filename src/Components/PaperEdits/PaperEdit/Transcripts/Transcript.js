@@ -7,6 +7,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+// import Card from 'react-bootstrap/Card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHighlighter,
@@ -59,7 +60,7 @@ class Transcript extends Component {
       selectedOptionSpeakerSearch: [],
       sentenceToSearchCSS: '',
       sentenceToSearchCSSInHighlights: '',
-      annotations: this.props.annotations,
+      annotations: [],
       isLabelsListOpen: true,
       labelsOptions: this.props.labelsOptions
       // isShowLabelsReference: false
@@ -77,6 +78,16 @@ class Transcript extends Component {
   //       });
   //     });
   // }
+
+  componentDidMount = () => {
+    ApiWrapper.getAllAnnotations(this.props.projectId, this.props.transcriptId)
+      .then(json => {
+        console.log('ApiWrapper.getAllAnnotations', json);
+        this.setState({
+          annotations: json.annotations
+        });
+      });
+  }
 
   onLabelCreate = (newLabel) => {
     ApiWrapper.createLabel(this.props.projectId, newLabel)
@@ -109,14 +120,6 @@ class Transcript extends Component {
         });
       });
   }
-
-  // handleVideoTranscriptPreviewDisplay = () => {
-  //   this.setState((state) => {
-  //     return {
-  //       isVideoTranscriptPreviewShow: state.isVideoTranscriptPreviewShow === 'none' ? true : 'none'
-  //     };
-  //   });
-  // }
 
   // functions repeadrted from TranscriptAnnotate/index.js
   handleTimecodeClick= e => {
@@ -204,22 +207,28 @@ class Transcript extends Component {
 
   handleCreateAnnotation = (e) => {
     const element = e.target;
-    window.element = element;
+    // window.element = element;
     const selection = getTimeFromUserWordsSelection();
     if (selection) {
       const { annotations } = this.state;
       selection.labelId = element.dataset.labelId;
       selection.note = '';
       const newAnnotation = selection;
-      ApiWrapper.createAnnotation(this.state.projectId, this.state.transcriptId, newAnnotation)
+      console.log('newAnnotation', newAnnotation);
+      ApiWrapper.createAnnotation(this.props.projectId, this.props.transcriptId, newAnnotation)
         .then(json => {
-        // this.setState({
-        //   labelsOptions: json.labels
-        // });
-          newAnnotation.id = json.annotation.id;
-          annotations.push(newAnnotation);
+          const newAnnotationFromServer = json.annotation;
+          console.log('newAnnotationFromServer', newAnnotationFromServer);
+          // console.log('handleCreateAnnotation', newAnnotation);
+          // this.setState({
+          //   labelsOptions: json.labels
+          // });
+          const newAnnotationsSet = JSON.parse(JSON.stringify(annotations));
+          // newAnnotation.id = json.annotation.id;
+          // newAnnotationsList.push(newAnnotation);
+          newAnnotationsSet.push(newAnnotationFromServer);
 
-          this.setState( { annotations: annotations });
+          this.setState( { annotations: newAnnotationsSet });
         });
 
     }
@@ -229,15 +238,19 @@ class Transcript extends Component {
   }
 
   handleDeleteAnnotation = (annotationId) => {
+    console.log('handleDeleteAnnotation', annotationId);
     const { annotations } = this.state;
     const newAnnotationsSet = annotations.filter((annotation) => {
       return annotation.id !== annotationId;
     });
 
-    ApiWrapper.deleteAnnotation(this.state.projectId, this.state.transcriptId, annotationId)
+    const deepCloneOfNestedObjectNewAnnotationsSet = JSON.parse(JSON.stringify(newAnnotationsSet));
+    ApiWrapper.deleteAnnotation(this.props.projectId, this.props.transcriptId, annotationId)
       .then(json => {
-        this.setState( { annotations: newAnnotationsSet });
+        console.log('ApiWrapper.deleteAnnotation', deepCloneOfNestedObjectNewAnnotationsSet);
+        this.setState( { annotations: deepCloneOfNestedObjectNewAnnotationsSet });
       });
+    // this.forceUpdate();
   }
 
   // TODO: add server side via ApiWrapper
@@ -331,49 +344,50 @@ class Transcript extends Component {
             backgroundColor: 'black'
           } }
           controls/>
-        <Row>
-          <Col xs={ 12 } sm={ 12 } md={ 12 } lg={ 12 } xl={ 12 }>
-            <ButtonGroup>
-              <Dropdown as={ ButtonGroup } style={ { width: '100%' } } >
-                <Button variant="outline-secondary" data-label-id={ 0 } onClick={ this.handleCreateAnnotation } >
-                  <FontAwesomeIcon icon={ faHighlighter } flip="horizontal"/> Highlight
-                  {/* */}
-                </Button>
-                <Dropdown.Toggle split variant="outline-secondary" data-lable-id={ 0 }/>
-                <Dropdown.Menu onClick={ this.handleCreateAnnotation }>
-                  {this.state.labelsOptions && this.state.labelsOptions.map((label) => {
-                    return (
-                      <Dropdown.Item key={ `label_id_${ label.id }` } data-label-id={ label.id } >
-                        <Row data-label-id={ label.id }>
-                          <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } style={ { backgroundColor: label.color } } data-label-id={ label.id }></Col>
-                          <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } data-label-id={ label.id }>{label.label}</Col>
-                        </Row>
-                      </Dropdown.Item>
-                    );
-                  })}
-                </Dropdown.Menu>
-              </Dropdown>
-
-              <DropdownButton
-                drop={ 'right' }
-                as={ ButtonGroup }
-                title={ <FontAwesomeIcon icon={ faCog }/> }
-                id="bg-nested-dropdown"
-                variant='outline-secondary'
-              >
-                <LabelsList
-                  isLabelsListOpen={ this.state.isLabelsListOpen }
-                  labelsOptions={ this.state.labelsOptions && this.state.labelsOptions }
-                  onLabelUpdate={ this.onLabelUpdate }
-                  onLabelCreate={ this.onLabelCreate }
-                  onLabelDelete={ this.onLabelDelete }
-                />
-              </DropdownButton>
-            </ButtonGroup>
-          </Col>
-        </Row>
-
         <Card>
+          <Card.Header>
+            <Row>
+              <Col xs={ 12 } sm={ 12 } md={ 12 } lg={ 12 } xl={ 12 }>
+                <ButtonGroup style={ { width: '100%' } }>
+                  <Dropdown as={ ButtonGroup } style={ { width: '100%' } } >
+                    <Button variant="outline-secondary" data-label-id={ 'default' } onClick={ this.handleCreateAnnotation } >
+                      <FontAwesomeIcon icon={ faHighlighter } flip="horizontal"/> Highlight
+                      {/* */}
+                    </Button>
+                    <Dropdown.Toggle split variant="outline-secondary" data-lable-id={ 0 }/>
+                    <Dropdown.Menu onClick={ this.handleCreateAnnotation }>
+                      {this.state.labelsOptions && this.state.labelsOptions.map((label) => {
+                        return (
+                          <Dropdown.Item key={ `label_id_${ label.id }` } data-label-id={ label.id } >
+                            <Row data-label-id={ label.id }>
+                              <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } style={ { backgroundColor: label.color } } data-label-id={ label.id }></Col>
+                              <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } data-label-id={ label.id }>{label.label}</Col>
+                            </Row>
+                          </Dropdown.Item>
+                        );
+                      })}
+                    </Dropdown.Menu>
+                  </Dropdown>
+
+                  <DropdownButton
+                    drop={ 'right' }
+                    as={ ButtonGroup }
+                    title={ <FontAwesomeIcon icon={ faCog }/> }
+                    id="bg-nested-dropdown"
+                    variant='outline-secondary'
+                  >
+                    <LabelsList
+                      isLabelsListOpen={ this.state.isLabelsListOpen }
+                      labelsOptions={ this.state.labelsOptions && this.state.labelsOptions }
+                      onLabelUpdate={ this.onLabelUpdate }
+                      onLabelCreate={ this.onLabelCreate }
+                      onLabelDelete={ this.onLabelDelete }
+                    />
+                  </DropdownButton>
+                </ButtonGroup>
+              </Col>
+            </Row>
+          </Card.Header>
           <SearchBar
             labelsOptions={ this.state.labelsOptions }
             speakersOptions={ this.props.transcript ? makeListOfUniqueSpeakers(this.props.transcript.paragraphs) : null }
