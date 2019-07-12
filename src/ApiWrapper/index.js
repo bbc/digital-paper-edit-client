@@ -62,9 +62,8 @@ class ApiWrapper {
 
   async deleteProject(id) {
     const res = await corsFetch(this.projectsIdUrl(id), 'DELETE');
-    const json = await res.json();
 
-    return json;
+    return res;
   }
 
   /**

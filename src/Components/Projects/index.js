@@ -108,7 +108,7 @@ class Projects extends React.Component {
 
   async handleDeleteItem(itemId) {
     const result = await ApiWrapper.deleteProject(itemId);
-    if (result.status === 'ok') {
+    if (result.ok) {
       const newItemsList = this.state.items.filter((p) => {
         return p.id !== itemId;
       });
