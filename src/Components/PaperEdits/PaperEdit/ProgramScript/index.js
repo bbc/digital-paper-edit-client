@@ -18,7 +18,8 @@ import {
   faHeading,
   faPlus,
   faSync,
-  faInfoCircle
+  faInfoCircle,
+  faSave
 } from '@fortawesome/free-solid-svg-icons';
 import timecodes from 'node-timecodes';
 import ProgrammeScript from './ProgrammeScript.js';
@@ -452,6 +453,42 @@ class ProgramScript extends Component {
     }
   }
 
+  handleSaveProgrammeScript = () => {
+    const { programmeScript } = this.state;
+    if (programmeScript) {
+      const elements = programmeScript.elements;
+      // finding an removing insert point before saving to server
+      // find insert point in list,
+      const insertPointElement = elements.find((el) => {
+        return el.type === 'insert-point';
+      });
+      if (insertPointElement) {
+        // get insertpoint index
+        const indexOfInsertPoint = elements.indexOf(insertPointElement);
+        elements.splice(indexOfInsertPoint, 1);
+      }
+
+      programmeScript.elements = elements;
+      ApiWrapper.updatePaperEdit(this.props.projectId, this.props.papereditId, programmeScript)
+        .then((json) => {
+          if (json.status === 'ok') {
+            alert('saved programme script');
+          }
+          // const programmeScript = json.programmeScript;
+          // Adding an insert point at the end of the list
+          // programmeScript.elements.push({ type: 'insert-point', text: 'Insert Point to add selection' });
+          // this.setState({
+          //   programmeScript: programmeScript
+          // }
+          // TODO: figure out how to update preview
+          // , () => {
+          //   this.handleUpdatePreview();
+          // }
+          // );
+        });
+    }
+  }
+
   render() {
     return (
       <Tab.Content>
@@ -480,7 +517,7 @@ class ProgramScript extends Component {
               <FontAwesomeIcon icon={ faPlus } /> Selection
             </Button>
           </Col>
-          <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
+          <Col sm={ 12 } md={ 2 } ld={ 2 } xl={ 2 }>
             <Dropdown block>
               <Dropdown.Toggle variant="outline-secondary">
                 <FontAwesomeIcon icon={ faPlus } />
@@ -564,6 +601,17 @@ class ProgramScript extends Component {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
+          </Col>
+          <Col sm={ 12 } md={ 1 } ld={ 1 } xl={ 1 }>
+            <Button variant="outline-secondary"
+              onClick={ this.handleSaveProgrammeScript }
+              // size="sm"
+              title="save programme script"
+              block
+            >
+              <FontAwesomeIcon icon={ faSave } />
+              {/* Save */}
+            </Button>
           </Col>
         </Row>
         <hr/>

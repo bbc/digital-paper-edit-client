@@ -59,6 +59,7 @@ class PaperEdits extends Component {
     else {
       ApiWrapper.updatePaperEdit(this.state.projectId, item.id, item).then(response => {
         if (response.status === 'ok') {
+          console.log('ApiWrapper.updatePaper', response );
           const paperedit = response.paperedit;
           // need to add display true attribute for search to the new project
           paperedit.display = true;
@@ -103,7 +104,7 @@ class PaperEdits extends Component {
   // TODO:
   async handleDeleteItem(itemId) {
     const result = await ApiWrapper.deletePaperEdit(this.state.projectId, itemId);
-    if (result.status === 'ok') {
+    if (result.ok) {
       const newItemsList = this.state.items.filter((p) => {
         return p.id !== itemId;
       });

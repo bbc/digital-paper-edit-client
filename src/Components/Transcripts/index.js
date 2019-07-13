@@ -47,6 +47,7 @@ class Transcripts extends Component {
   // component - could be refactored
   // but needs to take into account file upload from form in TranscriptForm
   handleSaveItem = (item) => {
+    console.log('handleSaveItem', item);
     const newItem = item;
     newItem.display = true;
     const { items } = this.state;
@@ -80,8 +81,8 @@ class Transcripts extends Component {
     // TODO: add error handling, eg message, wasn't able to update etc..
     ApiWrapper.updateTranscript(this.state.projectId, transcriptId, queryParamsOptions, newEditedITem)
       .then((response) => {
-        if (response.status === 'ok') {
-          console.log(response.transcript, newItemsList);
+        if (response.ok) {
+          console.log('ApiWrapper.updateTranscript', response, newItemsList);
           this.setState({
             items: newItemsList,
             isEditItemModalShow: false
@@ -116,7 +117,7 @@ class Transcripts extends Component {
     const result = await ApiWrapper.deleteTranscript(this.state.projectId, transcriptId);
     // TODO: some error handling, error message saying something went wrong
     const findId = (item) => item.id !== transcriptId;
-    if (result.status === 'ok') {
+    if (result.ok) {
       const tmpNewList = this.state.items.filter(item => findId(item));
       this.setState({
         items: tmpNewList

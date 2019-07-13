@@ -5,7 +5,10 @@ import Row from 'react-bootstrap/Row';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAngleUp,
+  faAngleDown
+} from '@fortawesome/free-solid-svg-icons';
 import CustomNavbar from '../../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../../lib/CustomFooter/index.js';
@@ -71,10 +74,10 @@ class PaperEdit extends Component {
     }
   }
 
-  saveToServer = () => {
-    // TODO: add Api call to save content of
-    alert('save to server');
-  }
+  // saveToServer = () => {
+  //   // TODO: add Api call to save content of
+  //   alert('save to server');
+  // }
 
   render() {
     return (
@@ -85,7 +88,7 @@ class PaperEdit extends Component {
         <br/>
 
         <Row>
-          <Col sm={ 12 } md={ 10 } ld={ 10 } xl={ 10 }>
+          <Col sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 }>
             <CustomBreadcrumb
               items={ [ {
                 name: 'Projects',
@@ -104,16 +107,18 @@ class PaperEdit extends Component {
               ] }
             />
           </Col>
-          <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
+          {/* <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
             <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
               Save
             </Button>
-          </Col>
+          </Col> */}
         </Row>
 
         <Container fluid={ true }>
           <div className="d-flex flex-column">
-            <ButtonGroup size="sm" className="mt-12">
+            <ButtonGroup
+              size="sm" className="mt-12"
+            >
               <Button
                 onClick={ this.toggleTranscripts }
                 variant={ this.state.isTranscriptsShown ? 'secondary' : 'outline-secondary' }
@@ -127,8 +132,8 @@ class PaperEdit extends Component {
                  Program Script  <FontAwesomeIcon icon={ this.state.isProgramScriptShown ? faAngleDown : faAngleUp } />  { this.state.isProgramScriptShown ? 'hide' : 'show'}
               </Button>
             </ButtonGroup>
-
           </div>
+
           <Row>
             <Col
               xs={ { span: 12, offset:0 } }
@@ -156,7 +161,7 @@ class PaperEdit extends Component {
                   transcripts={ this.state.transcripts }
                   labelsOptions={ this.state.labelsOptions }
                 />
-                : ''}
+                : <><br/><br/><i>No Transcripts, create a transcript to get started</i></>}
             </Col>
             <Col
               xs={ { span: 12, offset:0 } }

@@ -55,13 +55,15 @@ class Page extends React.Component {
         </Col>
       </Row>
 
+      {(this.props.items && this.props.items.length === 0) ? <i>There are no {this.props.model}, create a new one to get started</i> : null}
+
       {this.props.items ?
         <List
           items={ this.props.items }
           handleEdit={ this.props.handleEdit }
           handleDelete={ this.props.handleDelete }
           showLinkPath={ this.props.showLinkPath }
-        /> : 'There are no items'}
+        /> : null}
 
     </>);
   }

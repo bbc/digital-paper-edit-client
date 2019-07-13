@@ -64,7 +64,8 @@ class TranscriptCorrect extends Component {
     data.transcriptTitle = this.state.transcriptTitle;
     const queryParamsOptions = false;
     ApiWrapper.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, data).then((response) => {
-      if (response.status === 'ok') {
+      console.log('ApiWrapper.updateTranscript', response );
+      if (response.ok) {
       // show message or redirect
         console.log('updated');
         // this.setState({ redirect: true, newProjectId: response.projectId });

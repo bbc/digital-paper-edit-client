@@ -64,7 +64,7 @@ class TranscriptForm extends Component {
     try {
       ApiWrapper.createTranscript(this.state.projectId, this.state.formData)
         .then(response => {
-          console.log('response ', response);
+          console.log('ApiWrapper.createTranscript-response ', response);
           // show message or redirect
           this.setState({
             uploading: false,

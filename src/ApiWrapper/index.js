@@ -35,7 +35,6 @@ class ApiWrapper {
     console.log(this.projectsUrl);
     const res = await corsFetch(this.projectsUrl);
     const json = await res.json();
-    console.log('getAllProjects::', json);
 
     return json.projects;
   }
@@ -97,16 +96,14 @@ class ApiWrapper {
 
   async updateTranscript(projectId, transcriptId, queryParamsOptions, data) {
     const res = await corsFetch(this.transcriptsIdUrl(projectId, transcriptId, queryParamsOptions), 'PUT', data);
-    const json = await res.json();
 
-    return json;
+    return res;
   }
 
   async deleteTranscript(projectId, transcriptId) {
     const res = await corsFetch(this.transcriptsIdUrl(projectId, transcriptId), 'DELETE');
-    const json = await res.json();
 
-    return json;
+    return res;
   }
 
   /**
@@ -213,15 +210,15 @@ class ApiWrapper {
   async updatePaperEdit(projectId, id, data) {
     const res = await corsFetch(this.paperEditsIdUrl(projectId, id), 'PUT', data);
     const json = await res.json();
+    console.log('updatePaperEdit', json);
 
     return json;
   }
 
   async deletePaperEdit(projectId, id) {
     const res = await corsFetch(this.paperEditsIdUrl(projectId, id), 'DELETE');
-    const json = await res.json();
 
-    return json;
+    return res;
   }
 
   /**
