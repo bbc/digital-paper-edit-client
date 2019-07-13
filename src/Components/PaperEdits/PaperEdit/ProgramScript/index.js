@@ -518,7 +518,7 @@ class ProgramScript extends Component {
             </Button>
           </Col>
           <Col sm={ 12 } md={ 2 } ld={ 2 } xl={ 2 }>
-            <Dropdown block>
+            <Dropdown>
               <Dropdown.Toggle variant="outline-secondary">
                 <FontAwesomeIcon icon={ faPlus } />
               </Dropdown.Toggle>
