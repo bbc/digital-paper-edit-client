@@ -3,6 +3,21 @@ import React, { Component } from 'react';
 import removePunctuation from '../../../../../Util/remove-punctuation/index.js';
 
 class Word extends Component {
+  generatePreviousTimes = (start) => {
+    let prevTimes = '';
+
+    for (let i = 0; i < start; i++) {
+      prevTimes += `${ i } `;
+    }
+
+    if (start % 1 > 0) {
+      // Find the closest quarter-second to the current time, for more dynamic results
+      const dec = Math.floor((start % 1) * 4.0) / 4.0;
+      prevTimes += ` ${ Math.floor(start) + dec }`;
+    }
+
+    return prevTimes;
+  }
   render() {
     const { transcriptId, speaker, word } = this.props;
     // console.log('this.props.paragraph', this.props.transcriptId);
@@ -11,7 +26,8 @@ class Word extends Component {
     return (
       <span
         title={ `start:${ word.start } - end:${ word.end }` }
-        className={ [ 'words'
+        data-prev-times = { this.generatePreviousTimes( word.start) }
+        className={ [ 'words',
           // , styles.highlightedWord
         ].join(' ') }
         data-start={ word.start }

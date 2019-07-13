@@ -119,7 +119,7 @@ class SearchBar extends Component {
                  showLabelsSearchPreferences: this.state.showLabelsSearchPreferences,
                  showSpeakersSearchPreferences: this.state.showSpeakersSearchPreferences
                });} }
-               placeholder="Search keywords..."
+               placeholder="Search text..."
                aria-label="search"
                aria-describedby="search"
              />
@@ -192,7 +192,7 @@ class SearchBar extends Component {
                      isSearchable
                      options={ this.props.labelsOptions }
                      styles={ colourStyles }
-                     placeholder={ 'Find label...' }
+                     placeholder={ 'Filter by label...' }
                    />
                  </Col>
                </Row>
@@ -217,7 +217,7 @@ class SearchBar extends Component {
                      isSearchable
                      options={ this.props.speakersOptions }
                      styles={ speakersColorStyles }
-                     placeholder={ 'Find speaker...' }
+                     placeholder={ 'Filter by speaker...' }
                    />
                  </Col>
                </Row>
@@ -236,7 +236,7 @@ class SearchBar extends Component {
                      title="Show only matching paragraphs"
                      onClick={ this.handleShowParagraphsMatchingSearch }
                    >
-                       Show only paragraphs
+                       Show only matching paragraphs
                    </Form.Text>
                  </> }
                />

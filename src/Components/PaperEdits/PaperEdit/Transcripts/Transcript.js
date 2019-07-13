@@ -62,7 +62,8 @@ class Transcript extends Component {
       sentenceToSearchCSSInHighlights: '',
       annotations: [],
       isLabelsListOpen: true,
-      labelsOptions: this.props.labelsOptions
+      labelsOptions: this.props.labelsOptions,
+      currentTime: 0
       // isShowLabelsReference: false
     };
   }
@@ -263,7 +264,7 @@ class Transcript extends Component {
     const newNote = prompt('Edit the text note of the annotation', newAnnotationToEdit.note);
     if (newNote) {
       newAnnotationToEdit.note = newNote;
-      ApiWrapper.updateAnnotation(this.state.projectId, this.state.transcriptId, annotationId, newAnnotationToEdit)
+      ApiWrapper.updateAnnotation(this.state.projectId, this.props.transcriptId, annotationId, newAnnotationToEdit)
         .then(json => {
           const newAnnotation = json.annotation;
           // updating annotations client side by removing updating one
@@ -296,12 +297,55 @@ class Transcript extends Component {
     // }
   }
 
+  getCurrentWordTime = () => {
+    const { words } = this.props.transcript;
+    console.log('this.props.transcript', this.props.transcript);
+
+    const currentTime = this.state.currentTime ;
+    // if (this.videoRef && this.videoRef.current && this.videoRef.current.currentTime) {
+    //   currentTime = this.videoRef.current.currentTime;
+    // }
+    console.log('currentTime = this.videoRef.current.currentTime;', currentTime, typeof currentTime);
+
+    const currentWordTime = words.find((word) => {
+      if (currentTime >= word.start && currentTime <= word.end ) {
+        return word.start;
+      }
+    });
+    if (currentWordTime !== undefined) {
+      return currentWordTime[0];
+    }
+
+    return 0;
+
+  }
   // eslint-disable-next-line class-methods-use-this
   render() {
     console.log('labelsOptions- TRANSCRIPTS', this.props.labelsOptions);
 
+    // const currentWordTime = parseInt(this.state.currentTime );
+    const currentWordTime = this.state.currentTime;
+    // const currentWordTime = this.getCurrentWordTime();
+    console.log('currentWordTime', currentWordTime);
+    // const highlightColour = 'blue';//'#69e3c2';
+    const unplayedColor = 'grey';//'#767676';
+    // const correctionBorder = '1px dotted blue';
+
+    // Time to the nearest half second
+    const time = Math.round(currentWordTime * 4.0) / 4.0;
+    const highlights = (
+      <style scoped>
+        {/* {`span.words[data-start="${ currentWordTime }"] { background-color: ${ highlightColour }; text-shadow: 0 0 0.01px black }`}
+        {`span.words[data-start="${ currentWordTime }"]+span { background-color: ${ highlightColour } }`} */}
+        {`span.words[data-prev-times~="${ Math.floor(time) }"][data-transcript-id="${ this.props.transcriptId }"] { color: ${ unplayedColor } }`}
+        {/* {`span.words[data-prev-times~="${ Math.floor(time) }"] { color: ${ unplayedColor } }`} */}
+        {/* {`span.Word[data-confidence="low"] { border-bottom: ${ correctionBorder } }`} */}
+      </style>
+    );
+
     return (
       <>
+
         {/* <div style={ {
           display:
           // this.state.isShowLabelsReference ?
@@ -322,6 +366,7 @@ class Transcript extends Component {
           {`${ this.state.sentenceToSearchCSS } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
           {`${ this.state.sentenceToSearchCSSInHighlights } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
         </style>
+
         <h2
           className={ [ 'text-truncate', 'text-muted' ].join(' ') }
           title={ `Transcript Title: ${ this.props.title }` }
@@ -337,6 +382,8 @@ class Transcript extends Component {
         <video
           src={ this.props.url }
           ref={ this.videoRef }
+          onTimeUpdate={ (e) => {this.setState({ currentTime: e.target.currentTime });} }
+          // onTimeUpdate={ (e) => {console.log(e.target.currentTime); } }
           style={ {
             // display: this.state.isVideoTranscriptPreviewShow,
             width: '100%',
@@ -402,22 +449,24 @@ class Transcript extends Component {
             onClick={ this.handleTimecodeClick }
             style={ { height: '60vh', overflow: 'scroll' } }
           >
-            {/* TODO: instead of null, if transcript is not provided, eg offline or server error, then add custom alert */}
-            {this.props.transcript
-                && <Paragraphs
-                  labelsOptions={ this.state.labelsOptions && this.state.labelsOptions }
-                  annotations={ this.state.annotations ? this.state.annotations : [] }
-                  transcriptJson={ this.props.transcript }
-                  searchString={ this.state.searchString ? this.state.searchString : '' }
-                  showParagraphsMatchingSearch={ this.state.showParagraphsMatchingSearch }
-                  selectedOptionLabelSearch={ this.state.selectedOptionLabelSearch ? this.state.selectedOptionLabelSearch : [] }
-                  selectedOptionSpeakerSearch={ this.state.selectedOptionSpeakerSearch ? this.state.selectedOptionSpeakerSearch : [] }
-                  transcriptId={ this.props.transcriptId }
-                  handleTimecodeClick={ this.handleTimecodeClick }
-                  handleWordClick={ this.handleWordClick }
-                  handleDeleteAnnotation={ this.handleDeleteAnnotation }
-                  handleEditAnnotation={ this.handleEditAnnotation }
-                />}
+            <div>
+              {highlights}
+              {this.props.transcript
+          && <Paragraphs
+            labelsOptions={ this.state.labelsOptions && this.state.labelsOptions }
+            annotations={ this.state.annotations ? this.state.annotations : [] }
+            transcriptJson={ this.props.transcript }
+            searchString={ this.state.searchString ? this.state.searchString : '' }
+            showParagraphsMatchingSearch={ this.state.showParagraphsMatchingSearch }
+            selectedOptionLabelSearch={ this.state.selectedOptionLabelSearch ? this.state.selectedOptionLabelSearch : [] }
+            selectedOptionSpeakerSearch={ this.state.selectedOptionSpeakerSearch ? this.state.selectedOptionSpeakerSearch : [] }
+            transcriptId={ this.props.transcriptId }
+            handleTimecodeClick={ this.handleTimecodeClick }
+            handleWordClick={ this.handleWordClick }
+            handleDeleteAnnotation={ this.handleDeleteAnnotation }
+            handleEditAnnotation={ this.handleEditAnnotation }
+          />}
+            </div>
           </Card.Body>
         </Card>
       </>
