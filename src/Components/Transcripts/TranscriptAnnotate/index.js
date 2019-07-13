@@ -346,6 +346,15 @@ class TranscriptAnnotate extends Component {
   }
 
   render() {
+    const currentWordTime = this.state.currentTime;
+    const unplayedColor = 'grey';
+    const time = Math.round(currentWordTime * 4.0) / 4.0;
+    const highlights = (
+      <style scoped>
+        {`span.words[data-prev-times~="${ Math.floor(time) }"][data-transcript-id="${ this.state.transcriptId }"] { color: ${ unplayedColor } }`}
+      </style>
+    );
+
     return (<>
       {this.renderRedirect()}
       <Container fluid={ true } style={ { backgroundColor: '#f9f9f9', marginBottom: '5em' } }>
@@ -493,6 +502,7 @@ class TranscriptAnnotate extends Component {
                 onClick={ this.handleTimecodeClick }
                 style={ { height: '80vh', overflow: 'scroll' } }
               >
+                {highlights}
                 {/* TODO: instead of null, if transcript is not provided, eg offline or server error, then add custom alert */}
                 {this.state.transcriptJson
                 && <Paragraphs
