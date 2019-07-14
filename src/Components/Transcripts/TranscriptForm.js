@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import ApiWrapper from '../../ApiWrapper/index.js';
 import CustomAlert from '../lib/CustomAlert/index.js';
 import './index.module.css';
-
+import whichJsEnv from '../../Util/which-js-env';
 // setOriginalFetch(window.fetch);
 // window.fetch = progressBarFetch;
 
@@ -45,6 +45,11 @@ class TranscriptForm extends Component {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('type', file.type);
+    // in electron file upload provides a path to the file
+    if (file.path) {
+      formData.append('path', file.path);
+    }
+    // console.log("formData.get('path')", formData.get('path'));
     this.setState({ mediaFileSelected: true, formData: formData });
 
     if (this.state.title === '') {
@@ -59,10 +64,23 @@ class TranscriptForm extends Component {
 
     formData.append('title', this.state.title);
     formData.append('description', this.state.description);
+    console.log("formData.get('path')", formData.get('path'));
 
+    let data = {};
+    if (whichJsEnv() === 'electron') {
+      // if client run inside of electron
+      // is easier to pass another object with title, description
+      // as well as the additional path to the file
+      // rather then parsing a formData object in node etc..
+      data = {
+        title: formData.get('title'),
+        description: formData.get('description'),
+        path: formData.get('path')
+      };
+    }
     // TODO: do you need a try catch?
     try {
-      ApiWrapper.createTranscript(this.state.projectId, this.state.formData)
+      ApiWrapper.createTranscript(this.state.projectId, this.state.formData, data)
         .then(response => {
           console.log('ApiWrapper.createTranscript-response ', response);
           // show message or redirect
