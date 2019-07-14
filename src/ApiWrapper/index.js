@@ -1,5 +1,5 @@
 import ApiWrapper from './ApiWrapper';
-import ElectronWrapper from './ElectronWrapper.js';
+// import ElectronWrapper from './ElectronWrapper.js';
 import whichJsEnv from '../Util/which-js-env';
 
 const jsENV = whichJsEnv();
@@ -20,10 +20,10 @@ export default ( () => {
   }
   if (jsENV === 'electron') {
     console.log(whichJsEnv());
+    const ElectronWrapper = window.ElectronWrapper;
+    const electronWrapper = new ElectronWrapper();
+    Object.freeze(electronWrapper);
 
-    const apiWrapper = new ElectronWrapper();
-    Object.freeze(apiWrapper);
-
-    return apiWrapper;
+    return electronWrapper;
   }
 })();
