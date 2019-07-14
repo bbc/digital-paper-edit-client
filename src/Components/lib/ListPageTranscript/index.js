@@ -96,7 +96,7 @@ class ListPageTranscript extends Component {
       );
     }
     else {
-      content = <i>No {this.props.model}, create a new one to g;et started </i>;
+      content = <i>No {this.props.model}, create a new one to get started </i>;
     }
 
     return (
