@@ -3,6 +3,7 @@ import corsFetch from './cors_wrapper.js';
 
 class ApiWrapper {
   constructor() {
+    console.log('inside ApiWrapper');
     this.baseUrl = window.env.API_URL;
     window.env.API_URL = null;
 
