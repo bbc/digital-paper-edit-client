@@ -26,6 +26,16 @@
   </head>
   <body>
 
+      <script>
+          if(window.process && window.process.versions.electron){
+            window.require = require;
+            const electron = window.require('electron');
+            const currentWindow = electron.remote.getCurrentWindow();
+            const ElectronWrapper = currentWindow.ElectronWrapper;
+            window.ElectronWrapper = ElectronWrapper;
+          }
+        </script>
+
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <!--
@@ -45,15 +55,4 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
-  <script>
-    // Added after body as a workaround to override the window.DB defined inside React bundle
-    // Modular Architecture workaround
-    // If React front end used inside Electron, then use local API for DB and utils
-    // TODO: at later stage could consider modifying webpack config to output
-    // react bundle version for web and for electron
-    if(window.process && window.process.versions.electron){
-      window.DB = require(window.process.cwd()+'/db/db.js');
-      console.log(window.process.cwd()+'/db/db.js')
-    }
-  </script>
 </html>
