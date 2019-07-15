@@ -25,17 +25,20 @@
     <title>%REACT_APP_NAME%</title>
   </head>
   <body>
-
-      <script>
-          if(window.process && window.process.versions.electron){
-            window.require = require;
-            const electron = window.require('electron');
-            const currentWindow = electron.remote.getCurrentWindow();
-            const ElectronWrapper = currentWindow.ElectronWrapper;
-            window.ElectronWrapper = ElectronWrapper;
-          }
-        </script>
-
+    <script>
+      if(window.process && window.process.versions.electron){
+        // Electron Wrapper needs to be on the electron render process
+        // if not, if instead it's added via the main process the app will hang
+        // at the moment this works, in production. 
+        // eg do react build, move the build folder in digital-paper-edit-electron repo
+        // and when you start npm run start:prod the app will work
+        // however it means that in development npm start:dev in digital-paper-edit-electron won't work. 
+        // because in development the electron-main.js looks for the app served by webpack, 
+        // the path below to load src/ElectronWrapper/index.js doesn't resolve as they are in two different repos
+        const ElectronWrapper = require('../src/ElectronWrapper/index.js');
+        window.ElectronWrapper = ElectronWrapper;
+      }
+  </script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <!--
