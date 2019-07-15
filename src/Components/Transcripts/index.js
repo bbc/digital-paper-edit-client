@@ -65,10 +65,10 @@ class Transcripts extends Component {
   }
 
   handleSaveEditedItem = (transcript) => {
-    const newEditedITem = transcript;
-    console.log('newEditedITem', newEditedITem);
+    const newEditedItem = transcript;
+    console.log('newEditedITem', newEditedItem);
     // display attribute for search
-    newEditedITem.display = true;
+    newEditedItem.display = true;
     // Update existing
     const { items } = this.state;
     const itemIdex = items.findIndex(item => item.id === transcript.id);
@@ -77,9 +77,9 @@ class Transcripts extends Component {
     transcript.status = newItemsList[itemIdex].status;
     newItemsList[itemIdex] = transcript;
     const queryParamsOptions = false;
-    const transcriptId = newEditedITem.id;
+    const transcriptId = newEditedItem.id;
     // TODO: add error handling, eg message, wasn't able to update etc..
-    ApiWrapper.updateTranscript(this.state.projectId, transcriptId, queryParamsOptions, newEditedITem)
+    ApiWrapper.updateTranscript(this.state.projectId, transcriptId, queryParamsOptions, newEditedItem)
       .then((response) => {
         if (response.ok) {
           console.log('ApiWrapper.updateTranscript', response, newItemsList);

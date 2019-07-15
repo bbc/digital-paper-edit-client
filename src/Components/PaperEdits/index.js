@@ -21,6 +21,7 @@ class PaperEdits extends Component {
   async componentDidMount () {
     // TODO: do we need to add user id in request?
     const result = await ApiWrapper.getAllPaperEdits(this.state.projectId);
+    console.log('ApiWrapper.getAllPaperEdits', result);
     if (result) {
       // add a display property for component cards search
       const tmpList = result.map(paperEdit => {
@@ -38,6 +39,7 @@ class PaperEdits extends Component {
   handleSaveItem = (item) => {
     if (!item.id) {
       ApiWrapper.createPaperEdit(this.state.projectId, item).then(response => {
+        console.log('ApiWrapper.createPaperEdit', response);
         if (response.status === 'ok') {
           // Server returns project with UID generated server side
           const items = [ ...this.state.items ];
