@@ -64,26 +64,12 @@ class Transcript extends Component {
       isLabelsListOpen: true,
       labelsOptions: this.props.labelsOptions,
       currentTime: 0
-      // isShowLabelsReference: false
     };
   }
-
-  // TODO: this is not very efficient, we are loading labels for every transcript
-  // instead of once in parent component and then shared
-  // componentDidMount = () => {
-  //   ApiWrapper.getAllLabels(this.state.projectId)
-  //   // TODO: add error handling
-  //     .then(json => {
-  //       this.setState({
-  //         labelsOptions: json.labels
-  //       });
-  //     });
-  // }
 
   componentDidMount = () => {
     ApiWrapper.getAllAnnotations(this.props.projectId, this.props.transcriptId)
       .then(json => {
-        console.log('ApiWrapper.getAllAnnotations', json);
         this.setState({
           annotations: json.annotations
         });
@@ -239,7 +225,6 @@ class Transcript extends Component {
   }
 
   handleDeleteAnnotation = (annotationId) => {
-    console.log('handleDeleteAnnotation', annotationId);
     const { annotations } = this.state;
     const newAnnotationsSet = annotations.filter((annotation) => {
       return annotation.id !== annotationId;
@@ -248,10 +233,8 @@ class Transcript extends Component {
     const deepCloneOfNestedObjectNewAnnotationsSet = JSON.parse(JSON.stringify(newAnnotationsSet));
     ApiWrapper.deleteAnnotation(this.props.projectId, this.props.transcriptId, annotationId)
       .then(json => {
-        console.log('ApiWrapper.deleteAnnotation', deepCloneOfNestedObjectNewAnnotationsSet);
         this.setState( { annotations: deepCloneOfNestedObjectNewAnnotationsSet });
       });
-    // this.forceUpdate();
   }
 
   // TODO: add server side via ApiWrapper
@@ -299,14 +282,11 @@ class Transcript extends Component {
 
   getCurrentWordTime = () => {
     const { words } = this.props.transcript;
-    console.log('this.props.transcript', this.props.transcript);
 
     const currentTime = this.state.currentTime ;
     // if (this.videoRef && this.videoRef.current && this.videoRef.current.currentTime) {
     //   currentTime = this.videoRef.current.currentTime;
     // }
-    console.log('currentTime = this.videoRef.current.currentTime;', currentTime, typeof currentTime);
-
     const currentWordTime = words.find((word) => {
       if (currentTime >= word.start && currentTime <= word.end ) {
         return word.start;
@@ -321,25 +301,14 @@ class Transcript extends Component {
   }
   // eslint-disable-next-line class-methods-use-this
   render() {
-    console.log('labelsOptions- TRANSCRIPTS', this.props.labelsOptions);
-
-    // const currentWordTime = parseInt(this.state.currentTime );
     const currentWordTime = this.state.currentTime;
-    // const currentWordTime = this.getCurrentWordTime();
-    console.log('currentWordTime', currentWordTime);
-    // const highlightColour = 'blue';//'#69e3c2';
-    const unplayedColor = 'grey';//'#767676';
-    // const correctionBorder = '1px dotted blue';
+    const unplayedColor = 'grey';
 
     // Time to the nearest half second
     const time = Math.round(currentWordTime * 4.0) / 4.0;
     const highlights = (
       <style scoped>
-        {/* {`span.words[data-start="${ currentWordTime }"] { background-color: ${ highlightColour }; text-shadow: 0 0 0.01px black }`}
-        {`span.words[data-start="${ currentWordTime }"]+span { background-color: ${ highlightColour } }`} */}
         {`span.words[data-prev-times~="${ Math.floor(time) }"][data-transcript-id="${ this.props.transcriptId }"] { color: ${ unplayedColor } }`}
-        {/* {`span.words[data-prev-times~="${ Math.floor(time) }"] { color: ${ unplayedColor } }`} */}
-        {/* {`span.Word[data-confidence="low"] { border-bottom: ${ correctionBorder } }`} */}
       </style>
     );
 

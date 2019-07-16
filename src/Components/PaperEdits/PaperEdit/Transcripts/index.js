@@ -15,7 +15,6 @@ class Transcripts extends Component {
 
   // eslint-disable-next-line class-methods-use-this
   render() {
-    console.log(',this.props Transcripts SS', this.props);
     const transcriptsElNav = this.props.transcripts.map((transcript, index) => {
       return (
         <Nav.Item key={ transcript.id }>

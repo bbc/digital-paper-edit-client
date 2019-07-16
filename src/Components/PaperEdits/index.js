@@ -39,7 +39,6 @@ class PaperEdits extends Component {
   handleSaveItem = (item) => {
     if (!item.id) {
       ApiWrapper.createPaperEdit(this.state.projectId, item).then(response => {
-        console.log('ApiWrapper.createPaperEdit', response);
         if (response.status === 'ok') {
           // Server returns project with UID generated server side
           const items = [ ...this.state.items ];
@@ -61,7 +60,6 @@ class PaperEdits extends Component {
     else {
       ApiWrapper.updatePaperEdit(this.state.projectId, item.id, item).then(response => {
         if (response.status === 'ok') {
-          console.log('ApiWrapper.updatePaper', response );
           const paperedit = response.paperedit;
           // need to add display true attribute for search to the new project
           paperedit.display = true;
@@ -100,7 +98,6 @@ class PaperEdits extends Component {
       description: item.description,
       isNewItemModalShow: true
     });
-    console.log('edit item', item);
   }
 
   // TODO:

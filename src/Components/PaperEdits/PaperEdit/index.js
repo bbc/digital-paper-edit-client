@@ -38,22 +38,16 @@ class PaperEdit extends Component {
 
     ApiWrapper.get_ProgrammeScriptAndTranscripts(this.state.projectId, this.state.papereditId)
       .then((json) => {
-        console.log('get_ProgrammeScriptAndTranscripts', json);
         this.setState({
           programmeTitle: json.programmeScript.title,
           projectTitle: json.project.title,
-          // programmeScript: json.programmeScript,
           transcripts: json.transcripts,
           labelsOptions: json.labels
         });
       });
-
-    // const { labels } = await ApiWrapper.getAllLabels(this.state.projectId);
-    // this.setState({ labelsOptions: labels });
   }
 
   toggleTranscripts =() => {
-    console.log('toggleTranscripts');
     if (this.state.isProgramScriptShown ) {
       this.setState((state) => {
         return {
@@ -64,7 +58,6 @@ class PaperEdit extends Component {
   }
 
   toggleProgramScript = () => {
-    console.log('toggleProgramScript');
     if (this.state.isTranscriptsShown ) {
       this.setState((state) => {
         return {
@@ -73,11 +66,6 @@ class PaperEdit extends Component {
       });
     }
   }
-
-  // saveToServer = () => {
-  //   // TODO: add Api call to save content of
-  //   alert('save to server');
-  // }
 
   render() {
     return (

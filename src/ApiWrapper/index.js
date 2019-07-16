@@ -11,15 +11,12 @@ export default ( () => {
   // await async dependencies
   // export the module
   if (jsENV === 'browser') {
-    console.log(whichJsEnv());
-
     const apiWrapper = new ApiWrapper();
     Object.freeze(apiWrapper);
 
     return apiWrapper;
   }
   if (jsENV === 'electron') {
-    console.log(whichJsEnv());
     const ElectronWrapper = window.ElectronWrapper;
     const electronWrapper = new ElectronWrapper();
     Object.freeze(electronWrapper);

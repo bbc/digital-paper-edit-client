@@ -52,16 +52,12 @@ class Paragraphs extends Component {
       this.props.transcriptJson.paragraphs
     );
 
-    // console.log('paragraphsWithWordsSpeakerText', JSON.stringify(paragraphsWithWordsSpeakerText, null, 2));
-
     const paragraphWithWordsSpeakersAndAnnotations = addAnnotationsToWordsInParagraphs(paragraphsWithWordsSpeakerText, this.props.annotations);
-    // console.log('paragraphWithWordsSpeakersAndAnnotations', JSON.stringify(paragraphWithWordsSpeakersAndAnnotations, null, 2));
     /**
      * Loop over paragraphs
      */
     const textResult = paragraphWithWordsSpeakersAndAnnotations.map((paragraph, index) => {
       const annotationInCurrentParagraph = findAnnotationInParagraph(this.props.annotations, paragraph.words);
-      console.log('annotationInCurrentParagraph', annotationInCurrentParagraph);
       /* Paragraph text for data attribute for searches, without punctuation */
       const paragraphTextWithoutPunctuation = removePunctuation(paragraph.text);
       const isTextSearch = paragraphTextWithoutPunctuation.includes(this.props.searchString.toLowerCase());

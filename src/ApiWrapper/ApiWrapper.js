@@ -3,7 +3,6 @@ import corsFetch from './cors_wrapper.js';
 
 class ApiWrapper {
   constructor() {
-    console.log('inside ApiWrapper');
     this.baseUrl = window.env.API_URL;
     window.env.API_URL = null;
 
@@ -33,7 +32,6 @@ class ApiWrapper {
    * Projects
    */
   async getAllProjects() {
-    console.log(this.projectsUrl);
     const res = await corsFetch(this.projectsUrl);
     const json = await res.json();
 
@@ -211,7 +209,6 @@ class ApiWrapper {
   async updatePaperEdit(projectId, id, data) {
     const res = await corsFetch(this.paperEditsIdUrl(projectId, id), 'PUT', data);
     const json = await res.json();
-    console.log('updatePaperEdit', json);
 
     return json;
   }
@@ -289,7 +286,6 @@ class ApiWrapper {
         tr.annotations = [];
       }
     });
-    console.log('ApiWrapper transcriptsJson', transcriptsJson);
 
     // getting program script for paperEdit
     const paperEditResult = await this.getPaperEdit(projectId, papereditId);
@@ -305,7 +301,6 @@ class ApiWrapper {
       transcripts: transcriptsJson,
       labels: labelsResults.labels
     };
-    console.log('ApiWrapper - results', results);
 
     return results;
   }

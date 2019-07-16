@@ -19,7 +19,6 @@ class Words extends Component {
   }
   render() {
     const { transcriptId, speaker } = this.props;
-    // console.log('this.props.paragraph', this.props.transcriptId);
     const result = this.props.paragraph.map(word => {
       return (
         <span
