@@ -13,7 +13,7 @@ import Alert from 'react-bootstrap/Alert';
 import './App.css';
 
 const demoWarningMessage = (<p> This is Demo version of the app <Alert.Link href="https://github.com/bbc/digital-paper-edit-client" target="_blank" rel="noopener noreferrer"
->see project Github repository for more info</Alert.Link>.</p>);
+>see project Github repository for more info</Alert.Link>. This is a read-only demo you can only play around with existing projects!</p>);
 
 class App extends Component {
   constructor(props) {
