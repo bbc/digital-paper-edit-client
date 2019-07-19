@@ -10,7 +10,11 @@ function parseWordElDataset(wordEl) {
   return {
     start: wordEl.dataset.start,
     end: wordEl.dataset.end,
-    text: wordEl.dataset.text,
+    // you could also get the word from wordEl.dataset.text
+    // but the word there is lowercase and without punctuation coz is used
+    // for the search  functionality so using innerText
+    // to preserve punctuation and capitalization
+    text: wordEl.innerText,
     speaker: wordEl.dataset.speaker,
     transcriptId: wordEl.dataset.transcriptId
   };
@@ -30,7 +34,9 @@ function getDataFromUserWordsSelection(e) {
     // Seems like this work no matter if the selection is made left to right
     // or right to left form the user
     const words = selectedRange.querySelectorAll('.words');
+
     if (words.length !== 0) {
+      // TODO: remove window.words, it's for troubleshooting
       window.words = words;
 
       return {

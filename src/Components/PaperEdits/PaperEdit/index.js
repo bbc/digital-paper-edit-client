@@ -5,7 +5,10 @@ import Row from 'react-bootstrap/Row';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAngleUp,
+  faAngleDown
+} from '@fortawesome/free-solid-svg-icons';
 import CustomNavbar from '../../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../../lib/CustomFooter/index.js';
@@ -27,27 +30,24 @@ class PaperEdit extends Component {
       labelsOptions: [],
       isTranscriptsShown: true,
       isProgramScriptShown: true,
+      // annotations:[]
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
 
     ApiWrapper.get_ProgrammeScriptAndTranscripts(this.state.projectId, this.state.papereditId)
       .then((json) => {
-        console.log('get_ProgrammeScriptAndTranscripts', json);
         this.setState({
           programmeTitle: json.programmeScript.title,
           projectTitle: json.project.title,
-          // programmeScript: json.programmeScript,
           transcripts: json.transcripts,
           labelsOptions: json.labels
         });
       });
-
   }
 
   toggleTranscripts =() => {
-    console.log('toggleTranscripts');
     if (this.state.isProgramScriptShown ) {
       this.setState((state) => {
         return {
@@ -58,7 +58,6 @@ class PaperEdit extends Component {
   }
 
   toggleProgramScript = () => {
-    console.log('toggleProgramScript');
     if (this.state.isTranscriptsShown ) {
       this.setState((state) => {
         return {
@@ -66,11 +65,6 @@ class PaperEdit extends Component {
         };
       });
     }
-  }
-
-  saveToServer = () => {
-    // TODO: add Api call to save content of
-    alert('save to server');
   }
 
   render() {
@@ -82,7 +76,7 @@ class PaperEdit extends Component {
         <br/>
 
         <Row>
-          <Col sm={ 12 } md={ 10 } ld={ 10 } xl={ 10 }>
+          <Col sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 }>
             <CustomBreadcrumb
               items={ [ {
                 name: 'Projects',
@@ -101,75 +95,78 @@ class PaperEdit extends Component {
               ] }
             />
           </Col>
-          <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
+          {/* <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
             <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
               Save
             </Button>
-          </Col>
+          </Col> */}
         </Row>
 
         <Container fluid={ true }>
           <div className="d-flex flex-column">
-            <ButtonGroup size="sm" className="mt-12">
+            <ButtonGroup
+              size="sm" className="mt-12"
+            >
               <Button
                 onClick={ this.toggleTranscripts }
-                variant={ this.state.isTranscriptsShown ? 'primary' : 'outline-primary' }
+                variant={ this.state.isTranscriptsShown ? 'secondary' : 'outline-secondary' }
               >
-                Transcripts <FontAwesomeIcon icon={ this.state.isTranscriptsShown ? faAngleDown : faAngleUp } />
+               Transcripts <FontAwesomeIcon icon={ this.state.isTranscriptsShown ? faAngleDown : faAngleUp } /> { this.state.isTranscriptsShown ? 'hide' : 'show'}
               </Button>
               <Button
                 onClick={ this.toggleProgramScript }
-                variant={ this.state.isProgramScriptShown ? 'primary' : 'outline-primary' }
+                variant={ this.state.isProgramScriptShown ? 'secondary' : 'outline-secondary' }
               >
-                 Program Script  <FontAwesomeIcon icon={ this.state.isProgramScriptShown ? faAngleDown : faAngleUp } />
+                 Program Script  <FontAwesomeIcon icon={ this.state.isProgramScriptShown ? faAngleDown : faAngleUp } />  { this.state.isProgramScriptShown ? 'hide' : 'show'}
               </Button>
             </ButtonGroup>
-
           </div>
+
           <Row>
             <Col
               xs={ { span: 12, offset:0 } }
               sm={ {
-                span:7,
-                offset: this.state.isProgramScriptShown ? 0 : 2
+                span: this.state.isProgramScriptShown ? 7 : 12,
+                offset: this.state.isProgramScriptShown ? 0 : 0
               } }
               md={ {
                 span: this.state.isProgramScriptShown ? 7 : 12,
                 offset: this.state.isProgramScriptShown ? 0 : 0
               } }
               lg={ {
-                span: this.state.isProgramScriptShown ? 7 : 8,
+                span: this.state.isProgramScriptShown ? 7 : 10,
                 offset: this.state.isProgramScriptShown ? 0 : 1
               } }
               xl={ {
-                span: this.state.isProgramScriptShown ? 7 : 9,
+                span: this.state.isProgramScriptShown ? 7 : 10,
                 offset: this.state.isProgramScriptShown ? 0 : 1
               } }
               style={ { display: this.state.isTranscriptsShown ? 'block' : 'none' } }
             >
               { this.state.transcripts.length ?
                 <Transcripts
+                  projectId={ this.state.projectId }
                   transcripts={ this.state.transcripts }
                   labelsOptions={ this.state.labelsOptions }
                 />
-                : ''}
+                : <><br/><br/><i>No Transcripts, create a transcript to get started</i></>}
             </Col>
             <Col
               xs={ { span: 12, offset:0 } }
               sm={ {
-                span: this.state.isTranscriptsShown ? 5 : 7,
-                offset: this.state.isTranscriptsShown ? 0 : 3
+                span: this.state.isTranscriptsShown ? 5 : 12,
+                offset: this.state.isTranscriptsShown ? 0 : 0
               } }
               md={ {
                 span: this.state.isTranscriptsShown ? 5 : 12,
                 offset: this.state.isTranscriptsShown ? 0 : 0
               } }
               lg={ {
-                span: this.state.isTranscriptsShown ? 5 : 7,
+                span: this.state.isTranscriptsShown ? 5 : 10,
                 offset: this.state.isTranscriptsShown ? 0 : 1
               } }
               xl={ {
-                span: this.state.isTranscriptsShown ? 5 : 7,
+                span: this.state.isTranscriptsShown ? 5 : 8,
                 offset: this.state.isTranscriptsShown ? 0 : 2
               } }
               style={ { display: this.state.isProgramScriptShown ? 'block' : 'none' } }

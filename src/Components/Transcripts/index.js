@@ -47,6 +47,7 @@ class Transcripts extends Component {
   // component - could be refactored
   // but needs to take into account file upload from form in TranscriptForm
   handleSaveItem = (item) => {
+    console.log('handleSaveItem', item);
     const newItem = item;
     newItem.display = true;
     const { items } = this.state;
@@ -64,10 +65,10 @@ class Transcripts extends Component {
   }
 
   handleSaveEditedItem = (transcript) => {
-    const newEditedITem = transcript;
-    console.log('newEditedITem', newEditedITem);
+    const newEditedItem = transcript;
+    console.log('newEditedITem', newEditedItem);
     // display attribute for search
-    newEditedITem.display = true;
+    newEditedItem.display = true;
     // Update existing
     const { items } = this.state;
     const itemIdex = items.findIndex(item => item.id === transcript.id);
@@ -76,12 +77,12 @@ class Transcripts extends Component {
     transcript.status = newItemsList[itemIdex].status;
     newItemsList[itemIdex] = transcript;
     const queryParamsOptions = false;
-    const transcriptId = newEditedITem.id;
+    const transcriptId = newEditedItem.id;
     // TODO: add error handling, eg message, wasn't able to update etc..
-    ApiWrapper.updateTranscript(this.state.projectId, transcriptId, queryParamsOptions, newEditedITem)
+    ApiWrapper.updateTranscript(this.state.projectId, transcriptId, queryParamsOptions, newEditedItem)
       .then((response) => {
-        if (response.status === 'ok') {
-          console.log(response.transcript, newItemsList);
+        if (response.ok) {
+          console.log('ApiWrapper.updateTranscript', response, newItemsList);
           this.setState({
             items: newItemsList,
             isEditItemModalShow: false
@@ -116,7 +117,7 @@ class Transcripts extends Component {
     const result = await ApiWrapper.deleteTranscript(this.state.projectId, transcriptId);
     // TODO: some error handling, error message saying something went wrong
     const findId = (item) => item.id !== transcriptId;
-    if (result.status === 'ok') {
+    if (result.ok) {
       const tmpNewList = this.state.items.filter(item => findId(item));
       this.setState({
         items: tmpNewList
@@ -125,7 +126,7 @@ class Transcripts extends Component {
   }
 
   showLinkPathToItem = (id) => {
-    return `/projects/${ this.state.projectId }/transcripts/${ id }/annotate`;
+    return `/projects/${ this.state.projectId }/transcripts/${ id }/correct`;
   }
 
   handleUpdateList = (list) => {

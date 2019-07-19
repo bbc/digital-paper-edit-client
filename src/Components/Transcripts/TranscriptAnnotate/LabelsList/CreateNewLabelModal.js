@@ -71,14 +71,7 @@ class CreateNewLabelModal extends React.Component {
   handleHexChange = (e) => {
     if (e && e.target && e.target.value) {
       const hexColor = e.target.value;
-      // if it's a valid colour - css
-      //   if (chroma.valid(hexColor)) {
-      // if it is expressed as hex
-      //   if (!hexColor.includes('#')) {
-      // hexColor = chroma(hexColor).hex();
-      //   }
       this.setState({ color: chroma.valid(hexColor) ? chroma(hexColor).name() : hexColor });
-    //   }
     }
     else if (e && e.target && e.target.value === '') {
       this.setState({ color: '' });
@@ -87,10 +80,8 @@ class CreateNewLabelModal extends React.Component {
 
   handleColorSelectChange = color => {
     this.setState({ color: color.color });
-    // console.log('Option selected:', selectedOptionSpeakerSearch);
   };
 
-  //   handleColorNameChange =
   handleSave = () => {
     if ( this.state.label !== '') {
       this.props.onNewLabelCreated({

@@ -64,7 +64,8 @@ class TranscriptCorrect extends Component {
     data.transcriptTitle = this.state.transcriptTitle;
     const queryParamsOptions = false;
     ApiWrapper.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, data).then((response) => {
-      if (response.status === 'ok') {
+      console.log('ApiWrapper.updateTranscript', response );
+      if (response.ok) {
       // show message or redirect
         console.log('updated');
         // this.setState({ redirect: true, newProjectId: response.projectId });
@@ -115,7 +116,7 @@ class TranscriptCorrect extends Component {
           <br/>
 
           <Row>
-            <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
+            <Col sm={ 12 } md={ 11 } ld={ 11 } xl={ 11 }>
               <CustomBreadcrumb
                 items={ [ {
                   name: 'Projects',
@@ -137,12 +138,12 @@ class TranscriptCorrect extends Component {
                 ] }
               />
             </Col>
-            <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
+            {/* <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
               <Button variant="outline-secondary" onClick={ this.redirectToAnnotatePage } size="lg" block>
               Annotate
               </Button>
               <br/>
-            </Col>
+            </Col> */}
             <Col xs={ 12 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
               <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
               Save

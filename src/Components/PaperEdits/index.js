@@ -21,6 +21,7 @@ class PaperEdits extends Component {
   async componentDidMount () {
     // TODO: do we need to add user id in request?
     const result = await ApiWrapper.getAllPaperEdits(this.state.projectId);
+    console.log('ApiWrapper.getAllPaperEdits', result);
     if (result) {
       // add a display property for component cards search
       const tmpList = result.map(paperEdit => {
@@ -97,13 +98,12 @@ class PaperEdits extends Component {
       description: item.description,
       isNewItemModalShow: true
     });
-    console.log('edit item', item);
   }
 
   // TODO:
   async handleDeleteItem(itemId) {
     const result = await ApiWrapper.deletePaperEdit(this.state.projectId, itemId);
-    if (result.status === 'ok') {
+    if (result.ok) {
       const newItemsList = this.state.items.filter((p) => {
         return p.id !== itemId;
       });
