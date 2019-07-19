@@ -57,7 +57,7 @@ class DemoApiWrapper {
     transcripts = transcripts.filter((transcript) => {
       return transcript.projectId === projectId;
     });
-    // Temporary workaround.
+
     transcripts = transcripts.map((transcript) => {
       transcript.id = transcript._id;
 
@@ -115,7 +115,6 @@ class DemoApiWrapper {
 
     if (annotations) {
       annotations = annotations
-      // Temporary workaround.
         .map((annotation) => {
           annotation.id = annotation._id;
 
@@ -213,7 +212,6 @@ class DemoApiWrapper {
     data.paperedits = paperedits;
     if (data.paperedits) {
       data.paperedits = data.paperedits
-      // Temporary workaround.
         .map((paperedit) => {
           paperedit.id = paperedit._id;
 
@@ -282,8 +280,6 @@ class DemoApiWrapper {
       annotations: annotationsResult.annotations
     };
 
-    console.log(results);
-
     return results;
   }
 
@@ -294,11 +290,8 @@ class DemoApiWrapper {
     // use that list of ids to loop through and get json payload for each individual transcript
     // as separate request
 
-    // TODO: also add annotations for each Transcripts
     const transcriptsJson = await Promise.all(transcriptsResult.transcripts.map((transcript) => {
-      // const annotations = this.getAllAnnotations(projectId, transcript.id);
       const transcriptTmp = this.getTranscript(projectId, transcript.id);
-      // transcriptTmp.annotations = annotations;
 
       return transcriptTmp;
     }));
@@ -326,7 +319,6 @@ class DemoApiWrapper {
         tr.annotations = [];
       }
     });
-    console.log('ApiWrapper transcriptsJson', transcriptsJson);
 
     // getting program script for paperEdit
     const paperEditResult = await this.getPaperEdit(projectId, papereditId);
@@ -342,7 +334,6 @@ class DemoApiWrapper {
       transcripts: transcriptsJson,
       labels: labelsResults.labels
     };
-    console.log('ApiWrapper - results', results);
 
     return results;
   }
