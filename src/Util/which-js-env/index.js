@@ -6,6 +6,10 @@ function whichJsEnv() {
 // Is browser Eg client side app
   if (window.process === undefined) {
     // console.debug('In browser Environment');
+    if (process.env.REACT_APP_NODE_ENV === 'demo') {
+      return 'demo';
+    }
+
     return 'browser';
   } else {
     if (window.process.versions.electron !== undefined) {
