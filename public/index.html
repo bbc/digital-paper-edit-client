@@ -25,7 +25,7 @@
     <title>%REACT_APP_NAME%</title>
   </head>
   <body>
-    <script>
+    <script  type="text/javascript">
       if(window.process && window.process.versions.electron){
         // Electron Wrapper needs to be on the electron render process
         // if not, if instead it's added via the main process the app will hang
@@ -38,6 +38,12 @@
         const ElectronWrapper = require('../src/ElectronWrapper/index.js');
         window.ElectronWrapper = ElectronWrapper;
       }
+      if("%REACT_APP_NODE_ENV%"=== "demo"){
+        console.log('demo time!')
+        // const DemoWrapper = require('../demoWraper/index.js');
+        // window.DemoWrapper = DemoWrapper;
+      }
+      
   </script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>

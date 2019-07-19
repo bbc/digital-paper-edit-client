@@ -1,0 +1,65 @@
+[
+	{
+		"_id": "default",
+		"id": "default",
+		"projectId": "default",
+		"value": "default",
+		"label": "Default",
+		"color": "orange",
+		"description": "A default label"
+	},
+	{
+		"value": "darkblue",
+		"label": "Computer vision",
+		"color": "darkblue",
+		"description": "Talking about computer vision in robotics",
+		"projectId": "94346281c4ad4938b7d0ae6fa9899bec",
+		"_id": "db055983fabd40ef84dc35fbd3dfb40b",
+		"id": "db055983fabd40ef84dc35fbd3dfb40b"
+	},
+	{
+		"value": "greenyellow",
+		"label": "Bacteria",
+		"color": "greenyellow",
+		"description": "Talking about Bacteria and technology",
+		"projectId": "94346281c4ad4938b7d0ae6fa9899bec",
+		"_id": "920fa8f97acc43b5bc0694b2e5648080",
+		"id": "920fa8f97acc43b5bc0694b2e5648080"
+	},
+	{
+		"value": "deepskyblue",
+		"label": "Test",
+		"color": "deepskyblue",
+		"description": "Test blue",
+		"projectId": "54bae8166afc4b379de5d4e10b77218d",
+		"_id": "64b071fefa394b5b968c56f8b14149b7",
+		"id": "64b071fefa394b5b968c56f8b14149b7"
+	},
+	{
+		"value": "crimson",
+		"label": "Robotics",
+		"color": "crimson",
+		"description": "when they speak about robotics",
+		"projectId": "94346281c4ad4938b7d0ae6fa9899bec",
+		"_id": "cb10e79c20af4a7f8b3fe8a4c789d43e",
+		"id": "cb10e79c20af4a7f8b3fe8a4c789d43e"
+	},
+	{
+		"value": "yellow",
+		"label": "D",
+		"color": "yellow",
+		"description": "",
+		"projectId": "10046281c4ad4938b7d0ae6fa9899bec",
+		"_id": "eab94271d5894c3a8800ee59cc03d7be",
+		"id": "eab94271d5894c3a8800ee59cc03d7be"
+	},
+	{
+		"value": "yellow",
+		"label": "Test",
+		"color": "yellow",
+		"description": "",
+		"projectId": "94346281c4ad4938b7d0ae6fa9899bec",
+		"_id": "bddffe16cf024b2dbe74be4d64eb0ed4",
+		"id": "bddffe16cf024b2dbe74be4d64eb0ed4"
+	}
+]

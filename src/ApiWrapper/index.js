@@ -1,4 +1,5 @@
 import ApiWrapper from './ApiWrapper';
+import DemoApiWrapper from './DemoApiWrapper/index.js';
 // import ElectronWrapper from './ElectronWrapper.js';
 import whichJsEnv from '../Util/which-js-env';
 
@@ -10,7 +11,14 @@ const jsENV = whichJsEnv();
 export default ( () => {
   // await async dependencies
   // export the module
-  if (jsENV === 'browser') {
+  if (jsENV === 'browser' && process.env.REACT_APP_NODE_ENV === 'demo') {
+    console.log('API Wrapper demo time!');
+    const demoApiWrapper = new DemoApiWrapper();
+    Object.freeze(demoApiWrapper);
+
+    return demoApiWrapper;
+  }
+  if (jsENV === 'browser' && process.env.REACT_APP_NODE_ENV !== 'demo') {
     const apiWrapper = new ApiWrapper();
     Object.freeze(apiWrapper);
 
