@@ -16,8 +16,8 @@ class DemoApiWrapper {
 
       return results;
     }
-
   }
+
   // eslint-disable-next-line class-methods-use-this
   async getProject(id) {
     const response = await fetch('db/projects.json');
@@ -50,6 +50,7 @@ class DemoApiWrapper {
   /**
    * Transcripts
    */
+  // eslint-disable-next-line class-methods-use-this
   async getTranscripts(projectId) {
     const response = await fetch('db/transcripts.json');
     let transcripts = await response.json();
@@ -102,6 +103,7 @@ class DemoApiWrapper {
   /**
    * Annotations
    */
+  // eslint-disable-next-line class-methods-use-this
   async getAllAnnotations(projectId, transcriptId) {
 
     const response = await fetch('db/annotations.json');
@@ -152,6 +154,7 @@ class DemoApiWrapper {
    */
 
   // Get All Labels
+  // eslint-disable-next-line class-methods-use-this
   async getAllLabels(projectId) {
     const response = await fetch('db/labels.json');
     let labels = await response.json();
@@ -198,6 +201,7 @@ class DemoApiWrapper {
   /**
    * PaperEdits
    */
+  // eslint-disable-next-line class-methods-use-this
   async getAllPaperEdits(projectId) {
     const response = await fetch('db/paperedits.json');
     let paperedits = await response.json();
@@ -220,6 +224,7 @@ class DemoApiWrapper {
     return data.paperedits;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async getPaperEdit(projectId, id) {
     const paperEditId = id;
     const response = await fetch('db/paperedits.json');
