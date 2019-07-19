@@ -1,16 +1,18 @@
 {
-  "main.css": "./static/css/main.048af529.chunk.css",
-  "main.js": "./static/js/main.c46542a6.chunk.js",
-  "main.js.map": "./static/js/main.c46542a6.chunk.js.map",
-  "runtime~main.js": "./static/js/runtime~main.8c97409f.js",
-  "runtime~main.js.map": "./static/js/runtime~main.8c97409f.js.map",
-  "static/css/2.f09b0ddd.chunk.css": "./static/css/2.f09b0ddd.chunk.css",
-  "static/js/2.8feb5a37.chunk.js": "./static/js/2.8feb5a37.chunk.js",
-  "static/js/2.8feb5a37.chunk.js.map": "./static/js/2.8feb5a37.chunk.js.map",
-  "index.html": "./index.html",
-  "precache-manifest.211db44a501a8cb2aacaf35ca798b3af.js": "./precache-manifest.211db44a501a8cb2aacaf35ca798b3af.js",
-  "service-worker.js": "./service-worker.js",
-  "static/css/2.f09b0ddd.chunk.css.map": "./static/css/2.f09b0ddd.chunk.css.map",
-  "static/css/main.048af529.chunk.css.map": "./static/css/main.048af529.chunk.css.map",
-  "static/media/labsLogo.png": "./static/media/labsLogo.658ac9e3.png"
+  "files": {
+    "main.css": "./static/css/main.0aad6e8e.chunk.css",
+    "main.js": "./static/js/main.546f17c1.chunk.js",
+    "main.js.map": "./static/js/main.546f17c1.chunk.js.map",
+    "runtime~main.js": "./static/js/runtime~main.d653cc00.js",
+    "runtime~main.js.map": "./static/js/runtime~main.d653cc00.js.map",
+    "static/css/2.0f7a873c.chunk.css": "./static/css/2.0f7a873c.chunk.css",
+    "static/js/2.ea4a3589.chunk.js": "./static/js/2.ea4a3589.chunk.js",
+    "static/js/2.ea4a3589.chunk.js.map": "./static/js/2.ea4a3589.chunk.js.map",
+    "index.html": "./index.html",
+    "precache-manifest.1c410872c5d4d6c12cbf554db8911a10.js": "./precache-manifest.1c410872c5d4d6c12cbf554db8911a10.js",
+    "service-worker.js": "./service-worker.js",
+    "static/css/2.0f7a873c.chunk.css.map": "./static/css/2.0f7a873c.chunk.css.map",
+    "static/css/main.0aad6e8e.chunk.css.map": "./static/css/main.0aad6e8e.chunk.css.map",
+    "static/media/labsLogo.png": "./static/media/labsLogo.658ac9e3.png"
+  }
 }
