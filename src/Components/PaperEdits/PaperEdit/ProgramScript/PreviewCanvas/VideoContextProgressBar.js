@@ -31,28 +31,23 @@ class VideoContextProgressBar extends React.PureComponent {
   });
 
   handleClick = ({ nativeEvent: { offsetX } }) => {
-    this.videoContext.currentTime =
-      (offsetX / this.width) * this.state.duration;
+    this.videoContext.currentTime = (offsetX / this.width) * this.state.duration;
   }
 
   getTracks = () =>
-    this.state.duration && this.videoContext._sourceNodes.reverse().map(
-      ({ startTime, stopTime, elementURL }, i) => {
-        const marginLeft = (startTime / this.state.duration) * this.width;
-        const width =
-          ((stopTime - startTime) / this.state.duration) * this.width;
-        const key = `${elementURL.split('/').slice(-1).pop()}.${i}`;
-
-        return (
-          <div key={ key } style={ { pointerEvents: 'none' } } >
-            <div className={ styles.papercutsPlayerProgressTrackBuffer } />
-            <div className={ styles.papercutsPlayerProgressTrack }
-              style={ { width, marginLeft } }
-            />
-            <div className={ styles.papercutsPlayerProgressTrackBuffer }/>
-          </div>
-        );
-      });
+    this.state.duration && this.videoContext._sourceNodes.map(
+      ({ startTime, stopTime, elementURL }, i) => (
+        <div
+          key={ `${elementURL.split('/').slice(-1).pop()}.${startTime}` }
+          className={ styles.papercutsPlayerProgressTrack }
+          style={ {
+            width: ((stopTime - startTime) / this.state.duration) * this.width - 2
+          } }
+        >
+          { (i > 0) && <div />}
+        </div>
+      )
+    );
 
   render() {
     if (!this.tracks) this.tracks = this.getTracks();
@@ -65,13 +60,13 @@ class VideoContextProgressBar extends React.PureComponent {
           onClick={ this.handleClick }
           style={ { width: this.width } }
         >
+          { this.tracks ? this.tracks : <div /> }
           <div
           // className='papercuts-player-progess papercuts-player-progress-front'
             className={ [ styles.papercutsPlayerProgress, styles.papercutsPlayerProgressFront ].join(' ') }
             style={ { width: `${this.state.progress}%` } }
-          >
-            { this.tracks }
-          </div>
+          />
+
         </div>
       </>
     );
