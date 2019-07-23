@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route, HashRouter } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-css-only/css/bootstrap.css';
 import Projects from './Components/Projects/index.js';
 import Project from './Components/Projects/Project.js';
 import TranscriptAnnotate from './Components/Transcripts/TranscriptAnnotate/index.js';
