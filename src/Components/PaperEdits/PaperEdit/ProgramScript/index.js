@@ -242,14 +242,15 @@ class ProgramScript extends Component {
         const result = {
           startTime: element.start,
           endTime: element.end,
-          reelName: 'NA',
+          reelName:  currentTranscript.metadata ? currentTranscript.metadata.reelName : 'NA',
           clipName: `${ currentTranscript.clipName }`,
           // TODO: frameRate should be pulled from the clips in the sequence
           // Changing to 24 fps because that is the frame rate of the ted talk examples from youtube
           // but again frameRate should not be hard coded
-          fps: 24,
+          fps: currentTranscript.metadata ? currentTranscript.metadata.fps : 25,
           // TODO: if there is an offset this should added here, for now hard coding 0
-          offset: 0
+          offset:  currentTranscript.metadata ? currentTranscript.metadata.timecode : '00:00:00:00',
+          sampleRate:  currentTranscript.metadata ? currentTranscript.metadata.sampleRate : '16000'
         };
 
         return result;
@@ -280,6 +281,7 @@ class ProgramScript extends Component {
   handleExportADL = () => {
     // alert('this function has not been implemented yet');
     const edlSq = this.getSequenceJsonEDL();
+    const firstElement = edlSq.events[0];
     // const result = generateADL(edlSq);
     const result = generateADL({
       projectOriginator: 'Digital Paper Edit',
@@ -294,12 +296,8 @@ class ProgramScript extends Component {
           label: ''
         };
       }),
-      // TODO: sampleRate should be pulled from the sequence
-      sampleRate: '44100',
-      // TODO: frameRate should be pulled from the clips in the sequence
-      // Changing to 24 fps because that is the frame rate of the ted talk examples from youtube
-      // but again frameRate should not be hard coded
-      frameRate: 24,
+      sampleRate: firstElement.sampleRate,
+      frameRate: firstElement.fps,
       projectName: edlSq.title
     });
     downloadjs(result, `${ this.state.programmeScript.title }.adl`, 'text/plain');
@@ -332,14 +330,14 @@ class ProgramScript extends Component {
           ...element,
           startTime: element.start,
           endTime: element.end,
-          reelName: 'NA',
+          reelName:  currentTranscript.metadata ? currentTranscript.metadata.reelName : 'NA',
           clipName: `${ currentTranscript.clipName }`,
           // TODO: frameRate should be pulled from the clips in the sequence
           // Changing to 24 fps because that is the frame rate of the ted talk examples from youtube
           // but again frameRate should not be hard coded
-          fps: 24,
-          // TODO: if there is an offset this should added here, for now hard coding 0
-          offset: 0
+          fps: currentTranscript.metadata ? currentTranscript.metadata.fps : 25,
+          sampleRate:  currentTranscript.metadata ? currentTranscript.metadata.sampleRate : '16000',
+          offset:  currentTranscript.metadata ? currentTranscript.metadata.timecode : '00:00:00:00'
         };
 
         return result;
