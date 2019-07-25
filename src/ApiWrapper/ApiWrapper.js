@@ -110,6 +110,7 @@ class ApiWrapper {
    */
   async getAllAnnotations(projectId, transcriptId) {
     const res = await fetch(this.annotationsUrl(projectId, transcriptId));
+    // console.log('getAllAnnotations', res);
     const json = await res.json();
 
     return json;

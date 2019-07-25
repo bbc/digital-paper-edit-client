@@ -19,7 +19,7 @@ class AnnotationOverlayTrigger extends Component {
   }
 
   render() {
-    console.log('render - AnnotationOverlayTrigger', this.props.annotationNote);
+    // console.log('render - AnnotationOverlayTrigger - props', this.props);
     // const { annotationLabelId } = this.props;
     let overlayContent;
     // handling edge case when labels are not available

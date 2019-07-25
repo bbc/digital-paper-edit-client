@@ -16,6 +16,7 @@ const addAnnotationToWordsInOneParagraph = (words, annotations) => {
     const annotationForWord = isAnnotationWithinWord(annotations, word.start, word.end);
     if (annotationForWord) {
       word.annotation = annotationForWord;
+      // console.log(word.annotation);
     }
     else {
       // this is needed, for when a annotation is being removed from a word

@@ -7,6 +7,8 @@ import NewTranscriptFormModal from './NewTranscriptFormModal';
 import ItemFormModal from '../lib/ItemFormModal';
 import ApiWrapper from '../../ApiWrapper';
 
+const intervalInMs = 1000;//60000;
+
 class Transcripts extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +28,34 @@ class Transcripts extends Component {
   }
 
   async componentDidMount() {
+    this.getTranscripts();
+  }
 
+  setCheckForTranscriptsInterval = () => {
+    this.interval = setInterval(() => {
+      console.log('interval');
+      this.setState({ time: Date.now() });
+    }, intervalInMs);
+  }
+
+  clearCheckForTranscriptsInterval =() => {
+    clearInterval(this.interval);
+  }
+
+  areThereTranscriptsInProgress = (items) => {
+    if (items.length !== 0) {
+      const result = items.find((transcript) => {
+
+        return transcript.status === 'in-progress';
+      });
+
+      return result ? true : false;
+    }
+
+    return false;
+  }
+
+  getTranscripts = async () => {
     const result = await ApiWrapper.getTranscripts(this.state.projectId);
     // TODO: add error handling
     if (result) {
@@ -38,7 +67,22 @@ class Transcripts extends Component {
       this.setState({
         projectTitle: result.projectTitle,
         items: tmpList
+      }, () => {
+        if (!this.interval) {
+          if (this.areThereTranscriptsInProgress(tmpList)) {
+            this.setCheckForTranscriptsInterval();
+          }
+          else {
+            this.clearCheckForTranscriptsInterval();
+          }
+        }
       });
+    }
+  }
+
+  componentWillUnmount =() => {
+    if (this.interval) {
+      this.clearCheckForTranscriptsInterval();
     }
   }
 

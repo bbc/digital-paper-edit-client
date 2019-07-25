@@ -70,6 +70,7 @@ class Transcript extends Component {
   componentDidMount = () => {
     ApiWrapper.getAllAnnotations(this.props.projectId, this.props.transcriptId)
       .then(json => {
+        // console.log(' ApiWrapper.getAllAnnotations', json);
         this.setState({
           annotations: json.annotations
         });
