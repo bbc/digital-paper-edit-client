@@ -27,6 +27,11 @@ import getDataFromUserWordsSelection from './get-data-from-user-selection.js';
 import { divideWordsSelectionsIntoParagraphs, isOneParagraph } from './divide-words-selections-into-paragraphs/index.js';
 import ApiWrapper from '../../../../ApiWrapper/index.js';
 
+const defaultReelName = 'NA';
+const defaultFps = 25;
+const defaultTimecodeOffset = '00:00:00:00';
+const defaultSampleRate = '16000';
+
 class ProgramScript extends Component {
   constructor(props) {
     super(props);
@@ -242,15 +247,15 @@ class ProgramScript extends Component {
         const result = {
           startTime: element.start,
           endTime: element.end,
-          reelName:  currentTranscript.metadata ? currentTranscript.metadata.reelName : 'NA',
+          reelName:  currentTranscript.metadata ? currentTranscript.metadata.reelName : defaultReelName,
           clipName: `${ currentTranscript.clipName }`,
           // TODO: frameRate should be pulled from the clips in the sequence
           // Changing to 24 fps because that is the frame rate of the ted talk examples from youtube
           // but again frameRate should not be hard coded
-          fps: currentTranscript.metadata ? currentTranscript.metadata.fps : 25,
+          fps: currentTranscript.metadata ? currentTranscript.metadata.fps : defaultFps,
           // TODO: if there is an offset this should added here, for now hard coding 0
-          offset:  currentTranscript.metadata ? currentTranscript.metadata.timecode : '00:00:00:00',
-          sampleRate:  currentTranscript.metadata ? currentTranscript.metadata.sampleRate : '16000'
+          offset:  currentTranscript.metadata ? currentTranscript.metadata.timecode : defaultTimecodeOffset,
+          sampleRate:  currentTranscript.metadata ? currentTranscript.metadata.sampleRate : defaultSampleRate
         };
 
         return result;
@@ -330,14 +335,14 @@ class ProgramScript extends Component {
           ...element,
           startTime: element.start,
           endTime: element.end,
-          reelName:  currentTranscript.metadata ? currentTranscript.metadata.reelName : 'NA',
+          reelName:  currentTranscript.metadata ? currentTranscript.metadata.reelName : defaultReelName,
           clipName: `${ currentTranscript.clipName }`,
           // TODO: frameRate should be pulled from the clips in the sequence
           // Changing to 24 fps because that is the frame rate of the ted talk examples from youtube
           // but again frameRate should not be hard coded
-          fps: currentTranscript.metadata ? currentTranscript.metadata.fps : 25,
-          sampleRate:  currentTranscript.metadata ? currentTranscript.metadata.sampleRate : '16000',
-          offset:  currentTranscript.metadata ? currentTranscript.metadata.timecode : '00:00:00:00'
+          fps: currentTranscript.metadata ? currentTranscript.metadata.fps : defaultFps,
+          sampleRate:  currentTranscript.metadata ? currentTranscript.metadata.sampleRate : defaultSampleRate,
+          offset:  currentTranscript.metadata ? currentTranscript.metadata.timecode : defaultTimecodeOffset
         };
 
         return result;
