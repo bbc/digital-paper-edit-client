@@ -7,7 +7,7 @@ import NewTranscriptFormModal from './NewTranscriptFormModal';
 import ItemFormModal from '../lib/ItemFormModal';
 import ApiWrapper from '../../ApiWrapper';
 
-// const intervalInMs = 2000;//30000;
+const intervalInMs = 30000;
 
 class Transcripts extends Component {
   constructor(props) {
@@ -28,78 +28,54 @@ class Transcripts extends Component {
   }
 
   async componentDidMount() {
-     const result = await ApiWrapper.getTranscripts(this.state.projectId);
-    // TODO: add error handling
-    if (result) {
-      const tmpList = result.transcripts.map((item) => {
-        item.display = true;
-
-        return item;
-      });
-      this.setState({
-        projectTitle: result.projectTitle,
-        items: tmpList
-      }, () => {
-        console.log('getTranscripts-tmpList');
-      });
-    }
-
-    //   this.interval = setInterval(() => {
-    //   console.log('interval');
-    //   if(this.areThereTranscriptsInProgress(this.state.items)){
-    //       this.getTranscripts();
-    //   }
-    // }, intervalInMs);
-    
+      this.getTranscripts();
+      // For simplicity rather then handling all the edge cases (on start, save, delete,etc..), the interval runs periodicalicly, 
+      // and only if there are items in progress in the list, it checks the backed for updates
+      this.interval = setInterval(() => {
+        console.log('Running interval to check for transcripts');
+        if(this.areThereTranscriptsInProgress(this.state.items)){
+            console.log('interval: checking transcirpt update');
+            this.getTranscripts();
+        }
+    }, intervalInMs);
   }
 
   componentWillUnmount =() => {
-    // if (this.interval) {
-    //    clearInterval(this.interval);
-    // }
+    if (this.interval) {
+       clearInterval(this.interval);
+    }
   }
 
+  getTranscripts = async () =>{
+    const result = await ApiWrapper.getTranscripts(this.state.projectId);
+      // TODO: add error handling
+      if (result) {
+        const tmpList = result.transcripts.map((item) => {
+          item.display = true;
 
-  // setCheckForTranscriptsInterval = () => {
-  //   this.interval = setInterval(() => {
-  //     console.log('interval');
-  //     this.getTranscripts();
-  //   }, intervalInMs);
-  // }
+          return item;
+        });
+        this.setState({
+          projectTitle: result.projectTitle,
+          items: tmpList
+        }, () => {
+          console.log('getTranscripts-tmpList');
+        });
+      }
+  }
 
-  // clearCheckForTranscriptsInterval =() => {
-  //   clearInterval(this.interval);
-  // }
+  areThereTranscriptsInProgress = (items) => {
+    if (items.length !== 0) {
+      const result = items.find((transcript) => {
 
-  // areThereTranscriptsInProgress = (items) => {
-  //   if (items.length !== 0) {
-  //     const result = items.find((transcript) => {
+        return transcript.status === 'in-progress';
+      });
 
-  //       return transcript.status === 'in-progress';
-  //     });
+      return result ? true : false;
+    }
 
-  //     return result ? true : false;
-  //   }
-
-  //   return false;
-  // }
-
-  // ifThereAreTranscriptInProgressStartInterval =() => {
-  //   const list = this.state.items;
-  //   if (!this.interval) {
-  //     if (this.areThereTranscriptsInProgress(list)) {
-  //       this.setCheckForTranscriptsInterval();
-  //     }
-  //     else {
-  //       this.clearCheckForTranscriptsInterval();
-  //     }
-  //   }
-  // }
-
-  // getTranscripts = async () => {
-  //   console.log('getTranscripts');
-   
-  // }
+    return false;
+  }
 
 
   // side POST using wrapperAPI done
