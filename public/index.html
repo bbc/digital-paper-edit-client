@@ -25,7 +25,20 @@
     <title>%REACT_APP_NAME%</title>
   </head>
   <body>
-
+    <script  type="text/javascript">
+      if(window.process && window.process.versions.electron){
+        // Electron Wrapper needs to be on the electron render process
+        // if not, if instead it's added via the main process the app will hang
+        // at the moment this works, in production. 
+        // eg do react build, move the build folder in digital-paper-edit-electron repo
+        // and when you start npm run start:prod the app will work
+        // however it means that in development npm start:dev in digital-paper-edit-electron won't work. 
+        // because in development the electron-main.js looks for the app served by webpack, 
+        // the path below to load src/ElectronWrapper/index.js doesn't resolve as they are in two different repos
+        const ElectronWrapper = require('../src/ElectronWrapper/index.js');
+        window.ElectronWrapper = ElectronWrapper;
+      }
+  </script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <!--
@@ -45,15 +58,4 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
-  <script>
-    // Added after body as a workaround to override the window.DB defined inside React bundle
-    // Modular Architecture workaround
-    // If React front end used inside Electron, then use local API for DB and utils
-    // TODO: at later stage could consider modifying webpack config to output
-    // react bundle version for web and for electron
-    if(window.process && window.process.versions.electron){
-      window.DB = require(window.process.cwd()+'/db/db.js');
-      console.log(window.process.cwd()+'/db/db.js')
-    }
-  </script>
 </html>

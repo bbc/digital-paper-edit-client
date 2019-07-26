@@ -7,6 +7,8 @@ import NewTranscriptFormModal from './NewTranscriptFormModal';
 import ItemFormModal from '../lib/ItemFormModal';
 import ApiWrapper from '../../ApiWrapper';
 
+const intervalInMs = 30000;
+
 class Transcripts extends Component {
   constructor(props) {
     super(props);
@@ -26,27 +28,62 @@ class Transcripts extends Component {
   }
 
   async componentDidMount() {
+      this.getTranscripts();
+      // For simplicity rather then handling all the edge cases (on start, save, delete,etc..), the interval runs periodicalicly, 
+      // and only if there are items in progress in the list, it checks the backed for updates
+      this.interval = setInterval(() => {
+        console.log('Running interval to check for transcripts');
+        if(this.areThereTranscriptsInProgress(this.state.items)){
+            console.log('interval: checking transcirpt update');
+            this.getTranscripts();
+        }
+    }, intervalInMs);
+  }
 
-    const result = await ApiWrapper.getTranscripts(this.state.projectId);
-    // TODO: add error handling
-    if (result) {
-      const tmpList = result.transcripts.map((item) => {
-        item.display = true;
-
-        return item;
-      });
-      this.setState({
-        projectTitle: result.projectTitle,
-        items: tmpList
-      });
+  componentWillUnmount =() => {
+    if (this.interval) {
+       clearInterval(this.interval);
     }
   }
+
+  getTranscripts = async () =>{
+    const result = await ApiWrapper.getTranscripts(this.state.projectId);
+      // TODO: add error handling
+      if (result) {
+        const tmpList = result.transcripts.map((item) => {
+          item.display = true;
+
+          return item;
+        });
+        this.setState({
+          projectTitle: result.projectTitle,
+          items: tmpList
+        }, () => {
+          console.log('getTranscripts-tmpList');
+        });
+      }
+  }
+
+  areThereTranscriptsInProgress = (items) => {
+    if (items.length !== 0) {
+      const result = items.find((transcript) => {
+
+        return transcript.status === 'in-progress';
+      });
+
+      return result ? true : false;
+    }
+
+    return false;
+  }
+
 
   // side POST using wrapperAPI done
   // inside --> newTranscriptFormModal --> TranscriptForm
   // component - could be refactored
   // but needs to take into account file upload from form in TranscriptForm
   handleSaveItem = (item) => {
+    console.log('handleSaveItem', item);
     const newItem = item;
     newItem.display = true;
     const { items } = this.state;
@@ -58,16 +95,16 @@ class Transcripts extends Component {
       itemId: null,
       description: '',
       isNewItemModalShow: false
-    }, (props, state) => {
-      console.log('setState', props, state);
+    }, () => {
+      console.log('setState');
     });
   }
 
   handleSaveEditedItem = (transcript) => {
-    const newEditedITem = transcript;
-    console.log('newEditedITem', newEditedITem);
+    const newEditedItem = transcript;
+    console.log('newEditedITem', newEditedItem);
     // display attribute for search
-    newEditedITem.display = true;
+    newEditedItem.display = true;
     // Update existing
     const { items } = this.state;
     const itemIdex = items.findIndex(item => item.id === transcript.id);
@@ -76,12 +113,12 @@ class Transcripts extends Component {
     transcript.status = newItemsList[itemIdex].status;
     newItemsList[itemIdex] = transcript;
     const queryParamsOptions = false;
-    const transcriptId = newEditedITem.id;
+    const transcriptId = newEditedItem.id;
     // TODO: add error handling, eg message, wasn't able to update etc..
-    ApiWrapper.updateTranscript(this.state.projectId, transcriptId, queryParamsOptions, newEditedITem)
+    ApiWrapper.updateTranscript(this.state.projectId, transcriptId, queryParamsOptions, newEditedItem)
       .then((response) => {
-        if (response.status === 'ok') {
-          console.log(response.transcript, newItemsList);
+        if (response.ok) {
+          console.log('ApiWrapper.updateTranscript', response, newItemsList);
           this.setState({
             items: newItemsList,
             isEditItemModalShow: false
@@ -111,21 +148,24 @@ class Transcripts extends Component {
   }
 
   async handleDelete (transcriptId ) {
+    console.log('handle delete');
     // TODO: API + server side request for delete
     // on successful then update state
     const result = await ApiWrapper.deleteTranscript(this.state.projectId, transcriptId);
     // TODO: some error handling, error message saying something went wrong
     const findId = (item) => item.id !== transcriptId;
-    if (result.status === 'ok') {
+    if (result.ok) {
       const tmpNewList = this.state.items.filter(item => findId(item));
       this.setState({
         items: tmpNewList
+      }, () => {
+        console.log('deleted')
       });
     }
   }
 
   showLinkPathToItem = (id) => {
-    return `/projects/${ this.state.projectId }/transcripts/${ id }/annotate`;
+    return `/projects/${ this.state.projectId }/transcripts/${ id }/correct`;
   }
 
   handleUpdateList = (list) => {
@@ -163,6 +203,7 @@ class Transcripts extends Component {
     return (
       <>
         <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
+
           <ListPageTranscript
             model={ 'Transcript' }
             items={ this.state.items }

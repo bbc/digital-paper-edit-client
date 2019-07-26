@@ -14,9 +14,7 @@ class VoiceOver extends Component {
     return (
       <>
         <p className={ 'text-muted' }>
-          <i>
-            <FontAwesomeIcon icon={ faMicrophoneAlt } /> { this.props.text }
-          </i>
+          <FontAwesomeIcon icon={ faMicrophoneAlt } /> { this.props.text }
         </p>
       </>
     );

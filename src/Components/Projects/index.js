@@ -22,17 +22,21 @@ class Projects extends React.Component {
     this.handleDeleteItem = this.handleDeleteItem.bind(this);
   }
   async componentDidMount () {
+    try {
     // TODO: do we need to add user id in request?
-    const result = await ApiWrapper.getAllProjects();
+      const result = await ApiWrapper.getAllProjects();
 
-    if (result) {
+      if (result) {
       // add a display property for component cards search
-      const tmpList = result.map(project => {
-        project.display = true;
+        const tmpList = result.map(project => {
+          project.display = true;
 
-        return project;
-      });
-      this.setState({ items: tmpList });
+          return project;
+        });
+        this.setState({ items: tmpList });
+      }
+    } catch (e) {
+      console.log('Error with ApiWrapper.getAllProjects', e);
     }
     // TODO: some error handling
   };
@@ -104,7 +108,7 @@ class Projects extends React.Component {
 
   async handleDeleteItem(itemId) {
     const result = await ApiWrapper.deleteProject(itemId);
-    if (result.status === 'ok') {
+    if (result.ok) {
       const newItemsList = this.state.items.filter((p) => {
         return p.id !== itemId;
       });

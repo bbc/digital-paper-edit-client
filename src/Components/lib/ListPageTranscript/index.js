@@ -38,7 +38,7 @@ class ListPageTranscript extends Component {
   render() {
     let itemsCards;
     let description;
-    if (this.props.items !== null) {
+    if (this.props.items) {
       itemsCards = this.props.items
         .map(item => {
 
@@ -75,35 +75,42 @@ class ListPageTranscript extends Component {
     }
 
     let content;
+    let searchEl;
     // TODO: better error handling
     // eg there should be a loading/fetching? and then if it gets error 404 or 505(?) from server
     // then it displays error from server
     // also add `navigator.onLine` to raise error if offline?
+
+    if (this.props.items !== null && this.props.items.length !== 0) {
+      searchEl = (<SearchBar
+        handleSearch={ this.handleSearch }
+      />);
+    }
     if (this.props.items !== null && this.props.items.length !== 0) {
       content = (
         <>
-          <Row>
-            <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
-              <SearchBar
-                handleSearch={ this.handleSearch }
-              />
-            </Col>
-            <Col xs={ 12 } sm={ 3 } md={ 3 } ld={ 3 } xl={ 3 }>
-              <Button onClick={ this.props.handleShowCreateNewItemForm } variant="outline-secondary" size="sm" block>
-                New {this.props.model}
-              </Button>
-            </Col>
-          </Row>
-
           <section style={ { height: '75vh', overflow: 'scroll' } }>
             {itemsCards}
           </section>
         </>
       );
     }
+    else {
+      content = <i>No {this.props.model}, create a new one to get started </i>;
+    }
 
     return (
       <>
+        <Row>
+          <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
+            {searchEl}
+          </Col>
+          <Col xs={ 12 } sm={ 3 } md={ 3 } ld={ 3 } xl={ 3 }>
+            <Button onClick={ this.props.handleShowCreateNewItemForm } variant="outline-secondary" size="sm" block>
+                New {this.props.model}
+            </Button>
+          </Col>
+        </Row>
         {content}
       </>
     );

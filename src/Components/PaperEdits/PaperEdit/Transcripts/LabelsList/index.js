@@ -8,6 +8,7 @@ import Col from 'react-bootstrap/Col';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTag,
+  faTags,
   faTimes,
   faPen,
   faCog
@@ -75,14 +76,18 @@ class LabelsList extends Component {
     if (this.props.labelsOptions) {
 
       labelsListOptions = this.props.labelsOptions.map((label, index) => {
-        return (<ListGroup.Item key={ 'label_' + index }>
+        return (<ListGroup.Item style={ { width: '100%' } } key={ 'label_' + index }>
           <Row>
             {/* Col space for the label color */}
             <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }
               style={ { backgroundColor: label.color } }
-              title={ label.label }>
+              title={ label.label }
+            >
             </Col>
-            <Col xs={ 7 } sm={ 7 } md={ 7 } lg={ 7 } xl={ 7 }>
+            <Col xs={ 6 } sm={ 6 } md={ 6 } lg={ 6 } xl={ 6 }
+            // className="text-truncate"
+              title={ label.label }
+            >
               {label.label}
             </Col>
 
@@ -113,10 +118,13 @@ class LabelsList extends Component {
           <Row>
             {/* Spacing to align title and color */}
             <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }
+              className="text-truncate"
               title={ label.label }>
             </Col>
             <Col xs={ 10 } sm={ 10 } md={ 10 } lg={ 10 } xl={ 10 }>
-              <Form.Text className="text-muted">
+              <Form.Text
+                // className={ [ 'text-muted', 'text-truncate' ].join(' ') }
+                title={ label.description }>
                 {label.description}
               </Form.Text>
             </Col>
@@ -125,17 +133,17 @@ class LabelsList extends Component {
       });
     }
 
-    const labelsList = (<ListGroup style={ { height: '30vh', overflow: 'scroll' } }>{labelsListOptions}
+    const labelsList = (<ListGroup style={ { height: '50vh', width: '20vw', overflowY: 'scroll', overflowX: 'hidden' } }>{labelsListOptions}
     </ListGroup>);
+    // const labelsList = labelsListOptions;
 
     return (<>
 
       {this.props.isLabelsListOpen ? <>
-        <br/>
+        {/* <br/> */}
         <Card>
           <Card.Header>
-            <FontAwesomeIcon icon={ faTag } />
-            <FontAwesomeIcon icon={ faCog } /> Labels Options
+            <FontAwesomeIcon icon={ faTags } /> <FontAwesomeIcon icon={ faCog } /> Labels
           </Card.Header>
           { labelsList }
           <Card.Footer className="text-muted">

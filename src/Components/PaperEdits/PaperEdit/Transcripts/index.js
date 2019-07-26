@@ -15,15 +15,14 @@ class Transcripts extends Component {
 
   // eslint-disable-next-line class-methods-use-this
   render() {
-    console.log(',this.props Transcripts SS', this.props);
     const transcriptsElNav = this.props.transcripts.map((transcript, index) => {
       return (
         <Nav.Item key={ transcript.id }>
-
           <Nav.Link
             disabled={ transcript.status !== 'done' ? true : false }
             // title={ transcript.status !== 'done' ? transcript.status : transcript.title }
             eventKey={ transcript.id }
+
           >
             { transcript.status === 'in-progress' ? <FontAwesomeIcon icon={ faClock }/> : '' }
             { transcript.status === 'error' ? <FontAwesomeIcon icon={ faExclamationTriangle }/> : '' }
@@ -36,11 +35,11 @@ class Transcripts extends Component {
       return (
         <Tab.Pane key={ transcript.id } eventKey={ transcript.id } >
           <Transcript
+            projectId={ this.props.projectId }
+            transcriptId={ transcript.id }
             labelsOptions={ this.props.labelsOptions }
             title={ transcript.transcriptTitle }
             transcript={ transcript.transcript }
-            transcriptId={ transcript.id }
-            annotations={ transcript.annotations }
             url={ transcript.url }
           />
         </Tab.Pane>
@@ -54,15 +53,20 @@ class Transcripts extends Component {
         >
           <Row>
             <Col sm={ 3 }>
-              <h2>Transcripts</h2>
+              <h2
+                className={ [ 'text-truncate', 'text-muted' ].join(' ') }
+                // className={ 'text-truncate' }
+                title={ 'Transcripts' }
+              >
+                Transcripts</h2>
               <hr/>
               <Nav variant="pills" className="flex-column">
-                {transcriptsElNav}
+                { transcriptsElNav }
               </Nav>
             </Col>
             <Col sm={ 9 }>
               <Tab.Content>
-                {transcriptsElTab}
+                { transcriptsElTab }
               </Tab.Content>
             </Col>
           </Row>

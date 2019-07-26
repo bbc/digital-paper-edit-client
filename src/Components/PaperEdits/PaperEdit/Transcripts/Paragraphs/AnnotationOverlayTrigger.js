@@ -19,14 +19,14 @@ class AnnotationOverlayTrigger extends Component {
   }
 
   render() {
-    const { annotationLabelId } = this.props;
+    // console.log('render - AnnotationOverlayTrigger - props', this.props);
+    // const { annotationLabelId } = this.props;
     let overlayContent;
     // handling edge case when labels are not available
     if (this.props.labelsOptions) {
       let label = this.props.labelsOptions.find((label) => {
-        console.log(label.id, annotationLabelId);
 
-        return label.id === annotationLabelId;
+        return label.id === this.props.annotationLabelId;
       });
       // console.log('label:: ', label, annotationLabelId, this.props.labelsOptions, 'this.props.words', this.props.words, this.props.annotationNote);
       // TODO: Quick fix - needs digging into why sometimes adding a new label crashes, and the `find` function above returns undefined
