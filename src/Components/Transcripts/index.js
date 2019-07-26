@@ -7,7 +7,7 @@ import NewTranscriptFormModal from './NewTranscriptFormModal';
 import ItemFormModal from '../lib/ItemFormModal';
 import ApiWrapper from '../../ApiWrapper';
 
-const intervalInMs = 1000;//60000;
+// const intervalInMs = 2000;//30000;
 
 class Transcripts extends Component {
   constructor(props) {
@@ -28,35 +28,7 @@ class Transcripts extends Component {
   }
 
   async componentDidMount() {
-    this.getTranscripts();
-  }
-
-  setCheckForTranscriptsInterval = () => {
-    this.interval = setInterval(() => {
-      console.log('interval');
-      this.setState({ time: Date.now() });
-    }, intervalInMs);
-  }
-
-  clearCheckForTranscriptsInterval =() => {
-    clearInterval(this.interval);
-  }
-
-  areThereTranscriptsInProgress = (items) => {
-    if (items.length !== 0) {
-      const result = items.find((transcript) => {
-
-        return transcript.status === 'in-progress';
-      });
-
-      return result ? true : false;
-    }
-
-    return false;
-  }
-
-  getTranscripts = async () => {
-    const result = await ApiWrapper.getTranscripts(this.state.projectId);
+     const result = await ApiWrapper.getTranscripts(this.state.projectId);
     // TODO: add error handling
     if (result) {
       const tmpList = result.transcripts.map((item) => {
@@ -68,23 +40,67 @@ class Transcripts extends Component {
         projectTitle: result.projectTitle,
         items: tmpList
       }, () => {
-        if (!this.interval) {
-          if (this.areThereTranscriptsInProgress(tmpList)) {
-            this.setCheckForTranscriptsInterval();
-          }
-          else {
-            this.clearCheckForTranscriptsInterval();
-          }
-        }
+        console.log('getTranscripts-tmpList');
       });
     }
+
+    //   this.interval = setInterval(() => {
+    //   console.log('interval');
+    //   if(this.areThereTranscriptsInProgress(this.state.items)){
+    //       this.getTranscripts();
+    //   }
+    // }, intervalInMs);
+    
   }
 
   componentWillUnmount =() => {
-    if (this.interval) {
-      this.clearCheckForTranscriptsInterval();
-    }
+    // if (this.interval) {
+    //    clearInterval(this.interval);
+    // }
   }
+
+
+  // setCheckForTranscriptsInterval = () => {
+  //   this.interval = setInterval(() => {
+  //     console.log('interval');
+  //     this.getTranscripts();
+  //   }, intervalInMs);
+  // }
+
+  // clearCheckForTranscriptsInterval =() => {
+  //   clearInterval(this.interval);
+  // }
+
+  // areThereTranscriptsInProgress = (items) => {
+  //   if (items.length !== 0) {
+  //     const result = items.find((transcript) => {
+
+  //       return transcript.status === 'in-progress';
+  //     });
+
+  //     return result ? true : false;
+  //   }
+
+  //   return false;
+  // }
+
+  // ifThereAreTranscriptInProgressStartInterval =() => {
+  //   const list = this.state.items;
+  //   if (!this.interval) {
+  //     if (this.areThereTranscriptsInProgress(list)) {
+  //       this.setCheckForTranscriptsInterval();
+  //     }
+  //     else {
+  //       this.clearCheckForTranscriptsInterval();
+  //     }
+  //   }
+  // }
+
+  // getTranscripts = async () => {
+  //   console.log('getTranscripts');
+   
+  // }
+
 
   // side POST using wrapperAPI done
   // inside --> newTranscriptFormModal --> TranscriptForm
@@ -103,8 +119,8 @@ class Transcripts extends Component {
       itemId: null,
       description: '',
       isNewItemModalShow: false
-    }, (props, state) => {
-      console.log('setState', props, state);
+    }, () => {
+      console.log('setState');
     });
   }
 
@@ -156,6 +172,7 @@ class Transcripts extends Component {
   }
 
   async handleDelete (transcriptId ) {
+    console.log('handle delete');
     // TODO: API + server side request for delete
     // on successful then update state
     const result = await ApiWrapper.deleteTranscript(this.state.projectId, transcriptId);
@@ -165,6 +182,8 @@ class Transcripts extends Component {
       const tmpNewList = this.state.items.filter(item => findId(item));
       this.setState({
         items: tmpNewList
+      }, () => {
+        console.log('deleted')
       });
     }
   }
@@ -208,6 +227,7 @@ class Transcripts extends Component {
     return (
       <>
         <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
+
           <ListPageTranscript
             model={ 'Transcript' }
             items={ this.state.items }

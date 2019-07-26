@@ -79,28 +79,33 @@ and handle edge case where it doesn't find a match
 ```
  */
 function groupWordsInParagraphsBySpeakers(words, segments) {
+  // console.log('groupWordsInParagraphsBySpeakers');
   const result = addWordsToSpeakersParagraphs(words, segments);
 
   return result;
 };
 
 function addWordsToSpeakersParagraphs (words, segments) {
+  console.log('segments', segments);
   const results = [];
-  let currentSegment = 'UKN';
+  // let currentSegment;// = 'UKN';
   let currentSegmentIndex = 0;
   let previousSegmentIndex = 0;
   let paragraph = { words: [], text: '', speaker: '' };
   words.forEach((word) => {
-    currentSegment = findSegmentForWord(word, segments);
+    const currentSegment = findSegmentForWord(word, segments);
+    console.log('currentSegment', currentSegment);
     // if a segment exists for the word
-    if (currentSegment) {
+    if (currentSegment !== undefined) {
       currentSegmentIndex = segments.indexOf(currentSegment);
+      console.log('currentSegmentIndex', currentSegmentIndex);
       if (currentSegmentIndex === previousSegmentIndex) {
         paragraph.words.push(word);
         paragraph.text += word.text + ' ';
         paragraph.speaker = currentSegment.speaker;
       }
       else {
+        console.log('no match', word);
         previousSegmentIndex = currentSegmentIndex;
         paragraph.text.trim();
         results.push(paragraph);
@@ -108,10 +113,12 @@ function addWordsToSpeakersParagraphs (words, segments) {
         paragraph.words.push(word);
         paragraph.text += word.text + ' ';
         paragraph.speaker = currentSegment.speaker;
+        // console.log('no match', paragraph.text);
       }
     }
   });
   results.push(paragraph);
+  // console.log('results', results);
 
   return results;
 }

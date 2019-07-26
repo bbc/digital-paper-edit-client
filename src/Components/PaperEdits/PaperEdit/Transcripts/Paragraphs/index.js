@@ -47,10 +47,14 @@ class Paragraphs extends Component {
      * client side or server side?
      * using paragraphs attribute of transcript json
      */
+    // console.log('this.props.transcriptJson.words', this.props.transcriptJson.words);
+    // console.log('this.props.transcriptJson.paragraphs', this.props.transcriptJson.paragraphs);
+
     const paragraphsWithWordsSpeakerText = groupWordsInParagraphsBySpeakers(
       this.props.transcriptJson.words,
       this.props.transcriptJson.paragraphs
     );
+    // console.log('paragraphsWithWordsSpeakerText', paragraphsWithWordsSpeakerText);
 
     const paragraphWithWordsSpeakersAndAnnotations = addAnnotationsToWordsInParagraphs(paragraphsWithWordsSpeakerText, this.props.annotations);
     /**
