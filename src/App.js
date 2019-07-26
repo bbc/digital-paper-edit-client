@@ -28,6 +28,8 @@ class App extends Component {
   // eslint-disable-next-line class-methods-use-this
   render() {
     let envWarning = null;
+    let offlineWarning = null;
+
     if (process.env.REACT_APP_NODE_ENV === 'demo') {
       envWarning = (
         <Container>
@@ -38,9 +40,15 @@ class App extends Component {
         </Container>);
     }
 
+    if (!navigator.onLine) {
+      offlineWarning = <><br/><Container><p className={ 'text-warning' }>Offline warning, You don't seem to be connected to the internet </p></Container></>;
+    }
+
     return (<>
 
       {envWarning}
+
+      {offlineWarning}
 
       <HashRouter>
         <Switch>
