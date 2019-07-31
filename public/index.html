@@ -35,8 +35,8 @@
         // however it means that in development npm start:dev in digital-paper-edit-electron won't work. 
         // because in development the electron-main.js looks for the app served by webpack, 
         // the path below to load src/ElectronWrapper/index.js doesn't resolve as they are in two different repos
-        // const ElectronWrapper = require('../src/ElectronWrapper/index.js');
-        const ElectronWrapper = require('../../../src/ElectronWrapper/index.js');
+        const ElectronWrapper = require('../src/ElectronWrapper/index.js');
+        // const ElectronWrapper = require('../../../src/ElectronWrapper/index.js');
         window.ElectronWrapper = ElectronWrapper;
       }
   </script>
