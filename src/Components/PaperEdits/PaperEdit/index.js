@@ -173,7 +173,6 @@ class PaperEdit extends Component {
             </Col>
           </Row>
         </Container>
-        <CustomFooter />
       </Container>
     );
   }

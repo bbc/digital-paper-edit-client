@@ -17,8 +17,7 @@ function CustomFooter() {
       className="justify-content-center"
     >
       <FontAwesomeIcon icon={ faFlask } /> <small>
-        This is
-        a prototype by {' '}
+        This is a prototype by {' '}
         <a href={ process.env.REACT_APP_PROTOTYPE_BY_LINK } target="_blank" rel="noopener noreferrer">
           {process.env.REACT_APP_PROTOTYPE_BY}
         </a>

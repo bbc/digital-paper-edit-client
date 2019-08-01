@@ -145,7 +145,6 @@ class TranscriptCorrect extends Component {
             </Col>
           </Row>
           {this.state.savedNotification}
-          {/* <Row> */}
           {this.state.transcriptJson !== null &&
           <TranscriptEditor
             transcriptData={ this.state.transcriptJson }// Transcript json
@@ -158,9 +157,6 @@ class TranscriptCorrect extends Component {
             // fileName={ this.state.projectTitle }// optional*
             ref={ this.transcriptEditorRef }
           />}
-          {/* </Row> */}
-
-          <CustomFooter />
         </Container>
       </>
     );
