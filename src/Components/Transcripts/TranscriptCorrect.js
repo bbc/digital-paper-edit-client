@@ -9,11 +9,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Redirect } from 'react-router-dom';
-import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 // import CustomFooter from '../lib/CustomFooter/index.js';
 import ApiWrapper from '../../ApiWrapper/index.js';
-import navbarLinks from '../lib/custom-navbar-links';
 import CustomFooter from '../lib/CustomFooter/index.js';
 import CustomAlert from '../lib/CustomAlert/index.js';
 
