@@ -109,12 +109,7 @@ class TranscriptCorrect extends Component {
       <>
         {this.renderRedirect()}
         <Container style={ { marginBottom: '5em' } } fluid>
-
-          <CustomNavbar
-            links={ navbarLinks(this.state.projectId) }
-          />
           <br/>
-
           <Row>
             <Col sm={ 12 } md={ 11 } ld={ 11 } xl={ 11 }>
               <CustomBreadcrumb

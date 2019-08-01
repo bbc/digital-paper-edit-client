@@ -1,4 +1,4 @@
 body{
     /* otherwise Boostrap fixed="top" navbar covers elements on the page */
-    padding-top: 40px; 
+    /* padding-top: 40px;  */
 }

@@ -4,7 +4,6 @@ import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import CustomNavbar from '../lib/CustomNavbar';
 import CustomFooter from '../lib/CustomFooter';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb';
 import Transcripts from '../Transcripts';
@@ -34,7 +33,6 @@ class Project extends React.Component {
   render() {
     return (
       <>
-        <CustomNavbar/>
         <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
           <Row>
             <Col sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 }>
