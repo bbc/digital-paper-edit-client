@@ -161,7 +161,7 @@ class TranscriptCorrect extends Component {
             isEditable={ true }// se to true if you want to be able to edit the text
             sttJsonType={ 'digitalpaperedit' }// the type of STT Json transcript supported.
             //  TODO: check if name has changed in latest version
-            // title={ this.state.projectTitle }
+            title={ this.state.transcriptTitle }
             // fileName={ this.state.projectTitle }// optional*
             ref={ this.transcriptEditorRef }
           />}
