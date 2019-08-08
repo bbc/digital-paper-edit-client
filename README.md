@@ -6,11 +6,11 @@ An application to make it faster, easier and more accessible to edit audio and v
 
 See [intro](./docs/intro.md) for more info on the project. And [user journey](./docs/user-journey/user-journey.md) for a high level overview of the user journey.
 
-## Project Architecture 
+## Project Architecture
 
 It's a React, Express, Electron, Adobe CEP, AWS stack to be able to deploy one modular code base as a Web app or Cross platform Desktop app (for Mac, win and linux).
 
-The project is organised across these repository 
+The project is organised across these repository
 
 - [`bbc/digital-paper-edit-client`](https://github.com/bbc/digital-paper-edit-client) - React Client - [npm](https://www.npmjs.com/package/@bbc/digital-paper-edit-client)
 - [`bbc/digital-paper-edit-react-components`](https://github.com/bbc/digital-paper-edit-react-components) - React Storybook for Client components - `npm`.
@@ -33,7 +33,6 @@ The projects use [npm semantic versioning](https://docs.npmjs.com/about-semantic
 
 ![](https://raw.githubusercontent.com/bbc/digital-paper-edit-infrastructure/master/docs/adr/newest_arch.png)
 
-
 Between the 5 June and 17 July there is a sprint board used for organising the backlog for each two-week sprint cycle.
 
 - [BBC News Labs - Digital Paper Edit - Sprint Board](https://github.com/orgs/bbc/projects/33) is a Github project board [with linked repository](https://help.github.com/en/articles/linking-a-repository-to-a-project-board) where issues are added from the relevant repository listed in architecture section.
@@ -47,11 +46,10 @@ And there are [github project board for each milestone](https://github.com/bbc/d
 - [3 - Paper-editing](https://github.com/bbc/digital-paper-edit-client/projects/4)
 
 With UX being an overarching milestone that cuts across these different parts
+
 - [UX](https://github.com/bbc/digital-paper-edit-client/projects/1)
 
-
 See [UX Approach](./docs/guides/ux-approach.md) in docs guides for more info.
-
 
 ## Setup
 
@@ -60,7 +58,6 @@ See [UX Approach](./docs/guides/ux-approach.md) in docs guides for more info.
 _How to build and run the code/app_ -->
 
 See _optional_ [getting setup with the visual code workspace](docs/guides/visual-code-workspace-setup.md) to get up and running with the various repository needed for this project.
-
 
 ```
 git clone git@github.com:bbc/digital-paper-edit-client.git
@@ -71,11 +68,13 @@ cd digital-paper-edit-client
 ```
 
 Optional step to setup [nvm](https://github.com/nvm-sh/nvm) to use node version 10, otherwise just use node version 10
+
 ```
 nvm use || nvm install`
 ```
 
 in root of project
+
 ```
 npm install
 ```
@@ -84,8 +83,7 @@ npm install
 
 <!-- `cd` into the individual repository inside [`./packages`](./packages) and npm start, or see respective README and package.json for how deal with each. -->
 
-
-In root of the client project (`cd digital-paper-edit-client`) start React 
+In root of the client project (`cd digital-paper-edit-client`) start React
 
 ```
 npm run start
@@ -93,12 +91,11 @@ npm run start
 
 To developer for the web app [you will need to start setup and the API server](https://github.com/bbc/digital-paper-edit-api#setup) as well.
 
-
->Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+> Runs the app in the development mode.<br>
+> Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 >
->The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+> The page will reload if you make edits.<br>
+> You will also see any lint errors in the console.
 
 <!-- additionally to develop for electron also run ,in another terminal, in root of project.
 
@@ -106,12 +103,12 @@ You will also see any lint errors in the console.
 make start-electron
 ``` -->
 
-
 ## Usage - production
 
 The project is also publicly available in the npm registry [`@bbc/digital-paper-edit-client`](https://www.npmjs.com/package/@bbc/digital-paper-edit-client)
 
- you can add it to your project
+you can add it to your project
+
 ```
 npm install @bbc/digital-paper-edit-client
 ```
@@ -126,11 +123,9 @@ app.use("/", express.static(path.join(__dirname, '..', 'node_modules/@bbc/digita
 
 Client - React, is setup using [Create React App](https://facebook.github.io/create-react-app/docs/getting-started).
 
->You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+> You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 >
->To learn React, check out the [React documentation](https://reactjs.org/).
-
-
+> To learn React, check out the [React documentation](https://reactjs.org/).
 
 ## Development env
 
@@ -151,7 +146,7 @@ Node version is set in node version manager [`.nvmrc`](https://github.com/creati
 
 ## Documentation
 
-See [docs](./docs) folder 
+See [docs](./docs) folder
 
 - [`docs/features-list`](./docs/features-list.md) overview of main features of the app.
 - [`docs/user-journey/user-journey.md`](./docs/user-journey/user-journey.md) overview of main features of the app.
@@ -162,9 +157,9 @@ See [docs](./docs) folder
 > An architectural decision record (ADR) is a document that captures an important architectural decision made along with its context and consequences.
 
 We are using [this template for ADR](https://gist.github.com/iaincollins/92923cc2c309c2751aea6f1b34b31d95)
-<!-- 
-[There also QA testing docs](./docs/qa/README.md) to manual test the component before a major release, (QA testing does not require any technical knowledge). -->
 
+<!--
+[There also QA testing docs](./docs/qa/README.md) to manual test the component before a major release, (QA testing does not require any technical knowledge). -->
 
 ## Build
 
@@ -178,16 +173,15 @@ npm run build
 
 Build of react client side will be in `build`
 
->Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+> Builds the app for production to the `build` folder.<br>
+> It correctly bundles React in production mode and optimizes the build for the best performance.
 >
->The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+> The build is minified and the filenames include the hashes.<br>
+> Your app is ready to be deployed!
 
-
-<!-- 
+<!--
 ### Electron - Build
-First do `make build-react` then 
+First do `make build-react` then
 
 ```
 make build-electron
@@ -213,11 +207,10 @@ During development you can use
 npm run test:watch
 ```
 
->Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+> Launches the test runner in the interactive watch mode.<br>
+> See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 <!-- See README for individual packages for more details -->
-
 
 <!-- ## Travis CI
 
@@ -241,10 +234,9 @@ npm run publish:public
 
 <!-- See README for individual packages for more details -->
 
-for more info on Create React app deployment: 
+for more info on Create React app deployment:
 
->See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
+> See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ## Demo page on github pages
 
@@ -259,11 +251,11 @@ npm run deploy:ghpages
 See [CONTRIBUTING.md](./CONTRIBUTING.md) guidelines and [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) guidelines.
 
 ## Licence
+
 <!-- mention MIT Licence -->
+
 See [LICENCE](./LICENCE.md)
 
 ## Legal Disclaimer
 
 _Despite using React and DraftJs, the BBC is not promoting any Facebook products or other commercial interest._
-
-
