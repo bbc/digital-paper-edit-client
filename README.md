@@ -22,7 +22,7 @@ The project is organised across these repository
 Micro services for web app backend
 
 - [`bbc/digital-paper-edit-stt-proxy`](https://github.com/bbc/digital-paper-edit-stt-proxy) - An express server to connect to STT service
-- [`bbc/digital-paper-edit-video-preview-converter`](https://github.com/bbc/digital-paper-edit-video-preview-converterr) - An express server to generate an mp4 video preview using ffmpeg
+- [`bbc/digital-paper-edit-video-preview-converter`](https://github.com/bbc/digital-paper-edit-video-preview-converter) - An express server to generate an mp4 video preview using ffmpeg
 - [`bbc/digital-paper-edit-audio-converter`](https://github.com/bbc/digital-paper-edit-audio-converter) - An express server to generate an audio file with the stt specs to be able to send it to `STT Proxy`.
 
 [See here to see them as a list in github](https://github.com/topics/digital-paper-edit).
