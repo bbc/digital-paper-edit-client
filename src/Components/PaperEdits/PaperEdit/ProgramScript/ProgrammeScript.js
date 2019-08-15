@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Card from 'react-bootstrap/Card';
 import {
   sortableContainer,
   sortableElement,
@@ -95,6 +96,40 @@ class ProgrammeScript extends Component {
           return null;
         }
       });
+
+      const res = [];
+      programme.forEach((e) => {
+        if (e.type === 'title') {
+          e.children = [];
+
+          return res.push(e);
+        }
+        else {
+          res[res.length - 1].children.push(e);
+        }
+      });
+
+      programme = res.map((el) => {
+        if (el.type === 'title') {
+          // eslint-disable-next-line react/jsx-key
+          return ( { el: <Card>
+            <Card.Header as="h5"> {el.el}</Card.Header>
+            <Card.Body>
+              {/* <Card.Title>Special title treatment</Card.Title> */}
+              {/* <Card.Text> */}
+              {el.children.map((c) => {return c.el;})}
+              {/* </Card.Text> */}
+              {/* <Button variant="primary">Go somewhere</Button> */}
+            </Card.Body>
+            <Card.Footer>
+              <small className="text-muted">Some stats, like duration etc..?</small>
+            </Card.Footer>
+          </Card>,
+          type: el.type }
+          );
+        }
+      });
+
     }
 
     if (this.props.programmeScriptElements) {
