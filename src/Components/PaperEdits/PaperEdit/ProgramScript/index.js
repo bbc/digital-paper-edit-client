@@ -396,34 +396,32 @@ class ProgramScript extends Component {
     downloadjs(programmeScriptText, `${ this.state.programmeScript.title }.txt`, 'text/plain');
   }
 
-  handleUpdatePreview = () => {
-    let timelineStartTime = 0;
-    //  const { playlist } = this.state;
-    // { type:'video', start:0, sourceStart: 30, duration:10, src:'https://download.ted.com/talks/MorganVague_2018X.mp4' },
-    const playlist = this.state.programmeScript.elements.map((element) => {
-      if (element.type === 'paper-cut') {
-        // Get clipName for current transcript
-        const currentTranscript = this.props.transcripts.find((tr) => {
-          return tr.id === element.transcriptId;
-        });
-        const duration = element.end - element.start;
+  getTranscript = (transcriptId) => {
+    return this.props.transcripts.find((tr) => tr.id === transcriptId );
+  }
+
+  getPlayList = () => {
+    let startTime = 0;
+
+    return this.state.programmeScript.elements.filter((element) => element.type === 'paper-cut')
+      .map((element) => {
         // TODO: handle audio only type (eg for radio), get from transcript json?
         const result = {
           type:'video',
-          start: timelineStartTime,
+          start: startTime,
           sourceStart: element.start,
-          duration: duration,
-          src: currentTranscript.url
+          duration: element.end - element.start,
+          src: this.getTranscript(element.transcriptId).url
         };
 
-        timelineStartTime += duration;
+        startTime += result.duration;
 
         return result;
-      }
+      });
+  };
 
-      return null;
-    }).filter((el) => {return el !== null;});
-
+  handleUpdatePreview = () => {
+    const playlist = this.getPlayList();
     // Workaround to mound and unmoun the `PreviewCanvas` component
     // to update the playlist
     this.setState({
