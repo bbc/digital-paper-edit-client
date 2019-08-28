@@ -8,14 +8,15 @@ class PaperCutsPlayerViewer extends React.PureComponent {
       width = 640,
       height = 360,
       playlist = [],
+      ref = React.createRef()
     } = props;
 
     super(props);
 
     this.playlist = playlist;
-    this.canvasRef = React.createRef();
+    this.canvasRef = ref;
     this.canvas = (<canvas
-      ref={ this.canvasRef }
+      ref={ ref }
       width={ width }
       height={ height }
     />);
@@ -38,7 +39,7 @@ class PaperCutsPlayerViewer extends React.PureComponent {
       node.startAt(start);
       node.stopAt(start + duration);
       node.connect(this.videoContext.destination);
-    });
+    }); // playlist function override
   }
 
   render() {

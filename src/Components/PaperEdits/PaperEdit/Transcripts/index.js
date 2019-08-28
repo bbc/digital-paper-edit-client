@@ -41,6 +41,7 @@ class Transcripts extends Component {
             title={ transcript.transcriptTitle }
             transcript={ transcript.transcript }
             url={ transcript.url }
+            videoHeight={ this.props.videoHeight }
           />
         </Tab.Pane>
       );

@@ -31,3 +31,18 @@
   height: 1px;
   opacity: 0;
 }
+
+.progressBar {
+  position: relative;
+  height: 20px;
+  width: 100%;
+  border-radius: 50px;
+  border:1px solid #333;
+
+}
+
+.filler {
+  background: #1da598;
+  height: 100%;
+  border-radius: inherit;
+}
