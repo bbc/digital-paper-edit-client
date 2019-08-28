@@ -34,15 +34,13 @@
 
 .progressBar {
   position: relative;
-  height: 20px;
+  height: 12px;
   width: 100%;
-  border-radius: 50px;
-  border:1px solid #333;
-
+  opacity: 1;
 }
 
 .filler {
-  background: #1da598;
+  background: red;
   height: 100%;
   border-radius: inherit;
 }

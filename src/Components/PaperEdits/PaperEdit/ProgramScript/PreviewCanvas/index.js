@@ -47,14 +47,10 @@ class PreviewCanvas extends React.PureComponent {
           style={ { backgroundColor: 'lightgrey' } }
         >
           <VideoContextProgressBar
-            width={ '100%' }
             videoContext={ this.videoContext }
-            playlist= { this.playlist }
           />
         </Row>
         <Row
-          // noGutters
-          // className={ 'justify-content-center' }
           style={
             {
               marginTop: '0.4em'

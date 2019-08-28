@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,65 +8,56 @@ const playIcon = <FontAwesomeIcon icon={ faPlay } />;
 const pauseIcon = <FontAwesomeIcon icon={ faPause } />;
 const stopIcon = <FontAwesomeIcon icon={ faStop } />;
 
-class Controls extends React.PureComponent {
+const Controls = (props) => {
 
-  constructor(props) {
-    super(props);
+  const [ isPlaying, setIsPlaying ] = useState(false);
 
-    this.state = {
-      isPlaying: false
-    };
-  }
+  const handlePlay = () => {
+    props.videoContext.play();
+    setIsPlaying(true);
+  };
 
-  handlePlay = () => {
-    this.props.videoContext.play();
-    this.setState({ isPlaying: true });
-  }
+  const handlePause = () => {
+    props.videoContext.pause();
+    setIsPlaying(false);
+  };
 
-  handlePause = () => {
-    this.props.videoContext.pause();
-    this.setState({ isPlaying: false });
-  }
+  const handleStop = () => {
+    props.videoContext.pause();
+    props.videoContext.currentTime = 0;
+    setIsPlaying(false);
+  };
 
-  handleStop = () => {
-    this.props.videoContext.pause();
-    this.props.videoContext.currentTime = 0;
-    this.setState({ isPlaying: false });
-  }
-
-  render() {
-
-    return (
-      <>
-        <Col
-          sm={ 6 } md={ 6 } ld={ 6 } xl={ 6 }
-          // className={ 'col-auto' }
+  return (
+    <>
+      <Col
+        sm={ 6 } md={ 6 } ld={ 6 } xl={ 6 }
+        // className={ 'col-auto' }
+      >
+        <Button
+          size="sm"
+          block
+          variant="outline-secondary"
+          onClick={ isPlaying ? handlePause : handlePlay }
         >
-          <Button
-            size="sm"
-            block
-            variant="outline-secondary"
-            onClick={ this.state.isPlaying ? this.handlePause : this.handlePlay }
-          >
-            { this.state.isPlaying ? pauseIcon : playIcon }
-          </Button>
-        </Col>
-        <Col
-          sm={ 6 } md={ 6 } ld={ 6 } xl={ 6 }
-          // className={ 'col-auto' }
+          { isPlaying ? pauseIcon : playIcon }
+        </Button>
+      </Col>
+      <Col
+        sm={ 6 } md={ 6 } ld={ 6 } xl={ 6 }
+        // className={ 'col-auto' }
+      >
+        <Button
+          size="sm"
+          block
+          variant="outline-secondary"
+          onClick={ handleStop }
         >
-          <Button
-            size="sm"
-            block
-            variant="outline-secondary"
-            onClick={ this.handleStop }
-          >
-            { stopIcon }
-          </Button>
-        </Col>
-      </>
-    );
-  }
-}
+          { stopIcon }
+        </Button>
+      </Col>
+    </>
+  );
+};
 
 export default Controls;
