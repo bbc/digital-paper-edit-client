@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import ProgressBar from './ProgressBar';
 
+const getPercentage = (currentTime, duration) => currentTime / duration * 100;
 const VideoContextProgressBar = (props) => {
   const ref = useRef();
 
@@ -11,8 +12,8 @@ const VideoContextProgressBar = (props) => {
   const handleClick = ({ nativeEvent: { offsetX } }) => {
     const currentTime = (offsetX / width) * videoContext.duration;
     videoContext.currentTime = currentTime;
-    const progress = (currentTime / videoContext.duration) * 100;
-    setPercentage(progress);
+    const p = getPercentage(videoContext.currentTime, videoContext.duration);
+    setPercentage(p);
   };
 
   useLayoutEffect(() => {
@@ -23,8 +24,8 @@ const VideoContextProgressBar = (props) => {
 
   useEffect(() => {
     const fillerAnimation = () => {
-      const progress = (videoContext.currentTime / videoContext.duration) * 100;
-      setPercentage(progress);
+      const p = getPercentage(videoContext.currentTime, videoContext.duration);
+      setPercentage(p);
       requestAnimationFrame(fillerAnimation);
     };
 
