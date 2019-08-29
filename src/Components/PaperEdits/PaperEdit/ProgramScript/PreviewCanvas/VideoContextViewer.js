@@ -39,7 +39,7 @@ class PaperCutsPlayerViewer extends React.PureComponent {
       node.startAt(start);
       node.stopAt(start + duration);
       node.connect(this.videoContext.destination);
-    }); // playlist function override
+    }); 
   }
 
   render() {
