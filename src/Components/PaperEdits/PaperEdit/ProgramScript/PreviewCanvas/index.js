@@ -12,9 +12,6 @@ class PreviewCanvas extends React.PureComponent {
 
     super(props);
 
-    console.log('programme: ' + JSON.stringify(programmeScript));
-    console.log('playlist: ' + JSON.stringify(playlist));
-
     this.height = this.props.height;
     this.playlist = playlist;
     this.videoContextRef = React.createRef();
