@@ -1,76 +1,46 @@
-/* eslint-disable template-curly-spacing */
-/* eslint-disable react/prop-types */
-import React from 'react';
-import styles from './VideoContextProgressBar.module.css';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import ProgressBar from './ProgressBar';
 
-class VideoContextProgressBar extends React.PureComponent {
-  constructor(props) {
-    const {
-      width = 640,
-    } = props;
+const getPercentage = (currentTime, duration) => currentTime / duration * 100;
+const VideoContextProgressBar = (props) => {
+  const ref = useRef();
 
-    super(props);
+  const [ percentage, setPercentage ] = useState(0);
+  const [ videoContext, setVideoContext ] = useState();
+  const [ width, setWidth ] = useState(0);
 
-    this.width = width;
-    this.state = { progress: 0 };
-  }
+  const handleClick = ({ nativeEvent: { offsetX } }) => {
+    const currentTime = (offsetX / width) * videoContext.duration;
+    videoContext.currentTime = currentTime;
+    const p = getPercentage(videoContext.currentTime, videoContext.duration);
+    setPercentage(p);
+  };
 
-  componentDidUpdate() {
-    this.videoContext = this.props.videoContext;
-    this.setState({ duration: this.videoContext.duration });
-    this.updateProgress();
-  }
+  useLayoutEffect(() => {
+    if (ref.current) {
+      setWidth(ref.current.offsetWidth);
+    }
+  }, [ ref ]);
 
-  updateProgress = () => requestAnimationFrame(() => {
-    const currentTime = this.videoContext && this.videoContext.currentTime;
-    const progress = (currentTime / this.state.duration) * 100;
+  useEffect(() => {
+    const fillerAnimation = () => {
+      const p = getPercentage(videoContext.currentTime, videoContext.duration);
+      setPercentage(p);
+      requestAnimationFrame(fillerAnimation);
+    };
 
-    if (this.state.progress !== progress) this.setState({ progress });
+    setVideoContext(props.videoContext);
 
-    requestAnimationFrame(this.updateProgress);
-  });
+    if (videoContext) {
+      fillerAnimation();
+    }
+  }, [ props.videoContext, videoContext ]);
 
-  handleClick = ({ nativeEvent: { offsetX } }) => {
-    this.videoContext.currentTime = (offsetX / this.width) * this.state.duration;
-  }
-
-  getTracks = () =>
-    this.state.duration && this.videoContext._sourceNodes.map(
-      ({ startTime, stopTime, elementURL }, i) => (
-        <div
-          key={ `${elementURL.split('/').slice(-1).pop()}.${startTime}` }
-          className={ styles.papercutsPlayerProgressTrack }
-          style={ {
-            width: ((stopTime - startTime) / this.state.duration) * this.width - 2
-          } }
-        >
-          { (i > 0) && <div />}
-        </div>
-      )
-    );
-
-  render() {
-    if (!this.tracks) this.tracks = this.getTracks();
-
-    return (
-      <>
-        <div
-        // className='papercuts-player-progress papercuts-player-progress-back'
-          className={ [ styles.papercutsPlayerProgress, styles.papercutsPlayerProgressBack ].join(' ') }
-          onClick={ this.handleClick }
-          style={ { width: this.width } }
-        >
-          { this.tracks ? this.tracks : <div /> }
-          <div
-          // className='papercuts-player-progess papercuts-player-progress-front'
-            className={ [ styles.papercutsPlayerProgress, styles.papercutsPlayerProgressFront ].join(' ') }
-            style={ { width: `${this.state.progress}%` } }
-          />
-
-        </div>
-      </>
-    );
-  }
-}
+  return (
+    <div ref={ ref } style={ { width:'100%' } }>
+      <ProgressBar onClick={ handleClick } percentage={ percentage } />
+    </div>
+  );
+};
 
 export default VideoContextProgressBar;
