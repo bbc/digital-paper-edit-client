@@ -27,35 +27,14 @@
   <body>
     <script  type="text/javascript">
       if(window.process && window.process.versions.electron){
-        // Electron Wrapper needs to be on the electron render process
-        // if not, if instead it's added via the main process the app will hang
-        // at the moment this works, in production. 
-        // eg do react build, move the build folder in digital-paper-edit-electron repo
-        // and when you start npm run start:prod the app will work
-        // however it means that in development npm start:dev in digital-paper-edit-electron won't work. 
-        // because in development the electron-main.js looks for the app served by webpack, 
-        // the path below to load src/ElectronWrapper/index.js doesn't resolve as they are in two different repos
         const ElectronWrapper = require('../src/ElectronWrapper/index.js');
         window.ElectronWrapper = ElectronWrapper;
       }
   </script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <!--
-      Load "env.js" script before the main JavaScript bundle.
-      You can use it to define "runtime" environment variables.
-      Please open this file for more details.
-    -->
+
     <script src="%PUBLIC_URL%/env.js"></script>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>
