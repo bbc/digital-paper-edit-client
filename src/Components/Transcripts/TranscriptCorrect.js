@@ -9,12 +9,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Redirect } from 'react-router-dom';
-import CustomNavbar from '../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
-// import CustomFooter from '../lib/CustomFooter/index.js';
 import ApiWrapper from '../../ApiWrapper/index.js';
-import navbarLinks from '../lib/custom-navbar-links';
-import CustomFooter from '../lib/CustomFooter/index.js';
 import CustomAlert from '../lib/CustomAlert/index.js';
 
 class TranscriptCorrect extends Component {
@@ -109,12 +105,7 @@ class TranscriptCorrect extends Component {
       <>
         {this.renderRedirect()}
         <Container style={ { marginBottom: '5em' } } fluid>
-
-          <CustomNavbar
-            links={ navbarLinks(this.state.projectId) }
-          />
           <br/>
-
           <Row>
             <Col sm={ 12 } md={ 11 } ld={ 11 } xl={ 11 }>
               <CustomBreadcrumb
@@ -152,7 +143,6 @@ class TranscriptCorrect extends Component {
             </Col>
           </Row>
           {this.state.savedNotification}
-          {/* <Row> */}
           {this.state.transcriptJson !== null &&
           <TranscriptEditor
             transcriptData={ this.state.transcriptJson }// Transcript json
@@ -161,13 +151,10 @@ class TranscriptCorrect extends Component {
             isEditable={ true }// se to true if you want to be able to edit the text
             sttJsonType={ 'digitalpaperedit' }// the type of STT Json transcript supported.
             //  TODO: check if name has changed in latest version
-            // title={ this.state.projectTitle }
+            title={ this.state.transcriptTitle }
             // fileName={ this.state.projectTitle }// optional*
             ref={ this.transcriptEditorRef }
           />}
-          {/* </Row> */}
-
-          <CustomFooter />
         </Container>
       </>
     );

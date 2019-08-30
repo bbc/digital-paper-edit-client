@@ -2,7 +2,6 @@ import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import CustomNavbar from '../lib/CustomNavbar';
 import ListPage from '../lib/ListPage';
 import ItemFormModal from '../lib/ItemFormModal';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb';
@@ -142,7 +141,6 @@ class Projects extends React.Component {
 
   render() {
     return (<>
-      <CustomNavbar/>
       <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
         <Row>
           <Col sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 }>

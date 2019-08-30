@@ -9,10 +9,8 @@ import {
   faAngleUp,
   faAngleDown
 } from '@fortawesome/free-solid-svg-icons';
-import CustomNavbar from '../../lib/CustomNavbar/index.js';
 import CustomBreadcrumb from '../../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../../lib/CustomFooter/index.js';
-import navbarLinks from '../../lib/custom-navbar-links';
 
 import Transcripts from './Transcripts/index.js';
 import ProgramScript from './ProgramScript/index.js';
@@ -71,11 +69,7 @@ class PaperEdit extends Component {
   render() {
     return (
       <Container style={ { marginBottom: '5em' } } fluid>
-        <CustomNavbar
-          links={ navbarLinks(this.state.projectId) }
-        />
         <br/>
-
         <Row>
           <Col sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 }>
             <CustomBreadcrumb
@@ -182,7 +176,6 @@ class PaperEdit extends Component {
             </Col>
           </Row>
         </Container>
-        <CustomFooter />
       </Container>
     );
   }

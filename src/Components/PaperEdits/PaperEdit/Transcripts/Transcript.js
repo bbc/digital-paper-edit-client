@@ -345,23 +345,25 @@ class Transcript extends Component {
           {this.props.title}
         </h2>
 
-        {/* // Preview video - HTML5 Video element or  @bbc/react-transcript-editor/VideoPlayer
+        <Card>
+          <Card.Header>
+            {/* // Preview video - HTML5 Video element or  @bbc/react-transcript-editor/VideoPlayer
         // Media control - HTML5 default or @bbc/react-transcript-editor/MediaPlayer
         // Search Bar - from TranscriptAnnotate component
         // Text -  from TranscriptAnnotate component */}
-        <video
-          src={ this.props.url }
-          ref={ this.videoRef }
-          onTimeUpdate={ (e) => {this.setState({ currentTime: e.target.currentTime });} }
-          // onTimeUpdate={ (e) => {console.log(e.target.currentTime); } }
-          style={ {
-            // display: this.state.isVideoTranscriptPreviewShow,
-            width: '100%',
-            height: this.props.videoHeight,
-            backgroundColor: 'black'
-          } }
-          controls/>
-        <Card>
+            <video
+              src={ this.props.url }
+              ref={ this.videoRef }
+              onTimeUpdate={ (e) => {this.setState({ currentTime: e.target.currentTime });} }
+              // onTimeUpdate={ (e) => {console.log(e.target.currentTime); } }
+              style={ {
+                // display: this.state.isVideoTranscriptPreviewShow,
+                width: '100%',
+                height: this.props.videoHeight,
+                backgroundColor: 'black'
+              } }
+              controls/>
+          </Card.Header>
           <Card.Header>
             <Row>
               <Col xs={ 12 } sm={ 12 } md={ 12 } lg={ 12 } xl={ 12 }>
@@ -419,24 +421,25 @@ class Transcript extends Component {
             onClick={ this.handleTimecodeClick }
             style={ { height: '60vh', overflow: 'scroll' } }
           >
-            <div>
-              {highlights}
-              {this.props.transcript
-          && <Paragraphs
-            labelsOptions={ this.state.labelsOptions && this.state.labelsOptions }
-            annotations={ this.state.annotations ? this.state.annotations : [] }
-            transcriptJson={ this.props.transcript }
-            searchString={ this.state.searchString ? this.state.searchString : '' }
-            showParagraphsMatchingSearch={ this.state.showParagraphsMatchingSearch }
-            selectedOptionLabelSearch={ this.state.selectedOptionLabelSearch ? this.state.selectedOptionLabelSearch : [] }
-            selectedOptionSpeakerSearch={ this.state.selectedOptionSpeakerSearch ? this.state.selectedOptionSpeakerSearch : [] }
-            transcriptId={ this.props.transcriptId }
-            handleTimecodeClick={ this.handleTimecodeClick }
-            handleWordClick={ this.handleWordClick }
-            handleDeleteAnnotation={ this.handleDeleteAnnotation }
-            handleEditAnnotation={ this.handleEditAnnotation }
-          />}
-            </div>
+
+            {highlights}
+
+            {this.props.transcript &&
+            <Paragraphs
+              labelsOptions={ this.state.labelsOptions && this.state.labelsOptions }
+              annotations={ this.state.annotations ? this.state.annotations : [] }
+              transcriptJson={ this.props.transcript }
+              searchString={ this.state.searchString ? this.state.searchString : '' }
+              showParagraphsMatchingSearch={ this.state.showParagraphsMatchingSearch }
+              selectedOptionLabelSearch={ this.state.selectedOptionLabelSearch ? this.state.selectedOptionLabelSearch : [] }
+              selectedOptionSpeakerSearch={ this.state.selectedOptionSpeakerSearch ? this.state.selectedOptionSpeakerSearch : [] }
+              transcriptId={ this.props.transcriptId }
+              handleTimecodeClick={ this.handleTimecodeClick }
+              handleWordClick={ this.handleWordClick }
+              handleDeleteAnnotation={ this.handleDeleteAnnotation }
+              handleEditAnnotation={ this.handleEditAnnotation }
+            />}
+
           </Card.Body>
         </Card>
       </>

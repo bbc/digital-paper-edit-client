@@ -36,8 +36,6 @@ function getDataFromUserWordsSelection(e) {
     const words = selectedRange.querySelectorAll('.words');
 
     if (words.length !== 0) {
-      // TODO: remove window.words, it's for troubleshooting
-      window.words = words;
 
       return {
         start: parseFloat(words[0].dataset.start),
@@ -57,9 +55,9 @@ function getDataFromUserWordsSelection(e) {
         return {
           start: parseFloat(word.dataset.start),
           end: parseFloat(word.dataset.end),
-          transcriptId: words[0].dataset.transcriptId,
-          speaker: words[0].dataset.speaker,
-          words: words
+          transcriptId: word.dataset.transcriptId,
+          speaker: word.dataset.speaker,
+          words: [ parseWordElDataset(word) ]
         };
       }
 

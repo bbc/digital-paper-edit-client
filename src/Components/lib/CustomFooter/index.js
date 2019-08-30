@@ -2,7 +2,9 @@ import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import labsLogo from '../../../img/labsLogo.png';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFlask } from '@fortawesome/free-solid-svg-icons';
 
 function CustomFooter() {
   const footer = (
@@ -14,11 +16,10 @@ function CustomFooter() {
       fixed="bottom"
       className="justify-content-center"
     >
-      <small>
-        <img src={ labsLogo } style={ { height: '2em' } } alt="Labs Logo" /> This is
-        a prototype from{' '}
-        <a href="http://bbcnewslabs.co.uk/" target="_blank" rel="noopener noreferrer">
-          BBC News Labs
+      <FontAwesomeIcon icon={ faFlask } /> <small>
+        This is a prototype by {' '}
+        <a href={ process.env.REACT_APP_PROTOTYPE_BY_LINK } target="_blank" rel="noopener noreferrer">
+          {process.env.REACT_APP_PROTOTYPE_BY}
         </a>
       </small>
     </Navbar>

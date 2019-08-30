@@ -27,7 +27,13 @@
   <body>
     <script  type="text/javascript">
       if(window.process && window.process.versions.electron){
-        const ElectronWrapper = require('../src/ElectronWrapper/index.js');
+        const { app } = require('electron').remote;
+        const path = require('path');
+        const appPath = app.getAppPath();
+        // changing path to simplify being able to load electron wrapper from this index.html file, 
+        // which will be deep in node_modules
+        window.process.chdir(appPath)
+        const ElectronWrapper = require(path.join(appPath,'src','ElectronWrapper','index.js'));
         window.ElectronWrapper = ElectronWrapper;
       }
   </script>
