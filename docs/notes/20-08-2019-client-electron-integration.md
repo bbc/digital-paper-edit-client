@@ -43,12 +43,10 @@ In the `/public/index.html` folder, there is the `index` file for the react app,
   ...
 ```
 
-```js
-window.process.chdir(appPath)
-```
+This line changes directory to simplify loading of the electron wrapper from this file, as the wrapper will be deep in node_modules.
 
 ```js
- window.ElectronWrapper = ElectronWrapper;
+window.process.chdir(appPath)
 ```
 
 This line `window.ElectronWrapper = ElectronWrapper;` makes `ElectronWrapper` available in the `ApiWrapper` to replace the default `ApiWrapper` in `/src/ApiWrapper/index.js` React client app. 
