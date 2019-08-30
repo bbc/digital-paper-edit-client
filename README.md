@@ -179,15 +179,31 @@ Build of react client side will be in `build`
 > The build is minified and the filenames include the hashes.<br>
 > Your app is ready to be deployed!
 
-<!--
-### Electron - Build
-First do `make build-react` then
+### Electron
 
-```
-make build-electron
+See [docs](https://github.com/bbc/digital-paper-edit-client/commit/15a9fe2d06c9b8666b6bd9ddd1aaa64246de6bfd) for more information on how this works with Electron.
+
+In `public/index.html`:
+
+```js
+if(window.process && window.process.versions.electron){
+        const ElectronWrapper = require('../src/ElectronWrapper/index.js');
+        window.ElectronWrapper = ElectronWrapper;
+}
 ```
 
-`packages/client/dist` will contain your packaged version of the app for desktop -->
+`ElectronWrapper` needs to be on the Electron render process otherwise (i.e. from the main process) the app will hang.
+
+<!-- Build proc
+First do `make build-react` then `make build-electron`
+`packages/client/dist` will contain your packaged version of the app for desktop
+-->
+
+1. run `npm run build` which will output a `build` folder
+2. move the `build` folder to `digital-paper-edit-electron` repository
+3. from `digital-paper-edit-electron`, run `npm run start:prod`
+
+Running in development (`npm start:dev`) in `digital-paper-edit-electron` will not work. In development mode, the `electron-main.js` looks for the app served by webpack in `src/ElectronWrapper/index.js`, which doesn't resolve as that is in a different repository.
 
 ## Tests
 

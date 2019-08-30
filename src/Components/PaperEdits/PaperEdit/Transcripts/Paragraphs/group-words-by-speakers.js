@@ -111,6 +111,7 @@ function addWordsToSpeakersParagraphs (words, segments) {
     }
   });
   results.push(paragraph);
+  // console.log('results', results);
 
   return results;
 }

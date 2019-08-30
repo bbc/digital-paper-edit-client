@@ -29,6 +29,7 @@ class PaperEdit extends Component {
       isTranscriptsShown: true,
       isProgramScriptShown: true,
       // annotations:[]
+      videoHeight : '10em',
     };
   }
 
@@ -142,6 +143,7 @@ class PaperEdit extends Component {
                   projectId={ this.state.projectId }
                   transcripts={ this.state.transcripts }
                   labelsOptions={ this.state.labelsOptions }
+                  videoHeight={ this.props.videoHeight }
                 />
                 : <><br/><br/><i>No Transcripts, create a transcript to get started</i></>}
             </Col>
@@ -169,6 +171,7 @@ class PaperEdit extends Component {
                 projectId={ this.state.projectId }
                 papereditId={ this.state.papereditId }
                 transcripts={ this.state.transcripts }
+                videoHeight={ this.props.videoHeight }
               />
             </Col>
           </Row>

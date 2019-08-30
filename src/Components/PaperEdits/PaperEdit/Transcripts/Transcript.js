@@ -359,7 +359,7 @@ class Transcript extends Component {
               style={ {
                 // display: this.state.isVideoTranscriptPreviewShow,
                 width: '100%',
-                height:'10em',
+                height: this.props.videoHeight,
                 backgroundColor: 'black'
               } }
               controls/>

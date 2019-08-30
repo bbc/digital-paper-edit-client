@@ -8,13 +8,11 @@ import Row from 'react-bootstrap/Row';
 class PreviewCanvas extends React.PureComponent {
 
   constructor(props) {
-    const { playlist = [], width = 640 } = props;
+    const { playlist = [], programmeScript = [] } = props; // default initiated to []
 
     super(props);
 
-    this.width = width;
-    this.height = (9 / 16) * this.width;
-
+    this.height = this.props.height;
     this.playlist = playlist;
     this.videoContextRef = React.createRef();
   }
@@ -38,7 +36,6 @@ class PreviewCanvas extends React.PureComponent {
           <VideoContextViewer
             ref={ this.videoContextRef }
             playlist={ this.playlist }
-            width={ this.width }
             height={ this.height }
           />
         </Row>
@@ -47,13 +44,10 @@ class PreviewCanvas extends React.PureComponent {
           style={ { backgroundColor: 'lightgrey' } }
         >
           <VideoContextProgressBar
-            width={ this.width }
-            videoContext={ this.videoContext && this.videoContext }
+            videoContext={ this.videoContext }
           />
         </Row>
         <Row
-          // noGutters
-          // className={ 'justify-content-center' }
           style={
             {
               marginTop: '0.4em'
