@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Card from 'react-bootstrap/Card';
 import cuid from 'cuid';
 import Tab from 'react-bootstrap/Tab';
 import PreviewCanvas from './PreviewCanvas/index.js';
@@ -70,7 +71,6 @@ class ProgramScript extends Component {
 
   // TODO: save to server
   handleProgrammeScriptOrderChange = (list) => {
-    console.log('handleProgrammeScriptOrderChange', list);
     this.setState(({ programmeScript }) => {
       programmeScript.elements = list;
 
@@ -85,7 +85,6 @@ class ProgramScript extends Component {
   handleDeleteProgrammeScriptElement = (i) => {
     // TODO: add a prompt, like are you shure you want to delete, confirm etc..?
     // alert('handle delete');
-    console.log(i);
     this.setState(({ programmeScript }) => {
       const index = i;
       const list = programmeScript.elements;
@@ -490,140 +489,147 @@ class ProgramScript extends Component {
   // information around progressbar in the playlist object
   render() {
     return (
-      <Tab.Content>
+      <>
         <h2
           className={ [ 'text-truncate', 'text-muted' ].join(' ') }
           title={ `Programme Script Title: ${ this.state.programmeScript ? this.state.programmeScript.title : '' }` }>
           {this.state.programmeScript ? this.state.programmeScript.title : ''}
         </h2>
-        { !this.state.resetPreview ?
-          <PreviewCanvas playlist={ this.state.playlist } programmeScript={ this.state.programmeScript } />
-          : null }
-        <br/>
+        <Card>
+          <Card.Header>
+            { !this.state.resetPreview ?
+              <PreviewCanvas playlist={ this.state.playlist } programmeScript={ this.state.programmeScript } />
+              : null }
+          </Card.Header>
 
-        <Row noGutters>
-          <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
-            <Button
-              // block
-              variant="outline-secondary"
-              onClick={ this.handleAddTranscriptSelectionToProgrammeScript }
-              title="Add a text selection, select text in the transcript, then click this button to add it to the programme script"
-            >
-              <FontAwesomeIcon icon={ faPlus } /> Selection
-            </Button>
-          </Col>
-          <Col sm={ 12 } md={ 2 } ld={ 2 } xl={ 2 }>
-            <Dropdown>
-              <Dropdown.Toggle variant="outline-secondary">
-                <FontAwesomeIcon icon={ faPlus } />
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={ () => {this.handleAddTranscriptElementToProgrammeScript('title');} }
-                  title="Add a title header element to the programme script"
+          <Card.Header>
+            <Row noGutters>
+              <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
+                <Button
+                  // block
+                  variant="outline-secondary"
+                  onClick={ this.handleAddTranscriptSelectionToProgrammeScript }
+                  title="Add a text selection, select text in the transcript, then click this button to add it to the programme script"
                 >
-                  <FontAwesomeIcon icon={ faHeading } /> Heading
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={ () => {this.handleAddTranscriptElementToProgrammeScript('voice-over');} }
-                  title="Add a title voice over element to the programme script"
+                  <FontAwesomeIcon icon={ faPlus } /> Selection
+                </Button>
+              </Col>
+              <Col sm={ 12 } md={ 2 } ld={ 2 } xl={ 2 }>
+                <Dropdown>
+                  <Dropdown.Toggle variant="outline-secondary">
+                    <FontAwesomeIcon icon={ faPlus } />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      onClick={ () => {this.handleAddTranscriptElementToProgrammeScript('title');} }
+                      title="Add a title header element to the programme script"
+                    >
+                      <FontAwesomeIcon icon={ faHeading } /> Heading
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={ () => {this.handleAddTranscriptElementToProgrammeScript('voice-over');} }
+                      title="Add a title voice over element to the programme script"
+                    >
+                      <FontAwesomeIcon icon={ faMicrophoneAlt } /> Voice Over
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={ () => {this.handleAddTranscriptElementToProgrammeScript('note');} }
+                      title="Add a note element to the programme script"
+                    >
+                      <FontAwesomeIcon icon={ faStickyNote } /> Note
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Col>
+              <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
+                <Button variant="outline-secondary"
+                  onClick={ this.handleUpdatePreview }
+                  // size="sm"
+                  title="update preview"
+                  // block
                 >
-                  <FontAwesomeIcon icon={ faMicrophoneAlt } /> Voice Over
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={ () => {this.handleAddTranscriptElementToProgrammeScript('note');} }
-                  title="Add a note element to the programme script"
-                >
-                  <FontAwesomeIcon icon={ faStickyNote } /> Note
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Col>
-          <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
-            <Button variant="outline-secondary"
-              onClick={ this.handleUpdatePreview }
-              // size="sm"
-              title="update preview"
-              // block
-            >
-              <FontAwesomeIcon icon={ faSync } /> Preview
-            </Button>
-          </Col>
-          <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
-            <Dropdown>
-              <Dropdown.Toggle variant="outline-secondary">
-                <FontAwesomeIcon icon={ faShare } /> Export
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={ this.handleExportEDL }
-                  title="export EDL, edit decision list, to import the programme script as a sequence in video editing software - Avid, Premiere, Davinci Resolve, for FCPX choose FCPX XML"
-                >
+                  <FontAwesomeIcon icon={ faSync } /> Preview
+                </Button>
+              </Col>
+              <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
+                <Dropdown>
+                  <Dropdown.Toggle variant="outline-secondary">
+                    <FontAwesomeIcon icon={ faShare } /> Export
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      onClick={ this.handleExportEDL }
+                      title="export EDL, edit decision list, to import the programme script as a sequence in video editing software - Avid, Premiere, Davinci Resolve, for FCPX choose FCPX XML"
+                    >
                     EDL - Video <FontAwesomeIcon icon={ faInfoCircle } />
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={ this.handleExportADL }
-                  title="export ADL, audio decision list, to import the programme script as a sequence in audio editing software such as SADiE"
-                >
-                  {/* <FontAwesomeIcon icon={ faFileExport } />  */}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={ this.handleExportADL }
+                      title="export ADL, audio decision list, to import the programme script as a sequence in audio editing software such as SADiE"
+                    >
+                      {/* <FontAwesomeIcon icon={ faFileExport } />  */}
                   ADL - Audio  <FontAwesomeIcon icon={ faInfoCircle } />
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={ this.handleExportFCPX }
-                  title="export FCPX XML, to import the programme script as a sequence in Final Cut Pro X, video editing software"
-                >
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={ this.handleExportFCPX }
+                      title="export FCPX XML, to import the programme script as a sequence in Final Cut Pro X, video editing software"
+                    >
                   FCPX <FontAwesomeIcon icon={ faInfoCircle } />
-                </Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item
-                  onClick={ this.handleExportTxt }
-                  title="export Text, export the programme script as a text version"
-                >
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item
+                      onClick={ this.handleExportTxt }
+                      title="export Text, export the programme script as a text version"
+                    >
                   Text File <FontAwesomeIcon icon={ faInfoCircle } />
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={ () => {alert('export word doc not implemented yet');} }
-                  title="export docx, export the programme script as a word document"
-                >
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={ () => {alert('export word doc not implemented yet');} }
+                      title="export docx, export the programme script as a word document"
+                    >
                   Word Document <FontAwesomeIcon icon={ faInfoCircle } />
-                </Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item
-                  onClick={ this.handleExportJson }
-                  title="export Json, export the programme script as a json file"
-                >
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item
+                      onClick={ this.handleExportJson }
+                      title="export Json, export the programme script as a json file"
+                    >
                   Json <FontAwesomeIcon icon={ faInfoCircle } />
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Col>
-          <Col sm={ 12 } md={ 1 } ld={ 1 } xl={ 1 }>
-            <Button variant="outline-secondary"
-              onClick={ this.handleSaveProgrammeScript }
-              // size="sm"
-              title="save programme script"
-              block
-            >
-              <FontAwesomeIcon icon={ faSave } />
-              {/* Save */}
-            </Button>
-          </Col>
-        </Row>
-        <hr/>
-        <article
-          style={ { height: '60vh', overflow: 'scroll' } }
-          onDoubleClick={ this.handleDoubleClickOnProgrammeScript }
-        >
-          { this.state.programmeScript ? <ProgrammeScript
-            programmeScriptElements={ this.state.programmeScript.elements }
-            handleProgrammeScriptOrderChange={ this.handleProgrammeScriptOrderChange }
-            handleDeleteProgrammeScriptElement={ this.handleDeleteProgrammeScriptElement }
-            handleEditProgrammeScriptElement={ this.handleEditProgrammeScriptElement }
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Col>
+              <Col sm={ 12 } md={ 1 } ld={ 1 } xl={ 1 }>
+                <Button variant="outline-secondary"
+                  onClick={ this.handleSaveProgrammeScript }
+                  // size="sm"
+                  title="save programme script"
+                  block
+                >
+                  <FontAwesomeIcon icon={ faSave } />
+                  {/* Save */}
+                </Button>
+              </Col>
+            </Row>
+          </Card.Header>
 
-          />
-            : null }
-        </article>
-      </Tab.Content>
+          <Card.Body>
+            <article
+              style={ { height: '60vh', overflow: 'scroll' } }
+              onDoubleClick={ this.handleDoubleClickOnProgrammeScript }
+            >
+              { this.state.programmeScript ? <ProgrammeScript
+                programmeScriptElements={ this.state.programmeScript.elements }
+                handleProgrammeScriptOrderChange={ this.handleProgrammeScriptOrderChange }
+                handleDeleteProgrammeScriptElement={ this.handleDeleteProgrammeScriptElement }
+                handleEditProgrammeScriptElement={ this.handleEditProgrammeScriptElement }
+
+              />
+                : null }
+            </article>
+          </Card.Body>
+        </Card>
+      </>
     );
   }
 }
