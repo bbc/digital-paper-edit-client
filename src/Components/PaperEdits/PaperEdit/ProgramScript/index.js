@@ -42,7 +42,7 @@ const ProgramScript = (props) => {
   }, [ props.papereditId, props.projectId ]);
 
   // TODO: save to server
-  const handleProgrammeScriptOrderChange = (list) => {
+  const handleReorder = (list) => {
 
     programmeScript.elements = list;
     setProgrammeScript(programmeScript);
@@ -50,7 +50,7 @@ const ProgramScript = (props) => {
   };
 
   // TODO: save to server
-  const handleDeleteProgrammeScriptElement = (index) => {
+  const handleDeleteElement = (index) => {
     const list = programmeScript.elements;
     list.splice(index, 1);
     programmeScript.elements = list;
@@ -61,7 +61,7 @@ const ProgramScript = (props) => {
 
   };
 
-  const handleEditProgrammeScriptElement = (index) => {
+  const handleEditElement = (index) => {
     const elements = programmeScript.elements;
     const currentElement = elements[index];
     const newText = prompt('Edit', currentElement.text);
@@ -80,22 +80,21 @@ const ProgramScript = (props) => {
     }
   };
 
-  const getIndexPositionOfInsertPoint = () => {
+  const getInsertPointIndex = () => {
     const elements = programmeScript.elements;
     const insertPointElement = elements.find((el) => el.type === 'insert-point');
-    const indexOfInsertPoint = elements.indexOf(insertPointElement);
 
-    return indexOfInsertPoint;
+    return elements.indexOf(insertPointElement);;
   };
 
-  const handleAddTranscriptElementToProgrammeScript = (elementType) => {
+  const handleAddTranscriptElement = (elementType) => {
     const elements = programmeScript.elements;
     // TODO: refactor - with helper functions
     if (elementType === 'title'
       || elementType === 'note'
       || elementType === 'voice-over') {
       const text = prompt('Add some text for a section title', 'Some place holder text');
-      const indexOfInsertPoint = getIndexPositionOfInsertPoint();
+      const insertIndex = getInsertPointIndex();
 
       const newElement = {
         id: cuid(),
@@ -104,7 +103,7 @@ const ProgramScript = (props) => {
         text: text
       };
 
-      elements.splice(indexOfInsertPoint, 0, newElement);
+      elements.splice(insertIndex, 0, newElement);
       programmeScript.elements = elements;
       setProgrammeScript(programmeScript);
     };
@@ -112,7 +111,7 @@ const ProgramScript = (props) => {
 
   // TODO: save to server
   // TODO: needs to handle when selection spans across multiple paragraphs
-  const handleAddTranscriptSelectionToProgrammeScript = () => {
+  const handleAddTranscriptSelection = () => {
     const result = getDataFromUserWordsSelection();
     if (result) {
       console.log(JSON.stringify(result, null, 2));
@@ -124,7 +123,7 @@ const ProgramScript = (props) => {
       const elements = programmeScript.elements;
       // TODO: insert at insert point
 
-      const indexOfInsertPoint = getIndexPositionOfInsertPoint();
+      const indexOfInsertPoint = getInsertPointIndex();
       if (isOneParagraph(result.words)) {
         // create new element
         // TODO: Create new element could be refactored into helper function
@@ -206,7 +205,7 @@ const ProgramScript = (props) => {
     setPlaylist(playlist);
   };
 
-  const handleDoubleClickOnProgrammeScript = (e) => {
+  const handleDoubleClick = (e) => {
 
     if (e.target.className === 'words') {
       const wordCurrentTime = e.target.dataset.start;
@@ -217,17 +216,11 @@ const ProgramScript = (props) => {
     }
   };
 
-  const handleSaveProgrammeScript = () => {
+  const handleSave = () => {
     if (programmeScript) {
       const elements = programmeScript.elements;
-      // finding an removing insert point before saving to server
-      // find insert point in list,
-      const insertPointElement = elements.find((el) => el.type === 'insert-point');
-      if (insertPointElement) {
-        // get insertpoint index
-        const indexOfInsertPoint = elements.indexOf(insertPointElement);
-        elements.splice(indexOfInsertPoint, 1);
-      }
+      const insertIndex = getInsertPointIndex();
+      elements.splice(insertIndex, 1);
 
       programmeScript.elements = elements;
       ApiWrapper.updatePaperEdit(props.projectId, props.papereditId, programmeScript)
@@ -265,7 +258,7 @@ const ProgramScript = (props) => {
               <Button
                 // block
                 variant="outline-secondary"
-                onClick={ handleAddTranscriptSelectionToProgrammeScript }
+                onClick={ handleAddTranscriptSelection }
                 title="Add a text selection, select text in the transcript, then click this button to add it to the programme script"
               >
                 <FontAwesomeIcon icon={ faPlus } /> Selection
@@ -278,19 +271,19 @@ const ProgramScript = (props) => {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
-                    onClick={ () => {handleAddTranscriptElementToProgrammeScript('title');} }
+                    onClick={ () => {handleAddTranscriptElement('title');} }
                     title="Add a title header element to the programme script"
                   >
                     <FontAwesomeIcon icon={ faHeading } /> Heading
                   </Dropdown.Item>
                   <Dropdown.Item
-                    onClick={ () => {handleAddTranscriptElementToProgrammeScript('voice-over');} }
+                    onClick={ () => {handleAddTranscriptElement('voice-over');} }
                     title="Add a title voice over element to the programme script"
                   >
                     <FontAwesomeIcon icon={ faMicrophoneAlt } /> Voice Over
                   </Dropdown.Item>
                   <Dropdown.Item
-                    onClick={ () => {handleAddTranscriptElementToProgrammeScript('note');} }
+                    onClick={ () => {handleAddTranscriptElement('note');} }
                     title="Add a note element to the programme script"
                   >
                     <FontAwesomeIcon icon={ faStickyNote } /> Note
@@ -319,7 +312,7 @@ const ProgramScript = (props) => {
             </Col>
             <Col sm={ 12 } md={ 1 } ld={ 1 } xl={ 1 }>
               <Button variant="outline-secondary"
-                onClick={ handleSaveProgrammeScript }
+                onClick={ handleSave }
                 // size="sm"
                 title="save programme script"
                 block
@@ -334,13 +327,13 @@ const ProgramScript = (props) => {
         <Card.Body>
           <article
             style={ { height: '60vh', overflow: 'scroll' } }
-            onDoubleClick={ handleDoubleClickOnProgrammeScript }
+            onDoubleClick={ handleDoubleClick }
           >
             { programmeScript ? <ProgrammeScript
               programmeScriptElements={ programmeScript.elements }
-              handleProgrammeScriptOrderChange={ handleProgrammeScriptOrderChange }
-              handleDeleteProgrammeScriptElement={ handleDeleteProgrammeScriptElement }
-              handleEditProgrammeScriptElement={ handleEditProgrammeScriptElement }
+              handleProgrammeScriptOrderChange={ handleReorder }
+              handleDeleteProgrammeScriptElement={ handleDeleteElement }
+              handleEditProgrammeScriptElement={ handleEditElement }
 
             />
               : null }
