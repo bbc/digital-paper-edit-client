@@ -16,45 +16,49 @@ import {
   faSave
 } from '@fortawesome/free-solid-svg-icons';
 
-import getDataFromUserWordsSelection from './get-data-from-user-selection.js';
-import { divideWordsSelectionsIntoParagraphs, isOneParagraph } from './divide-words-selections-into-paragraphs/index.js';
-import ApiWrapper from '../../../../ApiWrapper/';
-import PreviewCanvas from './PreviewCanvas/index.js';
-import ProgrammeScript from './ProgrammeScript/';
+import getDataFromUserWordsSelection from './get-data-from-user-selection.js.js';
+import { divideWordsSelectionsIntoParagraphs, isOneParagraph } from './divide-words-selections-into-paragraphs/index.js.js';
+import ApiWrapper from '../../../../ApiWrapper';
+import PreviewCanvas from './PreviewCanvas/index.js.js';
+import ProgrammeScriptContainer from './ProgrammeScriptContainer';
 import ExportMenu from './ExportMenu';
 
-const ProgramScript = (props) => {
-  const [ programmeScript, setProgrammeScript ] = useState();
+;
+
+const ProgrammeScript = (props) => {
+  const [ programme, setProgramme ] = useState();
   const [ playlist, setPlaylist ] = useState([]);
   const [ resetPreview, setResetPreview ] = useState(false);
 
+  const addInsert = (elements) => {
+    return elements.push({ type: 'insert', text: 'Insert Point to add selection' });
+  };
+
   useEffect(() => {
     ApiWrapper.getPaperEdit(props.projectId, props.papereditId)
-      .then((json) => {
-        const ps = json.programmeScript;
-        // Adding an insert point at the end of the list
-        ps.elements.push({ type: 'insert', text: 'Insert Point to add selection' });
-        setProgrammeScript(ps);
+      .then((paperEdit) => {
+        const ps = paperEdit.programmeScript;
+        addInsert(ps.elements);
+        setProgramme(ps);
+      })
+      .then(() => {
         // TODO: figure out how to update preview
-        // , () => {
-        //   this.handleUpdatePreview();
-        // }
       });
   }, [ props.papereditId, props.projectId ]);
 
   // TODO: save to server
   const handleReorder = (list) => {
     console.log('handling reorder');
-    programmeScript.elements = list;
-    setProgrammeScript(programmeScript);
+    programme.elements = list;
+    setProgramme(programme);
   };
 
   // TODO: save to server
   const handleDeleteElement = (index) => {
-    const list = programmeScript.elements;
+    const list = programme.elements;
     list.splice(index, 1);
-    programmeScript.elements = list;
-    setProgrammeScript(programmeScript);
+    programme.elements = list;
+    setProgramme(programme);
 
     // TODO: add a prompt, like are you sure you want to delete, confirm etc..?
     // alert('handle delete');
@@ -62,15 +66,15 @@ const ProgramScript = (props) => {
   };
 
   const handleEditElement = (index) => {
-    const elements = programmeScript.elements;
+    const elements = programme.elements;
     const currentElement = elements[index];
     const newText = prompt('Edit', currentElement.text);
     if (newText) {
       currentElement.text = newText;
       elements[index] = currentElement;
-      programmeScript.elements = elements;
+      programme.elements = elements;
       // TODO: save to server
-      setProgrammeScript(programmeScript);
+      setProgramme(programme);
       // TODO: consider using set state function to avoid race condition? if needed?
       // this.setState(({ programmeScript }) => {
       //   return {
@@ -81,14 +85,14 @@ const ProgramScript = (props) => {
   };
 
   const getInsertPointIndex = () => {
-    const elements = programmeScript.elements;
+    const elements = programme.elements;
     const insertElement = elements.find((el) => el.type === 'insert');
 
     return elements.indexOf(insertElement);;
   };
 
   const handleAddTranscriptElement = (elementType) => {
-    const elements = programmeScript.elements;
+    const elements = programme.elements;
     // TODO: refactor - with helper functions
     if (elementType === 'title'
       || elementType === 'note'
@@ -104,8 +108,8 @@ const ProgramScript = (props) => {
       };
 
       elements.splice(insertIndex, 0, newElement);
-      programmeScript.elements = elements;
-      setProgrammeScript(programmeScript);
+      programme.elements = elements;
+      setProgramme(programme);
     };
   };
 
@@ -120,7 +124,7 @@ const ProgramScript = (props) => {
       // TODO: if there's just one speaker in selection do following
       // if it's multiple split list of words into multiple groups
       // and add a papercut for each to the programme script
-      const elements = programmeScript.elements;
+      const elements = programme.elements;
       // TODO: insert at insert point
 
       const indexOfInsertPoint = getInsertPointIndex();
@@ -140,7 +144,7 @@ const ProgramScript = (props) => {
         };
         // add element just above of insert point
         elements.splice(indexOfInsertPoint, 0, newElement);
-        programmeScript.elements = elements;
+        programme.elements = elements;
       }
       else {
         const paragraphs = divideWordsSelectionsIntoParagraphs(result.words);
@@ -159,11 +163,11 @@ const ProgramScript = (props) => {
           };
           // add element just above of insert point
           elements.splice(indexOfInsertPoint, 0, newElement);
-          programmeScript.elements = elements;
+          programme.elements = elements;
         });
       }
       // TODO: save to server
-      setProgrammeScript(programmeScript);
+      setProgramme(programme);
     }
     else {
       alert('Select some text in the transcript to add to the programme script');
@@ -177,7 +181,7 @@ const ProgramScript = (props) => {
   const getPlayList = () => {
     let startTime = 0;
 
-    return programmeScript.elements.filter((element) => element.type === 'paper-cut')
+    return programme.elements.filter((element) => element.type === 'paper-cut')
       .map((element) => {
         // TODO: handle audio only type (eg for radio), get from transcript json?
         const result = {
@@ -215,14 +219,14 @@ const ProgramScript = (props) => {
   };
 
   const handleSave = () => {
-    if (programmeScript) {
-      const elements = programmeScript.elements;
+    if (programme) {
+      const elements = programme.elements;
       const insertIndex = getInsertPointIndex();
       elements.splice(insertIndex, 1);
 
-      programmeScript.elements = elements;
-      setProgrammeScript(programmeScript);
-      ApiWrapper.updatePaperEdit(props.projectId, props.papereditId, programmeScript)
+      programme.elements = elements;
+      setProgramme(programme);
+      ApiWrapper.updatePaperEdit(props.projectId, props.papereditId, programme)
         .then((json) => {
           if (json.status === 'ok') {
             alert('saved programme script');
@@ -241,13 +245,13 @@ const ProgramScript = (props) => {
     <>
       <h2
         className={ [ 'text-truncate', 'text-muted' ].join(' ') }
-        title={ `Programme Script Title: ${ programmeScript ? programmeScript.title : '' }` }>
-        {programmeScript ? programmeScript.title : ''}
+        title={ `Programme Script Title: ${ programme ? programme.title : '' }` }>
+        {programme ? programme.title : ''}
       </h2>
       <Card>
         <Card.Header>
           { !resetPreview ?
-            <PreviewCanvas playlist={ playlist } programmeScript={ programmeScript } />
+            <PreviewCanvas playlist={ playlist } programmeScript={ programme } />
             : null }
         </Card.Header>
 
@@ -305,7 +309,7 @@ const ProgramScript = (props) => {
                 <Dropdown.Toggle variant="outline-secondary">
                   <FontAwesomeIcon icon={ faShare } /> Export
                 </Dropdown.Toggle>
-                <ExportMenu programmeScript={ programmeScript } transcripts={ props.transcripts } ></ExportMenu>
+                <ExportMenu programmeScript={ programme } transcripts={ props.transcripts } ></ExportMenu>
 
               </Dropdown>
             </Col>
@@ -328,9 +332,9 @@ const ProgramScript = (props) => {
             style={ { height: '60vh', overflow: 'scroll' } }
             onDoubleClick={ handleDoubleClick }
           >
-            { programmeScript ?
-              <ProgrammeScript
-                elements={ programmeScript.elements }
+            { programme ?
+              <ProgrammeScriptContainer
+                elements={ programme.elements }
                 handleReorder={ handleReorder }
                 handleDeleteElement={ handleDeleteElement }
                 handleEditElement={ handleEditElement }
@@ -343,4 +347,4 @@ const ProgramScript = (props) => {
   );
 };
 
-export default ProgramScript;
+export default ProgrammeScript;

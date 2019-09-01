@@ -29,7 +29,7 @@ const getElement = (el) => {
   }
 };
 
-const ProgrammeScript = (props) => {
+const ProgrammeScriptContainer = (props) => {
 
   const elements = props.elements;
 
@@ -67,4 +67,4 @@ const ProgrammeScript = (props) => {
   );
 };
 
-export default ProgrammeScript;
+export default ProgrammeScriptContainer;
