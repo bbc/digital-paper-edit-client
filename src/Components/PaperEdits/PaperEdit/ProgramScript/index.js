@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import cuid from 'cuid';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
-import cuid from 'cuid';
-import PreviewCanvas from './PreviewCanvas/index.js';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
-import ExportMenu from './ExportMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faShare,
@@ -17,10 +15,13 @@ import {
   faSync,
   faSave
 } from '@fortawesome/free-solid-svg-icons';
-import ProgrammeScript from './ProgrammeScript.js';
+
 import getDataFromUserWordsSelection from './get-data-from-user-selection.js';
 import { divideWordsSelectionsIntoParagraphs, isOneParagraph } from './divide-words-selections-into-paragraphs/index.js';
-import ApiWrapper from '../../../../ApiWrapper/index.js';
+import ApiWrapper from '../../../../ApiWrapper/';
+import PreviewCanvas from './PreviewCanvas/index.js';
+import ProgrammeScript from './ProgrammeScript/';
+import ExportMenu from './ExportMenu';
 
 const ProgramScript = (props) => {
   const [ programmeScript, setProgrammeScript ] = useState();
@@ -32,7 +33,7 @@ const ProgramScript = (props) => {
       .then((json) => {
         const ps = json.programmeScript;
         // Adding an insert point at the end of the list
-        ps.elements.push({ type: 'insert-point', text: 'Insert Point to add selection' });
+        ps.elements.push({ type: 'insert', text: 'Insert Point to add selection' });
         setProgrammeScript(ps);
         // TODO: figure out how to update preview
         // , () => {
@@ -43,10 +44,9 @@ const ProgramScript = (props) => {
 
   // TODO: save to server
   const handleReorder = (list) => {
-
+    console.log('handling reorder');
     programmeScript.elements = list;
     setProgrammeScript(programmeScript);
-
   };
 
   // TODO: save to server
@@ -82,9 +82,9 @@ const ProgramScript = (props) => {
 
   const getInsertPointIndex = () => {
     const elements = programmeScript.elements;
-    const insertPointElement = elements.find((el) => el.type === 'insert-point');
+    const insertElement = elements.find((el) => el.type === 'insert');
 
-    return elements.indexOf(insertPointElement);;
+    return elements.indexOf(insertElement);;
   };
 
   const handleAddTranscriptElement = (elementType) => {
@@ -194,15 +194,13 @@ const ProgramScript = (props) => {
       });
   };
 
-  const handleUpdatePreview = () => {
-    const playlist = getPlayList();
+  const handleUpdatePreview = async () => {
+    const newPlaylist = getPlayList();
     // Workaround to mound and unmount the `PreviewCanvas` component
     // to update the playlist
-    setResetPreview(true).then(() => {
-      setResetPreview(false);
-      setPlaylist(playlist);
-    });
-    setPlaylist(playlist);
+    setResetPreview(true);
+    setPlaylist(newPlaylist);
+    setResetPreview(false);
   };
 
   const handleDoubleClick = (e) => {
@@ -223,6 +221,7 @@ const ProgramScript = (props) => {
       elements.splice(insertIndex, 1);
 
       programmeScript.elements = elements;
+      setProgrammeScript(programmeScript);
       ApiWrapper.updatePaperEdit(props.projectId, props.papereditId, programmeScript)
         .then((json) => {
           if (json.status === 'ok') {
@@ -329,13 +328,13 @@ const ProgramScript = (props) => {
             style={ { height: '60vh', overflow: 'scroll' } }
             onDoubleClick={ handleDoubleClick }
           >
-            { programmeScript ? <ProgrammeScript
-              programmeScriptElements={ programmeScript.elements }
-              handleProgrammeScriptOrderChange={ handleReorder }
-              handleDeleteProgrammeScriptElement={ handleDeleteElement }
-              handleEditProgrammeScriptElement={ handleEditElement }
-
-            />
+            { programmeScript ?
+              <ProgrammeScript
+                elements={ programmeScript.elements }
+                handleReorder={ handleReorder }
+                handleDeleteElement={ handleDeleteElement }
+                handleEditElement={ handleEditElement }
+              />
               : null }
           </article>
         </Card.Body>
