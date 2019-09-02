@@ -1,98 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import cuid from 'cuid';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import Dropdown from 'react-bootstrap/Dropdown';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faShare,
-  faMicrophoneAlt,
-  faStickyNote,
-  faHeading,
-  faPlus,
-  faSync,
-  faSave
-} from '@fortawesome/free-solid-svg-icons';
+import cuid from 'cuid';
+import getDataFromUserWordsSelection from './get-data-from-user-selection.js';
+import { divideWordsSelectionsIntoParagraphs, isOneParagraph } from './divide-words-selections-into-paragraphs/index.js';
 
-import getDataFromUserWordsSelection from './get-data-from-user-selection.js.js';
-import { divideWordsSelectionsIntoParagraphs, isOneParagraph } from './divide-words-selections-into-paragraphs/index.js.js';
 import ApiWrapper from '../../../../ApiWrapper';
-import PreviewCanvas from './PreviewCanvas/index.js.js';
+import PreviewCanvas from './PreviewCanvas/';
 import ProgrammeScriptContainer from './ProgrammeScriptContainer';
-import ExportMenu from './ExportMenu';
-
-;
+import Menu from './Menu/index.js';
 
 const ProgrammeScript = (props) => {
   const [ programme, setProgramme ] = useState();
+  const [ elements, setElements ] = useState();
   const [ playlist, setPlaylist ] = useState([]);
   const [ resetPreview, setResetPreview ] = useState(false);
-
-  const addInsert = (elements) => {
-    return elements.push({ type: 'insert', text: 'Insert Point to add selection' });
-  };
 
   useEffect(() => {
     ApiWrapper.getPaperEdit(props.projectId, props.papereditId)
       .then((paperEdit) => {
         const ps = paperEdit.programmeScript;
-        addInsert(ps.elements);
         setProgramme(ps);
+        setElements(ps.elements);
+
+        const newElements = elements;
+        newElements.push({ type: 'insert', text: 'Insert Point to add selection' });
+        setElements(newElements);
       })
       .then(() => {
         // TODO: figure out how to update preview
       });
-  }, [ props.papereditId, props.projectId ]);
+  }, [ elements, props.papereditId, props.projectId ]);
 
   // TODO: save to server
   const handleReorder = (list) => {
     console.log('handling reorder');
     programme.elements = list;
+    setElements(list);
     setProgramme(programme);
-  };
-
-  // TODO: save to server
-  const handleDeleteElement = (index) => {
-    const list = programme.elements;
-    list.splice(index, 1);
-    programme.elements = list;
-    setProgramme(programme);
-
-    // TODO: add a prompt, like are you sure you want to delete, confirm etc..?
-    // alert('handle delete');
-
-  };
-
-  const handleEditElement = (index) => {
-    const elements = programme.elements;
-    const currentElement = elements[index];
-    const newText = prompt('Edit', currentElement.text);
-    if (newText) {
-      currentElement.text = newText;
-      elements[index] = currentElement;
-      programme.elements = elements;
-      // TODO: save to server
-      setProgramme(programme);
-      // TODO: consider using set state function to avoid race condition? if needed?
-      // this.setState(({ programmeScript }) => {
-      //   return {
-      //     programmeScript: programmeScript
-      //   };
-      // });
-    }
   };
 
   const getInsertPointIndex = () => {
-    const elements = programme.elements;
     const insertElement = elements.find((el) => el.type === 'insert');
 
     return elements.indexOf(insertElement);;
   };
 
-  const handleAddTranscriptElement = (elementType) => {
-    const elements = programme.elements;
+  const handleAddElement = (elementType) => {
     // TODO: refactor - with helper functions
     if (elementType === 'title'
       || elementType === 'note'
@@ -108,69 +61,40 @@ const ProgrammeScript = (props) => {
       };
 
       elements.splice(insertIndex, 0, newElement);
-      programme.elements = elements;
+      setElements(elements);
       setProgramme(programme);
     };
   };
 
   // TODO: save to server
-  // TODO: needs to handle when selection spans across multiple paragraphs
-  const handleAddTranscriptSelection = () => {
-    const result = getDataFromUserWordsSelection();
-    if (result) {
-      console.log(JSON.stringify(result, null, 2));
+  const handleDeleteElement = (index) => {
+    const list = programme.elements;
+    list.splice(index, 1);
+    setElements(list);
+    setProgramme(programme);
 
-      // result.words
-      // TODO: if there's just one speaker in selection do following
-      // if it's multiple split list of words into multiple groups
-      // and add a papercut for each to the programme script
-      const elements = programme.elements;
-      // TODO: insert at insert point
+    // TODO: add a prompt, like are you sure you want to delete, confirm etc..?
+    // alert('handle delete');
 
-      const indexOfInsertPoint = getInsertPointIndex();
-      if (isOneParagraph(result.words)) {
-        // create new element
-        // TODO: Create new element could be refactored into helper function
-        const newElement = {
-          id: cuid(),
-          index: elements.length,
-          type: 'paper-cut',
-          start:result.start,
-          end: result.end,
-          speaker: result.speaker,
-          words: result.words,
-          transcriptId: result.transcriptId,
-          labelId: []
-        };
-        // add element just above of insert point
-        elements.splice(indexOfInsertPoint, 0, newElement);
-        programme.elements = elements;
-      }
-      else {
-        const paragraphs = divideWordsSelectionsIntoParagraphs(result.words);
-        paragraphs.reverse().forEach((paragraph) => {
-          const newElement = {
-            id: cuid(),
-            index: elements.length,
-            type: 'paper-cut',
-            start:paragraph[0].start,
-            end: paragraph[paragraph.length - 1].end,
-            speaker: paragraph[0].speaker,
-            words: paragraph,
-            transcriptId: paragraph[0].transcriptId,
-            // TODO: ignoring labels for now
-            labelId: []
-          };
-          // add element just above of insert point
-          elements.splice(indexOfInsertPoint, 0, newElement);
-          programme.elements = elements;
-        });
-      }
+  };
+
+  const handleEditElement = (index) => {
+    const currentElement = elements[index];
+    const newText = prompt('Edit', currentElement.text);
+    if (newText) {
+      currentElement.text = newText;
+
+      const newElements = elements;
+      newElements[index] = currentElement;
+      setElements(newElements);
       // TODO: save to server
       setProgramme(programme);
-    }
-    else {
-      alert('Select some text in the transcript to add to the programme script');
+      // TODO: consider using set state function to avoid race condition? if needed?
+      // this.setState(({ programmeScript }) => {
+      //   return {
+      //     programmeScript: programmeScript
+      //   };
+      // });
     }
   };
 
@@ -220,7 +144,6 @@ const ProgrammeScript = (props) => {
 
   const handleSave = () => {
     if (programme) {
-      const elements = programme.elements;
       const insertIndex = getInsertPointIndex();
       elements.splice(insertIndex, 1);
 
@@ -240,6 +163,66 @@ const ProgrammeScript = (props) => {
     }
   };
 
+  // TODO: save to server
+  // TODO: needs to handle when selection spans across multiple paragraphs
+  const handleAddTranscriptSelection = () => {
+    const result = getDataFromUserWordsSelection();
+    if (result) {
+      console.log(JSON.stringify(result, null, 2));
+
+      // result.words
+      // TODO: if there's just one speaker in selection do following
+      // if it's multiple split list of words into multiple groups
+      // and add a papercut for each to the programme script
+      // TODO: insert at insert point
+
+      const indexOfInsertPoint = getInsertPointIndex();
+      if (isOneParagraph(result.words)) {
+        // create new element
+        // TODO: Create new element could be refactored into helper function
+        const newElement = {
+          id: cuid(),
+          index: elements.length,
+          type: 'paper-cut',
+          start:result.start,
+          end: result.end,
+          speaker: result.speaker,
+          words: result.words,
+          transcriptId: result.transcriptId,
+          labelId: []
+        };
+        // add element just above of insert point
+        elements.splice(indexOfInsertPoint, 0, newElement);
+        programme.elements = elements;
+      }
+      else {
+        const paragraphs = divideWordsSelectionsIntoParagraphs(result.words);
+        paragraphs.reverse().forEach((paragraph) => {
+          const newElement = {
+            id: cuid(),
+            index: elements.length,
+            type: 'paper-cut',
+            start:paragraph[0].start,
+            end: paragraph[paragraph.length - 1].end,
+            speaker: paragraph[0].speaker,
+            words: paragraph,
+            transcriptId: paragraph[0].transcriptId,
+            // TODO: ignoring labels for now
+            labelId: []
+          };
+          // add element just above of insert point
+          elements.splice(indexOfInsertPoint, 0, newElement);
+          setElements(elements);
+        });
+      }
+      // TODO: save to server
+      setProgramme(programme);
+    }
+    else {
+      alert('Select some text in the transcript to add to the programme script');
+    }
+  };
+
   // information around progressbar in the playlist object
   return (
     <>
@@ -256,75 +239,15 @@ const ProgrammeScript = (props) => {
         </Card.Header>
 
         <Card.Header>
-          <Row noGutters>
-            <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
-              <Button
-                // block
-                variant="outline-secondary"
-                onClick={ handleAddTranscriptSelection }
-                title="Add a text selection, select text in the transcript, then click this button to add it to the programme script"
-              >
-                <FontAwesomeIcon icon={ faPlus } /> Selection
-              </Button>
-            </Col>
-            <Col sm={ 12 } md={ 2 } ld={ 2 } xl={ 2 }>
-              <Dropdown>
-                <Dropdown.Toggle variant="outline-secondary">
-                  <FontAwesomeIcon icon={ faPlus } />
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    onClick={ () => {handleAddTranscriptElement('title');} }
-                    title="Add a title header element to the programme script"
-                  >
-                    <FontAwesomeIcon icon={ faHeading } /> Heading
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={ () => {handleAddTranscriptElement('voice-over');} }
-                    title="Add a title voice over element to the programme script"
-                  >
-                    <FontAwesomeIcon icon={ faMicrophoneAlt } /> Voice Over
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={ () => {handleAddTranscriptElement('note');} }
-                    title="Add a note element to the programme script"
-                  >
-                    <FontAwesomeIcon icon={ faStickyNote } /> Note
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </Col>
-            <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
-              <Button variant="outline-secondary"
-                onClick={ handleUpdatePreview }
-                // size="sm"
-                title="update preview"
-                // block
-              >
-                <FontAwesomeIcon icon={ faSync } /> Preview
-              </Button>
-            </Col>
-            <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
-              <Dropdown>
-                <Dropdown.Toggle variant="outline-secondary">
-                  <FontAwesomeIcon icon={ faShare } /> Export
-                </Dropdown.Toggle>
-                <ExportMenu programmeScript={ programme } transcripts={ props.transcripts } ></ExportMenu>
-
-              </Dropdown>
-            </Col>
-            <Col sm={ 12 } md={ 1 } ld={ 1 } xl={ 1 }>
-              <Button variant="outline-secondary"
-                onClick={ handleSave }
-                // size="sm"
-                title="save programme script"
-                block
-              >
-                <FontAwesomeIcon icon={ faSave } />
-                {/* Save */}
-              </Button>
-            </Col>
-          </Row>
+          <Menu
+            programme={ programme }
+            transcripts=
+              { props.transcripts }
+            handleAddTranscriptSelection={ handleAddTranscriptSelection }
+            handleAddElement={ handleAddElement }
+            handleUpdatePreview={ handleUpdatePreview }
+            handleSave={ handleSave }
+          />
         </Card.Header>
 
         <Card.Body>

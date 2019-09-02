@@ -9,12 +9,11 @@ import {
   faAngleUp,
   faAngleDown
 } from '@fortawesome/free-solid-svg-icons';
-import CustomBreadcrumb from '../../lib/CustomBreadcrumb/index.js';
-import CustomFooter from '../../lib/CustomFooter/index.js';
+import CustomBreadcrumb from '../../lib/CustomBreadcrumb/';
 
-import Transcripts from './Transcripts/index.js';
-import ProgramScript from './ProgramScript/index.js';
-import ApiWrapper from '../../../ApiWrapper/index.js';
+import Transcripts from './Transcripts/';
+import ProgrammeScript from './ProgrammeScript/';
+import ApiWrapper from '../../../ApiWrapper/';
 
 class PaperEdit extends Component {
   constructor(props) {
@@ -167,7 +166,7 @@ class PaperEdit extends Component {
               } }
               style={ { display: this.state.isProgramScriptShown ? 'block' : 'none' } }
             >
-              <ProgramScript
+              <ProgrammeScript
                 projectId={ this.state.projectId }
                 papereditId={ this.state.papereditId }
                 transcripts={ this.state.transcripts }

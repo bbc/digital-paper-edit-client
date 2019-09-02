@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faStop } from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
 
 const playIcon = <FontAwesomeIcon icon={ faPlay } />;
 const pauseIcon = <FontAwesomeIcon icon={ faPause } />;
@@ -61,3 +62,7 @@ const Controls = (props) => {
 };
 
 export default Controls;
+
+Controls.propTypes = {
+  videoContext: PropTypes.any
+};
