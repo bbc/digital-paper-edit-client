@@ -13,7 +13,6 @@ class Transcripts extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      projectId: this.props.projectId,
       items: [],
       isNewItemModalShow: false,
       title:'',
@@ -28,40 +27,40 @@ class Transcripts extends Component {
   }
 
   async componentDidMount() {
-      this.getTranscripts();
-      // For simplicity rather then handling all the edge cases (on start, save, delete,etc..), the interval runs periodicalicly, 
-      // and only if there are items in progress in the list, it checks the backed for updates
-      this.interval = setInterval(() => {
-        console.log('Running interval to check for transcripts');
-        if(this.areThereTranscriptsInProgress(this.state.items)){
-            console.log('interval: checking transcirpt update');
-            this.getTranscripts();
-        }
+    this.getTranscripts();
+    // For simplicity rather then handling all the edge cases (on start, save, delete,etc..), the interval runs periodicalicly,
+    // and only if there are items in progress in the list, it checks the backed for updates
+    this.interval = setInterval(() => {
+      console.log('Running interval to check for transcripts');
+      if (this.areThereTranscriptsInProgress(this.state.items)) {
+        console.log('interval: checking transcirpt update');
+        this.getTranscripts();
+      }
     }, intervalInMs);
   }
 
   componentWillUnmount =() => {
     if (this.interval) {
-       clearInterval(this.interval);
+      clearInterval(this.interval);
     }
   }
 
-  getTranscripts = async () =>{
-    const result = await ApiWrapper.getTranscripts(this.state.projectId);
-      // TODO: add error handling
-      if (result) {
-        const tmpList = result.transcripts.map((item) => {
-          item.display = true;
+  getTranscripts = async () => {
+    const result = await ApiWrapper.getTranscripts(this.props.projectId);
+    // TODO: add error handling
+    if (result) {
+      const tmpList = result.transcripts.map((item) => {
+        item.display = true;
 
-          return item;
-        });
-        this.setState({
-          projectTitle: result.projectTitle,
-          items: tmpList
-        }, () => {
-          console.log('getTranscripts-tmpList');
-        });
-      }
+        return item;
+      });
+      this.setState({
+        projectTitle: result.projectTitle,
+        items: tmpList
+      }, () => {
+        console.log('getTranscripts-tmpList');
+      });
+    }
   }
 
   areThereTranscriptsInProgress = (items) => {
@@ -76,7 +75,6 @@ class Transcripts extends Component {
 
     return false;
   }
-
 
   // side POST using wrapperAPI done
   // inside --> newTranscriptFormModal --> TranscriptForm
@@ -115,7 +113,7 @@ class Transcripts extends Component {
     const queryParamsOptions = false;
     const transcriptId = newEditedItem.id;
     // TODO: add error handling, eg message, wasn't able to update etc..
-    ApiWrapper.updateTranscript(this.state.projectId, transcriptId, queryParamsOptions, newEditedItem)
+    ApiWrapper.updateTranscript(this.props.projectId, transcriptId, queryParamsOptions, newEditedItem)
       .then((response) => {
         if (response.ok) {
           console.log('ApiWrapper.updateTranscript', response, newItemsList);
@@ -151,7 +149,7 @@ class Transcripts extends Component {
     console.log('handle delete');
     // TODO: API + server side request for delete
     // on successful then update state
-    const result = await ApiWrapper.deleteTranscript(this.state.projectId, transcriptId);
+    const result = await ApiWrapper.deleteTranscript(this.props.projectId, transcriptId);
     // TODO: some error handling, error message saying something went wrong
     const findId = (item) => item.id !== transcriptId;
     if (result.ok) {
@@ -159,13 +157,13 @@ class Transcripts extends Component {
       this.setState({
         items: tmpNewList
       }, () => {
-        console.log('deleted')
+        console.log('deleted');
       });
     }
   }
 
   showLinkPathToItem = (id) => {
-    return `/projects/${ this.state.projectId }/transcripts/${ id }/correct`;
+    return `/projects/${ this.props.projectId }/transcripts/${ id }/correct`;
   }
 
   handleUpdateList = (list) => {

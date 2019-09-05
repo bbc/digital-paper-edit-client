@@ -3,7 +3,7 @@ import { Switch, Route, HashRouter } from 'react-router-dom';
 import 'bootstrap-css-only/css/bootstrap.css';
 import Projects from './Components/Projects/index.js';
 import Project from './Components/Projects/Project.js';
-import TranscriptCorrect from './Components/Transcripts/TranscriptCorrect.js';
+import TranscriptEditor from './Components/Transcripts/TranscriptEditor';
 import PaperEdit from './Components/PaperEdits/PaperEdit';
 import CustomAlert from './Components/lib/CustomAlert';
 import Container from 'react-bootstrap/Container';
@@ -64,7 +64,7 @@ class App extends Component {
           <Route
             exact
             path="/projects/:projectId/transcripts/:transcriptId/correct"
-            component={ TranscriptCorrect }
+            component={ TranscriptEditor }
           />
           <Route
             exact
