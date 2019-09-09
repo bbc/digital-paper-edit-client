@@ -40,7 +40,6 @@ const ProgrammeScriptContainer = (props) => {
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
     const result = arrayMove(elements, oldIndex, newIndex);
-    console.log(result);
     props.handleReorder(result);
   };
 
@@ -53,7 +52,9 @@ const ProgrammeScriptContainer = (props) => {
       const handleDelete = props.handleDelete;
 
       if (type === 'insert') {
-        return (<SortableInsert value={ value } />);
+        return (
+          <SortableInsert value={ value } />
+        );
       } else {
         if (type === 'paper-cut') {
           handleEdit = null;
@@ -69,10 +70,10 @@ const ProgrammeScriptContainer = (props) => {
         />);
       }
     });
-    sortableProgramme =
+    sortableProgramme = (
       <SortableContainer useDragHandle onSortEnd={ onSortEnd }>
         {programme}
-      </SortableContainer>;
+      </SortableContainer>);
   }
 
   return (

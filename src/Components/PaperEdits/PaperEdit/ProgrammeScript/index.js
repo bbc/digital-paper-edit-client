@@ -11,38 +11,40 @@ import Menu from './Menu/index.js';
 
 const ProgrammeScript = (props) => {
   const [ programme, setProgramme ] = useState();
-  const [ elements, setElements ] = useState();
   const [ playlist, setPlaylist ] = useState([]);
   const [ resetPreview, setResetPreview ] = useState(false);
 
-  useEffect(() => {
-    ApiWrapper.getPaperEdit(props.projectId, props.papereditId)
-      .then((paperEdit) => {
-        const ps = paperEdit.programmeScript;
-        setProgramme(ps);
-        setElements(ps.elements);
+  const setProgrammeWithElements = (newElements) => {
+    setProgramme(pr => {
+      pr.elements = newElements;
 
-        const newElements = elements;
-        newElements.push({ type: 'insert', text: 'Insert Point to add selection' });
-        setElements(newElements);
-      })
-      .then(() => {
-        // TODO: figure out how to update preview
-      });
-  }, [ elements, props.papereditId, props.projectId ]);
+      return pr;
+    });
+  };
+
+  useEffect(() => {
+    const fetchPaperEdit = async () => {
+      const pe = await ApiWrapper.getPaperEdit(props.projectId, props.papereditId);
+      setProgramme(pe.programmeScript);
+      const newElements = pe.programmeScript.elements;
+      newElements.push({ type: 'insert', text: 'Insert Point to add selection' });
+      setProgrammeWithElements(newElements);
+      // TODO: figure out how to update preview
+    };
+    fetchPaperEdit();
+
+  }, [ props.papereditId, props.projectId ]);
 
   // TODO: save to server
   const handleReorder = (list) => {
     console.log('handling reorder');
-    programme.elements = list;
-    setElements(list);
-    setProgramme(programme);
+    setProgrammeWithElements(list);
   };
 
   const getInsertPointIndex = () => {
-    const insertElement = elements.find((el) => el.type === 'insert');
+    const insertElement = programme.elements.find((el) => el.type === 'insert');
 
-    return elements.indexOf(insertElement);;
+    return programme.elements.indexOf(insertElement);;
   };
 
   const handleAddElement = (elementType) => {
@@ -55,14 +57,14 @@ const ProgrammeScript = (props) => {
 
       const newElement = {
         id: cuid(),
-        index: elements.length,
+        index: programme.elements.length,
         type: elementType,
         text: text
       };
 
-      elements.splice(insertIndex, 0, newElement);
-      setElements(elements);
-      setProgramme(programme);
+      const newElements = programme.elements;
+      newElements.splice(insertIndex, 0, newElement);
+      setProgrammeWithElements(newElements);
     };
   };
 
@@ -70,8 +72,7 @@ const ProgrammeScript = (props) => {
   const handleDeleteElement = (index) => {
     const list = programme.elements;
     list.splice(index, 1);
-    setElements(list);
-    setProgramme(programme);
+    setProgrammeWithElements(list);
 
     // TODO: add a prompt, like are you sure you want to delete, confirm etc..?
     // alert('handle delete');
@@ -79,16 +80,15 @@ const ProgrammeScript = (props) => {
   };
 
   const handleEditElement = (index) => {
-    const currentElement = elements[index];
+    const currentElement = programme.elements[index];
     const newText = prompt('Edit', currentElement.text);
     if (newText) {
       currentElement.text = newText;
 
-      const newElements = elements;
+      const newElements = programme.elements;
       newElements[index] = currentElement;
-      setElements(newElements);
       // TODO: save to server
-      setProgramme(programme);
+      setProgrammeWithElements(newElements);
       // TODO: consider using set state function to avoid race condition? if needed?
       // this.setState(({ programmeScript }) => {
       //   return {
@@ -142,24 +142,23 @@ const ProgrammeScript = (props) => {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (programme) {
       const insertIndex = getInsertPointIndex();
-      elements.splice(insertIndex, 1);
+      const newElements = programme.elements;
 
-      programme.elements = elements;
-      setProgramme(programme);
-      ApiWrapper.updatePaperEdit(props.projectId, props.papereditId, programme)
-        .then((json) => {
-          if (json.status === 'ok') {
-            alert('saved programme script');
-          }
-          // TODO: figure out how to update preview
-          // , () => {
-          //   this.handleUpdatePreview();
-          // }
-          // );
-        });
+      newElements.splice(insertIndex, 1);
+
+      setProgrammeWithElements(newElements);
+      const json = await ApiWrapper.updatePaperEdit(props.projectId, props.papereditId, programme);
+      if (json.status === 'ok') {
+        alert('saved programme script');
+      }
+      // TODO: figure out how to update preview
+      // , () => {
+      //   this.handleUpdatePreview();
+      // }
+      // );
     }
   };
 
@@ -169,7 +168,7 @@ const ProgrammeScript = (props) => {
     const result = getDataFromUserWordsSelection();
     if (result) {
       console.log(JSON.stringify(result, null, 2));
-
+      let newElement;
       // result.words
       // TODO: if there's just one speaker in selection do following
       // if it's multiple split list of words into multiple groups
@@ -180,9 +179,9 @@ const ProgrammeScript = (props) => {
       if (isOneParagraph(result.words)) {
         // create new element
         // TODO: Create new element could be refactored into helper function
-        const newElement = {
+        newElement = {
           id: cuid(),
-          index: elements.length,
+          index: programme.elements.length,
           type: 'paper-cut',
           start:result.start,
           end: result.end,
@@ -191,16 +190,13 @@ const ProgrammeScript = (props) => {
           transcriptId: result.transcriptId,
           labelId: []
         };
-        // add element just above of insert point
-        elements.splice(indexOfInsertPoint, 0, newElement);
-        programme.elements = elements;
       }
       else {
         const paragraphs = divideWordsSelectionsIntoParagraphs(result.words);
         paragraphs.reverse().forEach((paragraph) => {
-          const newElement = {
+          newElement = {
             id: cuid(),
-            index: elements.length,
+            index: programme.elements.length,
             type: 'paper-cut',
             start:paragraph[0].start,
             end: paragraph[paragraph.length - 1].end,
@@ -210,13 +206,13 @@ const ProgrammeScript = (props) => {
             // TODO: ignoring labels for now
             labelId: []
           };
-          // add element just above of insert point
-          elements.splice(indexOfInsertPoint, 0, newElement);
-          setElements(elements);
         });
       }
+      // add element just above of insert point
+      const newElements = programme.elements;
+      newElements.splice(indexOfInsertPoint, 0, newElement);
       // TODO: save to server
-      setProgramme(programme);
+      setProgrammeWithElements(newElements);
     }
     else {
       alert('Select some text in the transcript to add to the programme script');
