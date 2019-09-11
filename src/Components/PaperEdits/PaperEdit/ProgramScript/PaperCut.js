@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import PropTypes from 'prop-types';
+import cuid from 'cuid';
 
 class PaperCut extends Component {
   constructor(props) {
@@ -15,16 +17,19 @@ class PaperCut extends Component {
     if (this.props.words) {
       // TODO could wrap words in span and add timecodes
       // to make it cliccable on programme script
-      words = this.props.words.map((w, index) => {return (
-        // eslint-disable-next-line react/jsx-key
-        <span
-          // TODO: add w.id to words to us as index?
-          key={ w.start + index }
-          className="words"
-          title={ `stat: ${ w.start }- end: ${ w.end }` }
-          data-start={ w.start }
-          data-end={ w.end }
-        >{w.text} </span>);});
+      words = this.props.words.map((w) => {
+        return (
+          <span
+            key={ cuid() }
+            className="words"
+            title={ `stat: ${ w.start }- end: ${ w.end }` }
+            data-start={ w.start }
+            data-end={ w.end }
+          >
+            {w.text}
+          </span>
+        );
+      });
     }
 
     return (
@@ -50,5 +55,10 @@ class PaperCut extends Component {
     );
   }
 }
+
+PaperCut.propTypes = {
+  speaker: PropTypes.any,
+  words: PropTypes.any
+};
 
 export default PaperCut;

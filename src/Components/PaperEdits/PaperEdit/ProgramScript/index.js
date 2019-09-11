@@ -3,7 +3,6 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import cuid from 'cuid';
-import Tab from 'react-bootstrap/Tab';
 import PreviewCanvas from './PreviewCanvas/index.js';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
