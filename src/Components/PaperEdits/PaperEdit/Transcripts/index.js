@@ -10,14 +10,15 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import Transcript from './Transcript.js';
+import cuid from 'cuid';
 
 class Transcripts extends Component {
 
   // eslint-disable-next-line class-methods-use-this
   render() {
-    const transcriptsElNav = this.props.transcripts.map((transcript, index) => {
+    const transcriptsElNav = this.props.transcripts.map((transcript) => {
       return (
-        <Nav.Item key={ transcript.id }>
+        <Nav.Item key={ cuid() }>
           <Nav.Link
             disabled={ transcript.status !== 'done' ? true : false }
             // title={ transcript.status !== 'done' ? transcript.status : transcript.title }
@@ -31,9 +32,9 @@ class Transcripts extends Component {
         </Nav.Item>
       );
     });
-    const transcriptsElTab = this.props.transcripts.map((transcript, index) => {
+    const transcriptsElTab = this.props.transcripts.map((transcript) => {
       return (
-        <Tab.Pane key={ transcript.id } eventKey={ transcript.id } >
+        <Tab.Pane key={ cuid() } eventKey={ transcript.id } >
           <Transcript
             projectId={ this.props.projectId }
             transcriptId={ transcript.id }

@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  sortableElement,
-} from 'react-sortable-hoc';
+import { SortableElement } from 'react-sortable-hoc';
 
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -14,14 +12,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import SortableHandle from './SortableHandle';
 
-const SortableElement = sortableElement(({ value, index, handleDelete, handleEdit }) => {
+const SortableItem = SortableElement(({ value, index, handleDelete, handleEdit, backgroundColour, textColour }) => {
 
   const EditIcon = (
     <FontAwesomeIcon
       className={ 'text-muted' }
       icon={ faPen }
       onClick={ () => { handleEdit(index); } }>
-
     </FontAwesomeIcon>
   );
 
@@ -34,13 +31,15 @@ const SortableElement = sortableElement(({ value, index, handleDelete, handleEdi
   );
 
   return (
-    <li>
-      <Row>
+    <li style={ { listStyle: 'none' } }>
+      <Row style={ { backgroundColor: backgroundColour } }>
         <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } >
           <SortableHandle />
         </Col>
         <Col xs={ 8 } sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 } >
-          {value}
+          <span style={ { color: textColour } }>
+            {value}
+          </span>
         </Col>
         <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } >
           {handleEdit ? EditIcon : null}
@@ -53,4 +52,4 @@ const SortableElement = sortableElement(({ value, index, handleDelete, handleEdi
   );
 });
 
-export default SortableElement;
+export default SortableItem;

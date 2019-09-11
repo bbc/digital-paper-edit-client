@@ -11,16 +11,9 @@ import Menu from './Menu/index.js';
 
 const ProgrammeScript = (props) => {
   const [ programme, setProgramme ] = useState();
+  const [ elements, setElements ] = useState();
   const [ playlist, setPlaylist ] = useState([]);
   const [ resetPreview, setResetPreview ] = useState(false);
-
-  const setProgrammeWithElements = (newElements) => {
-    setProgramme(pr => {
-      pr.elements = newElements;
-
-      return pr;
-    });
-  };
 
   useEffect(() => {
     const fetchPaperEdit = async () => {
@@ -28,51 +21,47 @@ const ProgrammeScript = (props) => {
       setProgramme(pe.programmeScript);
       const newElements = pe.programmeScript.elements;
       newElements.push({ type: 'insert', text: 'Insert Point to add selection' });
-      setProgrammeWithElements(newElements);
-      // TODO: figure out how to update preview
+      setElements(newElements);
     };
-    fetchPaperEdit();
+    if (!programme) {
+      fetchPaperEdit();
 
-  }, [ props.papereditId, props.projectId ]);
+    }
+
+  }, [ programme, props.papereditId, props.projectId ]);
 
   // TODO: save to server
   const handleReorder = (list) => {
-    console.log('handling reorder');
-    setProgrammeWithElements(list);
+    setElements(list);
   };
 
-  const getInsertPointIndex = () => {
-    const insertElement = programme.elements.find((el) => el.type === 'insert');
+  const getInsertPoint = () => {
+    const insertPoint = programme.elements.find((el) => el.type === 'insert');
 
-    return programme.elements.indexOf(insertElement);;
+    return elements.indexOf(insertPoint);;
   };
 
   const handleAddElement = (elementType) => {
-    // TODO: refactor - with helper functions
-    if (elementType === 'title'
-      || elementType === 'note'
-      || elementType === 'voice-over') {
-      const text = prompt('Add some text for a section title', 'Some place holder text');
-      const insertIndex = getInsertPointIndex();
+    const text = prompt('Add some text for a section title', 'Some place holder text');
+    const insertPoint = getInsertPoint();
 
-      const newElement = {
-        id: cuid(),
-        index: programme.elements.length,
-        type: elementType,
-        text: text
-      };
-
-      const newElements = programme.elements;
-      newElements.splice(insertIndex, 0, newElement);
-      setProgrammeWithElements(newElements);
+    const newElement = {
+      id: cuid(),
+      index: elements.length,
+      type: elementType,
+      text: text
     };
+
+    const newElements = elements;
+    newElements.splice(insertPoint, 0, newElement);
+    setElements(newElements);
   };
 
   // TODO: save to server
   const handleDeleteElement = (index) => {
-    const list = programme.elements;
-    list.splice(index, 1);
-    setProgrammeWithElements(list);
+    const newElements = elements;
+    newElements.splice(index, 1);
+    setElements(newElements);
 
     // TODO: add a prompt, like are you sure you want to delete, confirm etc..?
     // alert('handle delete');
@@ -85,10 +74,9 @@ const ProgrammeScript = (props) => {
     if (newText) {
       currentElement.text = newText;
 
-      const newElements = programme.elements;
+      const newElements = elements;
       newElements[index] = currentElement;
-      // TODO: save to server
-      setProgrammeWithElements(newElements);
+      setElements(newElements);
       // TODO: consider using set state function to avoid race condition? if needed?
       // this.setState(({ programmeScript }) => {
       //   return {
@@ -144,12 +132,11 @@ const ProgrammeScript = (props) => {
 
   const handleSave = async () => {
     if (programme) {
-      const insertIndex = getInsertPointIndex();
-      const newElements = programme.elements;
+      const insertPoint = getInsertPoint();
+      const newElements = elements;
+      newElements.splice(insertPoint, 1);
+      setElements(newElements);
 
-      newElements.splice(insertIndex, 1);
-
-      setProgrammeWithElements(newElements);
       const json = await ApiWrapper.updatePaperEdit(props.projectId, props.papereditId, programme);
       if (json.status === 'ok') {
         alert('saved programme script');
@@ -159,60 +146,73 @@ const ProgrammeScript = (props) => {
       //   this.handleUpdatePreview();
       // }
       // );
+
     }
   };
 
+  const createElementFromSelection = (selection) => {
+    let newElement;
+    // result.words
+    // TODO: if there's just one speaker in selection do following
+    // if it's multiple split list of words into multiple groups
+    // and add a papercut for each to the programme script
+    // TODO: insert at insert point
+
+    if (isOneParagraph(selection.words)) {
+      // create new element
+      // TODO: Create new element could be refactored into helper function
+      newElement = {
+        id: cuid(),
+        index: elements.length,
+        type: 'paper-cut',
+        start:selection.start,
+        end: selection.end,
+        speaker: selection.speaker,
+        words: selection.words,
+        transcriptId: selection.transcriptId,
+        labelId: []
+      };
+    }
+    else {
+      const paragraphs = divideWordsSelectionsIntoParagraphs(selection.words);
+      paragraphs.reverse().forEach((paragraph) => {
+        newElement = {
+          id: cuid(),
+          index: elements.length,
+          type: 'paper-cut',
+          start:paragraph[0].start,
+          end: paragraph[paragraph.length - 1].end,
+          speaker: paragraph[0].speaker,
+          words: paragraph,
+          transcriptId: paragraph[0].transcriptId,
+          // TODO: ignoring labels for now
+          labelId: []
+        };
+      });
+    }
+
+    return newElement;
+
+  };
+
+  const addElementAboveInsertPoint = (newElement) => {
+    const insertPoint = getInsertPoint();
+    console.log(insertPoint);
+    const newElements = elements;
+    newElements.splice(insertPoint, 0, newElement);
+  };
   // TODO: save to server
   // TODO: needs to handle when selection spans across multiple paragraphs
   const handleAddTranscriptSelection = () => {
-    const result = getDataFromUserWordsSelection();
-    if (result) {
-      console.log(JSON.stringify(result, null, 2));
-      let newElement;
-      // result.words
-      // TODO: if there's just one speaker in selection do following
-      // if it's multiple split list of words into multiple groups
-      // and add a papercut for each to the programme script
-      // TODO: insert at insert point
-
-      const indexOfInsertPoint = getInsertPointIndex();
-      if (isOneParagraph(result.words)) {
-        // create new element
-        // TODO: Create new element could be refactored into helper function
-        newElement = {
-          id: cuid(),
-          index: programme.elements.length,
-          type: 'paper-cut',
-          start:result.start,
-          end: result.end,
-          speaker: result.speaker,
-          words: result.words,
-          transcriptId: result.transcriptId,
-          labelId: []
-        };
-      }
-      else {
-        const paragraphs = divideWordsSelectionsIntoParagraphs(result.words);
-        paragraphs.reverse().forEach((paragraph) => {
-          newElement = {
-            id: cuid(),
-            index: programme.elements.length,
-            type: 'paper-cut',
-            start:paragraph[0].start,
-            end: paragraph[paragraph.length - 1].end,
-            speaker: paragraph[0].speaker,
-            words: paragraph,
-            transcriptId: paragraph[0].transcriptId,
-            // TODO: ignoring labels for now
-            labelId: []
-          };
-        });
-      }
+    const selection = getDataFromUserWordsSelection();
+    console.log(selection);
+    if (selection) {
+      const newElement = createElementFromSelection(selection);
       // add element just above of insert point
-      const newElements = programme.elements;
-      newElements.splice(indexOfInsertPoint, 0, newElement);
+      const newElements = addElementAboveInsertPoint(newElement);
+
       // TODO: save to server
-      setProgrammeWithElements(newElements);
+      setElements(newElements);
     }
     else {
       alert('Select some text in the transcript to add to the programme script');
@@ -237,8 +237,7 @@ const ProgrammeScript = (props) => {
         <Card.Header>
           <Menu
             programme={ programme }
-            transcripts=
-              { props.transcripts }
+            transcripts={ props.transcripts }
             handleAddTranscriptSelection={ handleAddTranscriptSelection }
             handleAddElement={ handleAddElement }
             handleUpdatePreview={ handleUpdatePreview }
@@ -251,9 +250,9 @@ const ProgrammeScript = (props) => {
             style={ { height: '60vh', overflow: 'scroll' } }
             onDoubleClick={ handleDoubleClick }
           >
-            { programme ?
+            { elements ?
               <ProgrammeScriptContainer
-                elements={ programme.elements }
+                items={ elements }
                 handleReorder={ handleReorder }
                 handleDeleteElement={ handleDeleteElement }
                 handleEditElement={ handleEditElement }

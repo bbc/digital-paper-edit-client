@@ -13,6 +13,7 @@ import {
   faSync,
   faSave
 } from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
 
 const Menu = (props) => {
   return (
@@ -61,6 +62,15 @@ const Menu = (props) => {
         </Button>
       </Col>
     </Row>);
+};
+
+Menu.propTypes = {
+  handleAddElement: PropTypes.any,
+  handleAddTranscriptSelection: PropTypes.any,
+  handleSave: PropTypes.any,
+  handleUpdatePreview: PropTypes.any,
+  programme: PropTypes.any,
+  transcripts: PropTypes.any
 };
 
 export default Menu;
