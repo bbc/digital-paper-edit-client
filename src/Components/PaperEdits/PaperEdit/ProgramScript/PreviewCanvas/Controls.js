@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faStop } from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
 
 const playIcon = <FontAwesomeIcon icon={ faPlay } />;
 const pauseIcon = <FontAwesomeIcon icon={ faPause } />;
@@ -13,27 +14,23 @@ const Controls = (props) => {
   const [ isPlaying, setIsPlaying ] = useState(false);
 
   const handlePlay = () => {
-    props.videoContext.play();
+    props.handlePlay();
     setIsPlaying(true);
   };
 
   const handlePause = () => {
-    props.videoContext.pause();
+    props.handlePause();
     setIsPlaying(false);
   };
 
   const handleStop = () => {
-    props.videoContext.pause();
-    props.videoContext.currentTime = 0;
+    props.handleStop();
     setIsPlaying(false);
   };
 
   return (
     <>
-      <Col
-        sm={ 6 } md={ 6 } ld={ 6 } xl={ 6 }
-        // className={ 'col-auto' }
-      >
+      <Col sm={ 6 }>
         <Button
           size="sm"
           block
@@ -44,8 +41,7 @@ const Controls = (props) => {
         </Button>
       </Col>
       <Col
-        sm={ 6 } md={ 6 } ld={ 6 } xl={ 6 }
-        // className={ 'col-auto' }
+        sm={ 6 }
       >
         <Button
           size="sm"
@@ -61,3 +57,9 @@ const Controls = (props) => {
 };
 
 export default Controls;
+
+Controls.propTypes = {
+  handleStop: PropTypes.any,
+  handlePlay: PropTypes.any,
+  handlePause: PropTypes.any
+};

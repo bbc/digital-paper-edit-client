@@ -1,8 +1,12 @@
 import React from 'react';
-import styles from './Filler.module.css';
 
 const Filler = (props) => {
-  return <div className={ styles.filler } style={ { width: `${ props.percentage }%` } }></div>;
+  return <div style={ {
+    width: `${ props.percentage }%`,
+    background: 'red',
+    height: '100%',
+    borderRadius: 'inherit'
+  } } />;
 };
 
 export default Filler;
