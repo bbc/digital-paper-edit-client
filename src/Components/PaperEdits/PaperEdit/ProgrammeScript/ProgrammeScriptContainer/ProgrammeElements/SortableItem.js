@@ -12,13 +12,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import SortableHandle from './SortableHandle';
 
-const SortableItem = SortableElement(({ value, index, handleDelete, handleEdit, backgroundColour, textColour }) => {
+const SortableItem = SortableElement(({ value, handleFns, colourOpts }) => {
 
   const EditIcon = (
     <FontAwesomeIcon
       className={ 'text-muted' }
       icon={ faPen }
-      onClick={ () => { handleEdit(index); } }>
+      onClick={ handleFns.edit }>
     </FontAwesomeIcon>
   );
 
@@ -26,30 +26,35 @@ const SortableItem = SortableElement(({ value, index, handleDelete, handleEdit, 
     <FontAwesomeIcon
       className={ 'text-muted' }
       icon={ faTrash }
-      onClick={ () => { handleDelete(index); } }>
+      onClick={ handleFns.delete }>
     </FontAwesomeIcon>
   );
 
   return (
     <li style={ { listStyle: 'none' } }>
-      <Row style={ { backgroundColor: backgroundColour } }>
-        <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } >
+      <Row style={ { backgroundColor: colourOpts.background } }>
+        <Col xs={ 1 } >
           <SortableHandle />
         </Col>
-        <Col xs={ 8 } sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 } >
-          <span style={ { color: textColour } }>
+        <Col xs={ 8 } sm={ 9 } >
+          <span style={ { color: colourOpts.text } }>
             {value}
           </span>
         </Col>
-        <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } >
-          {handleEdit ? EditIcon : null}
+        <Col xs={ 1 } >
+          {handleFns.edit ? EditIcon : null}
         </Col>
-        <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } >
-          {handleDelete ? DeleteIcon : null}
+        <Col xs={ 1 } >
+          {handleFns.delete ? DeleteIcon : null}
         </Col>
       </Row>
     </li>
   );
 });
+
+SortableItem.defaultProps = {
+  colourOpts: {},
+  handleFns: {}
+};
 
 export default SortableItem;

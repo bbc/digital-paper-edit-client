@@ -5,13 +5,12 @@ import { SortableContainer, } from 'react-sortable-hoc';
 import ProgrammeElements from './ProgrammeElements';
 
 const ProgrammeScriptContainer = (props) => {
-  const programmeElements = ProgrammeElements(props.items, props.handleEdit, props.handleDelete);
-  const [ elements, setElements ] = useState(programmeElements);
+  const [ items, setItems ] = useState(props.items);
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
-    const result = arrayMove(elements, oldIndex, newIndex);
+    const result = arrayMove(items, oldIndex, newIndex);
     props.handleReorder(result);
-    setElements(result);
+    setItems(result);
   };
 
   const SortableList = SortableContainer(({ children }) =>
@@ -19,6 +18,8 @@ const ProgrammeScriptContainer = (props) => {
       {children}
     </ul>
   );
+
+  const elements = ProgrammeElements(items, props.handleEdit, props.handleDelete);
 
   return (
     <SortableList useDragHandle onSortEnd={ onSortEnd }>

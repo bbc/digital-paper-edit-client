@@ -2,7 +2,7 @@
 import React from 'react';
 import VideoContext from 'videocontext';
 
-class PaperCutsPlayerViewer extends React.PureComponent {
+class VideoContextViewer extends React.PureComponent {
   constructor(props) {
     const {
       width = 640,
@@ -39,7 +39,7 @@ class PaperCutsPlayerViewer extends React.PureComponent {
       node.startAt(start);
       node.stopAt(start + duration);
       node.connect(this.videoContext.destination);
-    }); 
+    });
   }
 
   render() {
@@ -47,4 +47,4 @@ class PaperCutsPlayerViewer extends React.PureComponent {
   }
 }
 
-export default PaperCutsPlayerViewer;
+export default VideoContextViewer;
