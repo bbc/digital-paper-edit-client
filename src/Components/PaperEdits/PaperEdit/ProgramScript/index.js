@@ -3,7 +3,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import cuid from 'cuid';
-import PreviewCanvas from './PreviewCanvas/index.js';
+import PreviewCanvas from './PreviewCanvas__/index.js';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import EDL from 'edl_composer';
@@ -497,7 +497,7 @@ class ProgramScript extends Component {
         <Card>
           <Card.Header>
             { !this.state.resetPreview ?
-              <PreviewCanvas playlist={ this.state.playlist } programmeScript={ this.state.programmeScript } />
+              <PreviewCanvas playlist={ this.state.playlist } />
               : null }
           </Card.Header>
 
