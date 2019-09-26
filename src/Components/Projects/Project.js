@@ -5,10 +5,10 @@ import Tab from 'react-bootstrap/Tab';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import CustomFooter from '../lib/CustomFooter';
-import CustomBreadcrumb from '../lib/CustomBreadcrumb';
 import Transcripts from '../Transcripts';
 import PaperEdits from '../PaperEdits';
 import ApiWrapper from '../../ApiWrapper/index.js';
+import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 
 class Project extends React.Component {
   constructor(props, context) {
@@ -36,7 +36,7 @@ class Project extends React.Component {
         <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
           <Row>
             <Col sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 }>
-              <CustomBreadcrumb items={ [
+              <Breadcrumb items={ [
                 {
                   name: 'Projects',
                   link: '/projects'

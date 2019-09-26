@@ -9,12 +9,12 @@ import {
   faAngleUp,
   faAngleDown
 } from '@fortawesome/free-solid-svg-icons';
-import CustomBreadcrumb from '../../lib/CustomBreadcrumb/index.js';
-import CustomFooter from '../../lib/CustomFooter/index.js';
+import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 
 import Transcripts from './Transcripts/index.js';
-import ProgramScript from './ProgramScript/index.js';
+import ProgrammeScriptContainer from '@bbc/digital-paper-edit-react-components/ProgrammeScriptContainer';
 import ApiWrapper from '../../../ApiWrapper/index.js';
+import PropTypes from 'prop-types';
 
 class PaperEdit extends Component {
   constructor(props) {
@@ -72,7 +72,7 @@ class PaperEdit extends Component {
         <br/>
         <Row>
           <Col sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 }>
-            <CustomBreadcrumb
+            <Breadcrumb
               items={ [ {
                 name: 'Projects',
                 link: '/projects'
@@ -167,7 +167,7 @@ class PaperEdit extends Component {
               } }
               style={ { display: this.state.isProgramScriptShown ? 'block' : 'none' } }
             >
-              <ProgramScript
+              <ProgrammeScriptContainer
                 projectId={ this.state.projectId }
                 papereditId={ this.state.papereditId }
                 transcripts={ this.state.transcripts }
@@ -180,5 +180,10 @@ class PaperEdit extends Component {
     );
   }
 }
+
+PaperEdit.propTypes = {
+  match: PropTypes.any,
+  videoHeight: PropTypes.any
+};
 
 export default PaperEdit;

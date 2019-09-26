@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import SearchBar from '../SearchBar';
+import SearchBar from '@bbc/digital-paper-edit-react-components/SearchBar';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import CustomTranscriptCard from '../CustomTranscriptCard';
+import PropTypes from 'prop-types';
 import includesText from '../../../Util/includes-text';
+import TranscriptCard from '@bbc/digital-paper-edit-react-components/TranscriptCard';
 
 // TODO: add error handling, eg custom alert if server is not responding
 class ListPageTranscript extends Component {
@@ -44,7 +45,7 @@ class ListPageTranscript extends Component {
 
           if (item.display) {
             return (
-              <CustomTranscriptCard
+              <TranscriptCard
                 icon={ this.props.icon }
                 key={ 'key__' + item.id }
                 id={ item.id }
@@ -82,9 +83,8 @@ class ListPageTranscript extends Component {
     // also add `navigator.onLine` to raise error if offline?
 
     if (this.props.items !== null && this.props.items.length !== 0) {
-      searchEl = (<SearchBar
-        handleSearch={ this.handleSearch }
-      />);
+      searchEl =
+        <SearchBar handleSearch={ this.handleSearch }/>;
     }
     if (this.props.items !== null && this.props.items.length !== 0) {
       content = (
@@ -102,10 +102,10 @@ class ListPageTranscript extends Component {
     return (
       <>
         <Row>
-          <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
+          <Col sm={ 9 }>
             {searchEl}
           </Col>
-          <Col xs={ 12 } sm={ 3 } md={ 3 } ld={ 3 } xl={ 3 }>
+          <Col xs={ 12 } sm={ 3 }>
             <Button onClick={ this.props.handleShowCreateNewItemForm } variant="outline-secondary" size="sm" block>
                 New {this.props.model}
             </Button>
@@ -116,5 +116,16 @@ class ListPageTranscript extends Component {
     );
   }
 }
+
+ListPageTranscript.propTypes = {
+  handleDelete: PropTypes.any,
+  handleEdit: PropTypes.any,
+  handleShowCreateNewItemForm: PropTypes.any,
+  handleUpdateList: PropTypes.any,
+  icon: PropTypes.any,
+  items: PropTypes.any,
+  model: PropTypes.any,
+  showLinkPath: PropTypes.any
+};
 
 export default ListPageTranscript;

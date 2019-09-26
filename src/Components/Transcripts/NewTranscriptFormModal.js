@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-import TranscriptForm from './TranscriptForm';
+import TranscriptForm from '@bbc/digital-paper-edit-react-components/TranscriptForm';
 
 class NewTranscriptFormModal extends React.Component {
   constructor(props) {

@@ -9,9 +9,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Redirect } from 'react-router-dom';
-import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import ApiWrapper from '../../ApiWrapper/index.js';
-import CustomAlert from '../lib/CustomAlert/index.js';
+
+import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
+import CustomAlert from '@bbc/digital-paper-edit-react-components/CustomAlert';
 
 class TranscriptCorrect extends Component {
   constructor(props) {
@@ -108,7 +109,7 @@ class TranscriptCorrect extends Component {
           <br/>
           <Row>
             <Col sm={ 12 } md={ 11 } ld={ 11 } xl={ 11 }>
-              <CustomBreadcrumb
+              <Breadcrumb
                 items={ [ {
                   name: 'Projects',
                   link: '/projects'

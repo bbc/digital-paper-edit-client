@@ -1,181 +1,149 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import ListPage from '../lib/ListPage';
-import ItemFormModal from '../lib/ItemFormModal';
-import CustomBreadcrumb from '../lib/CustomBreadcrumb';
+import Page from '../lib/Page';
+import FormModal from '@bbc/digital-paper-edit-react-components/FormModal';
+import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 import CustomFooter from '../lib/CustomFooter';
 import ApiWrapper from '../../ApiWrapper/index.js';
 
-class Projects extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: [],
-      isNewItemModalShow: false,
-      title: '',
-      description: '',
-      itemId: null
+const Projects = () => {
+  const [ items, setItems ] = useState();
+  const [ showModal, setShowModal ] = useState(false);
+
+  const [ title, setTitle ] = useState('');
+  const [ description, setDescription ] = useState('');
+  const [ itemId, setItemId ] = useState(null);
+
+  const getItems = async () => {
+    const projects = await ApiWrapper.getAllProjects();
+    const projectsDisplayOn = projects.map(project => {
+      project.display = true;
+      const id = project.id;
+
+      project.key = id;
+      project.url = `/projects/${ id }`;
+
+      return project;
+    });
+
+    setItems(projectsDisplayOn);
+  };
+
+  useEffect(() => {
+    getItems();
+
+    return () => {
     };
-    this.handleDeleteItem = this.handleDeleteItem.bind(this);
-  }
-  async componentDidMount () {
-    try {
-    // TODO: do we need to add user id in request?
-      const result = await ApiWrapper.getAllProjects();
 
-      if (result) {
-      // add a display property for component cards search
-        const tmpList = result.map(project => {
-          project.display = true;
+  }, []);
 
-          return project;
-        });
-        this.setState({ items: tmpList });
-      }
-    } catch (e) {
-      console.log('Error with ApiWrapper.getAllProjects', e);
-    }
-    // TODO: some error handling
+  const resetItemForm = () => {
+    setTitle('');
+    setItemId(null);
+    setDescription('');
+
   };
 
   // The form works both for new/create and edit/update
-  handleSaveItem = (item) => {
+  const handleSaveItem = async (item) => {
     if (!item.id) {
-      ApiWrapper.createProject(item).then(response => {
-        if (response.status === 'ok') {
-          // Server returns project with UID generated server side
-          const projects = [ ...this.state.items ];
-          // need to add display true attribute for search to the new project
-          const newProject = response.project;
-          newProject.display = true;
-          projects.push(response.project);
-          this.setState({
-            isNewItemModalShow: false,
-            items: projects,
-            // reset item form
-            title: '',
-            itemId: null,
-            description: ''
-          });
-        }
-      });
+
+      const response = await ApiWrapper.createProject(item);
+
+      if (response.status === 'ok') {
+        // Server returns project with UID generated server side
+        // need to add display true attribute for search to the new project
+        const newProject = response.project;
+        newProject.display = true;
+        const projects = items;
+        projects.push(response.project);
+
+        setShowModal(false);
+        setItems(projects);
+        resetItemForm();
+      }
     }
     else {
-      ApiWrapper.updateProject(item.id, item).then(response => {
-        if (response.status === 'ok') {
-          const project = response.project;
-          // need to add display true attribute for search to the new project
-          project.display = true;
-          // // Server returns project with UID generated server side
-          const { items } = this.state;
-          this.findItemById(items, item);
-          const projectIndex = this.state.items.findIndex(element => element.id === project.id);
-          items[projectIndex] = project;
-          this.setState({
-            isNewItemModalShow: false,
-            items: items,
-            // reset item form
-            title: '',
-            itemId: null,
-            description: ''
-          });
-        }
-      });
-    }
-  }
+      const response = await ApiWrapper.updateProject(item.id, item);
+      if (response.status === 'ok') {
+        const project = response.project;
+        // need to add display true attribute for search to the new project
+        project.display = true;
+        // // Server returns project with UID generated server side
+        const index = items.findIndex(element => element.id === project.id);
 
-  findItemById = (list, id) => {
+        const projects = items;
+        projects[index] = project;
+        setItems(projects);
+        setShowModal(false);
+        resetItemForm();
+      }
+    }
+  };
+
+  const findItemById = (list, id) => {
     const result = list.filter((p) => {
       return p.id === id;
     });
 
     return result[0];
-  }
+  };
 
-  handleEditItem = (itemId) => {
-    const item = this.findItemById(this.state.items, itemId);
-    this.setState({
-      title: item.title,
-      itemId: item.id,
-      description: item.description,
-      isNewItemModalShow: true
-    });
-    console.log('edit item', item);
-  }
+  const handleEditItem = (id) => {
+    const item = findItemById(items, id);
+    setItemId(item.id);
+    setTitle(item.title);
+    setDescription(item.description);
+    setShowModal(true);
+  };
 
-  async handleDeleteItem(itemId) {
-    const result = await ApiWrapper.deleteProject(itemId);
+  const handleDeleteItem = async (id) => {
+    const result = await ApiWrapper.deleteProject(id);
     if (result.ok) {
-      const newItemsList = this.state.items.filter((p) => {
-        return p.id !== itemId;
+      const newItemsList = items.filter((p) => {
+        return p.id !== id;
       });
-      this.setState({ items: newItemsList });
+      setItems(newItemsList);
     } else {
       // TODO: some error handling, error message saying something went wrong
     }
-  }
-
-  showLinkPathToItem = (id) => {
-    return `/projects/${ id }`;
-  }
-
-  handleUpdateList = (list) => {
-    this.setState({ items: list });
-  }
-
-  handleShowCreateNewItemForm = () => {
-    // return '/projects/new';
-    this.setState({ isNewItemModalShow: true });
   };
 
-  handleCloseModal = () => {
-    this.setState({
-      title:'',
-      itemId: null,
-      description: '',
-      isNewItemModalShow: false
-    });
-  }
-
-  render() {
-    return (<>
+  return (
+    <>
       <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
         <Row>
-          <Col sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 }>
-            <CustomBreadcrumb items={ [
+          <Col sm={ 12 }>
+            <Breadcrumb items={ [
               {
-                name: 'Projects'
+                name: 'Project'
               }
             ] } />
           </Col>
         </Row>
-        <ListPage
+        <Page
           model={ 'Project' }
-          items={ this.state.items }
-          handleShowCreateNewItemForm={ this.handleShowCreateNewItemForm }
-          deleteItem={ this.createNew }
-          editItem={ this.createNew }
-          handleEdit={ this.handleEditItem }
-          handleDelete={ this.handleDeleteItem }
-          showLinkPath={ this.showLinkPathToItem }
-          handleUpdateList={ this.handleUpdateList }
+          items={ items }
+          handleShowModal={ setShowModal }
+          handleEdit={ handleEditItem }
+          handleDelete={ handleDeleteItem }
+          handleUpdateList={ setItems }
         />
-        <ItemFormModal
-          title={ this.state.title }
-          description={ this.state.description }
-          id={ this.state.itemId }
-          modalTitle={ this.state.itemId ? 'Edit Project' : 'New Project' }
-          show={ this.state.isNewItemModalShow }
-          handleCloseModal={ this.handleCloseModal }
-          handleSaveForm={ this.handleSaveItem }
+        <FormModal
+          id={ itemId }
+          title={ title }
+          description={ description }
+          modalTitle={ itemId ? 'Edit Project' : 'New Project' }
+          showModal={ showModal }
+          handleSaveForm={ handleSaveItem }
+          itemType={ 'project' }
         />
       </Container>
       <CustomFooter/>
     </>
-    );
-  }
-}
+  );
 
+};
 export default Projects;

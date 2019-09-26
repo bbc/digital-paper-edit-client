@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from 'react-bootstrap/Container';
-import ListPage from '../lib/ListPage';
-import ItemFormModal from '../lib/ItemFormModal';
+import Page from '../lib/Page';
+import FormModal from '@bbc/digital-paper-edit-react-components/FormModal';
 import ApiWrapper from '../../ApiWrapper/index.js';
 
 class PaperEdits extends Component {
@@ -139,7 +139,7 @@ class PaperEdits extends Component {
     return (
       <>
         <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
-          <ListPage
+          <Page
             model={ 'Paper Edit' }
             items={ this.state.items }
             handleShowCreateNewItemForm={ this.handleShowCreateNewItemForm }
@@ -150,7 +150,7 @@ class PaperEdits extends Component {
             showLinkPath={ this.showLinkPathToItem }
             handleUpdateList={ this.handleUpdateList }
           />
-          <ItemFormModal
+          <FormModal
             title={ this.state.title }
             description={ this.state.description }
             id={ this.state.itemId }
