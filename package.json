@@ -1,12 +1,13 @@
 {
   "name": "@bbc/digital-paper-edit-client",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Digital paper edit application, using transcriptions from automated STT, to do text based video editing on audio and video interviews. Modular architecture with  - React - Express - Electron - Adobe CEP",
   "main": "index.js",
   "dependencies": {
     "@bbc/aes31-adl-composer": "^1.0.1",
+    "@bbc/digital-paper-edit-react-components": "^1.1.2",
     "@bbc/fcpx-xml-composer": "^1.0.0",
-    "@bbc/react-transcript-editor": "^1.0.5",
+    "@bbc/react-transcript-editor": "^1.0.7",
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
     "@fortawesome/free-solid-svg-icons": "^5.7.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
