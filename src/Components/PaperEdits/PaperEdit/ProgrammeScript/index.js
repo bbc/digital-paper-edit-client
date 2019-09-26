@@ -8,15 +8,13 @@ import {
 } from './divide-words-selections-into-paragraphs/index.js';
 
 import ApiWrapper from '../../../../ApiWrapper';
-import PreviewCanvas from './PreviewCanvas/';
-import ProgrammeScriptContainer from './ProgrammeScriptContainer';
+import PreviewCanvas from '@bbc/digital-paper-edit-react-components/PreviewCanvas';
+import ProgrammeScriptContainer from '@bbc/digital-paper-edit-react-components/ProgrammeScriptContainer';
 import Menu from './Menu/index.js';
 
 const ProgrammeScript = (props) => {
-  console.log(props);
-  console.log(JSON.stringify(props.transcripts[0]));
-
   const [ elements, setElements ] = useState();
+
   const fetchPaperEdit = async () => {
     const pe = await ApiWrapper.getPaperEdit(props.projectId, props.papereditId);
     const newElements = pe.programmeScript.elements;
