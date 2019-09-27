@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import PropTypes from 'prop-types';
-import includesText from '../../../Util/includes-text';
+import { anyInText } from '../../../Util/in-text';
 import TranscriptCard from '@bbc/digital-paper-edit-react-components/TranscriptCard';
 
 // TODO: add error handling, eg custom alert if server is not responding
@@ -18,10 +18,7 @@ class ListPageTranscript extends Component {
 
   handleSearch = searchText => {
     const results = this.props.items.filter(project => {
-      if (
-        includesText(project.title, searchText) ||
-        includesText(project.description, searchText)
-      ) {
+      if (anyInText([ project.title, project.description ], searchText)) {
         project.display = true;
 
         return project;

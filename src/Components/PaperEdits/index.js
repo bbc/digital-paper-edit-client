@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Container from 'react-bootstrap/Container';
-import Page from '../lib/Page';
+import PageView from '../lib/PageView';
 import FormModal from '@bbc/digital-paper-edit-react-components/FormModal';
-import ApiWrapper from '../../ApiWrapper/index.js';
+import ApiWrapper from '../../ApiWrapper';
 
 class PaperEdits extends Component {
   constructor(props) {
@@ -139,7 +139,7 @@ class PaperEdits extends Component {
     return (
       <>
         <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
-          <Page
+          <PageView
             model={ 'Paper Edit' }
             items={ this.state.items }
             handleShowCreateNewItemForm={ this.handleShowCreateNewItemForm }

@@ -1,149 +1,112 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Page from '../lib/Page';
-import FormModal from '@bbc/digital-paper-edit-react-components/FormModal';
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 import CustomFooter from '../lib/CustomFooter';
 import ApiWrapper from '../../ApiWrapper/index.js';
+import PageView from '../lib/PageView';
+import { useStateValue } from '../../State';
 
 const Projects = () => {
-  const [ items, setItems ] = useState();
-  const [ showModal, setShowModal ] = useState(false);
+  const [ { projects }, dispatch ] = useStateValue();
+  const model = 'Project';
 
-  const [ title, setTitle ] = useState('');
-  const [ description, setDescription ] = useState('');
-  const [ itemId, setItemId ] = useState(null);
+  const createProject = async (item) => {
+    const response = await ApiWrapper.createProject(item);
+    if (response.status === 'ok') {
+      // Server returns project with UID generated server side
+      // need to add display true attribute for search to the new project
+      const newProject = response.project;
+      newProject.display = true;
+      dispatch.projects({ type: 'add', newItem: response.project });
+    } else {
+      console.error('Failed to add project', item);
+    }
+  };
 
-  const getItems = async () => {
-    const projects = await ApiWrapper.getAllProjects();
-    const projectsDisplayOn = projects.map(project => {
+  const updateProject = async (item) => {
+    const response = await ApiWrapper.updateProject(item.id, item); if (response.status === 'ok') {
+      const project = response.project;
+      // need to add display true attribute for search to the new project
       project.display = true;
-      const id = project.id;
+      // // Server returns project with UID generated server side
+      const index = projects.findIndex(element => element.id === project.id);
+      const newProjects = projects;
 
-      project.key = id;
-      project.url = `/projects/${ id }`;
-
-      return project;
-    });
-
-    setItems(projectsDisplayOn);
-  };
-
-  useEffect(() => {
-    getItems();
-
-    return () => {
-    };
-
-  }, []);
-
-  const resetItemForm = () => {
-    setTitle('');
-    setItemId(null);
-    setDescription('');
-
-  };
-
-  // The form works both for new/create and edit/update
-  const handleSaveItem = async (item) => {
-    if (!item.id) {
-
-      const response = await ApiWrapper.createProject(item);
-
-      if (response.status === 'ok') {
-        // Server returns project with UID generated server side
-        // need to add display true attribute for search to the new project
-        const newProject = response.project;
-        newProject.display = true;
-        const projects = items;
-        projects.push(response.project);
-
-        setShowModal(false);
-        setItems(projects);
-        resetItemForm();
-      }
-    }
-    else {
-      const response = await ApiWrapper.updateProject(item.id, item);
-      if (response.status === 'ok') {
-        const project = response.project;
-        // need to add display true attribute for search to the new project
-        project.display = true;
-        // // Server returns project with UID generated server side
-        const index = items.findIndex(element => element.id === project.id);
-
-        const projects = items;
-        projects[index] = project;
-        setItems(projects);
-        setShowModal(false);
-        resetItemForm();
-      }
+      newProjects[index] = project;
+      dispatch.projects({ type: 'update', projects: newProjects });
     }
   };
 
-  const findItemById = (list, id) => {
-    const result = list.filter((p) => {
-      return p.id === id;
-    });
-
-    return result[0];
+  const handleSave = async (item) => {
+    if (item.id) {
+      return await updateProject(item);
+    } else {
+      return await createProject(item);
+    }
   };
 
-  const handleEditItem = (id) => {
-    const item = findItemById(items, id);
-    setItemId(item.id);
-    setTitle(item.title);
-    setDescription(item.description);
-    setShowModal(true);
-  };
-
-  const handleDeleteItem = async (id) => {
+  const handleDelete = async (id) => {
     const result = await ApiWrapper.deleteProject(id);
     if (result.ok) {
-      const newItemsList = items.filter((p) => {
+      const newItemsList = projects.filter((p) => {
         return p.id !== id;
       });
-      setItems(newItemsList);
+      dispatch.projects({ type: 'update', projects: newItemsList });
     } else {
       // TODO: some error handling, error message saying something went wrong
     }
   };
+
+  useEffect(() => {
+
+    const getProjects = async () => {
+      const allProjects = await ApiWrapper.getAllProjects();
+      const extendedProjects = allProjects.map(project => {
+        const id = project.id;
+        project.key = id;
+        project.url = `/projects/${ id }`;
+        project.display = true;
+
+        return project;
+      });
+      dispatch.projects({ type: 'update', projects: extendedProjects });
+    };
+
+    if (!projects ) {
+
+      getProjects();
+    }
+
+    return () => {
+    };
+
+  }, [ dispatch, projects ]);
+
+  const breadcrumbItems = [
+    {
+      name: `${ model }s`,
+      link: `/${ model }s`,
+    }
+  ];
 
   return (
     <>
       <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
         <Row>
           <Col sm={ 12 }>
-            <Breadcrumb items={ [
-              {
-                name: 'Project'
-              }
-            ] } />
+            <Breadcrumb items={ breadcrumbItems } />;
           </Col>
         </Row>
-        <Page
-          model={ 'Project' }
-          items={ items }
-          handleShowModal={ setShowModal }
-          handleEdit={ handleEditItem }
-          handleDelete={ handleDeleteItem }
-          handleUpdateList={ setItems }
-        />
-        <FormModal
-          id={ itemId }
-          title={ title }
-          description={ description }
-          modalTitle={ itemId ? 'Edit Project' : 'New Project' }
-          showModal={ showModal }
-          handleSaveForm={ handleSaveItem }
-          itemType={ 'project' }
-        />
+        {/* <PageView
+          model={ model }
+          handleSave={ handleSave }
+          handleDelete={ handleDelete }
+        /> */}
       </Container>
-      <CustomFooter/>
+      <CustomFooter />
     </>
   );
-
 };
 export default Projects;

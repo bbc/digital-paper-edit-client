@@ -1,13 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Switch, Route, HashRouter } from 'react-router-dom';
 import 'bootstrap-css-only/css/bootstrap.css';
 import Projects from './Components/Projects/index.js';
 import Project from './Components/Projects/Project.js';
 import TranscriptCorrect from './Components/Transcripts/TranscriptCorrect.js';
 import PaperEdit from './Components/PaperEdits/PaperEdit';
-import CustomAlert from './Components/lib/CustomAlert';
+import CustomAlert from '@bbc/digital-paper-edit-react-components/CustomAlert';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
+import { StateProvider } from './State';
+import { projectsReducer, transcriptsReducer } from './State/reducers';
+// import ApiWrapper from './ApiWrapper';
 
 const demoWarningMessage = (<><p> This is a demo version of the app <Alert.Link href="https://github.com/bbc/digital-paper-edit-client" target="_blank" rel="noopener noreferrer"
 >see project Github repository for more info</Alert.Link>. </p><p>This is a read-only demo you can only play around with existing projects!</p></>);
@@ -16,44 +19,55 @@ const NoMatch = () => {
   return <h1>There was an error loading the page you requested</h1>;
 };
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+const App = () => {
 
-    this.state = {
-      transcriptJson: null
+  // if log user data
+  const initialState = {
+    name: 'Tania',
+    loggedIn: true,
+    projects: [],
+    transcripts: []
+  };
+
+  const reducer = ({ projects, transcripts }, action) => {
+    return {
+      projects: projectsReducer(projects, action),
+      transcripts: transcriptsReducer(transcripts, action)
     };
-  }
+  };
+
   // TODO: remove unused rootes
+  let envWarning = null;
+  let offlineWarning = null;
 
-  // eslint-disable-next-line class-methods-use-this
-  render() {
-    let envWarning = null;
-    let offlineWarning = null;
+  if (process.env.REACT_APP_NODE_ENV === 'demo') {
+    envWarning = (
+      <Container>
+        <CustomAlert
+          variant={ 'warning' }
+          heading={ 'Demo mode' }
+          message={ demoWarningMessage }/>
+      </Container>
+    );
+  }
 
-    if (process.env.REACT_APP_NODE_ENV === 'demo') {
-      envWarning = (
+  if (!navigator.onLine) {
+    offlineWarning = (
+      <>
+        <br/>
         <Container>
           <CustomAlert
             variant={ 'warning' }
-            heading={ 'Demo mode' }
-            message={ demoWarningMessage }/>
-        </Container>);
-    }
+            heading={ 'Offline warning' }
+            message={ 'You don\'t seem to be connected to the internet ' }/>
+        </Container>
+      </>);
+  }
 
-    if (!navigator.onLine) {
-      offlineWarning = <><br/><Container>
-        <CustomAlert
-          variant={ 'warning' }
-          heading={ 'Offline warning' }
-          message={ 'You don\'t seem to be connected to the internet ' }/>
-      </Container></>;
-    }
-
-    return (<>
+  return (
+    <StateProvider initialState={ initialState } reducer={ reducer }>
 
       {envWarning}
-
       {offlineWarning}
 
       <HashRouter>
@@ -74,9 +88,8 @@ class App extends Component {
           <Route component={ NoMatch } />
         </Switch>
       </HashRouter>
-    </>
-    );
-  }
-}
+    </StateProvider>
+  );
+};
 
 export default App;
