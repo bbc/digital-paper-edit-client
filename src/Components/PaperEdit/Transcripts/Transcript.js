@@ -16,9 +16,9 @@ import {
 import SearchBar from './SearchBar/index.js';
 import Paragraphs from './Paragraphs/index.js';
 import LabelsList from './LabelsList/index.js';
-import onlyCallOnce from '../../../../Util/only-call-once/index.js';
+import onlyCallOnce from '../../../Util/only-call-once/index.js';
 import getTimeFromUserWordsSelection from './get-user-selection.js';
-import ApiWrapper from '../../../../ApiWrapper/index.js';
+import ApiWrapper from '../../../ApiWrapper';
 
 // import Paragraph from './Paragraph.js';
 

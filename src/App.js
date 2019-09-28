@@ -2,15 +2,14 @@ import React from 'react';
 import { Switch, Route, HashRouter } from 'react-router-dom';
 import 'bootstrap-css-only/css/bootstrap.css';
 import Projects from './Components/Projects/index.js';
-import Project from './Components/Projects/Project.js';
-import TranscriptCorrect from './Components/Transcripts/TranscriptCorrect.js';
-import PaperEdit from './Components/PaperEdits/PaperEdit';
+import WorkspaceView from './Components/WorkspaceView/index.js';
+import TranscriptCorrect from './Components/WorkspaceView/Transcripts/TranscriptCorrect.js';
+import PaperEdit from './Components/PaperEdit';
 import CustomAlert from '@bbc/digital-paper-edit-react-components/CustomAlert';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import { StateProvider } from './State';
-import { projectsReducer, transcriptsReducer } from './State/reducers';
-// import ApiWrapper from './ApiWrapper';
+import reducers from './State/reducers';
 
 const demoWarningMessage = (<><p> This is a demo version of the app <Alert.Link href="https://github.com/bbc/digital-paper-edit-client" target="_blank" rel="noopener noreferrer"
 >see project Github repository for more info</Alert.Link>. </p><p>This is a read-only demo you can only play around with existing projects!</p></>);
@@ -25,15 +24,9 @@ const App = () => {
   const initialState = {
     name: 'Tania',
     loggedIn: true,
-    projects: [],
-    transcripts: []
-  };
-
-  const reducer = ({ projects, transcripts }, action) => {
-    return {
-      projects: projectsReducer(projects, action),
-      transcripts: transcriptsReducer(transcripts, action)
-    };
+    projects: null,
+    transcripts: null,
+    paperEdits: null
   };
 
   // TODO: remove unused rootes
@@ -65,7 +58,7 @@ const App = () => {
   }
 
   return (
-    <StateProvider initialState={ initialState } reducer={ reducer }>
+    <StateProvider initialState={ initialState } reducer={ reducers }>
 
       {envWarning}
       {offlineWarning}
@@ -74,7 +67,7 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={ Projects } />
           <Route exact path="/projects" component={ Projects } />
-          <Route exact path="/projects/:projectId" component={ Project } />
+          <Route exact path="/projects/:projectId" component={ WorkspaceView } />
           <Route
             exact
             path="/projects/:projectId/transcripts/:transcriptId/correct"

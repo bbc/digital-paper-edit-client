@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-// import removePunctuation from '../../../../../../Util/remove-punctuation/index.js';
-import removePunctuation from '../../../../../Util/remove-punctuation/index.js';
+import removePunctuation from '../../../../Util/remove-punctuation';
 
 class Word extends Component {
   generatePreviousTimes = (start) => {

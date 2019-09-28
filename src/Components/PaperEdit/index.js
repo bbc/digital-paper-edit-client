@@ -13,7 +13,7 @@ import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 
 import Transcripts from './Transcripts/index.js';
 import ProgrammeScriptContainer from '@bbc/digital-paper-edit-react-components/ProgrammeScriptContainer';
-import ApiWrapper from '../../../ApiWrapper/index.js';
+import ApiWrapper from '../../ApiWrapper';
 import PropTypes from 'prop-types';
 
 class PaperEdit extends Component {

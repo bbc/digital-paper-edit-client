@@ -3,13 +3,12 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import PropTypes from 'prop-types';
-// import ApiWrapper from '../../../ApiWrapper';
+import Container from 'react-bootstrap/Container';
 
 import { anyInText } from '../../../Util/in-text';
 import List from '@bbc/digital-paper-edit-react-components/List';
 import SearchBar from '@bbc/digital-paper-edit-react-components/SearchBar';
 import FormModal from '@bbc/digital-paper-edit-react-components/FormModal';
-import { useStateValue } from '../../../State';
 
 const initialFormState = {
   title: '',
@@ -29,18 +28,9 @@ const formReducer = (state = initialFormState, { type, payload }) => {
   }
 };
 
-const PageView = (props) => {
-  const [ { projects, transcripts }, dispatch ] = useStateValue();
-  const [ items, setItems ] = useState();
-
-  console.log('projects', projects);
-  console.log('transcripts', transcripts);
-
-  if (props.model === 'Transcript') {
-    setItems(transcripts);
-  } else {
-    setItems(projects);
-  }
+const ItemsContainer = (props) => {
+  const [ model, setModel ] = useState(props.model);
+  const [ items, setItems ] = useState(props.items);
 
   const [ showModal, setShowModal ] = useState(false);
   const [ formData, dispatchForm ] = useReducer(formReducer, initialFormState);
@@ -94,15 +84,19 @@ const PageView = (props) => {
   };
 
   useEffect(() => {
-    if (!items) {
+    if (model !== props.model) {
+      setModel(props.model);
+      console.log('Should rerender children', model);
+    }
+
+    if (items !== props.items) {
       setItems(props.items);
-      console.log('effect', items);
     }
 
     return () => {
 
     };
-  }, [ items, props.items ]);
+  }, [ items, model, props.items, props.model ]);
 
   let searchEl;
   let showItems;
@@ -119,11 +113,11 @@ const PageView = (props) => {
     );
 
   } else {
-    showItems = (<i>There are no {props.model}s, create a new one to get started.</i>);
+    showItems = (<i>There are no {model}s, create a new one to get started.</i>);
   }
 
   return (
-    <>
+    <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
       <Row>
         <Col sm={ 9 } >
           {searchEl}
@@ -132,23 +126,23 @@ const PageView = (props) => {
           <Button onClick={ handleShowModal }
             variant="outline-secondary"
             size="sm" block>
-                New {props.model}
+                New {model}
           </Button>
         </Col>
       </Row>
       {showItems}
       <FormModal
         { ...formData }
-        modalTitle={ formData.id ? `Edit ${ props.model }` : `New ${ props.model }` }
+        modalTitle={ formData.id ? `Edit ${ model }` : `New ${ model }` }
         showModal={ showModal }
         handleSaveForm={ handleSaveItem }
-        itemType={ props.model.toLowerCase }
+        itemType={ model.toLowerCase }
       />
-    </>
+    </Container>
   );
 };
 
-PageView.propTypes = {
+ItemsContainer.propTypes = {
   handleSave: PropTypes.any,
   handleEdit: PropTypes.any,
   handleDelete: PropTypes.any,
@@ -156,4 +150,8 @@ PageView.propTypes = {
   model: PropTypes.string
 };
 
-export default PageView;
+ItemsContainer.defaultProps = {
+  model: 'Project'
+};
+
+export default ItemsContainer;

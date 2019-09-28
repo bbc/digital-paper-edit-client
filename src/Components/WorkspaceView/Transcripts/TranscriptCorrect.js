@@ -9,7 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Redirect } from 'react-router-dom';
-import ApiWrapper from '../../ApiWrapper/index.js';
+import ApiWrapper from '../../../ApiWrapper';
 
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 import CustomAlert from '@bbc/digital-paper-edit-react-components/CustomAlert';

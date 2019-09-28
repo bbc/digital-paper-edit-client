@@ -1,38 +1,26 @@
-const projectsReducer = (state, action) => {
+const itemsReducer = (state, action) => {
   switch (action.type) {
   case 'update':
     return {
       ...state,
-      projects: action.projects
+      items: action.items
     };
   case 'add':
     return {
       ...state,
-      projects: [ ...state.projects, action.newItem ]
+      items: [ ...state.items, action.newItem ]
     };
   default:
     return state;
   }
 };
 
-const transcriptsReducer = (state, action) => {
-  switch (action.type) {
-  case 'update':
-    return {
-      ...state,
-      transcripts: action.transcripts
-    };
-  case 'add':
-    return {
-      ...state,
-      projects: [ ...state.transcripts, action.newItem ]
-    };
-  default:
-    return state;
-  }
+const reducers = ({ projects, transcripts, paperEdits }, action) => {
+  return {
+    projects: itemsReducer(projects, action),
+    transcripts: itemsReducer(transcripts, action),
+    paperEdits: itemsReducer(paperEdits, action)
+  };
 };
 
-export {
-  projectsReducer,
-  transcriptsReducer
-};
+export default reducers;
