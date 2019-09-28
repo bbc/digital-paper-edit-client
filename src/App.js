@@ -2,9 +2,9 @@ import React from 'react';
 import { Switch, Route, HashRouter } from 'react-router-dom';
 import 'bootstrap-css-only/css/bootstrap.css';
 import Projects from './Components/Projects/index.js';
-import WorkspaceView from './Components/WorkspaceView/index.js';
-import TranscriptCorrect from './Components/WorkspaceView/Transcripts/TranscriptCorrect.js';
-import PaperEdit from './Components/PaperEdit';
+import Workspace from './Components/Workspace';
+import TranscriptEditor from './Components/Workspace/Transcripts/TranscriptEditor.js';
+import PaperEditor from './Components/PaperEditor';
 import CustomAlert from '@bbc/digital-paper-edit-react-components/CustomAlert';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
@@ -67,16 +67,16 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={ Projects } />
           <Route exact path="/projects" component={ Projects } />
-          <Route exact path="/projects/:projectId" component={ WorkspaceView } />
+          <Route exact path="/projects/:projectId" component={ Workspace } />
           <Route
             exact
             path="/projects/:projectId/transcripts/:transcriptId/correct"
-            component={ TranscriptCorrect }
+            component={ TranscriptEditor }
           />
           <Route
             exact
             path="/projects/:projectId/paperedits/:papereditId"
-            component={ PaperEdit }
+            component={ PaperEditor }
           />
           <Route component={ NoMatch } />
         </Switch>

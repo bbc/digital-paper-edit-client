@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // import styles from './Transcript.module.css';
 // TODO: perhaps import TranscriptEditor on componentDidMount(?) to defer the load for later
 // https://facebook.github.io/create-react-app/docs/code-splitting
-import { TranscriptEditor } from '@bbc/react-transcript-editor';
+import { TranscriptEditor as ReactTranscriptEditor } from '@bbc/react-transcript-editor';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -14,7 +14,7 @@ import ApiWrapper from '../../../ApiWrapper';
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 import CustomAlert from '@bbc/digital-paper-edit-react-components/CustomAlert';
 
-class TranscriptCorrect extends Component {
+class TranscriptEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -145,7 +145,7 @@ class TranscriptCorrect extends Component {
           </Row>
           {this.state.savedNotification}
           {this.state.transcriptJson !== null &&
-          <TranscriptEditor
+          <ReactTranscriptEditor
             transcriptData={ this.state.transcriptJson }// Transcript json
             // TODO: move url server side
             mediaUrl={ this.state.url }// string url to media file - audio or video
@@ -162,4 +162,4 @@ class TranscriptCorrect extends Component {
   }
 }
 
-export default TranscriptCorrect;
+export default TranscriptEditor;
