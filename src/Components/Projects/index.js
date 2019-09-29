@@ -89,7 +89,6 @@ const Projects = () => {
     };
 
     if (!isFetch) {
-      console.log('getting projects at least once');
       getProjects();
       setIsFetch(true);
     }

@@ -4,7 +4,7 @@ import ApiWrapper from '../../../ApiWrapper';
 import PropTypes from 'prop-types';
 import { deleteItem, updateItem } from '../../../State/reducers';
 
-const intervalInMs = 300000;
+const intervalInMs = 30000;
 
 const isTranscriptionInProgress = (transcripts) => {
   if (transcripts.length !== 0) {

@@ -29,11 +29,11 @@ const WorkspaceView = (props) => {
   useEffect(() => {
 
     const getProjectName = async () => {
-      const response = await ApiWrapper.getProject(id);
-      if (response.ok) {
+      try {
+        const response = await ApiWrapper.getProject(id);
         setName(response.project.title);
-      } else {
-        console.error('Could not get Project Id: ', id);
+      } catch (e) {
+        console.error('Could not get Project Id: ', id, e );
       }
     };
 

@@ -3,7 +3,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import PropTypes from 'prop-types';
-import cuid from 'cuid';
 
 import { anyInText } from '../../../Util/in-text';
 import arrayMatch from '../../../Util/array-match';
@@ -68,11 +67,12 @@ const ItemsContainer = (props) => {
   };
 
   const handleSearch = text => {
-    const results = items.filter(item => handleFilterDisplay(item, text));
+    const results = items.map(item => handleFilterDisplay(item, text));
     setItems(results);
   };
 
   const toggleShowModal = () => {
+    console.log('toggle', !showModal);
     setShowModal(!showModal);
   };
 
@@ -104,6 +104,7 @@ const ItemsContainer = (props) => {
     showItems = (<i>There are no {type}s, create a new one to get started.</i>);
   }
 
+  // not actually linked to any buttons...
   return (
     <>
       <Row>
