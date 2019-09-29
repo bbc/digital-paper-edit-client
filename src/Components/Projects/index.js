@@ -18,7 +18,7 @@ const Projects = () => {
 
   const createProject = async (item) => {
     const response = await ApiWrapper.createProject(item);
-    if (response.status === 'ok') {
+    if (response.ok) {
       const newProject = response.project;
       newProject.display = true;
       dispatch({ type: 'add', newItem: newProject });
@@ -30,7 +30,7 @@ const Projects = () => {
   const updateProject = async (id, item) => {
     const response = await ApiWrapper.updateProject(id, item);
 
-    if (response.status === 'ok') {
+    if (response.ok) {
       const project = response.project;
       project.display = true;
       dispatch({ type: 'updateItem', id: item.id, item: project });

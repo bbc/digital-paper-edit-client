@@ -40,7 +40,7 @@ const PaperEdits = (props) => {
 
   const createPaperEdit = async (item) => {
     const response = await ApiWrapper.createPaperEdit(props.projectId, item);
-    if (response.status === 'ok') {
+    if (response.ok) {
       const newPaperEdit = response.paperedit;
       newPaperEdit.display = true;
       // newPaperEdit.url = genUrl(newPaperEdit.id);
@@ -55,7 +55,7 @@ const PaperEdits = (props) => {
   const updatePaperEdit = async (id, item) => {
     const response = await ApiWrapper.updatePaperEdit(props.projectId, id, item);
 
-    if (response.status === 'ok') {
+    if (response.ok) {
       const paperEdit = response.paperedit;
       paperEdit.display = true;
 

@@ -8,8 +8,7 @@ import CustomFooter from '../lib/CustomFooter';
 import Transcripts from './Transcripts';
 import PaperEdits from './PaperEdits';
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
-import { useStateValue } from '../../State';
-import arrayMatch from '../../Util/array-match';
+import ApiWrapper from '../../ApiWrapper/index.js';
 
 const genBreadcrumb = (name) => [
   {
@@ -22,37 +21,35 @@ const genBreadcrumb = (name) => [
 ];
 
 const WorkspaceView = (props) => {
-  const [ id, setId ] = useState(props.match.params.projectId);
+  const id = props.match.params.projectId;
+
   const [ active, setActive ] = useState('transcripts');
-  const [ { projects }, dispatch ] = useStateValue();
-  const [ items, setItems ] = useState([]);
-  const [ breadcrumb, setBreadcrumb ] = useState(genBreadcrumb('Project Name'));
+  const [ name, setName ] = useState('Project Name');
 
   useEffect(() => {
-    const getProjectName = () => {
-      const result = items.find(p => p.id === id);
-      if (result) {
-        console.log(result);
-        const bc = genBreadcrumb(result.title);
-        setBreadcrumb(bc);
+
+    const getProjectName = async () => {
+      const response = await ApiWrapper.getProject(id);
+      if (response.ok) {
+        setName(response.project.title);
+      } else {
+        console.error('Could not get Project Id: ', id);
       }
     };
-    if (!arrayMatch(projects.items, items)) {
-      setItems(projects.items);
-      getProjectName();
-    }
+
+    getProjectName();
 
     return () => {
     };
 
-  }, [ id, items, projects.items ]);
+  }, [ id, name ]);
 
   return (
     <>
       <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
         <Row>
           <Col sm={ 12 }>
-            <Breadcrumb items={ breadcrumb } />
+            <Breadcrumb items={ genBreadcrumb(name) } />
           </Col>
         </Row>
 
@@ -62,16 +59,20 @@ const WorkspaceView = (props) => {
           onSelect={ tab => setActive(tab) }
         >
           <Tab eventKey="transcripts" title="Transcripts">
-            <Transcripts projectId={ id }/>
+            <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
+              <Transcripts projectId={ id }/>
+            </Container>
           </Tab>
+
           <Tab eventKey="paperedits" title="Paper Edits">
-            <PaperEdits projectId={ id } />
+            <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
+              <PaperEdits projectId={ id } />
+            </Container>
           </Tab>
         </Tabs>
 
       </Container>
-
-      <CustomFooter/>
+      <CustomFooter />
     </>
   );
 };
