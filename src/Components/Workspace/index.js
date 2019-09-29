@@ -9,54 +9,57 @@ import Transcripts from './Transcripts';
 import PaperEdits from './PaperEdits';
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 import { useStateValue } from '../../State';
+import arrayMatch from '../../Util/array-match';
+
+const genBreadcrumb = (name) => [
+  {
+    name: 'Projects',
+    link: '/projects'
+  },
+  {
+    name: name
+  }
+];
 
 const WorkspaceView = (props) => {
-
   const [ id, setId ] = useState(props.match.params.projectId);
-  const [ name, setName ] = useState('Projects Name');
-  const [ key, setKey ] = useState('transcripts');
-
+  const [ active, setActive ] = useState('transcripts');
   const [ { projects }, dispatch ] = useStateValue();
+  const [ items, setItems ] = useState([]);
+  const [ breadcrumb, setBreadcrumb ] = useState(genBreadcrumb('Project Name'));
 
   useEffect(() => {
-    const findProject = () => {
-      return projects.items.find(p => p.id === id);
-    };
-
-    const getProject = async() => {
-      const result = findProject();
+    const getProjectName = () => {
+      const result = items.find(p => p.id === id);
       if (result) {
-        setName(result.title);
+        console.log(result);
+        const bc = genBreadcrumb(result.title);
+        setBreadcrumb(bc);
       }
     };
-
-    if (projects && projects.items)
-      getProject();
+    if (!arrayMatch(projects.items, items)) {
+      setItems(projects.items);
+      getProjectName();
+    }
 
     return () => {
     };
-  }, [ id, projects ]);
+
+  }, [ id, items, projects.items ]);
 
   return (
     <>
       <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
         <Row>
           <Col sm={ 12 }>
-            <Breadcrumb items={ [
-              {
-                name: 'Projects',
-                link: '/projects'
-              },
-              {
-                name: name
-              }
-            ] } />
+            <Breadcrumb items={ breadcrumb } />
           </Col>
         </Row>
+
         <Tabs
           id="controlled-tab-example"
-          activeKey={ key }
-          onSelect={ k => setKey(k) }
+          activeKey={ active }
+          onSelect={ tab => setActive(tab) }
         >
           <Tab eventKey="transcripts" title="Transcripts">
             <Transcripts projectId={ id }/>
@@ -65,6 +68,7 @@ const WorkspaceView = (props) => {
             <PaperEdits projectId={ id } />
           </Tab>
         </Tabs>
+
       </Container>
 
       <CustomFooter/>

@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import ItemsContainer from '../../lib/ItemsContainer';
 import ApiWrapper from '../../../ApiWrapper';
 import PropTypes from 'prop-types';
+import { deleteItem, updateItem } from '../../../State/reducers';
 
-import { useStateValue } from '../../../State';
-
-const intervalInMs = 30000;
+const intervalInMs = 300000;
 
 const isTranscriptionInProgress = (transcripts) => {
   if (transcripts.length !== 0) {
@@ -19,11 +18,11 @@ const isTranscriptionInProgress = (transcripts) => {
   return false;
 };
 
-// refactor with projects as they have fairly similar logic.
 const Transcripts = (props) => {
-  const [ { transcripts }, dispatch ] = useStateValue();
-  const model = 'Transcript';
+  const [ isFetch, setIsFetch ] = useState(false);
+  const [ items, setItems ] = useState([]);
   const [ interval, setInterval ] = useState();
+  const type = 'Transcript';
 
   useEffect(() => {
     const genUrl = (id) => {
@@ -31,24 +30,29 @@ const Transcripts = (props) => {
     };
 
     const getTranscripts = async () => {
-      const result = await ApiWrapper.getTranscripts(props.projectId);
-      // TODO: add error handling
-      if (result) {
-        const newItems = result.transcripts.map((item) => {
+      const response = await ApiWrapper.getTranscripts(props.projectId);
+
+      if (response) {
+        const newItems = response.transcripts.map((item) => {
           item.display = true;
           item.url = genUrl(item.id);
+          item.projectId = props.projectId;
 
           return item;
         });
-        dispatch({ type: 'update', items: newItems });
+        setItems(newItems);
       }
+
     };
-    if (!transcripts) {
+
+    if (!isFetch) {
+      setIsFetch(true);
       getTranscripts();
     }
+
     // For simplicity rather then handling all the edge cases (on start, save, delete,etc..), the interval runs periodicalicly,
     // and only if there are items in progress in the list, it checks the backed for updates
-    if (transcripts && isTranscriptionInProgress(transcripts.items)) {
+    if (!interval && isTranscriptionInProgress(items)) {
       setInterval(() => {
         getTranscripts();
       }, intervalInMs);
@@ -57,59 +61,68 @@ const Transcripts = (props) => {
     return () => {
       clearInterval(interval);
     };
-  }, [ dispatch, interval, props.projectId, transcripts ]);
+  }, [ interval, isFetch, items, props.projectId ]);
 
-  // // side POST using wrapperAPI done
-  // // inside --> newTranscriptFormModal --> TranscriptForm
-  // // component - could be refactored
-  // // but needs to take into account file upload from form in TranscriptForm
-  // const handleSave = (item) => {
-  //   console.log('handleSaveItem', item);
-  //   const newItem = item;
-  //   dispatch({ type: 'add', newItem: newItem });
-  // };
-
-  const handleEdit = async (transcript) => {
-    const newEditedItem = transcript;
-    // display attribute for search
-    newEditedItem.display = true;
-    // Update existing
-    const index = transcripts.items.findIndex(item => item.id === transcript.id);
-    const newItems = transcripts.items;
-    // preserve status info
-    transcript.status = newItems[index].status;
-    newItems[index] = transcript;
+  const updateTranscript = async (id, item) => {
     const queryParamsOptions = false;
-    const transcriptId = newEditedItem.id;
-    // TODO: add error handling, eg message, wasn't able to update etc..
-    const response = await ApiWrapper.updateTranscript(props.projectId, transcriptId, queryParamsOptions, newEditedItem);
-    if (response.ok) {
-      console.log('ApiWrapper.updateTranscript', response, newItems);
-      dispatch({ type: 'update', items: newItems });
-    }
+    const response = await ApiWrapper.updateTranscript(
+      props.projectId,
+      id,
+      queryParamsOptions,
+      item
+    );
 
+    if (response.status === 'ok') {
+      const editedTranscript = response.transcript;
+      const index = items.findIndex(pe => pe.id === id);
+      const originalTranscript = items[index];
+
+      editedTranscript.display = true;
+      editedTranscript.status = originalTranscript.status;
+      const newItems = updateItem(id, editedTranscript, items);
+      setItems(newItems);
+    } else {
+      console.log('ApiWrapper.updateTranscript', response);
+    }
   };
 
-  const handleDelete = async (transcriptId ) => {
-    console.log('handle delete');
-    // TODO: API + server side request for delete
-    // on successful then update state
-    const result = await ApiWrapper.deleteTranscript(props.projectId, transcriptId);
-    // TODO: some error handling, error message saying something went wrong
-    const findId = (item) => item.id !== transcriptId;
-    if (result.ok) {
-      const newItems = transcripts.items.filter(item => findId(item));
-      dispatch({ type: 'update', items: newItems });
+  const handleSave = (item) => {
+    if (item.id) {
+      return updateTranscript(item.id, item);
+    } else {
+      console.log('non-existing');
+      // return createTranscript(item);
+      // creation handled by form
+    }
+  };
+
+  const deleteTranscript = async (id) => {
+    let response;
+    try {
+      response = await ApiWrapper.deleteTranscript(props.projectId, id);
+    } catch (e) {
+      console.log(e);
+    }
+    console.log('ApiWrapper.deleteTranscript', response);
+
+    return response;
+  };
+
+  const handleDelete = (id) => {
+    const response = deleteTranscript(id);
+    if (response.ok) {
+      const newItems = deleteItem(id, items);
+      setItems(newItems);
     }
   };
 
   return (
     <ItemsContainer
-      model={ model }
-      key={ model }
-      items={ transcripts ? transcripts.items : [] }
-      handleEdit={ handleEdit }
-      handleDelete={ handleDelete }
+      type={ type }
+      key={ type }
+      items={ items }
+      handleSave={ () => handleSave }
+      handleDelete={ () => handleDelete }
     />
   );
 };
@@ -118,4 +131,4 @@ Transcripts.propTypes = {
   projectId: PropTypes.any
 };
 
-export default Transcripts;
+export default React.memo(Transcripts);

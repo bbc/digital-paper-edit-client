@@ -1,87 +1,106 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ApiWrapper from '../../../ApiWrapper';
 import ItemsContainer from '../../lib/ItemsContainer';
-import { useStateValue } from '../../../State';
 import PropTypes from 'prop-types';
+import { deleteItem, updateItem, addItem } from '../../../State/reducers';
 
 const PaperEdits = (props) => {
-  const [ { paperEdits }, dispatch ] = useStateValue();
-  const model = 'Paper Edit';
+  const [ items, setItems ] = useState([]);
+  const type = 'Paper Edit';
+  const [ isFetch, setIsFetch ] = useState(false);
+
   useEffect(() => {
     const genUrl = (id) => {
       return `/projects/${ props.projectId }/paperedits/${ id }`;
     };
-    const getAllPaperEdits = async () => {
 
-      // TODO: do we need to add user id in request?
+    const getAllPaperEdits = async () => {
       const allPaperEdits = await ApiWrapper.getAllPaperEdits(props.projectId);
-      // add a display property for component cards search
-      const extendedPEs = allPaperEdits.map(paperEdit => {
+
+      const paperEdits = allPaperEdits.map(paperEdit => {
         paperEdit.display = true;
         paperEdit.url = genUrl(paperEdit.id);
+        paperEdit.projectId = props.projectId;
 
         return paperEdit;
       });
-      dispatch({ type: 'update', items: extendedPEs });
+
+      setItems(paperEdits);
+
     };
     // TODO: some error handling
-
-    getAllPaperEdits();
+    if (!isFetch) {
+      getAllPaperEdits();
+      setIsFetch(true);
+    }
 
     return () => {
     };
-  }, [ dispatch, props.projectId ]);
+  }, [ isFetch, items, props.projectId ]);
 
-  // TODO: handlesave / update through API wrapper
-  // The form works both for new/create and edit/update
-  const handleEdit = (item) => {
-    if (!item.id) {
-      ApiWrapper.createPaperEdit(props.projectId, item).then(response => {
-        if (response.status === 'ok') {
-          // Server returns project with UID generated server side
-          // need to add display true attribute for search to the new project
-          const newPaperEdit = response.paperedit;
-          newPaperEdit.display = true;
-          // newPaperEdit.url = genUrl(newPaperEdit.id);
-          dispatch({ type: 'add', item: newPaperEdit });
-        }
-      });
-    }
-    else {
-      ApiWrapper.updatePaperEdit(props.projectId, item.id, item).then(response => {
-        if (response.status === 'ok') {
-          const paperedit = response.paperedit;
-          // need to add display true attribute for search to the new project
-          paperedit.display = true;
-          // // Server returns project with UID generated server side
-          const papereditIndex = paperEdits.items.findIndex(pe => pe.id === paperedit.id);
-          const newItemsList = paperEdits.items;
-          newItemsList[papereditIndex] = paperedit;
-          dispatch({ type: 'update', items: newItemsList });
-        }
-      });
+  const createPaperEdit = async (item) => {
+    const response = await ApiWrapper.createPaperEdit(props.projectId, item);
+    if (response.status === 'ok') {
+      const newPaperEdit = response.paperedit;
+      newPaperEdit.display = true;
+      // newPaperEdit.url = genUrl(newPaperEdit.id);
+
+      const newItems = addItem(newPaperEdit, items);
+      setItems(newItems);
+    } else {
+      console.log('ApiWrapper.createPaperEdit', response);
     }
   };
 
-  // TODO:
-  const handleDelete = async (itemId) => {
-    const result = await ApiWrapper.deletePaperEdit(props.projectId, itemId);
-    if (result.ok) {
-      const newItemsList = paperEdits.items.filter((p) => {
-        return p.id !== itemId;
-      });
-      dispatch({ type: 'update', items: newItemsList });
+  const updatePaperEdit = async (id, item) => {
+    const response = await ApiWrapper.updatePaperEdit(props.projectId, id, item);
+
+    if (response.status === 'ok') {
+      const paperEdit = response.paperedit;
+      paperEdit.display = true;
+
+      const newItems = updateItem(id, paperEdit, items);
+      setItems(newItems);
     } else {
-      // TODO: some error handling, error message saying something went wrong
+      console.log('ApiWrapper.createPaperEdit', response);
+    }
+  };
+
+  const handleSave = (item) => {
+    if (item.id) {
+      return updatePaperEdit(item.id, item);
+    } else {
+      return createPaperEdit(item);
+    }
+  };
+
+  const deletePaperEdit = async (id) => {
+    let response;
+    try {
+      response = await ApiWrapper.deletePaperEdit(props.projectId, id);
+    } catch (e) {
+      console.log(e);
+    }
+    console.log('ApiWrapper.deletePaperEdit', response);
+
+    return response;
+  };
+
+  const handleDelete = (id) => {
+    console.log('handle delete');
+    const response = deletePaperEdit(id);
+    if (response.ok) {
+      const newItems = deleteItem(id, items);
+      setItems(newItems);
     }
   };
 
   return (
     <ItemsContainer
-      model={ model }
-      items={ paperEdits ? paperEdits.items : [] }
-      handleEdit={ handleEdit }
-      handleDelete={ handleDelete }
+      type={ type }
+      items={ items }
+      handleSave={ () => handleSave }
+      handleDelete={ () => handleDelete }
     />
   );
 };

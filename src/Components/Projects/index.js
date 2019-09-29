@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -7,89 +7,106 @@ import CustomFooter from '../lib/CustomFooter';
 import ApiWrapper from '../../ApiWrapper/index.js';
 import ItemsContainer from '../lib/ItemsContainer';
 import { useStateValue } from '../../State';
+import arrayMatch from '../../Util/array-match';
 
 const Projects = () => {
   const [ { projects }, dispatch ] = useStateValue();
-  const model = 'Project';
+  const [ isFetch, setIsFetch ] = useState(false);
+  const [ items, setItems ] = useState([]);
+
+  const type = 'Project';
 
   const createProject = async (item) => {
     const response = await ApiWrapper.createProject(item);
     if (response.status === 'ok') {
-      // Server returns project with UID generated server side
-      // need to add display true attribute for search to the new project
       const newProject = response.project;
       newProject.display = true;
-      dispatch({ type: 'add', newItem: response.project });
+      dispatch({ type: 'add', newItem: newProject });
     } else {
       console.error('Failed to add project', item);
     }
   };
 
-  const updateProject = async (item) => {
-    const response = await ApiWrapper.updateProject(item.id, item);
+  const updateProject = async (id, item) => {
+    const response = await ApiWrapper.updateProject(id, item);
+
     if (response.status === 'ok') {
       const project = response.project;
-      // need to add display true attribute for search to the new project
       project.display = true;
-      // // Server returns project with UID generated server side
-      const index = projects.items.findIndex(element => element.id === project.id);
-      const newProjects = projects.items;
-
-      newProjects[index] = project;
-      dispatch({ type: 'update', items: newProjects });
+      dispatch({ type: 'updateItem', id: item.id, item: project });
     }
   };
 
   const handleSave = async (item) => {
     if (item.id) {
-      return await updateProject(item);
+      return await updateProject(item.id, item);
     } else {
       return await createProject(item);
     }
   };
 
-  const handleDelete = async (id) => {
-    const result = await ApiWrapper.deleteProject(id);
-    if (result.ok) {
-      const newItemsList = projects.items.filter((p) => {
-        return p.id !== id;
-      });
-      dispatch({ type: 'update', items: newItemsList });
-    } else {
-      // TODO: some error handling, error message saying something went wrong
+  const deleteProject = async (id) => {
+    let response;
+    try {
+      response = await ApiWrapper.deleteProject(id);
+    } catch (e) {
+      console.log(e);
+    }
+    console.log('ApiWrapper.deleteProject', response);
+
+    return response;
+  };
+
+  const handleDelete = (id) => {
+    console.log('handle delete');
+    const response = deleteProject(id);
+    if (response.ok) {
+      dispatch({ type: 'delete', id: id });
     }
   };
 
   useEffect(() => {
-
     const getProjects = async () => {
-      const allProjects = await ApiWrapper.getAllProjects();
-      const extendedProjects = allProjects.map(project => {
-        const id = project.id;
-        project.key = id;
-        project.url = `/projects/${ id }`;
-        project.display = true;
+      let allProjects = [];
 
-        return project;
-      });
+      try {
+        const result = await ApiWrapper.getAllProjects();
+        allProjects = result.map(project => {
+          const id = project.id;
+          project.key = id;
+          project.url = `/projects/${ id }`;
+          project.display = true;
 
-      dispatch({ type: 'update', items: extendedProjects });
+          return project;
+        });
 
+      } catch (e) {
+        console.log('Failed to get projects');
+      }
+
+      dispatch({ type: 'update', items: allProjects });
+      setItems(projects.items);
     };
 
-    if (!projects) {
+    if (!isFetch) {
+      console.log('getting projects at least once');
       getProjects();
+      setIsFetch(true);
+    }
+
+    if (!arrayMatch(projects.items, items)) {
+      setItems(projects.items);
     }
 
     return () => {
     };
 
-  }, [ dispatch, projects ]);
+  }, [ dispatch, isFetch, items, projects.items ]);
 
   const breadcrumbItems = [
     {
-      name: `${ model }s`,
-      link: `/${ model }s`,
+      name: `${ type }s`,
+      link: `/${ type }s`,
     }
   ];
 
@@ -102,11 +119,11 @@ const Projects = () => {
           </Col>
         </Row>
         <ItemsContainer
-          key={ model }
-          model={ model }
-          items={ projects ? projects.items : [] }
-          handleSave={ async () => await handleSave }
-          handleDelete={ async () => await handleDelete }
+          key={ type }
+          model={ type }
+          items={ items }
+          handleSave={ () => handleSave }
+          handleDelete={ () => handleDelete }
         />
       </Container>
       <CustomFooter />
