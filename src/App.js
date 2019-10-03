@@ -22,7 +22,7 @@ const App = () => {
 
   // if log user data
   const initialState = {
-    name: 'Tania',
+    name: 'User A',
     loggedIn: true,
     projects: { items:[] }
   };

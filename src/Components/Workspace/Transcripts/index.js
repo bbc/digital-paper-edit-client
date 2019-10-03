@@ -21,6 +21,7 @@ const isTranscriptionInProgress = (transcripts) => {
 const Transcripts = (props) => {
   const [ isFetch, setIsFetch ] = useState(false);
   const [ items, setItems ] = useState([]);
+  const [ isInProgress, setIsInProgress ] = useState(false);
   const [ interval, setInterval ] = useState();
   const type = 'Transcript';
 
@@ -52,16 +53,20 @@ const Transcripts = (props) => {
 
     // For simplicity rather then handling all the edge cases (on start, save, delete,etc..), the interval runs periodicalicly,
     // and only if there are items in progress in the list, it checks the backed for updates
-    if (!interval && isTranscriptionInProgress(items)) {
-      setInterval(() => {
+    if (isInProgress && !interval) {
+      setInterval(setTimeout(() => {
         getTranscripts();
-      }, intervalInMs);
+      }, intervalInMs));
+    }
+
+    if (items.length > 0) {
+      setIsInProgress(isTranscriptionInProgress(items));
     }
 
     return () => {
       clearInterval(interval);
     };
-  }, [ interval, isFetch, items, props.projectId ]);
+  }, [ interval, isFetch, isInProgress, items, props.projectId ]);
 
   const updateTranscript = async (id, item) => {
     const queryParamsOptions = false;
