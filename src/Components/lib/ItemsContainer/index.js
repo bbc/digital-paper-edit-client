@@ -104,7 +104,6 @@ const ItemsContainer = (props) => {
     showItems = (<i>There are no {type}s, create a new one to get started.</i>);
   }
 
-  // not actually linked to any buttons...
   return (
     <>
       <Row>
