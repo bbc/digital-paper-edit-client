@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import ApiWrapper from './ApiWrapper';
+import ApiWrapper from '../ApiWrapper';
 
 const ApiContext = createContext(ApiWrapper);
 

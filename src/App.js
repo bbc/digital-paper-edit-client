@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import 'bootstrap-css-only/css/bootstrap.css';
-import ApiContext from './ApiContext';
+import ApiContext from './Context/ApiContext';
 import CustomAlert from '@bbc/digital-paper-edit-react-components/CustomAlert';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';

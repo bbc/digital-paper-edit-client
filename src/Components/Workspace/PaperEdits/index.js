@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import ItemsContainer from '../../lib/ItemsContainer';
 import PropTypes from 'prop-types';
-import { deleteItem, updateItem, addItem } from '../../../State/reducers';
-import ApiContext from '../../../ApiContext';
+import { deleteItem, updateItem, addItem } from '../../../Context/reducers';
+import ApiContext from '../../../Context/ApiContext';
 
 const PaperEdits = (props) => {
   const api = useContext(ApiContext);

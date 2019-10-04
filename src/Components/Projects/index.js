@@ -5,8 +5,8 @@ import Col from 'react-bootstrap/Col';
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 import CustomFooter from '../lib/CustomFooter';
 import ItemsContainer from '../lib/ItemsContainer';
-import ApiContext from '../../ApiContext';
-import { deleteItem, updateItem, addItem } from '../../State/reducers';
+import ApiContext from '../../Context/ApiContext';
+import { deleteItem, updateItem, addItem } from '../../Context/reducers';
 
 const Projects = () => {
   const [ isFetch, setIsFetch ] = useState(false);

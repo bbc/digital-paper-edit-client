@@ -9,7 +9,7 @@ import Transcripts from './Transcripts';
 import PaperEdits from './PaperEdits';
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 
-import ApiContext from '../../ApiContext';
+import ApiContext from '../../Context/ApiContext';
 
 const genBreadcrumb = (name) => [
   {

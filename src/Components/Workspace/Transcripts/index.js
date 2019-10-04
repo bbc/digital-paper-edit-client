@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import ItemsContainer from '../../lib/ItemsContainer';
 import PropTypes from 'prop-types';
-import { deleteItem, updateItem } from '../../../State/reducers';
-import ApiContext from '../../../ApiContext';
+import { deleteItem, updateItem } from '../../../Context/reducers';
+import ApiContext from '../../../Context/ApiContext';
 const intervalInMs = 30000;
 
 const isTranscriptionInProgress = (transcripts) => {
