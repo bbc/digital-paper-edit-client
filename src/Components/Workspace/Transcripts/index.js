@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import ItemsContainer from '../../lib/ItemsContainer';
-import ApiWrapper from '../../../ApiWrapper';
 import PropTypes from 'prop-types';
 import { deleteItem, updateItem } from '../../../State/reducers';
-
+import ApiContext from '../../../ApiContext';
 const intervalInMs = 30000;
 
 const isTranscriptionInProgress = (transcripts) => {
@@ -19,6 +18,7 @@ const isTranscriptionInProgress = (transcripts) => {
 };
 
 const Transcripts = (props) => {
+  const api = useContext(ApiContext);
   const [ isFetch, setIsFetch ] = useState(false);
   const [ items, setItems ] = useState([]);
   const [ isInProgress, setIsInProgress ] = useState(false);
@@ -31,7 +31,7 @@ const Transcripts = (props) => {
     };
 
     const getTranscripts = async () => {
-      const response = await ApiWrapper.getTranscripts(props.projectId);
+      const response = await api.getTranscripts(props.projectId);
 
       if (response) {
         const newItems = response.transcripts.map((item) => {
@@ -66,11 +66,11 @@ const Transcripts = (props) => {
     return () => {
       clearInterval(interval);
     };
-  }, [ interval, isFetch, isInProgress, items, props.projectId ]);
+  }, [ api, interval, isFetch, isInProgress, items, props.projectId ]);
 
   const updateTranscript = async (id, item) => {
     const queryParamsOptions = false;
-    const response = await ApiWrapper.updateTranscript(
+    const response = await api.updateTranscript(
       props.projectId,
       id,
       queryParamsOptions,
@@ -87,7 +87,7 @@ const Transcripts = (props) => {
       const newItems = updateItem(id, editedTranscript, items);
       setItems(newItems);
     } else {
-      console.log('ApiWrapper.updateTranscript', response);
+      console.log('api.updateTranscript', response);
     }
   };
 
@@ -104,11 +104,11 @@ const Transcripts = (props) => {
   const deleteTranscript = async (id) => {
     let response;
     try {
-      response = await ApiWrapper.deleteTranscript(props.projectId, id);
+      response = await api.deleteTranscript(props.projectId, id);
     } catch (e) {
       console.log(e);
     }
-    console.log('ApiWrapper.deleteTranscript', response);
+    console.log('api.deleteTranscript', response);
 
     return response;
   };
@@ -122,13 +122,17 @@ const Transcripts = (props) => {
   };
 
   return (
-    <ItemsContainer
-      type={ type }
-      key={ type }
-      items={ items }
-      handleSave={ () => handleSave }
-      handleDelete={ () => handleDelete }
-    />
+    <ApiContext.Consumer>
+      {() => (
+        <ItemsContainer
+          type={ type }
+          key={ type }
+          items={ items }
+          handleSave={ () => handleSave }
+          handleDelete={ () => handleDelete }
+        />
+      )}
+    </ApiContext.Consumer>
   );
 };
 

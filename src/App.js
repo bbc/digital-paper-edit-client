@@ -1,32 +1,18 @@
-import React from 'react';
-import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
+import React, { useState } from 'react';
 import 'bootstrap-css-only/css/bootstrap.css';
-import Projects from './Components/Projects/index.js';
-import Workspace from './Components/Workspace';
-import TranscriptEditor from './Components/Workspace/Transcripts/TranscriptEditor.js';
-import PaperEditor from './Components/PaperEditor';
+import ApiContext from './ApiContext';
 import CustomAlert from '@bbc/digital-paper-edit-react-components/CustomAlert';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
-import { StateProvider } from './State';
-import { reducers } from './State/reducers';
+import Routes from './Routes';
+import ApiWrapper from './ApiWrapper';
 
 const demoWarningMessage = (<><p> This is a demo version of the app <Alert.Link href="https://github.com/bbc/digital-paper-edit-client" target="_blank" rel="noopener noreferrer"
 >see project Github repository for more info</Alert.Link>. </p><p>This is a read-only demo you can only play around with existing projects!</p></>);
 
-const NoMatch = () => {
-  return <h1>There was an error loading the page you requested</h1>;
-};
-
 const App = () => {
 
-  // if log user data
-  const initialState = {
-    name: 'User A',
-    loggedIn: true,
-    projects: { items:[] }
-  };
-
+  const [ api, setApi ] = useState(ApiWrapper);
   // TODO: remove unused rootes
   let envWarning = null;
   let offlineWarning = null;
@@ -56,30 +42,13 @@ const App = () => {
   }
 
   return (
-    <StateProvider initialState={ initialState } reducer={ reducers }>
-
+    <>
       {envWarning}
       {offlineWarning}
-
-      <BrowserRouter>
-        <Switch>
-          <Redirect exact from="/" to="/projects" />
-          <Route exact path="/projects" component={ Projects } />
-          <Route exact path="/projects/:projectId" component={ Workspace } />
-          <Route
-            exact
-            path="/projects/:projectId/transcripts/:transcriptId/correct"
-            component={ TranscriptEditor }
-          />
-          <Route
-            exact
-            path="/projects/:projectId/paperedits/:papereditId"
-            component={ PaperEditor }
-          />
-          <Route component={ NoMatch } />
-        </Switch>
-      </BrowserRouter>
-    </StateProvider>
+      <ApiContext.Provider value={ api }>
+        <Routes />
+      </ApiContext.Provider>
+    </>
   );
 };
 

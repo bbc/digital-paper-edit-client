@@ -1,39 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 import CustomFooter from '../lib/CustomFooter';
-import ApiWrapper from '../../ApiWrapper/index.js';
 import ItemsContainer from '../lib/ItemsContainer';
-import { useStateValue } from '../../State';
-import arrayMatch from '../../Util/array-match';
+import ApiContext from '../../ApiContext';
+import { deleteItem, updateItem, addItem } from '../../State/reducers';
 
 const Projects = () => {
-  const [ { projects }, dispatch ] = useStateValue();
   const [ isFetch, setIsFetch ] = useState(false);
   const [ items, setItems ] = useState([]);
 
   const type = 'Project';
+  const api = useContext(ApiContext);
 
   const createProject = async (item) => {
-    const response = await ApiWrapper.createProject(item);
+    const response = await api.createProject(item);
     if (response.ok) {
       const newProject = response.project;
       newProject.display = true;
-      dispatch({ type: 'add', newItem: newProject });
+      const newItems = addItem(newProject, items);
+      setItems(newItems);
     } else {
       console.error('Failed to add project', item);
     }
   };
 
   const updateProject = async (id, item) => {
-    const response = await ApiWrapper.updateProject(id, item);
+    const response = await api.updateProject(id, item);
 
     if (response.ok) {
       const project = response.project;
       project.display = true;
-      dispatch({ type: 'updateItem', id: item.id, item: project });
+      const newItems = updateItem(id, project, items);
+      setItems(newItems);
     }
   };
 
@@ -48,11 +49,11 @@ const Projects = () => {
   const deleteProject = async (id) => {
     let response;
     try {
-      response = await ApiWrapper.deleteProject(id);
+      response = await api.deleteProject(id);
     } catch (e) {
       console.log(e);
     }
-    console.log('ApiWrapper.deleteProject', response);
+    console.log('api.deleteProject', response);
 
     return response;
   };
@@ -61,7 +62,8 @@ const Projects = () => {
     console.log('handle delete');
     const response = deleteProject(id);
     if (response.ok) {
-      dispatch({ type: 'delete', id: id });
+      const newItems = deleteItem(id, items);
+      setItems(newItems);
     }
   };
 
@@ -70,7 +72,7 @@ const Projects = () => {
       let allProjects = [];
 
       try {
-        const result = await ApiWrapper.getAllProjects();
+        const result = await api.getAllProjects();
         allProjects = result.map(project => {
           const id = project.id;
           project.key = id;
@@ -84,8 +86,7 @@ const Projects = () => {
         console.log('Failed to get projects');
       }
 
-      dispatch({ type: 'update', items: allProjects });
-      setItems(projects.items);
+      setItems(allProjects);
     };
 
     if (!isFetch) {
@@ -93,14 +94,10 @@ const Projects = () => {
       setIsFetch(true);
     }
 
-    if (!arrayMatch(projects.items, items)) {
-      setItems(projects.items);
-    }
-
     return () => {
     };
 
-  }, [ dispatch, isFetch, items, projects.items ]);
+  }, [ api, isFetch, items ]);
 
   const breadcrumbItems = [
     {
@@ -110,23 +107,27 @@ const Projects = () => {
   ];
 
   return (
-    <>
-      <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
-        <Row>
-          <Col sm={ 12 }>
-            <Breadcrumb items={ breadcrumbItems } />
-          </Col>
-        </Row>
-        <ItemsContainer
-          key={ type }
-          model={ type }
-          items={ items }
-          handleSave={ () => handleSave }
-          handleDelete={ () => handleDelete }
-        />
-      </Container>
-      <CustomFooter />
-    </>
+    <ApiContext.Consumer>
+      {() => (
+        <>
+          <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
+            <Row>
+              <Col sm={ 12 }>
+                <Breadcrumb items={ breadcrumbItems } />
+              </Col>
+            </Row>
+            <ItemsContainer
+              key={ type }
+              model={ type }
+              items={ items }
+              handleSave={ () => handleSave }
+              handleDelete={ () => handleDelete }
+            />
+          </Container>
+          <CustomFooter />
+        </>
+      )}
+    </ApiContext.Consumer>
   );
 };
 export default Projects;

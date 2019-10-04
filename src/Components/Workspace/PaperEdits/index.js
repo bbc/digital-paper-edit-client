@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import ApiWrapper from '../../../ApiWrapper';
+import React, { useEffect, useState, useContext } from 'react';
 import ItemsContainer from '../../lib/ItemsContainer';
 import PropTypes from 'prop-types';
 import { deleteItem, updateItem, addItem } from '../../../State/reducers';
+import ApiContext from '../../../ApiContext';
 
 const PaperEdits = (props) => {
+  const api = useContext(ApiContext);
   const [ items, setItems ] = useState([]);
   const type = 'Paper Edit';
   const [ isFetch, setIsFetch ] = useState(false);
@@ -15,7 +16,7 @@ const PaperEdits = (props) => {
     };
 
     const getAllPaperEdits = async () => {
-      const allPaperEdits = await ApiWrapper.getAllPaperEdits(props.projectId);
+      const allPaperEdits = await api.getAllPaperEdits(props.projectId);
 
       const paperEdits = allPaperEdits.map(paperEdit => {
         paperEdit.display = true;
@@ -36,10 +37,10 @@ const PaperEdits = (props) => {
 
     return () => {
     };
-  }, [ isFetch, items, props.projectId ]);
+  }, [ api, isFetch, items, props.projectId ]);
 
   const createPaperEdit = async (item) => {
-    const response = await ApiWrapper.createPaperEdit(props.projectId, item);
+    const response = await api.createPaperEdit(props.projectId, item);
     if (response.ok) {
       const newPaperEdit = response.paperedit;
       newPaperEdit.display = true;
@@ -48,12 +49,12 @@ const PaperEdits = (props) => {
       const newItems = addItem(newPaperEdit, items);
       setItems(newItems);
     } else {
-      console.log('ApiWrapper.createPaperEdit', response);
+      console.log('api.createPaperEdit', response);
     }
   };
 
   const updatePaperEdit = async (id, item) => {
-    const response = await ApiWrapper.updatePaperEdit(props.projectId, id, item);
+    const response = await api.updatePaperEdit(props.projectId, id, item);
 
     if (response.ok) {
       const paperEdit = response.paperedit;
@@ -62,7 +63,7 @@ const PaperEdits = (props) => {
       const newItems = updateItem(id, paperEdit, items);
       setItems(newItems);
     } else {
-      console.log('ApiWrapper.createPaperEdit', response);
+      console.log('api.createPaperEdit', response);
     }
   };
 
@@ -77,11 +78,11 @@ const PaperEdits = (props) => {
   const deletePaperEdit = async (id) => {
     let response;
     try {
-      response = await ApiWrapper.deletePaperEdit(props.projectId, id);
+      response = await api.deletePaperEdit(props.projectId, id);
     } catch (e) {
       console.log(e);
     }
-    console.log('ApiWrapper.deletePaperEdit', response);
+    console.log('api.deletePaperEdit', response);
 
     return response;
   };
@@ -96,12 +97,17 @@ const PaperEdits = (props) => {
   };
 
   return (
-    <ItemsContainer
-      type={ type }
-      items={ items }
-      handleSave={ () => handleSave }
-      handleDelete={ () => handleDelete }
-    />
+    <ApiContext.Consumer>
+      {() => (
+        <ItemsContainer
+          type={ type }
+          items={ items }
+          handleSave={ () => handleSave }
+          handleDelete={ () => handleDelete }
+        />
+      )}
+    </ApiContext.Consumer>
+
   );
 };
 

@@ -68,11 +68,11 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@react-mock/fetch": "^0.3.0",
+    "@testing-library/jest-dom": "^4.1.0",
+    "@testing-library/react": "^9.3.0",
     "babel-jest": "^24.9.0",
     "cross-env": "^5.2.0",
-    "enzyme": "^3.10.0",
-    "enzyme-adapter-react-16": "^1.14.0",
-    "enzyme-to-json": "^3.4.0",
     "eslint-plugin-react-hooks": "^2.0.1",
     "gh-pages": "^2.0.1",
     "speculate": "^2.0.0"
@@ -90,8 +90,5 @@
     ]
   },
   "jest": {
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ]
   }
 }

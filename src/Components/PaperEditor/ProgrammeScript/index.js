@@ -70,7 +70,7 @@ class ProgramScript extends Component {
   }
 
   // TODO: save to server
-  handleProgrammeScriptOrderChange = (list) => {
+  handleReorder = (list) => {
     this.setState(({ programmeScript }) => {
       programmeScript.elements = list;
 
@@ -82,7 +82,7 @@ class ProgramScript extends Component {
   }
 
   // TODO: save to server
-  handleDeleteProgrammeScriptElement = (i) => {
+  handleDelete = (i) => {
     // TODO: add a prompt, like are you shure you want to delete, confirm etc..?
     // alert('handle delete');
     this.setState(({ programmeScript }) => {
@@ -98,7 +98,7 @@ class ProgramScript extends Component {
     );
   }
 
-  handleEditProgrammeScriptElement = (i) => {
+  handleEdit = (i) => {
     const { programmeScript } = this.state;
     const elements = programmeScript.elements;
     const currentElement = elements[i];
@@ -620,9 +620,9 @@ class ProgramScript extends Component {
             >
               { this.state.programmeScript ? <ProgrammeScriptContainer
                 items={ this.state.programmeScript.elements }
-                handleReorder={ this.handleProgrammeScriptOrderChange }
-                handleDelete={ this.handleDeleteProgrammeScriptElement }
-                handleEdit={ this.handleEditProgrammeScriptElement }
+                handleReorder={ this.handleReorder }
+                handleDelete={ this.handleDelete }
+                handleEdit={ this.handleEdit }
 
               />
                 : null }

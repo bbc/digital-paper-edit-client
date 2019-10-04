@@ -9,6 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Redirect } from 'react-router-dom';
+import ApiContext from '../../../ApiContext';
 import ApiWrapper from '../../../ApiWrapper';
 
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
@@ -28,6 +29,7 @@ class TranscriptEditor extends Component {
     };
     this.transcriptEditorRef = React.createRef();
   }
+  api = this.context
 
   componentDidMount = () => {
     ApiWrapper.getTranscript(this.state.projectId, this.state.transcriptId)
@@ -103,61 +105,66 @@ class TranscriptEditor extends Component {
 
   render() {
     return (
-      <>
-        {this.renderRedirect()}
-        <Container style={ { marginBottom: '5em' } } fluid>
-          <br/>
-          <Row>
-            <Col sm={ 12 } md={ 11 } ld={ 11 } xl={ 11 }>
-              <Breadcrumb
-                items={ [ {
-                  name: 'Projects',
-                  link: '/projects'
-                },
-                {
-                  name: `Project: ${ this.state.projectTitle }`,
-                  link: `/projects/${ this.state.projectId }`
-                },
-                {
-                  name: 'Transcripts',
-                },
-                {
-                  name: `${ this.state.transcriptTitle }`
-                },
-                {
-                  name: 'Correct'
-                }
-                ] }
-              />
-            </Col>
-            {/* <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
+      <ApiContext.Consumer>
+        {() => (
+          <>
+            {this.renderRedirect()}
+            <Container style={ { marginBottom: '5em' } } fluid>
+              <br/>
+              <Row>
+                <Col sm={ 12 } md={ 11 } ld={ 11 } xl={ 11 }>
+                  <Breadcrumb
+                    items={ [ {
+                      name: 'Projects',
+                      link: '/projects'
+                    },
+                    {
+                      name: `Project: ${ this.state.projectTitle }`,
+                      link: `/projects/${ this.state.projectId }`
+                    },
+                    {
+                      name: 'Transcripts',
+                    },
+                    {
+                      name: `${ this.state.transcriptTitle }`
+                    },
+                    {
+                      name: 'Correct'
+                    }
+                    ] }
+                  />
+                </Col>
+                {/* <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
               <Button variant="outline-secondary" onClick={ this.redirectToAnnotatePage } size="lg" block>
               Annotate
               </Button>
               <br/>
             </Col> */}
-            <Col xs={ 12 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
-              <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
+                <Col xs={ 12 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
+                  <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
               Save
-              </Button>
-              <br/>
-            </Col>
-          </Row>
-          {this.state.savedNotification}
-          {this.state.transcriptJson !== null &&
-          <ReactTranscriptEditor
-            transcriptData={ this.state.transcriptJson }// Transcript json
-            // TODO: move url server side
-            mediaUrl={ this.state.url }// string url to media file - audio or video
-            isEditable={ true }// se to true if you want to be able to edit the text
-            sttJsonType={ 'digitalpaperedit' }// the type of STT Json transcript supported.
-            //  TODO: check if name has changed in latest version
-            title={ this.state.transcriptTitle }
-            // fileName={ this.state.projectTitle }// optional*
-            ref={ this.transcriptEditorRef }
-          />}
-        </Container>
-      </>
+                  </Button>
+                  <br/>
+                </Col>
+              </Row>
+              {this.state.savedNotification}
+              {this.state.transcriptJson !== null &&
+              <ReactTranscriptEditor
+                transcriptData={ this.state.transcriptJson }// Transcript json
+                // TODO: move url server side
+                mediaUrl={ this.state.url }// string url to media file - audio or video
+                isEditable={ true }// se to true if you want to be able to edit the text
+                sttJsonType={ 'digitalpaperedit' }// the type of STT Json transcript supported.
+                //  TODO: check if name has changed in latest version
+                title={ this.state.transcriptTitle }
+                // fileName={ this.state.projectTitle }// optional*
+                ref={ this.transcriptEditorRef }
+              />}
+            </Container>
+          </>
+        )}
+
+      </ApiContext.Consumer>
     );
   }
 }
