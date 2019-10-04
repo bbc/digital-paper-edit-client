@@ -56,7 +56,7 @@ class ProgramScript extends Component {
       .then((json) => {
         const programmeScript = json.programmeScript;
         // Adding an insert point at the end of the list
-        programmeScript.elements.push({ type: 'insert-point', text: 'Insert Point to add selection' });
+        programmeScript.elements.push({ type: 'insert', text: 'Insert Point to add selection' });
         this.setState({
           programmeScript: programmeScript
         }
@@ -151,7 +151,7 @@ class ProgramScript extends Component {
     const elements = programmeScript.elements;
     // find insert point in list,
     const insertPointElement = elements.find((el) => {
-      return el.type === 'insert-point';
+      return el.type === 'insert';
     });
     // get insertpoint index
     const indexOfInsertPoint = elements.indexOf(insertPointElement);
@@ -457,7 +457,7 @@ class ProgramScript extends Component {
       // finding an removing insert point before saving to server
       // find insert point in list,
       const insertPointElement = elements.find((el) => {
-        return el.type === 'insert-point';
+        return el.type === 'insert';
       });
       if (insertPointElement) {
         // get insertpoint index
