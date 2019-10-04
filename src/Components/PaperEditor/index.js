@@ -17,7 +17,7 @@ import ProgrammeScript from './ProgrammeScript';
 import ApiWrapper from '../../ApiWrapper';
 import PropTypes from 'prop-types';
 
-class PaperEdit extends Component {
+class PaperEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -91,11 +91,6 @@ class PaperEdit extends Component {
               ] }
             />
           </Col>
-          {/* <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
-            <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
-              Save
-            </Button>
-          </Col> */}
         </Row>
 
         <Container fluid={ true }>
@@ -182,9 +177,9 @@ class PaperEdit extends Component {
   }
 }
 
-PaperEdit.propTypes = {
+PaperEditor.propTypes = {
   match: PropTypes.any,
   videoHeight: PropTypes.any
 };
 
-export default PaperEdit;
+export default PaperEditor;
