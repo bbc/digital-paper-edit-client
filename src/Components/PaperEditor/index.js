@@ -12,7 +12,8 @@ import {
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 
 import Transcripts from './Transcripts/index.js';
-import ProgrammeScriptContainer from '@bbc/digital-paper-edit-react-components/ProgrammeScriptContainer';
+// import ProgrammeScriptContainer from '@bbc/digital-paper-edit-react-components/ProgrammeScriptContainer';
+import ProgrammeScript from './ProgrammeScript';
 import ApiWrapper from '../../ApiWrapper';
 import PropTypes from 'prop-types';
 
@@ -167,7 +168,7 @@ class PaperEdit extends Component {
               } }
               style={ { display: this.state.isProgramScriptShown ? 'block' : 'none' } }
             >
-              <ProgrammeScriptContainer
+              <ProgrammeScript
                 projectId={ this.state.projectId }
                 papereditId={ this.state.papereditId }
                 transcripts={ this.state.transcripts }
