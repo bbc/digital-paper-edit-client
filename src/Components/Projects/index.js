@@ -107,27 +107,27 @@ const Projects = () => {
   ];
 
   return (
-    <ApiContext.Consumer>
-      {() => (
-        <>
-          <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
-            <Row>
-              <Col sm={ 12 }>
-                <Breadcrumb items={ breadcrumbItems } />
-              </Col>
-            </Row>
-            <ItemsContainer
-              key={ type }
-              model={ type }
-              items={ items }
-              handleSave={ () => handleSave }
-              handleDelete={ () => handleDelete }
-            />
-          </Container>
-          <CustomFooter />
-        </>
-      )}
-    </ApiContext.Consumer>
+    <>
+      <Container
+        data-testid='projectsContainer'
+        style={ { marginBottom: '5em', marginTop: '1em' } }>
+        <Row>
+          <Col sm={ 12 }>
+            <Breadcrumb
+              data-testid='projectsBreadcrumb'
+              items={ breadcrumbItems } />
+          </Col>
+        </Row>
+        <ItemsContainer
+          key={ type }
+          model={ type }
+          items={ items }
+          handleSave={ () => handleSave }
+          handleDelete={ () => handleDelete }
+        />
+      </Container>
+      <CustomFooter />
+    </>
   );
 };
 export default Projects;

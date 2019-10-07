@@ -25,7 +25,7 @@ import timecodes from 'node-timecodes';
 import ProgrammeScriptContainer from '@bbc/digital-paper-edit-react-components/ProgrammeScriptContainer';
 import getDataFromUserWordsSelection from './get-data-from-user-selection.js';
 import { divideWordsSelectionsIntoParagraphs, isOneParagraph } from './divide-words-selections-into-paragraphs';
-import ApiWrapper from '../../../ApiWrapper';
+import ApiContext from '../../../Context/ApiContext';
 
 const defaultReelName = 'NA';
 const defaultFps = 25;
@@ -33,6 +33,7 @@ const defaultTimecodeOffset = '00:00:00:00';
 const defaultSampleRate = '16000';
 
 class ProgramScript extends Component {
+  static contextType = ApiContext
   constructor(props) {
     super(props);
     this.state = {
@@ -51,7 +52,8 @@ class ProgramScript extends Component {
   }
 
   componentDidMount = () => {
-    ApiWrapper.getPaperEdit(this.props.projectId, this.props.papereditId)
+    const api = this.context;
+    api.getPaperEdit(this.props.projectId, this.props.papereditId)
       .then((json) => {
         const programmeScript = json.programmeScript;
         // Adding an insert point at the end of the list
@@ -450,6 +452,7 @@ class ProgramScript extends Component {
   }
 
   handleSaveProgrammeScript = () => {
+    const api = this.context;
     const { programmeScript } = this.state;
     if (programmeScript) {
       const elements = programmeScript.elements;
@@ -465,7 +468,7 @@ class ProgramScript extends Component {
       }
 
       programmeScript.elements = elements;
-      ApiWrapper.updatePaperEdit(this.props.projectId, this.props.papereditId, programmeScript)
+      api.updatePaperEdit(this.props.projectId, this.props.papereditId, programmeScript)
         .then((json) => {
           if (json.status === 'ok') {
             alert('saved programme script');

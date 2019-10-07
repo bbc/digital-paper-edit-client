@@ -10,12 +10,12 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Redirect } from 'react-router-dom';
 import ApiContext from '../../../Context/ApiContext';
-import ApiWrapper from '../../../ApiWrapper';
 
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 import CustomAlert from '@bbc/digital-paper-edit-react-components/CustomAlert';
 
 class TranscriptEditor extends Component {
+  static contextType = ApiContext
   constructor(props) {
     super(props);
     this.state = {
@@ -29,10 +29,10 @@ class TranscriptEditor extends Component {
     };
     this.transcriptEditorRef = React.createRef();
   }
-  api = this.context
 
   componentDidMount = () => {
-    ApiWrapper.getTranscript(this.state.projectId, this.state.transcriptId)
+    const api = this.context;
+    api.getTranscript(this.state.projectId, this.state.transcriptId)
       // TODO: add error handling
       .then(json => {
         this.setState({
@@ -45,6 +45,7 @@ class TranscriptEditor extends Component {
   }
 
   saveToServer = () => {
+    const api = this.context;
     // TODO: add Api call to save content of
     alert('save to server');
 
@@ -62,8 +63,8 @@ class TranscriptEditor extends Component {
     data.title = this.state.transcriptTitle;
     data.transcriptTitle = this.state.transcriptTitle;
     const queryParamsOptions = false;
-    ApiWrapper.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, data).then((response) => {
-      console.log('ApiWrapper.updateTranscript', response );
+    api.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, data).then((response) => {
+      console.log('api.updateTranscript', response );
       if (response.ok) {
       // show message or redirect
         console.log('updated');
@@ -105,66 +106,61 @@ class TranscriptEditor extends Component {
 
   render() {
     return (
-      <ApiContext.Consumer>
-        {() => (
-          <>
-            {this.renderRedirect()}
-            <Container style={ { marginBottom: '5em' } } fluid>
-              <br/>
-              <Row>
-                <Col sm={ 12 } md={ 11 } ld={ 11 } xl={ 11 }>
-                  <Breadcrumb
-                    items={ [ {
-                      name: 'Projects',
-                      link: '/projects'
-                    },
-                    {
-                      name: `Project: ${ this.state.projectTitle }`,
-                      link: `/projects/${ this.state.projectId }`
-                    },
-                    {
-                      name: 'Transcripts',
-                    },
-                    {
-                      name: `${ this.state.transcriptTitle }`
-                    },
-                    {
-                      name: 'Correct'
-                    }
-                    ] }
-                  />
-                </Col>
-                {/* <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
+      <>
+        {this.renderRedirect()}
+        <Container style={ { marginBottom: '5em' } } fluid>
+          <br/>
+          <Row>
+            <Col sm={ 12 } md={ 11 } ld={ 11 } xl={ 11 }>
+              <Breadcrumb
+                items={ [ {
+                  name: 'Projects',
+                  link: '/projects'
+                },
+                {
+                  name: `Project: ${ this.state.projectTitle }`,
+                  link: `/projects/${ this.state.projectId }`
+                },
+                {
+                  name: 'Transcripts',
+                },
+                {
+                  name: `${ this.state.transcriptTitle }`
+                },
+                {
+                  name: 'Correct'
+                }
+                ] }
+              />
+            </Col>
+            {/* <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
               <Button variant="outline-secondary" onClick={ this.redirectToAnnotatePage } size="lg" block>
               Annotate
               </Button>
               <br/>
             </Col> */}
-                <Col xs={ 12 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
-                  <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
+            <Col xs={ 12 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
+              <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
               Save
-                  </Button>
-                  <br/>
-                </Col>
-              </Row>
-              {this.state.savedNotification}
-              {this.state.transcriptJson !== null &&
-              <ReactTranscriptEditor
-                transcriptData={ this.state.transcriptJson }// Transcript json
-                // TODO: move url server side
-                mediaUrl={ this.state.url }// string url to media file - audio or video
-                isEditable={ true }// se to true if you want to be able to edit the text
-                sttJsonType={ 'digitalpaperedit' }// the type of STT Json transcript supported.
-                //  TODO: check if name has changed in latest version
-                title={ this.state.transcriptTitle }
-                // fileName={ this.state.projectTitle }// optional*
-                ref={ this.transcriptEditorRef }
-              />}
-            </Container>
-          </>
-        )}
-
-      </ApiContext.Consumer>
+              </Button>
+              <br/>
+            </Col>
+          </Row>
+          {this.state.savedNotification}
+          {this.state.transcriptJson !== null &&
+          <ReactTranscriptEditor
+            transcriptData={ this.state.transcriptJson }// Transcript json
+            // TODO: move url server side
+            mediaUrl={ this.state.url }// string url to media file - audio or video
+            isEditable={ true }// se to true if you want to be able to edit the text
+            sttJsonType={ 'digitalpaperedit' }// the type of STT Json transcript supported.
+            //  TODO: check if name has changed in latest version
+            title={ this.state.transcriptTitle }
+            // fileName={ this.state.projectTitle }// optional*
+            ref={ this.transcriptEditorRef }
+          />}
+        </Container>
+      </>
     );
   }
 }

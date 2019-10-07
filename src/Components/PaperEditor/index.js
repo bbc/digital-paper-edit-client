@@ -13,10 +13,11 @@ import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 
 import Transcripts from './Transcripts/index.js';
 import ProgrammeScript from './ProgrammeScript';
-import ApiWrapper from '../../ApiWrapper';
+import ApiContext from '../../Context/ApiContext';
 import PropTypes from 'prop-types';
 
 class PaperEditor extends Component {
+  static contextType = ApiContext;
   constructor(props) {
     super(props);
     this.state = {
@@ -34,8 +35,9 @@ class PaperEditor extends Component {
   }
 
   componentDidMount = async () => {
+    const api = this.context;
 
-    ApiWrapper.get_ProgrammeScriptAndTranscripts(this.state.projectId, this.state.papereditId)
+    api.get_ProgrammeScriptAndTranscripts(this.state.projectId, this.state.papereditId)
       .then((json) => {
         this.setState({
           programmeTitle: json.programmeScript.title,

@@ -18,7 +18,7 @@ import Paragraphs from './Paragraphs/index.js';
 import LabelsList from './LabelsList/index.js';
 import onlyCallOnce from '../../../Util/only-call-once/index.js';
 import getTimeFromUserWordsSelection from './get-user-selection.js';
-import ApiWrapper from '../../../ApiWrapper';
+import ApiContext from '../../../Context/ApiContext';
 
 // import Paragraph from './Paragraph.js';
 
@@ -49,6 +49,7 @@ function makeListOfUniqueSpeakers(array) {
 }
 
 class Transcript extends Component {
+  static contextType = ApiContext
   constructor(props) {
     super(props);
     this.videoRef = React.createRef();
@@ -68,9 +69,10 @@ class Transcript extends Component {
   }
 
   componentDidMount = () => {
-    ApiWrapper.getAllAnnotations(this.props.projectId, this.props.transcriptId)
+    const api = this.context;
+    api.getAllAnnotations(this.props.projectId, this.props.transcriptId)
       .then(json => {
-        // console.log(' ApiWrapper.getAllAnnotations', json);
+        // console.log(' api.getAllAnnotations', json);
         this.setState({
           annotations: json.annotations
         });
@@ -78,7 +80,8 @@ class Transcript extends Component {
   }
 
   onLabelCreate = (newLabel) => {
-    ApiWrapper.createLabel(this.props.projectId, newLabel)
+    const api = this.context;
+    api.createLabel(this.props.projectId, newLabel)
     // TODO: add error handling
       .then(json => {
         this.setState({
@@ -88,9 +91,10 @@ class Transcript extends Component {
   }
 
   onLabelUpdate = (updatedLabel) => {
+    const api = this.context;
     console.log('updatedLabel', updatedLabel);
     // TODO: PUT with API Wrapper
-    ApiWrapper.updateLabel(this.props.projectId, updatedLabel.id, updatedLabel)
+    api.updateLabel(this.props.projectId, updatedLabel.id, updatedLabel)
     // TODO: add error handling
       .then(json => {
         this.setState({
@@ -100,7 +104,8 @@ class Transcript extends Component {
   }
 
   onLabelDelete = (labelIid) => {
-    ApiWrapper.deleteLabel(this.props.projectId, labelIid)
+    const api = this.context;
+    api.deleteLabel(this.props.projectId, labelIid)
     // TODO: add error handling
       .then(json => {
         this.setState({
@@ -194,6 +199,7 @@ class Transcript extends Component {
   };
 
   handleCreateAnnotation = (e) => {
+    const api = this.context;
     const element = e.target;
     // window.element = element;
     const selection = getTimeFromUserWordsSelection();
@@ -203,7 +209,7 @@ class Transcript extends Component {
       selection.note = '';
       const newAnnotation = selection;
       console.log('newAnnotation', newAnnotation);
-      ApiWrapper.createAnnotation(this.props.projectId, this.props.transcriptId, newAnnotation)
+      api.createAnnotation(this.props.projectId, this.props.transcriptId, newAnnotation)
         .then(json => {
           const newAnnotationFromServer = json.annotation;
           console.log('newAnnotationFromServer', newAnnotationFromServer);
@@ -226,21 +232,23 @@ class Transcript extends Component {
   }
 
   handleDeleteAnnotation = (annotationId) => {
+    const api = this.context;
     const { annotations } = this.state;
     const newAnnotationsSet = annotations.filter((annotation) => {
       return annotation.id !== annotationId;
     });
 
     const deepCloneOfNestedObjectNewAnnotationsSet = JSON.parse(JSON.stringify(newAnnotationsSet));
-    ApiWrapper.deleteAnnotation(this.props.projectId, this.props.transcriptId, annotationId)
+    api.deleteAnnotation(this.props.projectId, this.props.transcriptId, annotationId)
       .then(json => {
         this.setState( { annotations: deepCloneOfNestedObjectNewAnnotationsSet });
       });
   }
 
-  // TODO: add server side via ApiWrapper
+  // TODO: add server side via api
   // similar to handleDeleteAnnotation filter to find annotation then replace text
   handleEditAnnotation = (annotationId) => {
+    const api = this.context;
     const { annotations } = this.state;
     const newAnnotationToEdit = annotations.find((annotation) => {
       return annotation.id === annotationId;
@@ -248,7 +256,7 @@ class Transcript extends Component {
     const newNote = prompt('Edit the text note of the annotation', newAnnotationToEdit.note);
     if (newNote) {
       newAnnotationToEdit.note = newNote;
-      ApiWrapper.updateAnnotation(this.state.projectId, this.props.transcriptId, annotationId, newAnnotationToEdit)
+      api.updateAnnotation(this.state.projectId, this.props.transcriptId, annotationId, newAnnotationToEdit)
         .then(json => {
           const newAnnotation = json.annotation;
           // updating annotations client side by removing updating one

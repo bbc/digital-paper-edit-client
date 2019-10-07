@@ -1,63 +1,115 @@
-import React, { useContext } from 'react';
-import { render, waitForElement, fireEvent } from '@testing-library/react';
+import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
+import { render, waitForElement, fireEvent, waitForDomChange } from '@testing-library/react';
+import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import Routes from './Routes';
+import ApiContext from './Context/ApiContext';
 import DemoApiWrapper from './ApiWrapper/DemoApiWrapper';
+import fetchMock from 'fetch-mock';
+import projects from '../public/db/projects.json';
+import transcripts from '../public/db/transcripts.json';
+import paperEdits from '../public/db/paperEdits.json';
 
 // https://stackoverflow.com/questions/48033841/test-process-env-with-jest
 
-const DummyApiWrapper = ({ children }) => {
-  const ApiContext = useContext(DemoApiWrapper);
-
-  return (
-    <ApiContext.Provider value={ DemoApiWrapper }>
-      <ApiContext.Consumer>
-        {() => (
-          { children }
-        )}
-      </ApiContext.Consumer>
-    </ApiContext.Provider>
+const renderRoutes = (history, api) => {
+  return render(
+    <Router history={ history }>
+      <ApiContext.Provider value={ api }>
+        <Routes />
+      </ApiContext.Provider>
+    </Router>
   );
 };
 
+const awaitForDomChange = (container) => waitForDomChange({ container })
+  .then(() => console.log('DOM changed!'))
+  .catch(err => console.log(`Error you need to deal with: ${ err }`));
+
 describe('App component', () => {
-  const OLD_ENV = process.env;
 
   beforeEach(() => {
     jest.resetModules(); // this is important - it clears the cache
+    fetchMock.get('db/projects.json', projects);
+    fetchMock.get('db/transcripts.json', transcripts);
+    fetchMock.get('db/paperedits.json', paperEdits);
   });
 
   afterEach(() => {
-    process.env = OLD_ENV;
+    fetchMock.reset();
   });
 
-  it('renders without crashing even without node_env', async () => {
-    const message = 'There are no Projects, create a new one to get started.';
-    const breadcrumbText = 'Projects';
-    const { getByText } = render(
-      <DummyApiWrapper>
-        <Routes />
-      </DummyApiWrapper>
-    );
-    expect(getByText(message)).toBeInTheDocument();
-    expect(getByText(breadcrumbText)).toBeInTheDocument();
-    await waitForElement(() => getByText(breadcrumbText));
-    await waitForElement(() => getByText(message));
+  it('renders with projects', async () => {
+    const history = createMemoryHistory();
+    const api = new DemoApiWrapper();
+    const breadCrumb = 'Projects';
+    const newProjects = 'New Projects';
+
+    const { container, getByTestId } = renderRoutes(history, api);
+    const emptyMessage = 'There are no Projects, create a new one to get started.';
+
+    let projectsContainer = getByTestId('projectsContainer');
+    let projectsBreadcrumb = getByTestId('projectsBreadcrumb');
+
+    expect(projectsContainer.textContent).toMatch(emptyMessage);
+    expect(projectsBreadcrumb.textContent).toMatch(breadCrumb);
+    expect(projectsContainer.textContent).toMatch(newProjects);
+
+    const title = 'PBS Frontline - The Facebook Dilemma';
+    const description = 'Interviews from PBS Frontline documentary, The Facebook Dilemma - sample project.';
+
+    await awaitForDomChange(container);
+
+    projectsContainer = getByTestId('projectsContainer');
+    projectsBreadcrumb = getByTestId('projectsBreadcrumb');
+    console.log(projectsContainer);
+
+    expect(projectsBreadcrumb.textContent).toMatch(breadCrumb);
+    expect(projectsContainer.textContent).toMatch(title);
+    expect(projectsContainer.textContent).toMatch(description);
+
   });
 
-  //   it('renders without projects', async () => {
-  //     const message = 'Projects asdf';
-  //     const breadcrumbText = 'Projects';
-  //     const { getByText } = render(<App/>);
-  //     await waitForElement(() => getByText(breadcrumbText));
-  //     await waitForElement(() => getByText(message));
-  //   });
+  it('can edit projects', async () => {
+    const history = createMemoryHistory();
+    const api = new DemoApiWrapper();
 
-//   it('goes to routes to project or /', async () => {
-//     process.env.REACT_APP_NODE_ENV = 'browser';
-//     const { getByText } = render(<App/>);
-//     const breadcrumbText = 'Projects';
-//     fireEvent.click(getByText(breadcrumbText));
-//     await waitForElement(() => getByText(breadcrumbText));
-//   });
+    const { container } = renderRoutes(history, api);
+
+    const breadCrumb = 'Projects';
+    const title = 'PBS Frontline - The Facebook Dilemma';
+    const description = 'Interviews from PBS Frontline documentary, The Facebook Dilemma - sample project.';
+
+    await awaitForDomChange(container);
+
+    expect(container.innerHTML).toMatch(breadCrumb);
+    expect(container.innerHTML).toMatch(title);
+    expect(container.innerHTML).toMatch(description);
+
+  });
+
+  it('renders with transcripts and paper edits', async () => {
+    const history = createMemoryHistory();
+    const api = new DemoApiWrapper();
+
+    const { container, getByText } = renderRoutes(history, api);
+
+    const breadCrumb = 'Projects';
+    const title = 'PBS Frontline - The Facebook Dilemma';
+
+    await awaitForDomChange(container);
+
+    fireEvent.click(getByText(title));
+
+    await awaitForDomChange(container);
+
+    // expect(container.innerHTML).toMatch('You are on the about page');
+    const tr = await waitForElement(() => getByText('Transcripts'));
+    const pe = await waitForElement(() => getByText('Paper Edits'));
+    const pes = await waitForElement(() => getByText(title));
+    // const pedss = await waitForElement(() => getByText('Asdfasdfsaf'));
+    expect(container.innerHTML).toMatch('sdf');
+
+  });
 });

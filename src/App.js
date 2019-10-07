@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import 'bootstrap-css-only/css/bootstrap.css';
 import ApiContext from './Context/ApiContext';
 import CustomAlert from '@bbc/digital-paper-edit-react-components/CustomAlert';
@@ -12,7 +12,6 @@ const demoWarningMessage = (<><p> This is a demo version of the app <Alert.Link 
 
 const App = () => {
 
-  const [ api, setApi ] = useState(ApiWrapper);
   // TODO: remove unused rootes
   let envWarning = null;
   let offlineWarning = null;
@@ -45,7 +44,7 @@ const App = () => {
     <>
       {envWarning}
       {offlineWarning}
-      <ApiContext.Provider value={ api }>
+      <ApiContext.Provider value={ ApiWrapper }>
         <Routes />
       </ApiContext.Provider>
     </>

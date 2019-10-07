@@ -222,7 +222,6 @@ class DemoApiWrapper {
     return data.paperedits;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async getPaperEdit(projectId, id) {
     const paperEditId = id;
     const response = await fetch('db/paperedits.json');
