@@ -50,10 +50,9 @@ describe('App component', () => {
     const emptyMessage = 'There are no Projects, create a new one to get started.';
 
     let projectsContainer = getByTestId('projectsContainer');
-    let projectsBreadcrumb = getByTestId('projectsBreadcrumb');
 
     expect(projectsContainer.textContent).toMatch(emptyMessage);
-    expect(projectsBreadcrumb.textContent).toMatch(breadCrumb);
+    expect(projectsContainer.textContent).toMatch(/$breadCrumb/i);
     expect(projectsContainer.textContent).toMatch(newProjects);
 
     const title = 'PBS Frontline - The Facebook Dilemma';
@@ -62,10 +61,9 @@ describe('App component', () => {
     await awaitForDomChange(container);
 
     projectsContainer = getByTestId('projectsContainer');
-    projectsBreadcrumb = getByTestId('projectsBreadcrumb');
     console.log(projectsContainer);
 
-    expect(projectsBreadcrumb.textContent).toMatch(breadCrumb);
+    expect(projectsContainer.textContent).toMatch(/$breadCrumb/i);
     expect(projectsContainer.textContent).toMatch(title);
     expect(projectsContainer.textContent).toMatch(description);
 
