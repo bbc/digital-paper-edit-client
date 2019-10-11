@@ -406,7 +406,6 @@ class ProgramScript extends Component {
       .map((element) => {
         // TODO: handle audio only type (eg for radio), get from transcript json?
         const transcript = this.getTranscript(element.transcriptId);
-        console.log(element.transcriptId);
         console.log(transcript);
         const result = {
           type:'video',
