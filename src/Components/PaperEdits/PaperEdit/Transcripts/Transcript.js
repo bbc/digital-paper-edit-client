@@ -313,27 +313,42 @@ class Transcript extends Component {
       </style>
     );
 
-    const videoHeight = this.props.mediaType === 'audio' ? '5vh' : this.props.videoHeight;
-    const cardBodyHeight = this.props.mediaType === 'audio' ? '95vh' : '60vh';
+    const cardBodyHeight = this.props.mediaType === 'audio' ? '100vh' : '60vh';
+
+    let transcriptMediaCard;
+
+    if (this.props.mediaType === 'audio') {
+      transcriptMediaCard = (
+        <Card.Header>
+          <audio
+            src={ this.props.url }
+            ref={ this.videoRef }
+            onTimeUpdate={ (e) => {this.setState({ currentTime: e.target.currentTime });} }
+            style={ {
+              width: '100%',
+              backgroundColor: 'black'
+            } }
+            controls/>
+        </Card.Header>
+      );
+    } else {
+      transcriptMediaCard = (
+        <Card.Header>
+          <video
+            src={ this.props.url }
+            ref={ this.videoRef }
+            onTimeUpdate={ (e) => {this.setState({ currentTime: e.target.currentTime });} }
+            style={ {
+              width: '100%',
+              backgroundColor: 'black'
+            } }
+            controls/>
+        </Card.Header>
+      );
+    }
 
     return (
       <>
-
-        {/* <div style={ {
-          display:
-          // this.state.isShowLabelsReference ?
-           'block'
-          //  : 'none'
-          ,
-          position: 'absolute',
-          top: '0px',
-          left: '0px',
-          width: '5vw',
-          height: '100vh',
-          backgroundColor: 'black'
-        } }>
-            Test
-        </div> */}
         <style scoped>
           {/* This is to style of the Paragraph component programmatically */}
           {`${ this.state.sentenceToSearchCSS } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
@@ -349,18 +364,7 @@ class Transcript extends Component {
         </h2>
 
         <Card>
-          <video
-            src={ this.props.url }
-            ref={ this.videoRef }
-            onTimeUpdate={ (e) => {this.setState({ currentTime: e.target.currentTime });} }
-            // onTimeUpdate={ (e) => {console.log(e.target.currentTime); } }
-            style={ {
-              // display: this.state.isVideoTranscriptPreviewShow,
-              width: '100%',
-              height: videoHeight,
-              backgroundColor: 'black'
-            } }
-            controls/>
+          {transcriptMediaCard}
           <Card.Header>
             <Row>
               <Col xs={ 12 } >
