@@ -313,6 +313,9 @@ class Transcript extends Component {
       </style>
     );
 
+    const videoHeight = this.props.mediaType === 'audio' ? '5vh' : this.props.videoHeight;
+    const cardBodyHeight = this.props.mediaType === 'audio' ? '95vh' : '60vh';
+
     return (
       <>
 
@@ -346,27 +349,21 @@ class Transcript extends Component {
         </h2>
 
         <Card>
-          <Card.Header>
-            {/* // Preview video - HTML5 Video element or  @bbc/react-transcript-editor/VideoPlayer
-        // Media control - HTML5 default or @bbc/react-transcript-editor/MediaPlayer
-        // Search Bar - from TranscriptAnnotate component
-        // Text -  from TranscriptAnnotate component */}
-            <video
-              src={ this.props.url }
-              ref={ this.videoRef }
-              onTimeUpdate={ (e) => {this.setState({ currentTime: e.target.currentTime });} }
-              // onTimeUpdate={ (e) => {console.log(e.target.currentTime); } }
-              style={ {
-                // display: this.state.isVideoTranscriptPreviewShow,
-                width: '100%',
-                height: this.props.videoHeight,
-                backgroundColor: 'black'
-              } }
-              controls/>
-          </Card.Header>
+          <video
+            src={ this.props.url }
+            ref={ this.videoRef }
+            onTimeUpdate={ (e) => {this.setState({ currentTime: e.target.currentTime });} }
+            // onTimeUpdate={ (e) => {console.log(e.target.currentTime); } }
+            style={ {
+              // display: this.state.isVideoTranscriptPreviewShow,
+              width: '100%',
+              height: videoHeight,
+              backgroundColor: 'black'
+            } }
+            controls/>
           <Card.Header>
             <Row>
-              <Col xs={ 12 } sm={ 12 } md={ 12 } lg={ 12 } xl={ 12 }>
+              <Col xs={ 12 } >
                 <ButtonGroup style={ { width: '100%' } }>
                   <Dropdown as={ ButtonGroup } style={ { width: '100%' } } >
                     <Button variant="outline-secondary" data-label-id={ 'default' } onClick={ this.handleCreateAnnotation } >
@@ -379,8 +376,8 @@ class Transcript extends Component {
                         return (
                           <Dropdown.Item key={ `label_id_${ label.id }` } data-label-id={ label.id } >
                             <Row data-label-id={ label.id }>
-                              <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } style={ { backgroundColor: label.color } } data-label-id={ label.id }></Col>
-                              <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 } data-label-id={ label.id }>{label.label}</Col>
+                              <Col xs={ 1 } style={ { backgroundColor: label.color } } data-label-id={ label.id }></Col>
+                              <Col xs={ 1 } data-label-id={ label.id }>{label.label}</Col>
                             </Row>
                           </Dropdown.Item>
                         );
@@ -419,7 +416,7 @@ class Transcript extends Component {
           <Card.Body
             onDoubleClick={ this.handleWordClick }
             onClick={ this.handleTimecodeClick }
-            style={ { height: '60vh', overflow: 'scroll' } }
+            style={ { height: cardBodyHeight, overflow: 'scroll' } }
           >
 
             {highlights}

@@ -40,8 +40,8 @@ class Transcripts extends Component {
             labelsOptions={ this.props.labelsOptions }
             title={ transcript.transcriptTitle }
             transcript={ transcript.transcript }
+            mediaType={ transcript.mediaType }
             url={ transcript.url }
-            videoHeight={ this.props.videoHeight }
           />
         </Tab.Pane>
       );
