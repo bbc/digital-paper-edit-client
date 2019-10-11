@@ -23,7 +23,8 @@ class TranscriptCorrect extends Component {
       url: null,
       projectTitle: '',
       transcriptTitle: '',
-      savedNotification: null
+      savedNotification: null,
+      mediaType: 'video'
     };
     this.transcriptEditorRef = React.createRef();
   }
@@ -36,7 +37,8 @@ class TranscriptCorrect extends Component {
           projectTitle: json.projectTitle,
           transcriptTitle: json.transcriptTitle,
           transcriptJson: json.transcript,
-          url: json.url
+          url: json.url,
+          mediaType: json.mediaType
         });
       });
   }
@@ -154,6 +156,7 @@ class TranscriptCorrect extends Component {
             title={ this.state.transcriptTitle }
             // fileName={ this.state.projectTitle }// optional*
             ref={ this.transcriptEditorRef }
+            mediaType={ this.state.mediaType }
           />}
         </Container>
       </>

@@ -84,6 +84,7 @@ class DemoApiWrapper {
     const resProject = await this.getProject(projectId);
     transcript.projectTitle = resProject.project.title;
     transcript.transcriptTitle = transcript.title;
+    transcript.mediaType = transcript.mediaType;
 
     return transcript;
   }
