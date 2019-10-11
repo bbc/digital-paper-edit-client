@@ -25,7 +25,8 @@ class TranscriptEditor extends Component {
       url: null,
       projectTitle: '',
       transcriptTitle: '',
-      savedNotification: null
+      savedNotification: null,
+      mediaType: 'video'
     };
     this.transcriptEditorRef = React.createRef();
   }
@@ -39,7 +40,8 @@ class TranscriptEditor extends Component {
           projectTitle: json.projectTitle,
           transcriptTitle: json.transcriptTitle,
           transcriptJson: json.transcript,
-          url: json.url
+          url: json.url,
+          mediaType: json.mediaType
         });
       });
   }

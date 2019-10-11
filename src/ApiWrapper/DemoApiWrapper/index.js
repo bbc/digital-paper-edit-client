@@ -21,7 +21,9 @@ class DemoApiWrapper {
   // eslint-disable-next-line class-methods-use-this
   async getProject(id) {
     const response = await fetch('db/projects.json');
+    console.log(response);
     const projects = await response.json();
+    console.log('projects', projects);
     const project = projects.find((project) => {
       return project._id === id;
     });
