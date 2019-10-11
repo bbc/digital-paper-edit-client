@@ -407,6 +407,7 @@ class ProgramScript extends Component {
     return this.state.programmeScript.elements.filter((element) => element.type === 'paper-cut')
       .map((element) => {
         // TODO: handle audio only type (eg for radio), get from transcript json?
+        const transcript = this.getTranscript(element.transcriptId);
         const result = {
           type:'video',
           start: startTime,

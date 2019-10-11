@@ -5,6 +5,7 @@
 		"title": "Kate Darling Ted Talk",
 		"description": "Ted Talk by Kate Darling ",
 		"url": "https://download.ted.com/talks/KateDarling_2018S-950k.mp4",
+		"mediaType": "video",
 		"clipName": "KateDarling_2018S-950k.mp4",
 		"status": "done",
 		"transcript": {
@@ -11084,6 +11085,7 @@
 		"title": "Kate Darling Ted Talk",
 		"description": "Ted Talk by Kate Darling ",
 		"url": "https://digital-paper-edit-demo.s3.eu-west-2.amazonaws.com/Ted-talks/KateDarling_2018S-950k-audio.m4a",
+		"mediaType": "audio",
 		"clipName": "KateDarling_2018S-950k-audio.m4a",
 		"status": "done",
 		"transcript": {
@@ -22163,6 +22165,7 @@
 		"title": "Morgan Vague Ted Talk",
 		"description": "Ted Talk by Morgan Vague ",
 		"url": "https://download.ted.com/talks/MorganVague_2018X.mp4",
+		"mediaType": "video",
 		"status": "done",
 		"clipName": "MorganVague_2018X.mp4",
 		"transcript": {
@@ -28505,6 +28508,7 @@
 		"projectId": "94346281c4ad4938b7d0ae6fa9899bec",
 		"title": "Ivan Poupyrev Ted Talk",
 		"url": "https://download.ted.com/talks/IvanPoupyrev_2019.mp4",
+		"mediaType": "video",
 		"clipName": "IvanPoupyrev_2019.mp4",
 		"status": "done",
 		"transcript": {
@@ -39302,6 +39306,7 @@
 		"title": "Test Transcript One",
 		"description": "Example of in progress transcript",
 		"url": null,
+		"mediaType": "video",
 		"status": "in-progress",
 		"_id": "f5a8dc8c863243d19528e1eff60d91d9"
     },
@@ -39310,6 +39315,7 @@
 		"title": "Test Transcript Two",
 		"description": "Example of transcript with an error",
 		"url": null,
+		"mediaType": "video",
         "status": "error",
         "errorMessage": "Some meaningfull error message that tells you why the transcript failed, and what to do about it",
 		"_id": "f5a8dc8c863243d19528e1eff60d91d8"
@@ -39320,6 +39326,7 @@
 		"title": "Soleio Cuervo",
 		"description": "Soleio Cuervo, Former Facebook Product Designer. Interview for PBS Frontline, The Facebook Dilemma",
 		"url": "https://digital-paper-edit-demo.s3.eu-west-2.amazonaws.com/PBS-Frontline/The+Facebook+Dilemma+-+interviews/The+Facebook+Dilemma+-+Soleio+Cuervo-OIAUfZBd_7w.mp4",
+		"mediaType": "video",
 		"clipName": "The Facebook Dilemma - Soleio Cuervo-OIAUfZBd_7w.mp4",
 		"status": "done",
 		"transcript": {
@@ -61924,6 +61931,7 @@
 		"projectId": "10046281c4ad4938b7d0ae6fa9899bec",
 		"title": "Nathaniel Gleicher",
 		"description": "Nathaniel Gleicher, Facebook Head of Cybersecurity Policy. Interview for PBS Frontline, The Facebook Dilemma",
+		"mediaType": "video",
 		"url": "https://digital-paper-edit-demo.s3.eu-west-2.amazonaws.com/PBS-Frontline/The+Facebook+Dilemma+-+interviews/The+Facebook+Dilemma+-+Nathaniel+Gleicher-F0ykdaOck_M.mp4",
 		"clipName": "The Facebook Dilemma - Nathaniel Gleicher-F0ykdaOck_M.mp4",
 		"status": "done",
@@ -96368,6 +96376,7 @@
 		"title": "Naomi Gleit",
 		"description": "Naomi Gleit, Facebook VP of Social Good. Interview for PBS Frontline, The Facebook Dilemma",
 		"url": "https://digital-paper-edit-demo.s3.eu-west-2.amazonaws.com/PBS-Frontline/The+Facebook+Dilemma+-+interviews/The+Facebook+Dilemma+-+Naomi+Gleit-l-Ivr6kq6fk.mp4",
+		"mediaType": "video",
 		"clipName": "The Facebook Dilemma - Naomi Gleit-l-Ivr6kq6fk.mp4",
 		"status": "done",
 		"transcript": {
@@ -122021,6 +122030,7 @@
 		"title": "Guy Rosen",
 		"description": "Guy Rosen, Facebook VP of Product Management. Interview for PBS Frontline, The Facebook Dilemma",
 		"url": "https://digital-paper-edit-demo.s3.eu-west-2.amazonaws.com/PBS-Frontline/The+Facebook+Dilemma+-+interviews/The+Facebook+Dilemma+-+Guy+Rosen-4sGvc84tNik.mp4",
+		"mediaType": "video",
 		"clipName": "The Facebook Dilemma - Guy Rosen-4sGvc84tNik.mp4",
 		"status": "done",
 		"transcript": {

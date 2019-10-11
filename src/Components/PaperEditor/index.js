@@ -140,7 +140,6 @@ class PaperEditor extends Component {
                   projectId={ this.state.projectId }
                   transcripts={ this.state.transcripts }
                   labelsOptions={ this.state.labelsOptions }
-                  videoHeight={ this.props.videoHeight }
                 />
                 : <><br/><br/><i>No Transcripts, create a transcript to get started</i></>}
             </Col>
