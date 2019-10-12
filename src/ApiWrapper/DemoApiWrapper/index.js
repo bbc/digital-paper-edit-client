@@ -1,10 +1,18 @@
 class DemoApiWrapper {
+  constructor() {
+    this.url = 'http://localhost:3000/db/';
+    this.projects = this.url + 'projects.json';
+    this.paperEdits = this.url + 'paperedits.json';
+    this.transcripts = this.url + 'transcripts.json';
+    this.labels = this.url + 'labels.json';
+    this.annotations = this.url + 'annotations.json';
+  }
+
   /**
    * Projects
    */
-  // eslint-disable-next-line class-methods-use-this
   async getAllProjects() {
-    const response = await fetch('db/projects.json');
+    const response = await fetch(this.projects);
     const projects = await response.json();
     let results = 0;
     if (projects.length !== 0) {
@@ -18,31 +26,33 @@ class DemoApiWrapper {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async getProject(id) {
-    const response = await fetch('db/projects.json');
+    const response = await fetch(this.projects);
     const projects = await response.json();
-    const project = projects.find((project) => {
-      return project._id === id;
+    const project = projects.find((p) => {
+      return p._id === id;
     });
 
-    return { status: 'ok', project:project };
+    return { status: 'ok', project: project };
   }
 
-  async createProject(data) {
+  static async createProject(data) {
     alert('Not implemented in demo mode');
+    console.log(data);
 
     return { status: 'false' };
   }
 
-  async updateProject(id, data) {
+  static async updateProject(id, data) {
     alert('Not implemented in demo mode');
+    console.log(id, data);
 
     return { status: 'false' };
   }
 
-  async deleteProject(id) {
+  static async deleteProject(id) {
     alert('Not implemented in demo mode');
+    console.log(id);
 
     return { ok: false, status: 'false', project: { } };
   }
@@ -50,15 +60,14 @@ class DemoApiWrapper {
   /**
    * Transcripts
    */
-  // eslint-disable-next-line class-methods-use-this
-  async getTranscripts(projectId) {
-    const response = await fetch('db/transcripts.json');
-    let transcripts = await response.json();
-    transcripts = transcripts.filter((transcript) => {
-      return transcript.projectId === projectId;
-    });
 
-    transcripts = transcripts.map((transcript) => {
+  async getTranscripts(projectId) {
+    const response = await fetch(this.transcripts);
+    const transcriptsData = await response.json();
+
+    const transcripts = transcriptsData.filter((transcript) => {
+      return transcript.projectId === projectId;
+    }).map((transcript) => {
       transcript.id = transcript._id;
 
       return transcript;
@@ -67,17 +76,19 @@ class DemoApiWrapper {
     return { transcripts: transcripts };
   }
 
-  async createTranscript(projectId, formData, data) {
+  static async createTranscript(projectId, formData, data) {
     alert('Not implemented in demo mode');
+
+    console.log(projectId, formData, data);
 
     return { status: 'false' };
   }
 
   async getTranscript(projectId, transcriptId, queryParamsOptions) {
-    const response = await fetch('db/transcripts.json');
+    const response = await fetch(this.transcripts);
     const transcripts = await response.json();
-    const transcript = transcripts.find((transcript) => {
-      return transcript._id === transcriptId;
+    const transcript = transcripts.find((tr) => {
+      return tr._id === transcriptId;
     });
 
     transcript.id = transcript._id;
@@ -88,14 +99,16 @@ class DemoApiWrapper {
     return transcript;
   }
 
-  async updateTranscript(projectId, transcriptId, queryParamsOptions, data) {
+  static async updateTranscript(projectId, transcriptId, queryParamsOptions, data) {
     alert('Not implemented in demo mode');
+    console.log(projectId, transcriptId, queryParamsOptions, data);
 
     return { ok: false };
   }
 
-  async deleteTranscript(projectId, transcriptId) {
+  static async deleteTranscript(projectId, transcriptId) {
     alert('Not implemented in demo mode');
+    console.log(projectId, transcriptId);
 
     return { ok: false, status: 'false' };
   }
@@ -103,10 +116,10 @@ class DemoApiWrapper {
   /**
    * Annotations
    */
-  // eslint-disable-next-line class-methods-use-this
+
   async getAllAnnotations(projectId, transcriptId) {
 
-    const response = await fetch('db/annotations.json');
+    const response = await fetch(this.annotations);
     let annotations = await response.json();
 
     annotations = annotations.filter((annotation) => {
@@ -129,21 +142,23 @@ class DemoApiWrapper {
 
   // not used
   async getAnnotation(projectId, transcriptId, annotationId) {
-    const response = await fetch('db/annotations.json');
+    const response = await fetch(this.annotations);
     const annotations = await response.json();
     const annotation = annotations[0];
 
     return { annotation };
   }
 
-  async createAnnotation(projectId, transcriptId, data) {
+  static async createAnnotation(projectId, transcriptId, data) {
     alert('Not implemented in demo mode');
+    console.log(projectId, transcriptId, data);
 
     return { 'ok': false, status: 'false', annotation: [] };
   }
 
-  async deleteAnnotation(projectId, transcriptId, annotationId) {
+  static async deleteAnnotation(projectId, transcriptId, annotationId) {
     alert('Not implemented in demo mode');
+    console.log(projectId, transcriptId, annotationId);
 
     return { 'ok': false, status: 'false' };
   }
@@ -153,9 +168,9 @@ class DemoApiWrapper {
    */
 
   // Get All Labels
-  // eslint-disable-next-line class-methods-use-this
+
   async getAllLabels(projectId) {
-    const response = await fetch('db/labels.json');
+    const response = await fetch(this.labels);
     let labels = await response.json();
     const defaultLabel = labels[0];
     labels = labels.filter((label) => {
@@ -169,9 +184,10 @@ class DemoApiWrapper {
 
     return { ok: true, status: 'ok', labels };
   }
+
   // Get Label - not used
   async getLabel(projectId, labelId) {
-    const response = await fetch('db/labels.json');
+    const response = await fetch(this.labels);
     const labels = await response.json();
     const label = labels[0];
 
@@ -179,43 +195,47 @@ class DemoApiWrapper {
   }
 
   // Create Label
-  async createLabel(projectId, data) {
+  static async createLabel(projectId, data) {
     alert('Not implemented in demo mode');
+    console.log(projectId, data);
 
     return ({ ok: false, status: 'false' });
   }
 
   // Update Label
-  async updateLabel(projectId, labelId, data) {
+  static async updateLabel(projectId, labelId, data) {
     alert('Not implemented in demo mode');
+    console.log(projectId, labelId, data);
 
     return { ok: false, status: 'false' };
   }
   // Delete Label
-  async deleteLabel(projectId, labelId) {
+  static async deleteLabel(projectId, labelId) {
     alert('Not implemented in demo mode');
+    console.log(projectId, labelId);
 
     return { status: 'false' };
   }
   /**
    * PaperEdits
    */
-  // eslint-disable-next-line class-methods-use-this
+
   async getAllPaperEdits(projectId) {
-    const response = await fetch('db/paperedits.json');
+    const response = await fetch(this.paperEdits);
     let paperedits = await response.json();
-    paperedits = paperedits.filter((paperedit) => {
-      return paperedit.projectId === projectId;
+    paperedits = paperedits.filter((pe) => {
+      return pe.projectId === projectId;
     });
+
     const data = {};
     data.paperedits = [];
     data.paperedits = paperedits;
     if (data.paperedits) {
       data.paperedits = data.paperedits
-        .map((paperedit) => {
-          paperedit.id = paperedit._id;
+        .map((pe) => {
+          pe.id = pe._id;
 
-          return paperedit;
+          return pe;
         });
     }
 
@@ -224,11 +244,12 @@ class DemoApiWrapper {
 
   async getPaperEdit(projectId, id) {
     const paperEditId = id;
-    const response = await fetch('db/paperedits.json');
+    const response = await fetch(this.paperEdits);
     const paperedits = await response.json();
-    const paperEdit = paperedits.find((paperedit) => {
-      return paperedit.id === paperEditId;
+    const paperEdit = paperedits.find((pe) => {
+      return pe.id === paperEditId;
     });
+
     if (!paperEdit) {
       const err = new Error('No paper edit found');
       err.statusCode = 404;
@@ -237,20 +258,23 @@ class DemoApiWrapper {
     return { ok: true, status: 'ok', programmeScript: paperEdit };
   }
 
-  async createPaperEdit(projectId, data) {
+  static async createPaperEdit(projectId, data) {
     alert('Not implemented in demo mode');
+    console.log(projectId, data);
 
     return { ok: false, status: 'false' };
   }
 
-  async updatePaperEdit(projectId, id, data) {
+  static async updatePaperEdit(projectId, id, data) {
     alert('Not implemented in demo mode');
+    console.log(projectId, id, data);
 
     return { ok:true, status: 'false' };
   }
 
-  async deletePaperEdit(projectId, id) {
+  static async deletePaperEdit(projectId, id) {
     alert('Not implemented in demo mode');
+    console.log(projectId, id);
 
     return { ok: false, status: 'false' };
   }
@@ -259,7 +283,7 @@ class DemoApiWrapper {
    * Helper SDK function to avoid making multiple calls client side when in Annotated Transcript view
    * Transcript + Annotations for that transcript + Labels for the project
    */
-  async get_TranscriptLabelsAnnotations(projectId, transcriptId) {
+  async getTranscriptLabelsAnnotations(projectId, transcriptId) {
     // GET Transcripts
     const transcriptResult = await this.getTranscript(projectId, transcriptId);
     // GET Labels for Project <-- or separate request in label component
@@ -284,7 +308,7 @@ class DemoApiWrapper {
 
   // Helper function to get program script & associated transcript
   // https://flaviocopes.com/javascript-async-await-array-map/
-  async get_ProgrammeScriptAndTranscripts(projectId, papereditId) { // // get transcripts list, this contain id, title, description only
+  async getProgrammeScriptAndTranscripts(projectId, papereditId) { // // get transcripts list, this contain id, title, description only
     const transcriptsResult = await this.getTranscripts(projectId);
     // use that list of ids to loop through and get json payload for each individual transcript
     // as separate request

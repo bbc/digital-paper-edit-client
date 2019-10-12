@@ -52,7 +52,7 @@ describe('App component', () => {
     let projectsContainer = getByTestId('projectsContainer');
 
     expect(projectsContainer.textContent).toMatch(emptyMessage);
-    expect(projectsContainer.textContent).toMatch(/$breadCrumb/i);
+    expect(projectsContainer.textContent).toMatch(breadCrumb);
     expect(projectsContainer.textContent).toMatch(newProjects);
 
     const title = 'PBS Frontline - The Facebook Dilemma';
@@ -63,7 +63,7 @@ describe('App component', () => {
     projectsContainer = getByTestId('projectsContainer');
     console.log(projectsContainer);
 
-    expect(projectsContainer.textContent).toMatch(/$breadCrumb/i);
+    expect(projectsContainer.textContent).toMatch(breadCrumb);
     expect(projectsContainer.textContent).toMatch(title);
     expect(projectsContainer.textContent).toMatch(description);
 
@@ -93,21 +93,16 @@ describe('App component', () => {
 
     const { container, getByText } = renderRoutes(history, api);
 
-    const breadCrumb = 'Projects';
     const title = 'PBS Frontline - The Facebook Dilemma';
-
     await awaitForDomChange(container);
 
     fireEvent.click(getByText(title));
 
     await awaitForDomChange(container);
 
-    // expect(container.innerHTML).toMatch('You are on the about page');
-    const tr = await waitForElement(() => getByText('Transcripts'));
-    const pe = await waitForElement(() => getByText('Paper Edits'));
-    const pes = await waitForElement(() => getByText(title));
-    // const pedss = await waitForElement(() => getByText('Asdfasdfsaf'));
-    expect(container.innerHTML).toMatch('sdf');
+    await waitForElement(() => getByText('Transcripts'));
+    await waitForElement(() => getByText('Paper Edits'));
+    await waitForElement(() => getByText(title));
 
   });
 });
