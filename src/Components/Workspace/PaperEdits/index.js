@@ -56,9 +56,9 @@ const PaperEdits = (props) => {
 
   const updatePaperEdit = async (id, item) => {
     const response = await api.updatePaperEdit(props.projectId, id, item);
+    const paperEdit = response.paperedit;
 
-    if (response.ok) {
-      const paperEdit = response.paperedit;
+    if (response.ok && paperEdit) {
       paperEdit.display = true;
 
       const newItems = updateItem(id, paperEdit, items);
@@ -103,8 +103,8 @@ const PaperEdits = (props) => {
         <ItemsContainer
           type={ type }
           items={ items }
-          handleSave={ () => handleSave }
-          handleDelete={ () => handleDelete }
+          handleSave={ handleSave }
+          handleDelete={ handleDelete }
         />
       )}
     </ApiContext.Consumer>

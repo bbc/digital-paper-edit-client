@@ -122,8 +122,8 @@ const Projects = () => {
           key={ type }
           model={ type }
           items={ items }
-          handleSave={ () => handleSave }
-          handleDelete={ () => handleDelete }
+          handleSave={ handleSave }
+          handleDelete={ handleDelete }
         />
       </Container>
       <CustomFooter />

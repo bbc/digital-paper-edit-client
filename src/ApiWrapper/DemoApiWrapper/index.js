@@ -36,21 +36,21 @@ class DemoApiWrapper {
     return { status: 'ok', project: project };
   }
 
-  static async createProject(data) {
+  async createProject(data) {
     alert('Not implemented in demo mode');
     console.log(data);
 
     return { status: 'false' };
   }
 
-  static async updateProject(id, data) {
+  async updateProject(id, data) {
     alert('Not implemented in demo mode');
     console.log(id, data);
 
     return { status: 'false' };
   }
 
-  static async deleteProject(id) {
+  async deleteProject(id) {
     alert('Not implemented in demo mode');
     console.log(id);
 
@@ -76,7 +76,7 @@ class DemoApiWrapper {
     return { transcripts: transcripts };
   }
 
-  static async createTranscript(projectId, formData, data) {
+  async createTranscript(projectId, formData, data) {
     alert('Not implemented in demo mode');
 
     console.log(projectId, formData, data);
@@ -99,14 +99,14 @@ class DemoApiWrapper {
     return transcript;
   }
 
-  static async updateTranscript(projectId, transcriptId, queryParamsOptions, data) {
+  async updateTranscript(projectId, transcriptId, queryParamsOptions, data) {
     alert('Not implemented in demo mode');
     console.log(projectId, transcriptId, queryParamsOptions, data);
 
     return { ok: false };
   }
 
-  static async deleteTranscript(projectId, transcriptId) {
+  async deleteTranscript(projectId, transcriptId) {
     alert('Not implemented in demo mode');
     console.log(projectId, transcriptId);
 
@@ -149,14 +149,14 @@ class DemoApiWrapper {
     return { annotation };
   }
 
-  static async createAnnotation(projectId, transcriptId, data) {
+  async createAnnotation(projectId, transcriptId, data) {
     alert('Not implemented in demo mode');
     console.log(projectId, transcriptId, data);
 
     return { 'ok': false, status: 'false', annotation: [] };
   }
 
-  static async deleteAnnotation(projectId, transcriptId, annotationId) {
+  async deleteAnnotation(projectId, transcriptId, annotationId) {
     alert('Not implemented in demo mode');
     console.log(projectId, transcriptId, annotationId);
 
@@ -195,7 +195,7 @@ class DemoApiWrapper {
   }
 
   // Create Label
-  static async createLabel(projectId, data) {
+  async createLabel(projectId, data) {
     alert('Not implemented in demo mode');
     console.log(projectId, data);
 
@@ -203,14 +203,14 @@ class DemoApiWrapper {
   }
 
   // Update Label
-  static async updateLabel(projectId, labelId, data) {
+  async updateLabel(projectId, labelId, data) {
     alert('Not implemented in demo mode');
     console.log(projectId, labelId, data);
 
     return { ok: false, status: 'false' };
   }
   // Delete Label
-  static async deleteLabel(projectId, labelId) {
+  async deleteLabel(projectId, labelId) {
     alert('Not implemented in demo mode');
     console.log(projectId, labelId);
 
@@ -258,21 +258,21 @@ class DemoApiWrapper {
     return { ok: true, status: 'ok', programmeScript: paperEdit };
   }
 
-  static async createPaperEdit(projectId, data) {
+  async createPaperEdit(projectId, data) {
     alert('Not implemented in demo mode');
     console.log(projectId, data);
 
     return { ok: false, status: 'false' };
   }
 
-  static async updatePaperEdit(projectId, id, data) {
+  async updatePaperEdit(projectId, id, data) {
     alert('Not implemented in demo mode');
     console.log(projectId, id, data);
 
     return { ok:true, status: 'false' };
   }
 
-  static async deletePaperEdit(projectId, id) {
+  async deletePaperEdit(projectId, id) {
     alert('Not implemented in demo mode');
     console.log(projectId, id);
 

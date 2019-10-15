@@ -49,7 +49,6 @@ const ItemsContainer = (props) => {
       payload: item
     });
     setShowModal(true);
-    props.handleSave(item);
   };
 
   const handleDeleteItem = (id) => {
@@ -95,8 +94,8 @@ const ItemsContainer = (props) => {
     showItems = (
       <List
         items={ items }
-        handleEditItem={ () => handleEditItem }
-        handleDeleteItem={ () => handleDeleteItem }
+        handleEditItem={ handleEditItem }
+        handleDeleteItem={ handleDeleteItem }
       />
     );
 

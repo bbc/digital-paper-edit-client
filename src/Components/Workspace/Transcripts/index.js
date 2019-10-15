@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import ItemsContainer from '../../lib/ItemsContainer';
 import PropTypes from 'prop-types';
-import { deleteItem, updateItem } from '../../../Context/reducers';
+import { deleteItem, updateItem, addItem } from '../../../Context/reducers';
 import ApiContext from '../../../Context/ApiContext';
 const intervalInMs = 30000;
 
@@ -91,17 +91,31 @@ const Transcripts = (props) => {
     }
   };
 
+  const createTranscript = async (item) => {
+    const response = await api.createTranscript(item);
+    if (response.ok) {
+      const newTranscript = response.transcript;
+
+      newTranscript.display = true;
+      newTranscript.status = 'in-progress';
+
+      const newItems = addItem(newTranscript, items);
+      setItems(newItems);
+    } else {
+      console.log('api.updateTranscript', response);
+    }
+  };
+
   const handleSave = (item) => {
     if (item.id) {
       return updateTranscript(item.id, item);
     } else {
-      console.log('non-existing');
-      // return createTranscript(item);
-      // creation handled by form
+      return createTranscript(item);
     }
   };
 
   const deleteTranscript = async (id) => {
+    console.log(api);
     let response;
     try {
       response = await api.deleteTranscript(props.projectId, id);
@@ -128,8 +142,8 @@ const Transcripts = (props) => {
           type={ type }
           key={ type }
           items={ items }
-          handleSave={ () => handleSave }
-          handleDelete={ () => handleDelete }
+          handleSave={ handleSave }
+          handleDelete={ handleDelete }
         />
       )}
     </ApiContext.Consumer>
