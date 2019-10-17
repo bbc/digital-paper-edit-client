@@ -17,7 +17,6 @@ const PaperEdits = (props) => {
 
     const getAllPaperEdits = async () => {
       const allPaperEdits = await api.getAllPaperEdits(props.projectId);
-      console.log(allPaperEdits);
 
       const paperEdits = allPaperEdits.map(paperEdit => {
         paperEdit.display = true;

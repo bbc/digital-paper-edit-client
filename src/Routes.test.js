@@ -31,9 +31,9 @@ describe('App component', () => {
 
   beforeEach(() => {
     jest.resetModules(); // this is important - it clears the cache
-    fetchMock.get('db/projects.json', projects);
-    fetchMock.get('db/transcripts.json', transcripts);
-    fetchMock.get('db/paperedits.json', paperEdits);
+    fetchMock.get('http://localhost:3000/db/projects.json', projects);
+    fetchMock.get('http://localhost:3000/db/transcripts.json', transcripts);
+    fetchMock.get('http://localhost:3000/db/paperedits.json', paperEdits);
   });
 
   afterEach(() => {
@@ -44,7 +44,7 @@ describe('App component', () => {
     const history = createMemoryHistory();
     const api = new DemoApiWrapper();
     const breadCrumb = 'Projects';
-    const newProjects = 'New Projects';
+    const newProjects = 'New Project';
 
     const { container, getByTestId } = renderRoutes(history, api);
     const emptyMessage = 'There are no Projects, create a new one to get started.';
@@ -61,7 +61,6 @@ describe('App component', () => {
     await awaitForDomChange(container);
 
     projectsContainer = getByTestId('projectsContainer');
-    console.log(projectsContainer);
 
     expect(projectsContainer.textContent).toMatch(breadCrumb);
     expect(projectsContainer.textContent).toMatch(title);
