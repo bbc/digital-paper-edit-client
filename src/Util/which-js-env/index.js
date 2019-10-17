@@ -3,8 +3,9 @@
  * @returns - 'browser', 'electron', 'cep'. where cep stands for adobe CEP panel
  */
 function whichJsEnv() {
-// Is browser Eg client side app
-  if (window.process === undefined) {
+// Is browser Eg client side app or locally testing (Node)
+  // if (window.process === undefined) {
+  if (window.process === undefined || window.process.versions.node !== undefined) {
     // console.debug('In browser Environment');
     if (process.env.REACT_APP_NODE_ENV === 'demo') {
       return 'demo';
