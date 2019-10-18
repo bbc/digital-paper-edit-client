@@ -501,7 +501,7 @@ class ProgramScript extends Component {
         <Card>
           <Card.Header>
             { !this.state.resetPreview ?
-              <PreviewCanvas width={ '100%' } height={ 280 } playlist={ this.state.playlist } />
+              <PreviewCanvas width={ 300 } playlist={ this.state.playlist } />
               : null }
           </Card.Header>
 
