@@ -501,13 +501,13 @@ class ProgramScript extends Component {
         <Card>
           <Card.Header>
             { !this.state.resetPreview ?
-              <PreviewCanvas playlist={ this.state.playlist } />
+              <PreviewCanvas width={ '100%' } height={ 280 } playlist={ this.state.playlist } />
               : null }
           </Card.Header>
 
           <Card.Header>
             <Row noGutters>
-              <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
+              <Col sm={ 12 } md={ 3 } >
                 <Button
                   // block
                   variant="outline-secondary"
