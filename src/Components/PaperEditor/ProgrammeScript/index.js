@@ -39,6 +39,7 @@ class ProgramScript extends Component {
     this.state = {
       programmeScript: null,
       resetPreview: false,
+      width: 150,
       // demo content
       playlist:[
         // start - is relative to timeline
@@ -49,6 +50,12 @@ class ProgramScript extends Component {
         // { type:'video', start:20, sourceStart: 50, duration:10, src:'https://download.ted.com/talks/KateDarling_2018S-950k.mp4' },
       ],
     };
+  }
+
+  updateVideoContextWidth = () => {
+    this.setState({
+      width: this.card.offsetWidth - 10
+    });
   }
 
   componentDidMount = () => {
@@ -67,7 +74,12 @@ class ProgramScript extends Component {
         // }
         );
       });
+    this.updateVideoContextWidth();
+    window.addEventListener('resize', this.updateVideoContextWidth);
+  }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateVideoContextWidth);
   }
 
   // TODO: save to server
@@ -499,10 +511,14 @@ class ProgramScript extends Component {
           {this.state.programmeScript ? this.state.programmeScript.title : ''}
         </h2>
         <Card>
-          <Card.Header>
-            { !this.state.resetPreview ?
-              <PreviewCanvas width={ 300 } playlist={ this.state.playlist } />
-              : null }
+          <Card.Header ref={ el => (this.card = el) }>
+            <div>
+              <span>
+                { !this.state.resetPreview ?
+                  <PreviewCanvas width={ this.state.width } playlist={ this.state.playlist } />
+                  : null }
+              </span>
+            </div>
           </Card.Header>
 
           <Card.Header>
@@ -544,7 +560,7 @@ class ProgramScript extends Component {
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
-              <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
+              <Col sm={ 12 } md={ 3 } >
                 <Button variant="outline-secondary"
                   onClick={ this.handleUpdatePreview }
                   // size="sm"
@@ -554,7 +570,7 @@ class ProgramScript extends Component {
                   <FontAwesomeIcon icon={ faSync } /> Preview
                 </Button>
               </Col>
-              <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
+              <Col sm={ 12 } md={ 3 } >
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-secondary">
                     <FontAwesomeIcon icon={ faShare } /> Export
@@ -602,7 +618,7 @@ class ProgramScript extends Component {
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
-              <Col sm={ 12 } md={ 1 } ld={ 1 } xl={ 1 }>
+              <Col sm={ 12 } md={ 1 } >
                 <Button variant="outline-secondary"
                   onClick={ this.handleSaveProgrammeScript }
                   // size="sm"

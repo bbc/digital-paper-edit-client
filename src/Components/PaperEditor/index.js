@@ -73,7 +73,7 @@ class PaperEditor extends Component {
       <Container style={ { marginBottom: '5em' } } fluid>
         <br/>
         <Row>
-          <Col sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 }>
+          <Col sm={ 12 } >
             <Breadcrumb
               items={ [ {
                 name: 'Projects',
