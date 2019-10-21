@@ -183,6 +183,7 @@ class ProgrammeScript extends Component {
       this.setState({
         programmeScript: programmeScript
       });
+
     }
   }
 
@@ -258,6 +259,7 @@ class ProgrammeScript extends Component {
       this.setState({
         programmeScript: programmeScript
       });
+      this.handleUpdatePreview();
     }
     else {
       alert('Select some text in the transcript to add to the programme script');
@@ -437,6 +439,7 @@ class ProgrammeScript extends Component {
   }
 
   handleUpdatePreview = () => {
+    console.log('update preview');
     const playlist = this.getPlayList();
     // Workaround to mound and unmount the `PreviewCanvas` component
     // to update the playlist
