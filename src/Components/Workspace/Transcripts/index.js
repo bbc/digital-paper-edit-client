@@ -5,18 +5,6 @@ import { deleteItem, updateItem, addItem } from '../../../Context/reducers';
 import ApiContext from '../../../Context/ApiContext';
 const intervalInMs = 30000;
 
-const isTranscriptionInProgress = (transcripts) => {
-  if (transcripts.length !== 0) {
-    const result = transcripts.find((transcript) => {
-      return transcript.status === 'in-progress';
-    });
-
-    return result ? true : false;
-  }
-
-  return false;
-};
-
 const Transcripts = (props) => {
   const api = useContext(ApiContext);
   const [ isFetch, setIsFetch ] = useState(false);
@@ -25,30 +13,39 @@ const Transcripts = (props) => {
   const [ interval, setInterval ] = useState();
   const type = 'Transcript';
 
+  const isTranscriptionInProgress = (transcripts) => {
+    if (transcripts.length !== 0) {
+      const result = transcripts.find((transcript) => {
+        return transcript.status === 'in-progress';
+      });
+
+      return result ? true : false;
+    }
+
+    return false;
+  };
+
   useEffect(() => {
     const genUrl = (id) => {
-      return `/projects/${ props.projectId }/transcripts/${ id }/correct`;
+      return `#/projects/${ props.projectId }/transcripts/${ id }/correct`;
     };
 
     const getTranscripts = async () => {
       const response = await api.getTranscripts(props.projectId);
 
-      if (response) {
-        const newItems = response.transcripts.map((item) => {
-          item.display = true;
-          item.url = genUrl(item.id);
-          item.projectId = props.projectId;
+      const newItems = response.transcripts.map((transcript) => {
+        transcript.display = true;
+        transcript.url = genUrl(transcript.id);
+        transcript.projectId = props.projectId;
 
-          return item;
-        });
-        setItems(newItems);
-      }
-
+        return transcript;
+      });
+      setItems(newItems);
     };
 
     if (!isFetch) {
-      setIsFetch(true);
       getTranscripts();
+      setIsFetch(true);
     }
 
     // For simplicity rather then handling all the edge cases (on start, save, delete,etc..), the interval runs periodicalicly,
@@ -140,7 +137,6 @@ const Transcripts = (props) => {
       {() => (
         <ItemsContainer
           type={ type }
-          key={ type }
           items={ items }
           handleSave={ handleSave }
           handleDelete={ handleDelete }
@@ -154,4 +150,4 @@ Transcripts.propTypes = {
   projectId: PropTypes.any
 };
 
-export default React.memo(Transcripts);
+export default Transcripts;

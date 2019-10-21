@@ -29,7 +29,6 @@ class PaperEditor extends Component {
       labelsOptions: [],
       isTranscriptsShown: true,
       isProgramScriptShown: true,
-      // annotations:[]
       videoHeight : '10em',
     };
   }

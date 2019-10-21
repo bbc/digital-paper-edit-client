@@ -85,7 +85,6 @@ class ApiWrapper {
     const json = await res.json();
     // get project title
     const resProject = await this.getProject(projectId);
-    // console.log('resProject', resProject.project.title, json);
     json.projectTitle = resProject.project.title;
     json.transcriptTitle = json.title;
     delete json.title;
@@ -110,7 +109,6 @@ class ApiWrapper {
    */
   async getAllAnnotations(projectId, transcriptId) {
     const res = await fetch(this.annotationsUrl(projectId, transcriptId));
-    // console.log('getAllAnnotations', res);
     const json = await res.json();
 
     return json;

@@ -25,7 +25,6 @@ const PaperEdits = (props) => {
 
         return paperEdit;
       });
-
       setItems(paperEdits);
 
     };
