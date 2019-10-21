@@ -40,7 +40,7 @@ class TranscriptEditor extends Component {
           projectTitle: json.projectTitle,
           transcriptTitle: json.transcriptTitle,
           transcriptJson: json.transcript,
-          url: json.url,
+          mediaUrl: json.url,
           mediaType: json.mediaType
         });
       });
@@ -66,10 +66,8 @@ class TranscriptEditor extends Component {
     data.transcriptTitle = this.state.transcriptTitle;
     const queryParamsOptions = false;
     api.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, data).then((response) => {
-      console.log('api.updateTranscript', response );
       if (response.ok) {
       // show message or redirect
-        console.log('updated');
         // this.setState({ redirect: true, newProjectId: response.projectId });
         this.setState({
           savedNotification: <CustomAlert
@@ -149,7 +147,7 @@ class TranscriptEditor extends Component {
             </Col>
           </Row>
           {this.state.savedNotification}
-          {this.state.transcriptJson !== null &&
+          {this.state.transcriptJson &&
           <ReactTranscriptEditor
             transcriptData={ this.state.transcriptJson }// Transcript json
             // TODO: move url server side

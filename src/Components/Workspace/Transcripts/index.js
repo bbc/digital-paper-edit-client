@@ -27,7 +27,7 @@ const Transcripts = (props) => {
 
   useEffect(() => {
     const genUrl = (id) => {
-      return `/projects/${ props.projectId }/transcripts/${ id }/correct`;
+      return `#/projects/${ props.projectId }/transcripts/${ id }/correct`;
     };
 
     const getTranscripts = async () => {
@@ -37,8 +37,6 @@ const Transcripts = (props) => {
         transcript.display = true;
         transcript.url = genUrl(transcript.id);
         transcript.projectId = props.projectId;
-
-        console.log(transcript);
 
         return transcript;
       });
