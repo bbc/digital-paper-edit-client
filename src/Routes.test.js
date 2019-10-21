@@ -31,9 +31,9 @@ describe('App component', () => {
 
   beforeEach(() => {
     jest.resetModules(); // this is important - it clears the cache
-    fetchMock.get('http://localhost:3000/db/projects.json', projects);
-    fetchMock.get('http://localhost:3000/db/transcripts.json', transcripts);
-    fetchMock.get('http://localhost:3000/db/paperedits.json', paperEdits);
+    fetchMock.get('db/projects.json', projects);
+    fetchMock.get('db/transcripts.json', transcripts);
+    fetchMock.get('db/paperedits.json', paperEdits);
   });
 
   afterEach(() => {
