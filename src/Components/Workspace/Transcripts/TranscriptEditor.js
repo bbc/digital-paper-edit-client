@@ -8,7 +8,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { Redirect } from 'react-router-dom';
+// import { Redirect } from 'react-router-dom';
 import ApiContext from '../../../Context/ApiContext';
 
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
@@ -22,7 +22,7 @@ class TranscriptEditor extends Component {
       projectId: this.props.match.params.projectId,
       transcriptId: this.props.match.params.transcriptId,
       transcriptJson: null,
-      url: null,
+      mediaUrl: null,
       projectTitle: '',
       transcriptTitle: '',
       savedNotification: null,
@@ -93,23 +93,23 @@ class TranscriptEditor extends Component {
     });
   }
 
-  redirectToAnnotatePage = () => {
-    // this.state.projectId this.state.transcriptId
-    this.setState({
-      redirect: true
-    });
-  }
+  // redirectToAnnotatePage = () => {
+  //   // this.state.projectId this.state.transcriptId
+  //   this.setState({
+  //     redirect: true
+  //   });
+  // }
 
-  renderRedirect = () => {
-    if (this.state.redirect) {
-      return <Redirect to={ `/projects/${ this.state.projectId }/transcripts/${ this.state.newTranscriptId }/annotate` } />;
-    }
-  }
+  // renderRedirect = () => {
+  //   if (this.state.redirect) {
+  //     return <Redirect to={ `/projects/${ this.state.projectId }/transcripts/${ this.state.newTranscriptId }/annotate` } />;
+  //   }
+  // }
 
   render() {
     return (
       <>
-        {this.renderRedirect()}
+        {/* {this.renderRedirect()} */}
         <Container style={ { marginBottom: '5em' } } fluid>
           <br/>
           <Row>
@@ -153,7 +153,7 @@ class TranscriptEditor extends Component {
           <ReactTranscriptEditor
             transcriptData={ this.state.transcriptJson }// Transcript json
             // TODO: move url server side
-            mediaUrl={ this.state.url }// string url to media file - audio or video
+            mediaUrl={ this.state.mediaUrl }// string url to media file - audio or video
             isEditable={ true }// se to true if you want to be able to edit the text
             sttJsonType={ 'digitalpaperedit' }// the type of STT Json transcript supported.
             //  TODO: check if name has changed in latest version
