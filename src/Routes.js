@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Projects from './Components/Projects/index.js';
 import Workspace from './Components/Workspace';
 import TranscriptEditor from './Components/Workspace/Transcripts/TranscriptEditor.js';

@@ -1,6 +1,6 @@
 class DemoApiWrapper {
   constructor() {
-    this.url = 'http://localhost:3000/db/';
+    this.url = 'db/'; // when serving statically
     this.projects = this.url + 'projects.json';
     this.paperEdits = this.url + 'paperedits.json';
     this.transcripts = this.url + 'transcripts.json';
