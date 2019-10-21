@@ -532,7 +532,7 @@ class ProgrammeScript extends Component {
                   <FontAwesomeIcon icon={ faPlus } /> Selection
                 </Button>
               </Col>
-              <Col sm={ 12 } md={ 2 } ld={ 2 } xl={ 2 }>
+              <Col sm={ 12 } md={ 2 } >
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-secondary">
                     <FontAwesomeIcon icon={ faPlus } />
@@ -558,16 +558,6 @@ class ProgrammeScript extends Component {
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
-              </Col>
-              <Col sm={ 12 } md={ 3 } >
-                <Button variant="outline-secondary"
-                  onClick={ this.handleUpdatePreview }
-                  // size="sm"
-                  title="update preview"
-                  // block
-                >
-                  <FontAwesomeIcon icon={ faSync } /> Preview
-                </Button>
               </Col>
               <Col sm={ 12 } md={ 3 } >
                 <Dropdown>
