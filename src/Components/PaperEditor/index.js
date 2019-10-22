@@ -25,7 +25,7 @@ class PaperEditor extends Component {
       papereditId:  this.props.match.params.papereditId,
       projectTitle: '',
       programmeTitle: '',
-      transcripts: [],
+      transcripts: null,
       labelsOptions: [],
       isTranscriptsShown: true,
       isProgramScriptShown: true,
@@ -68,6 +68,7 @@ class PaperEditor extends Component {
   }
 
   render() {
+
     return (
       <Container style={ { marginBottom: '5em' } } fluid>
         <br/>
@@ -134,7 +135,7 @@ class PaperEditor extends Component {
               } }
               style={ { display: this.state.isTranscriptsShown ? 'block' : 'none' } }
             >
-              { this.state.transcripts.length ?
+              { this.state.transcripts ?
                 <Transcripts
                   projectId={ this.state.projectId }
                   transcripts={ this.state.transcripts }
@@ -162,12 +163,14 @@ class PaperEditor extends Component {
               } }
               style={ { display: this.state.isProgramScriptShown ? 'block' : 'none' } }
             >
-              <ProgrammeScript
-                projectId={ this.state.projectId }
-                papereditId={ this.state.papereditId }
-                transcripts={ this.state.transcripts }
-                videoHeight={ this.props.videoHeight }
-              />
+              { this.state.transcripts ?
+                <ProgrammeScript
+                  projectId={ this.state.projectId }
+                  papereditId={ this.state.papereditId }
+                  transcripts={ this.state.transcripts }
+                  videoHeight={ this.props.videoHeight }
+                /> : null
+              }
             </Col>
           </Row>
         </Container>

@@ -92,7 +92,8 @@ class ProgrammeScript extends Component {
         // Adding an insert point at the end of the list
         programmeScript.elements.push({ type: 'insert', text: 'Insert Point to add selection' });
         this.setState({
-          programmeScript: programmeScript
+          programmeScript: programmeScript,
+          resetPreview: true
         });
 
       });
@@ -104,8 +105,8 @@ class ProgrammeScript extends Component {
     window.removeEventListener('resize', this.updateVideoContextWidth);
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.transcripts !== this.props.transcripts && this.props.transcripts.length > 0) {
+  componentDidUpdate() {
+    if (this.state.resetPreview) {
       this.handleUpdatePreview();
     }
   }
@@ -116,10 +117,10 @@ class ProgrammeScript extends Component {
       programmeScript.elements = list;
 
       return {
-        programmeScript: programmeScript
+        programmeScript: programmeScript,
+        resetPreview: true
       };
-    }
-    );
+    });
   }
 
   // TODO: save to server
@@ -133,10 +134,10 @@ class ProgrammeScript extends Component {
       programmeScript.elements = list;
 
       return {
-        programmeScript: programmeScript
+        programmeScript: programmeScript,
+        resetPreview: true
       };
-    }
-    );
+    });
   }
 
   handleEdit = (i) => {
@@ -150,7 +151,8 @@ class ProgrammeScript extends Component {
       programmeScript.elements = elements;
       // TODO: save to server
       this.setState({
-        programmeScript: programmeScript
+        programmeScript: programmeScript,
+        resetPreview: true
       });
       // TODO: consider using set state function to avoid race condition? if needed?
       // this.setState(({ programmeScript }) => {
@@ -181,7 +183,8 @@ class ProgrammeScript extends Component {
       programmeScript.elements = elements;
       // TODO: save to server
       this.setState({
-        programmeScript: programmeScript
+        programmeScript: programmeScript,
+        resetPreview: true
       });
 
     }
@@ -204,10 +207,7 @@ class ProgrammeScript extends Component {
   // TODO: needs to handle when selection spans across multiple paragraphs
   handleAddTranscriptSelectionToProgrammeScript = () => {
     const result = getDataFromUserWordsSelection();
-    console.log('getDataFromUserWordsSelection::', result);
     if (result) {
-      console.log(JSON.stringify(result, null, 2));
-
       // result.words
       // TODO: if there's just one speaker in selection do following
       // if it's multiple split list of words into multiple groups
@@ -217,10 +217,11 @@ class ProgrammeScript extends Component {
       // TODO: insert at insert point
 
       const indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
+      let newElement;
       if (isOneParagraph(result.words)) {
         // create new element
         // TODO: Create new element could be refactored into helper function
-        const newElement = {
+        newElement = {
           id: cuid(),
           index: elements.length,
           type: 'paper-cut',
@@ -231,14 +232,10 @@ class ProgrammeScript extends Component {
           transcriptId: result.transcriptId,
           labelId: []
         };
-        // add element just above of insert point
-        elements.splice(indexOfInsertPoint, 0, newElement);
-        programmeScript.elements = elements;
-      }
-      else {
+      } else {
         const paragraphs = divideWordsSelectionsIntoParagraphs(result.words);
         paragraphs.reverse().forEach((paragraph) => {
-          const newElement = {
+          newElement = {
             id: cuid(),
             index: elements.length,
             type: 'paper-cut',
@@ -250,16 +247,16 @@ class ProgrammeScript extends Component {
             // TODO: ignoring labels for now
             labelId: []
           };
-          // add element just above of insert point
-          elements.splice(indexOfInsertPoint, 0, newElement);
-          programmeScript.elements = elements;
         });
       }
+      // add element just above of insert point
+      elements.splice(indexOfInsertPoint, 0, newElement);
+      programmeScript.elements = elements;
       // TODO: save to server
       this.setState({
-        programmeScript: programmeScript
+        programmeScript: programmeScript,
+        resetPreview: true
       });
-      this.handleUpdatePreview();
     }
     else {
       alert('Select some text in the transcript to add to the programme script');
@@ -439,7 +436,6 @@ class ProgrammeScript extends Component {
   }
 
   handleUpdatePreview = () => {
-    console.log('update preview');
     const playlist = this.getPlayList();
     // Workaround to mound and unmount the `PreviewCanvas` component
     // to update the playlist
