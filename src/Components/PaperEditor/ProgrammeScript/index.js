@@ -11,6 +11,7 @@ import generateADL from '@bbc/aes31-adl-composer';
 import jsonToFCPX from '@bbc/fcpx-xml-composer';
 import downloadjs from 'downloadjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PropTypes from 'prop-types';
 import {
   faShare,
   faMicrophoneAlt,
@@ -32,7 +33,7 @@ const defaultFps = 25;
 const defaultTimecodeOffset = '00:00:00:00';
 const defaultSampleRate = '16000';
 
-class ProgramScript extends Component {
+class ProgrammeScript extends Component {
   static contextType = ApiContext
   constructor(props) {
     super(props);
@@ -58,6 +59,31 @@ class ProgramScript extends Component {
     });
   }
 
+  getTranscript = (transcriptId) => {
+    return this.props.transcripts.find((tr) => tr.id === transcriptId );
+  }
+
+  getPlayList = () => {
+    let startTime = 0;
+
+    return this.state.programmeScript.elements.filter((element) => element.type === 'paper-cut')
+      .map((element) => {
+        // TODO: handle audio only type (eg for radio), get from transcript json?
+        const transcript = this.getTranscript(element.transcriptId);
+        const result = {
+          type:'video',
+          start: startTime,
+          sourceStart: element.start,
+          duration: element.end - element.start,
+          src: transcript.url
+        };
+
+        startTime += result.duration;
+
+        return result;
+      });
+  };
+
   componentDidMount = () => {
     const api = this.context;
     api.getPaperEdit(this.props.projectId, this.props.papereditId)
@@ -67,12 +93,8 @@ class ProgramScript extends Component {
         programmeScript.elements.push({ type: 'insert', text: 'Insert Point to add selection' });
         this.setState({
           programmeScript: programmeScript
-        }
-        // TODO: figure out how to update preview
-        // , () => {
-        //   this.handleUpdatePreview();
-        // }
-        );
+        });
+
       });
     this.updateVideoContextWidth();
     window.addEventListener('resize', this.updateVideoContextWidth);
@@ -80,6 +102,12 @@ class ProgramScript extends Component {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateVideoContextWidth);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.transcripts !== this.props.transcripts && this.props.transcripts.length > 0) {
+      this.handleUpdatePreview();
+    }
   }
 
   // TODO: save to server
@@ -141,7 +169,6 @@ class ProgramScript extends Component {
       || elementType === 'note'
       || elementType === 'voice-over') {
       const text = prompt('Add some text for a section title', 'Some place holder text');
-      console.log(text);
 
       const indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
       const newElement = {
@@ -156,6 +183,7 @@ class ProgramScript extends Component {
       this.setState({
         programmeScript: programmeScript
       });
+
     }
   }
 
@@ -231,6 +259,7 @@ class ProgramScript extends Component {
       this.setState({
         programmeScript: programmeScript
       });
+      this.handleUpdatePreview();
     }
     else {
       alert('Select some text in the transcript to add to the programme script');
@@ -409,45 +438,19 @@ class ProgramScript extends Component {
     downloadjs(programmeScriptText, `${ this.state.programmeScript.title }.txt`, 'text/plain');
   }
 
-  getTranscript = (transcriptId) => {
-    return this.props.transcripts.find((tr) => tr.id === transcriptId );
-  }
-
-  getPlayList = () => {
-    let startTime = 0;
-
-    return this.state.programmeScript.elements.filter((element) => element.type === 'paper-cut')
-      .map((element) => {
-        // TODO: handle audio only type (eg for radio), get from transcript json?
-        const transcript = this.getTranscript(element.transcriptId);
-        const result = {
-          type:'video',
-          start: startTime,
-          sourceStart: element.start,
-          duration: element.end - element.start,
-          src: this.getTranscript(element.transcriptId).url
-        };
-
-        startTime += result.duration;
-
-        return result;
-      });
-  };
-
   handleUpdatePreview = () => {
+    console.log('update preview');
     const playlist = this.getPlayList();
     // Workaround to mound and unmount the `PreviewCanvas` component
     // to update the playlist
     this.setState({
       resetPreview: true
     }, () => {
-      console.log('handleUpdatePreview', playlist);
       this.setState({
         resetPreview: false,
         playlist: playlist
       });
     });
-    console.log('handleUpdatePreview', playlist);
     this.setState({
       playlist: playlist
     });
@@ -512,13 +515,9 @@ class ProgramScript extends Component {
         </h2>
         <Card>
           <Card.Header ref={ el => (this.card = el) }>
-            <div>
-              <span>
-                { !this.state.resetPreview ?
-                  <PreviewCanvas width={ this.state.width } playlist={ this.state.playlist } />
-                  : null }
-              </span>
-            </div>
+            { !this.state.resetPreview ?
+              <PreviewCanvas width={ this.state.width } playlist={ this.state.playlist } />
+              : null }
           </Card.Header>
 
           <Card.Header>
@@ -533,7 +532,7 @@ class ProgramScript extends Component {
                   <FontAwesomeIcon icon={ faPlus } /> Selection
                 </Button>
               </Col>
-              <Col sm={ 12 } md={ 2 } ld={ 2 } xl={ 2 }>
+              <Col sm={ 12 } md={ 2 } >
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-secondary">
                     <FontAwesomeIcon icon={ faPlus } />
@@ -559,16 +558,6 @@ class ProgramScript extends Component {
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
-              </Col>
-              <Col sm={ 12 } md={ 3 } >
-                <Button variant="outline-secondary"
-                  onClick={ this.handleUpdatePreview }
-                  // size="sm"
-                  title="update preview"
-                  // block
-                >
-                  <FontAwesomeIcon icon={ faSync } /> Preview
-                </Button>
               </Col>
               <Col sm={ 12 } md={ 3 } >
                 <Dropdown>
@@ -653,4 +642,10 @@ class ProgramScript extends Component {
   }
 }
 
-export default ProgramScript;
+ProgrammeScript.propTypes = {
+  papereditId: PropTypes.any,
+  projectId: PropTypes.any,
+  transcripts: PropTypes.any
+};
+
+export default ProgrammeScript;
