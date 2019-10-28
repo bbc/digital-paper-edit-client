@@ -82,6 +82,9 @@
     "requires": [
       "cloud-httpd24-ssl-services-devs-staff"
     ],
+    "buildRequires": [
+      "python"
+    ],
     "executable": [
       "./bake-scripts/*"
     ],
