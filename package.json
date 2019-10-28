@@ -49,7 +49,7 @@
     "start": "node server.js",
     "start:dev": "cross-env REACT_APP_NODE_ENV=development react-scripts start",
     "start:demo": "cross-env REACT_APP_NODE_ENV=demo react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts --max-old-space-size=4096 build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "clean:cache": "npm cache clean --force",
