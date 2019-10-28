@@ -56,7 +56,7 @@
     "deploy:ghpages": "rimraf build && cross-env REACT_APP_NODE_ENV=demo npm run build && gh-pages -d build",
     "publish:prep": "npm run build && cp package.json ./build/package.json && cp README.md ./build/README.md && rimraf ./build/db",
     "publish:public": "npm run publish:prep && npm publish build --access public",
-    "spec": "speculate --release ${BUILD_NUMBER} --name=digital-paper-edit-client"
+    "spec": "speculate --name=digital-paper-edit-client --release ${BUILD_NUMBER}"
   },
   "eslintConfig": {
     "extends": "react-app"
