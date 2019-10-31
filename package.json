@@ -79,7 +79,7 @@
     "speculate": "^2.0.0"
   },
   "spec": {
-    "nodeVersion": "< 7.0.0",
+    "prune": false,
     "requires": [
       "cloud-httpd24-ssl-services-devs-staff"
     ],
