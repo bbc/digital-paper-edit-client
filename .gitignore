@@ -117,3 +117,5 @@ packages/client/build/
 SPECS
 SOURCES
 *.service
+
+.firebase/*
