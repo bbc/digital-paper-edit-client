@@ -7,6 +7,7 @@ const jsENV = whichJsEnv();
 const dynamicApiWrapper = () => {
   // await async dependencies
   // export the module
+  console.debug(jsENV)
 
   if (jsENV === 'demo') {
     console.log('API Wrapper demo time!');
