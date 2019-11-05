@@ -3,21 +3,16 @@
  * @returns - 'browser', 'electron', 'cep'. where cep stands for adobe CEP panel
  */
 function whichJsEnv() {
+  // Is browser Eg client side app or locally testing (Node)
+  if (process.env.REACT_APP_NODE_ENV === 'demo') {
+    return 'demo';
+  }
+  if (window.process === undefined) {
+    return 'browser';
+  }
   if (window.process.versions.electron !== undefined) {
     return 'electron';
   }
-  // Is browser Eg client side app or locally testing (Node)
-  if (
-    window.process === undefined ||
-    window.process.versions.node !== undefined
-  ) {
-    if (process.env.REACT_APP_NODE_ENV === 'demo') {
-      return 'demo';
-    }
-
-    return 'browser';
-  }
-
   if (window.process.versions.cep !== undefined) {
     //   console.debug('In Adobe CEP Environment');
     //   console.info('In Chromium v: ', window.process.versions.chromium);

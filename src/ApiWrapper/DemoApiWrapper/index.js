@@ -16,7 +16,7 @@ class DemoApiWrapper {
     const projects = await response.json();
     let results = 0;
     if (projects.length !== 0) {
-      results = projects.map((project) => {
+      results = projects.map(project => {
         project.id = project._id;
 
         return project;
@@ -29,7 +29,7 @@ class DemoApiWrapper {
   async getProject(id) {
     const response = await fetch(this.projects);
     const projects = await response.json();
-    const project = projects.find((p) => {
+    const project = projects.find(p => {
       return p._id === id;
     });
 
@@ -54,7 +54,7 @@ class DemoApiWrapper {
     alert('Not implemented in demo mode');
     console.log(id);
 
-    return { ok: false, status: 'false', project: { } };
+    return { ok: false, status: 'false', project: {} };
   }
 
   /**
@@ -65,13 +65,15 @@ class DemoApiWrapper {
     const response = await fetch(this.transcripts);
     const transcriptsData = await response.json();
 
-    const transcripts = transcriptsData.filter((transcript) => {
-      return transcript.projectId === projectId;
-    }).map((transcript) => {
-      transcript.id = transcript._id;
+    const transcripts = transcriptsData
+      .filter(transcript => {
+        return transcript.projectId === projectId;
+      })
+      .map(transcript => {
+        transcript.id = transcript._id;
 
-      return transcript;
-    });
+        return transcript;
+      });
 
     return { transcripts: transcripts };
   }
@@ -87,7 +89,7 @@ class DemoApiWrapper {
   async getTranscript(projectId, transcriptId, queryParamsOptions) {
     const response = await fetch(this.transcripts);
     const transcripts = await response.json();
-    const transcript = transcripts.find((tr) => {
+    const transcript = transcripts.find(tr => {
       return tr._id === transcriptId;
     });
 
@@ -118,21 +120,19 @@ class DemoApiWrapper {
    */
 
   async getAllAnnotations(projectId, transcriptId) {
-
     const response = await fetch(this.annotations);
     let annotations = await response.json();
 
-    annotations = annotations.filter((annotation) => {
+    annotations = annotations.filter(annotation => {
       return annotation.transcriptId === transcriptId;
     });
 
     if (annotations) {
-      annotations = annotations
-        .map((annotation) => {
-          annotation.id = annotation._id;
+      annotations = annotations.map(annotation => {
+        annotation.id = annotation._id;
 
-          return annotation;
-        });
+        return annotation;
+      });
     } else {
       annotations = [];
     }
@@ -153,14 +153,14 @@ class DemoApiWrapper {
     alert('Not implemented in demo mode');
     console.log(projectId, transcriptId, data);
 
-    return { 'ok': false, status: 'false', annotation: [] };
+    return { ok: false, status: 'false', annotation: [] };
   }
 
   async deleteAnnotation(projectId, transcriptId, annotationId) {
     alert('Not implemented in demo mode');
     console.log(projectId, transcriptId, annotationId);
 
-    return { 'ok': false, status: 'false' };
+    return { ok: false, status: 'false' };
   }
 
   /**
@@ -173,7 +173,7 @@ class DemoApiWrapper {
     const response = await fetch(this.labels);
     let labels = await response.json();
     const defaultLabel = labels[0];
-    labels = labels.filter((label) => {
+    labels = labels.filter(label => {
       return label.projectId === projectId;
     });
     labels.unshift(defaultLabel);
@@ -199,7 +199,7 @@ class DemoApiWrapper {
     alert('Not implemented in demo mode');
     console.log(projectId, data);
 
-    return ({ ok: false, status: 'false' });
+    return { ok: false, status: 'false' };
   }
 
   // Update Label
@@ -223,7 +223,7 @@ class DemoApiWrapper {
   async getAllPaperEdits(projectId) {
     const response = await fetch(this.paperEdits);
     let paperedits = await response.json();
-    paperedits = paperedits.filter((pe) => {
+    paperedits = paperedits.filter(pe => {
       return pe.projectId === projectId;
     });
 
@@ -231,12 +231,11 @@ class DemoApiWrapper {
     data.paperedits = [];
     data.paperedits = paperedits;
     if (data.paperedits) {
-      data.paperedits = data.paperedits
-        .map((pe) => {
-          pe.id = pe._id;
+      data.paperedits = data.paperedits.map(pe => {
+        pe.id = pe._id;
 
-          return pe;
-        });
+        return pe;
+      });
     }
 
     return data.paperedits;
@@ -246,7 +245,7 @@ class DemoApiWrapper {
     const paperEditId = id;
     const response = await fetch(this.paperEdits);
     const paperedits = await response.json();
-    const paperEdit = paperedits.find((pe) => {
+    const paperEdit = paperedits.find(pe => {
       return pe.id === paperEditId;
     });
 
@@ -269,7 +268,7 @@ class DemoApiWrapper {
     alert('Not implemented in demo mode');
     console.log(projectId, id, data);
 
-    return { ok:true, status: 'false' };
+    return { ok: true, status: 'false' };
   }
 
   async deletePaperEdit(projectId, id) {
@@ -289,7 +288,10 @@ class DemoApiWrapper {
     // GET Labels for Project <-- or separate request in label component
     const labelsResults = await this.getAllLabels(projectId, transcriptId);
     // GET Annotation for Transcript
-    const annotationsResult = await this.getAllAnnotations(projectId, transcriptId);
+    const annotationsResult = await this.getAllAnnotations(
+      projectId,
+      transcriptId
+    );
 
     // Combine results
     const results = {
@@ -299,7 +301,7 @@ class DemoApiWrapper {
       transcriptTitle: transcriptResult.transcriptTitle,
       url: transcriptResult.url,
       labels: labelsResults.labels,
-      transcript:  transcriptResult.transcript,
+      transcript: transcriptResult.transcript,
       annotations: annotationsResult.annotations
     };
 
@@ -308,28 +310,32 @@ class DemoApiWrapper {
 
   // Helper function to get program script & associated transcript
   // https://flaviocopes.com/javascript-async-await-array-map/
-  async getProgrammeScriptAndTranscripts(projectId, papereditId) { // // get transcripts list, this contain id, title, description only
+  async getProgrammeScriptAndTranscripts(projectId, papereditId) {
+    // // get transcripts list, this contain id, title, description only
     const transcriptsResult = await this.getTranscripts(projectId);
     // use that list of ids to loop through and get json payload for each individual transcript
     // as separate request
 
-    const transcriptsJson = await Promise.all(transcriptsResult.transcripts.map((transcript) => {
-      const transcriptTmp = this.getTranscript(projectId, transcript.id);
+    const transcriptsJson = await Promise.all(
+      transcriptsResult.transcripts.map(transcript => {
+        const transcriptTmp = this.getTranscript(projectId, transcript.id);
 
-      return transcriptTmp;
-    }));
+        return transcriptTmp;
+      })
+    );
 
-    const annotationsJson = await Promise.all(transcriptsResult.transcripts.map((transcript) => {
-      const annotations = this.getAllAnnotations(projectId, transcript.id);
+    const annotationsJson = await Promise.all(
+      transcriptsResult.transcripts.map(transcript => {
+        const annotations = this.getAllAnnotations(projectId, transcript.id);
 
-      return annotations;
-    }));
+        return annotations;
+      })
+    );
 
     // add annotations to transcript
-    transcriptsJson.forEach((tr) => {
+    transcriptsJson.forEach(tr => {
       // get annotations for transcript
-      const currentAnnotationsSet = annotationsJson.find((a) => {
-
+      const currentAnnotationsSet = annotationsJson.find(a => {
         return a.transcriptId === tr.id;
       });
       // if there are annotations for this transcript add them to it
@@ -337,8 +343,7 @@ class DemoApiWrapper {
         tr.annotations = currentAnnotationsSet.annotations;
 
         return;
-      }
-      else {
+      } else {
         tr.annotations = [];
       }
     });

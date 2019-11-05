@@ -7,6 +7,7 @@ const updateItem = (id, newItem, items) => {
 };
 
 const deleteItem = (id, items) => {
+  console.log('deleting Item');
   const newItems = items.filter(item => item.id !== id);
 
   return newItems;

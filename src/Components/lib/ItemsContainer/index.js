@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useReducer, useLayoutEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -28,22 +28,22 @@ const formReducer = (state = initialFormState, { type, payload }) => {
   }
 };
 
-const ItemsContainer = (props) => {
+const ItemsContainer = props => {
   const type = props.type;
-  const [ items, setItems ] = useState([]);
+  const [ items, setItems ] = useState(props.items);
 
   const [ showModal, setShowModal ] = useState(false);
   const [ formData, dispatchForm ] = useReducer(formReducer, initialFormState);
 
   // The form works both for new/create and edit/update
-  const handleSaveForm = (item) => {
+  const handleSaveForm = item => {
     props.handleSave(item);
     setShowModal(false);
     dispatchForm({ type: 'reset' });
   };
 
-  const handleEditItem = (id) => {
-    const item = items.find((i) => i.id === id);
+  const handleEditItem = id => {
+    const item = items.find(i => i.id === id);
     dispatchForm({
       type: 'update',
       payload: item
@@ -51,7 +51,7 @@ const ItemsContainer = (props) => {
     setShowModal(true);
   };
 
-  const handleDeleteItem = (id) => {
+  const handleDeleteItem = id => {
     props.handleDelete(id);
   };
 
@@ -76,48 +76,48 @@ const ItemsContainer = (props) => {
   };
 
   useEffect(() => {
+    console.log('items effect');
     if (!arrayMatch(props.items, items)) {
       setItems(props.items);
     }
 
-    return () => {
-
-    };
-
+    return () => {};
   }, [ items, props.items ]);
 
   let searchEl;
-  let showItems;
+
+  const ItemsList = () => (
+    <List
+      items={ items }
+      handleEditItem={ handleEditItem }
+      handleDeleteItem={ handleDeleteItem }
+    />
+  );
 
   if (items.length > 0) {
     searchEl = <SearchBar handleSearch={ handleSearch } />;
-    showItems = (
-      <List
-        items={ items }
-        handleEditItem={ handleEditItem }
-        handleDeleteItem={ handleDeleteItem }
-      />
-    );
-
-  } else {
-    showItems = (<i>There are no {type}s, create a new one to get started.</i>);
   }
 
   return (
     <>
       <Row>
-        <Col sm={ 9 } >
-          {searchEl}
-        </Col>
-        <Col xs={ 12 } sm={ 3 } >
-          <Button onClick={ toggleShowModal }
+        <Col sm={ 9 }>{searchEl}</Col>
+        <Col xs={ 12 } sm={ 3 }>
+          <Button
+            onClick={ toggleShowModal }
             variant="outline-secondary"
-            size="sm" block>
-                New {type}
+            size="sm"
+            block
+          >
+            New {type}
           </Button>
         </Col>
       </Row>
-      {showItems}
+      {items ? (
+        <ItemsList />
+      ) : (
+        <i>There are no {type}s, create a new one to get started.</i>
+      )}
       <FormModal
         { ...formData }
         modalTitle={ formData.id ? `Edit ${ type }` : `New ${ type }` }
