@@ -1,20 +1,20 @@
 # Modular Architecture (breaking down repositories and packages)
 
-* Status: accepted
-* Deciders: Pietro, Eimi, Dan (Data solutions), James, Alli
-* Date: 2019-06-13
+- Status: accepted
+- Deciders: Pietro, Eimi, Dan (Data solutions), James, Alli
+- Date: 2019-06-13
 
 Technical Story: Exploring a better way to organise the project than in a monorepo.
 
 ## Context and Problem Statement
 
-As this is an opensource project, we might want to separate out the projects so they are more digestible. 
+As this is an opensource project, we might want to separate out the projects so they are more digestible.
 
 ## Decision Drivers
 
-* opensource means removing BBC specific code
-* separating infrastructure
-* electron and cep (future integration)
+- opensource means removing BBC specific code
+- separating infrastructure
+- electron and cep (future integration)
 
 ## Considered Options
 
@@ -24,10 +24,10 @@ There are 3 logically separated packages:
 2. API (monorepo)
 3. (AWS/CEP/Electron) Infrastructure
 
-* Option 1 - bundle everything (UI, API, Infra) into an RPM.
-* Option 2 - separate the UI to a new github repository, bundle it as an NPM package. Keep infrastructure in the same repository as API. API will pull in UI as a dependency.
-* Option 3 - separate the UI, API and infrastructure. Bundle UI and API separately as NPM packages. Infrastructure will have UI and API packages as dependencies.
-* Option 4 - separate the UI, API and infrastructure. Bundle only UI as NPM package, and API will be bundled as RPM. Infrastructure repo will have UI as a dependency.
+- Option 1 - bundle everything (UI, API, Infra) into an RPM.
+- Option 2 - separate the UI to a new github repository, bundle it as an NPM package. Keep infrastructure in the same repository as API. API will pull in UI as a dependency.
+- Option 3 - separate the UI, API and infrastructure. Bundle UI and API separately as NPM packages. Infrastructure will have UI and API packages as dependencies.
+- Option 4 - separate the UI, API and infrastructure. Bundle only UI as NPM package, and API will be bundled as RPM. Infrastructure repo will have UI as a dependency.
 
 ## Decision Outcome
 
@@ -43,13 +43,15 @@ We will not automate the release of NPM, but as a manual step which also does te
 We will retain the public state of each repository and not be concerned with "ready" state of our repositories.
 
 ### Why move out API from NPM? (Cons)
-* Unknown benefits to external person
-* Using NPM for versioning (this can be done through other means)
-* Possibly atypical use of NPM (although this is inconclusive)
+
+- Unknown benefits to external person
+- Using NPM for versioning (this can be done through other means)
+- Possibly atypical use of NPM (although this is inconclusive)
 
 They can fork the repository to try out the services.
 
 ### Reasons for option 3 initially
+
 There is a separation to all the packages, which means it will be simpler to version, test and contribute to individual packages. The API repository will contain different infrastructural flavours of the business logic. There will be a browser (Cloud) package, CEP package, and Electron package that does the same thing. Each is compatible with the UI. To package these similar packages, we can look at `lerna`. The browser flavoured package will have another Express server in the repository to simplify local testing. Infrastructure, which will have UI and API as dependencies will not have an Express server inside.
 
 A potential problem here is that during development, the packages will have features not implemented in the other packages. In order to have parallel set of features, we will add BDD tests to automatically test that all the packages have the same features which are functional.
@@ -57,9 +59,10 @@ A potential problem here is that during development, the packages will have feat
 We are also keeping the AWS Infrastructure public, as the generic cloudformation JSON has no confidential or security issues in it.
 
 #### Why release API in NPM? (Pros)
-* Abstraction
-* Clear separation of concerns (RPM)
-* Simpler to set up for external people (???)
+
+- Abstraction
+- Clear separation of concerns (RPM)
+- Simpler to set up for external people (???)
 
 ### RPM deployment flow
 
@@ -97,6 +100,7 @@ http://asciiflow.com/
 
 Jenkins will then be used to deploy the RPMs to each BBC Cosmos project.
 Once deployed, this will be two separate EC2 instances.
+
 ```
 +---------------------------+           +-----------------------------+
 |Client                     |           |API                          |
@@ -116,6 +120,7 @@ Once deployed, this will be two separate EC2 instances.
 ```
 
 ### Repo naming conventions
+
 Prefix will be `digital-paper-edit`:
 
 - client: `-client`
