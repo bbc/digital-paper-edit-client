@@ -7,6 +7,7 @@ import CustomFooter from '../lib/CustomFooter';
 import ItemsContainer from '../lib/ItemsContainer';
 import Collection from '../Firebase/Collection';
 import { deleteItem, updateItem, addItem } from '../../Context/reducers';
+import { withAuthorization } from '../Session';
 
 const Projects = () => {
   const api = Collection('projects');
@@ -128,4 +129,5 @@ const Projects = () => {
     </>
   );
 };
-export default Projects;
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(Projects);

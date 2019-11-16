@@ -11,28 +11,23 @@ const SignInPage = () => (
 );
 
 const SignInFormBase = props => {
-  const [ email, setEmail ] = useState();
-  const [ password, setPassword ] = useState();
+  const [ email, setEmail ] = useState('');
+  const [ password, setPassword ] = useState('');
   const [ error, setError ] = useState();
-
-  const resetState = () => {
-    setEmail('');
-    setPassword('');
-    setError(null);
-  };
-
-  resetState();
 
   const onSubmit = async event => {
     try {
       await props.firebase.doSignInWithEmailAndPassword(email, password);
-      resetState();
+      setEmail('');
+      setPassword('');
+      setError(null);
       props.history.push(ROUTES.PROJECTS);
     } catch (err) {
       setError(err);
     }
     event.preventDefault();
   };
+
   const onChange = event => {
     console.log(event.target);
     if (event.target.name === 'password') {

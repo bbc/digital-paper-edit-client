@@ -22,7 +22,7 @@ const App = props => {
     return () => {
       authListener();
     };
-  }, [authUser, props.firebase.auth]);
+  }, [ authUser, props.firebase.auth ]);
 
   if (!navigator.onLine) {
     offlineWarning = (
@@ -42,6 +42,7 @@ const App = props => {
   return (
     <>
       {offlineWarning}
+      {authUser ? <p>{authUser.email}</p> : null}
       {authUser ? <SignOutButton /> : null}
       <Routes />
     </>
