@@ -4,14 +4,14 @@ import PropTypes from 'prop-types';
 import { deleteItem, updateItem, addItem } from '../../../Context/reducers';
 import ApiContext from '../../../Context/ApiContext';
 
-const PaperEdits = (props) => {
+const PaperEdits = props => {
   const api = useContext(ApiContext);
   const [ items, setItems ] = useState([]);
   const type = 'Paper Edit';
   const [ isFetch, setIsFetch ] = useState(false);
 
   useEffect(() => {
-    const genUrl = (id) => {
+    const genUrl = id => {
       return `/projects/${ props.projectId }/paperedits/${ id }`;
     };
 
@@ -26,7 +26,6 @@ const PaperEdits = (props) => {
         return paperEdit;
       });
       setItems(paperEdits);
-
     };
     // TODO: some error handling
     if (!isFetch) {
@@ -34,11 +33,10 @@ const PaperEdits = (props) => {
       setIsFetch(true);
     }
 
-    return () => {
-    };
+    return () => {};
   }, [ api, isFetch, items, props.projectId ]);
 
-  const createPaperEdit = async (item) => {
+  const createPaperEdit = async item => {
     const response = await api.createPaperEdit(props.projectId, item);
     if (response.ok) {
       const newPaperEdit = response.paperedit;
@@ -66,7 +64,7 @@ const PaperEdits = (props) => {
     }
   };
 
-  const handleSave = (item) => {
+  const handleSave = item => {
     if (item.id) {
       return updatePaperEdit(item.id, item);
     } else {
@@ -74,7 +72,7 @@ const PaperEdits = (props) => {
     }
   };
 
-  const deletePaperEdit = async (id) => {
+  const deletePaperEdit = async id => {
     let response;
     try {
       response = await api.deletePaperEdit(props.projectId, id);
@@ -86,7 +84,7 @@ const PaperEdits = (props) => {
     return response;
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = id => {
     console.log('handle delete');
     const response = deletePaperEdit(id);
     if (response.ok) {
@@ -106,7 +104,6 @@ const PaperEdits = (props) => {
         />
       )}
     </ApiContext.Consumer>
-
   );
 };
 

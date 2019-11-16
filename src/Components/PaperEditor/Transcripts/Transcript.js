@@ -9,10 +9,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Card from 'react-bootstrap/Card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faHighlighter,
-  faCog,
-} from '@fortawesome/free-solid-svg-icons';
+import { faHighlighter, faCog } from '@fortawesome/free-solid-svg-icons';
 import SearchBar from './SearchBar/index.js';
 import Paragraphs from './Paragraphs/index.js';
 import LabelsList from './LabelsList/index.js';
@@ -49,7 +46,7 @@ function makeListOfUniqueSpeakers(array) {
 }
 
 class Transcript extends Component {
-  static contextType = ApiContext
+  static contextType = ApiContext;
   constructor(props) {
     super(props);
     this.videoRef = React.createRef();
@@ -70,52 +67,56 @@ class Transcript extends Component {
 
   componentDidMount = () => {
     const api = this.context;
-    api.getAllAnnotations(this.props.projectId, this.props.transcriptId)
+    api
+      .getAllAnnotations(this.props.projectId, this.props.transcriptId)
       .then(json => {
         // console.log(' api.getAllAnnotations', json);
         this.setState({
           annotations: json.annotations
         });
       });
-  }
+  };
 
-  onLabelCreate = (newLabel) => {
+  onLabelCreate = newLabel => {
     const api = this.context;
-    api.createLabel(this.props.projectId, newLabel)
-    // TODO: add error handling
+    api
+      .createLabel(this.props.projectId, newLabel)
+      // TODO: add error handling
       .then(json => {
         this.setState({
           labelsOptions: json.labels
         });
       });
-  }
+  };
 
-  onLabelUpdate = (updatedLabel) => {
+  onLabelUpdate = updatedLabel => {
     const api = this.context;
     console.log('updatedLabel', updatedLabel);
     // TODO: PUT with API Wrapper
-    api.updateLabel(this.props.projectId, updatedLabel.id, updatedLabel)
-    // TODO: add error handling
+    api
+      .updateLabel(this.props.projectId, updatedLabel.id, updatedLabel)
+      // TODO: add error handling
       .then(json => {
         this.setState({
           labelsOptions: json.labels
         });
       });
-  }
+  };
 
-  onLabelDelete = (labelIid) => {
+  onLabelDelete = labelIid => {
     const api = this.context;
-    api.deleteLabel(this.props.projectId, labelIid)
-    // TODO: add error handling
+    api
+      .deleteLabel(this.props.projectId, labelIid)
+      // TODO: add error handling
       .then(json => {
         this.setState({
           labelsOptions: json.labels
         });
       });
-  }
+  };
 
   // functions repeadrted from TranscriptAnnotate/index.js
-  handleTimecodeClick= e => {
+  handleTimecodeClick = e => {
     if (e.target.classList.contains('timecode')) {
       const wordEl = e.target;
       this.videoRef.current.currentTime = wordEl.dataset.start;
@@ -124,7 +125,7 @@ class Transcript extends Component {
   };
 
   handleWordClick = e => {
-    if (e.target.className === 'words' ) {
+    if (e.target.className === 'words') {
       const wordEl = e.target;
       this.videoRef.current.currentTime = wordEl.dataset.start;
       this.videoRef.current.play();
@@ -132,22 +133,24 @@ class Transcript extends Component {
   };
 
   handleShowParagraphsMatchingSearch = () => {
-    this.setState((state) => {
-      return { showParagraphsMatchingSearch: !state.showParagraphsMatchingSearch };
+    this.setState(state => {
+      return {
+        showParagraphsMatchingSearch: !state.showParagraphsMatchingSearch
+      };
     });
-  }
+  };
 
-  handleLabelsSearchChange = (selectedOptionLabelSearch) => {
+  handleLabelsSearchChange = selectedOptionLabelSearch => {
     this.setState({
       selectedOptionLabelSearch
     });
-  }
+  };
 
-  handleSpeakersSearchChange = (selectedOptionSpeakerSearch) => {
+  handleSpeakersSearchChange = selectedOptionSpeakerSearch => {
     this.setState({
       selectedOptionSpeakerSearch
     });
-  }
+  };
 
   handleSearch = (e, searchPreferences) => {
     // TODO: debounce to optimise
@@ -155,7 +158,7 @@ class Transcript extends Component {
       const searchString = e.target.value;
       this.setState({ searchString: searchString.toLowerCase() });
       //  "debounce" to optimise
-      onlyCallOnce(this.highlightWords (searchString), 500);
+      onlyCallOnce(this.highlightWords(searchString), 500);
     }
     // if empty string reset
     else if (e.target.value === '') {
@@ -167,8 +170,13 @@ class Transcript extends Component {
   };
 
   highlightWords = searchString => {
-    const listOfSearchWords = searchString.toLowerCase().trim().split(' ');
-    const pCSS = `.paragraph[data-paragraph-text*="${ listOfSearchWords.join(' ') }"]`;
+    const listOfSearchWords = searchString
+      .toLowerCase()
+      .trim()
+      .split(' ');
+    const pCSS = `.paragraph[data-paragraph-text*="${ listOfSearchWords.join(
+      ' '
+    ) }"]`;
 
     const wordsToSearchCSS = listOfSearchWords.map((searchWord, index) => {
       let res = `${ pCSS } > div > span.words[data-text="${ searchWord
@@ -182,23 +190,25 @@ class Transcript extends Component {
     });
     // Need to add an extra span to search annotation hilights
     // TODO: refactor to make more DRY
-    const wordsToSearchCSSInHighlights = listOfSearchWords.map((searchWord, index) => {
-      let res = `${ pCSS } > div  > span >span.words[data-text="${ searchWord
-        .toLowerCase()
-        .trim() }"]`;
-      if (index < listOfSearchWords.length - 1) {
-        res += ', ';
-      }
+    const wordsToSearchCSSInHighlights = listOfSearchWords.map(
+      (searchWord, index) => {
+        let res = `${ pCSS } > div  > span >span.words[data-text="${ searchWord
+          .toLowerCase()
+          .trim() }"]`;
+        if (index < listOfSearchWords.length - 1) {
+          res += ', ';
+        }
 
-      return res;
-    });
+        return res;
+      }
+    );
     this.setState({
       sentenceToSearchCSS: wordsToSearchCSS.join(' '),
       sentenceToSearchCSSInHighlights: wordsToSearchCSSInHighlights.join(' ')
     });
   };
 
-  handleCreateAnnotation = (e) => {
+  handleCreateAnnotation = e => {
     const api = this.context;
     const element = e.target;
     // window.element = element;
@@ -209,7 +219,12 @@ class Transcript extends Component {
       selection.note = '';
       const newAnnotation = selection;
       console.log('newAnnotation', newAnnotation);
-      api.createAnnotation(this.props.projectId, this.props.transcriptId, newAnnotation)
+      api
+        .createAnnotation(
+          this.props.projectId,
+          this.props.transcriptId,
+          newAnnotation
+        )
         .then(json => {
           const newAnnotationFromServer = json.annotation;
           console.log('newAnnotationFromServer', newAnnotationFromServer);
@@ -222,57 +237,72 @@ class Transcript extends Component {
           // newAnnotationsList.push(newAnnotation);
           newAnnotationsSet.push(newAnnotationFromServer);
 
-          this.setState( { annotations: newAnnotationsSet });
+          this.setState({ annotations: newAnnotationsSet });
         });
-
-    }
-    else {
+    } else {
       alert('Select some text in the transcript to highlight ');
     }
-  }
+  };
 
-  handleDeleteAnnotation = (annotationId) => {
+  handleDeleteAnnotation = annotationId => {
     const api = this.context;
     const { annotations } = this.state;
-    const newAnnotationsSet = annotations.filter((annotation) => {
+    const newAnnotationsSet = annotations.filter(annotation => {
       return annotation.id !== annotationId;
     });
 
-    const deepCloneOfNestedObjectNewAnnotationsSet = JSON.parse(JSON.stringify(newAnnotationsSet));
-    api.deleteAnnotation(this.props.projectId, this.props.transcriptId, annotationId)
+    const deepCloneOfNestedObjectNewAnnotationsSet = JSON.parse(
+      JSON.stringify(newAnnotationsSet)
+    );
+    api
+      .deleteAnnotation(
+        this.props.projectId,
+        this.props.transcriptId,
+        annotationId
+      )
       .then(json => {
-        this.setState( { annotations: deepCloneOfNestedObjectNewAnnotationsSet });
+        this.setState({
+          annotations: deepCloneOfNestedObjectNewAnnotationsSet
+        });
       });
-  }
+  };
 
   // TODO: add server side via api
   // similar to handleDeleteAnnotation filter to find annotation then replace text
-  handleEditAnnotation = (annotationId) => {
+  handleEditAnnotation = annotationId => {
     const api = this.context;
     const { annotations } = this.state;
-    const newAnnotationToEdit = annotations.find((annotation) => {
+    const newAnnotationToEdit = annotations.find(annotation => {
       return annotation.id === annotationId;
     });
-    const newNote = prompt('Edit the text note of the annotation', newAnnotationToEdit.note);
+    const newNote = prompt(
+      'Edit the text note of the annotation',
+      newAnnotationToEdit.note
+    );
     if (newNote) {
       newAnnotationToEdit.note = newNote;
-      api.updateAnnotation(this.state.projectId, this.props.transcriptId, annotationId, newAnnotationToEdit)
+      api
+        .updateAnnotation(
+          this.state.projectId,
+          this.props.transcriptId,
+          annotationId,
+          newAnnotationToEdit
+        )
         .then(json => {
           const newAnnotation = json.annotation;
           // updating annotations client side by removing updating one
           // and re-adding to array
           // could be refactored using `findindex`
-          const newAnnotationsSet = annotations.filter((annotation) => {
+          const newAnnotationsSet = annotations.filter(annotation => {
             return annotation.id !== annotationId;
           });
           newAnnotationsSet.push(newAnnotation);
-          this.setState( { annotations: newAnnotationsSet });
+          this.setState({ annotations: newAnnotationsSet });
         });
-    }
-    else {
+    } else {
       alert('all good nothing changed');
     }
-  }
+  };
 
   showLabelsReference = () => {
     // if (this.state.isShowLabelsReference) {
@@ -287,17 +317,17 @@ class Transcript extends Component {
     //   //   isShowLabelsReference: true
     //   // });
     // }
-  }
+  };
 
   getCurrentWordTime = () => {
     const { words } = this.props.transcript;
 
-    const currentTime = this.state.currentTime ;
+    const currentTime = this.state.currentTime;
     // if (this.videoRef && this.videoRef.current && this.videoRef.current.currentTime) {
     //   currentTime = this.videoRef.current.currentTime;
     // }
-    const currentWordTime = words.find((word) => {
-      if (currentTime >= word.start && currentTime <= word.end ) {
+    const currentWordTime = words.find(word => {
+      if (currentTime >= word.start && currentTime <= word.end) {
         return word.start;
       }
     });
@@ -306,8 +336,7 @@ class Transcript extends Component {
     }
 
     return 0;
-
-  }
+  };
   // eslint-disable-next-line class-methods-use-this
   render() {
     const currentWordTime = this.state.currentTime;
@@ -317,7 +346,11 @@ class Transcript extends Component {
     const time = Math.round(currentWordTime * 4.0) / 4.0;
     const highlights = (
       <style scoped>
-        {`span.words[data-prev-times~="${ Math.floor(time) }"][data-transcript-id="${ this.props.transcriptId }"] { color: ${ unplayedColor } }`}
+        {`span.words[data-prev-times~="${ Math.floor(
+          time
+        ) }"][data-transcript-id="${
+          this.props.transcriptId
+        }"] { color: ${ unplayedColor } }`}
       </style>
     );
 
@@ -331,12 +364,15 @@ class Transcript extends Component {
           <audio
             src={ this.props.url }
             ref={ this.videoRef }
-            onTimeUpdate={ (e) => {this.setState({ currentTime: e.target.currentTime });} }
+            onTimeUpdate={ e => {
+              this.setState({ currentTime: e.target.currentTime });
+            } }
             style={ {
               width: '100%',
               backgroundColor: 'black'
             } }
-            controls/>
+            controls
+          />
         </Card.Header>
       );
     } else {
@@ -345,12 +381,15 @@ class Transcript extends Component {
           <video
             src={ this.props.url }
             ref={ this.videoRef }
-            onTimeUpdate={ (e) => {this.setState({ currentTime: e.target.currentTime });} }
+            onTimeUpdate={ e => {
+              this.setState({ currentTime: e.target.currentTime });
+            } }
             style={ {
               width: '100%',
               backgroundColor: 'black'
             } }
-            controls/>
+            controls
+          />
         </Card.Header>
       );
     }
@@ -359,8 +398,12 @@ class Transcript extends Component {
       <>
         <style scoped>
           {/* This is to style of the Paragraph component programmatically */}
-          {`${ this.state.sentenceToSearchCSS } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
-          {`${ this.state.sentenceToSearchCSSInHighlights } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
+          {`${
+            this.state.sentenceToSearchCSS
+          } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
+          {`${
+            this.state.sentenceToSearchCSSInHighlights
+          } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
         </style>
 
         <h2
@@ -375,38 +418,59 @@ class Transcript extends Component {
           {transcriptMediaCard}
           <Card.Header>
             <Row>
-              <Col xs={ 12 } >
+              <Col xs={ 12 }>
                 <ButtonGroup style={ { width: '100%' } }>
-                  <Dropdown as={ ButtonGroup } style={ { width: '100%' } } >
-                    <Button variant="outline-secondary" data-label-id={ 'default' } onClick={ this.handleCreateAnnotation } >
-                      <FontAwesomeIcon icon={ faHighlighter } flip="horizontal"/> Highlight
+                  <Dropdown as={ ButtonGroup } style={ { width: '100%' } }>
+                    <Button
+                      variant="outline-secondary"
+                      data-label-id={ 'default' }
+                      onClick={ this.handleCreateAnnotation }
+                    >
+                      <FontAwesomeIcon icon={ faHighlighter } flip="horizontal" />{' '}
+                      Highlight
                       {/* */}
                     </Button>
-                    <Dropdown.Toggle split variant="outline-secondary" data-lable-id={ 0 }/>
+                    <Dropdown.Toggle
+                      split
+                      variant="outline-secondary"
+                      data-lable-id={ 0 }
+                    />
                     <Dropdown.Menu onClick={ this.handleCreateAnnotation }>
-                      {this.state.labelsOptions && this.state.labelsOptions.map((label) => {
-                        return (
-                          <Dropdown.Item key={ `label_id_${ label.id }` } data-label-id={ label.id } >
-                            <Row data-label-id={ label.id }>
-                              <Col xs={ 1 } style={ { backgroundColor: label.color } } data-label-id={ label.id }></Col>
-                              <Col xs={ 1 } data-label-id={ label.id }>{label.label}</Col>
-                            </Row>
-                          </Dropdown.Item>
-                        );
-                      })}
+                      {this.state.labelsOptions &&
+                        this.state.labelsOptions.map(label => {
+                          return (
+                            <Dropdown.Item
+                              key={ `label_id_${ label.id }` }
+                              data-label-id={ label.id }
+                            >
+                              <Row data-label-id={ label.id }>
+                                <Col
+                                  xs={ 1 }
+                                  style={ { backgroundColor: label.color } }
+                                  data-label-id={ label.id }
+                                ></Col>
+                                <Col xs={ 1 } data-label-id={ label.id }>
+                                  {label.label}
+                                </Col>
+                              </Row>
+                            </Dropdown.Item>
+                          );
+                        })}
                     </Dropdown.Menu>
                   </Dropdown>
 
                   <DropdownButton
                     drop={ 'right' }
                     as={ ButtonGroup }
-                    title={ <FontAwesomeIcon icon={ faCog }/> }
+                    title={ <FontAwesomeIcon icon={ faCog } /> }
                     id="bg-nested-dropdown"
-                    variant='outline-secondary'
+                    variant="outline-secondary"
                   >
                     <LabelsList
                       isLabelsListOpen={ this.state.isLabelsListOpen }
-                      labelsOptions={ this.state.labelsOptions && this.state.labelsOptions }
+                      labelsOptions={
+                        this.state.labelsOptions && this.state.labelsOptions
+                      }
                       onLabelUpdate={ this.onLabelUpdate }
                       onLabelCreate={ this.onLabelCreate }
                       onLabelDelete={ this.onLabelDelete }
@@ -418,11 +482,17 @@ class Transcript extends Component {
           </Card.Header>
           <SearchBar
             labelsOptions={ this.state.labelsOptions }
-            speakersOptions={ this.props.transcript ? makeListOfUniqueSpeakers(this.props.transcript.paragraphs) : null }
+            speakersOptions={
+              this.props.transcript
+                ? makeListOfUniqueSpeakers(this.props.transcript.paragraphs)
+                : null
+            }
             handleSearch={ this.handleSearch }
             handleLabelsSearchChange={ this.handleLabelsSearchChange }
             handleSpeakersSearchChange={ this.handleSpeakersSearchChange }
-            handleShowParagraphsMatchingSearch={ this.handleShowParagraphsMatchingSearch }
+            handleShowParagraphsMatchingSearch={
+              this.handleShowParagraphsMatchingSearch
+            }
           />
 
           <Card.Body
@@ -430,25 +500,40 @@ class Transcript extends Component {
             onClick={ this.handleTimecodeClick }
             style={ { height: cardBodyHeight, overflow: 'scroll' } }
           >
-
             {highlights}
 
-            {this.props.transcript &&
-            <Paragraphs
-              labelsOptions={ this.state.labelsOptions && this.state.labelsOptions }
-              annotations={ this.state.annotations ? this.state.annotations : [] }
-              transcriptJson={ this.props.transcript }
-              searchString={ this.state.searchString ? this.state.searchString : '' }
-              showParagraphsMatchingSearch={ this.state.showParagraphsMatchingSearch }
-              selectedOptionLabelSearch={ this.state.selectedOptionLabelSearch ? this.state.selectedOptionLabelSearch : [] }
-              selectedOptionSpeakerSearch={ this.state.selectedOptionSpeakerSearch ? this.state.selectedOptionSpeakerSearch : [] }
-              transcriptId={ this.props.transcriptId }
-              handleTimecodeClick={ this.handleTimecodeClick }
-              handleWordClick={ this.handleWordClick }
-              handleDeleteAnnotation={ this.handleDeleteAnnotation }
-              handleEditAnnotation={ this.handleEditAnnotation }
-            />}
-
+            {this.props.transcript && (
+              <Paragraphs
+                labelsOptions={
+                  this.state.labelsOptions && this.state.labelsOptions
+                }
+                annotations={
+                  this.state.annotations ? this.state.annotations : []
+                }
+                transcriptJson={ this.props.transcript }
+                searchString={
+                  this.state.searchString ? this.state.searchString : ''
+                }
+                showParagraphsMatchingSearch={
+                  this.state.showParagraphsMatchingSearch
+                }
+                selectedOptionLabelSearch={
+                  this.state.selectedOptionLabelSearch
+                    ? this.state.selectedOptionLabelSearch
+                    : []
+                }
+                selectedOptionSpeakerSearch={
+                  this.state.selectedOptionSpeakerSearch
+                    ? this.state.selectedOptionSpeakerSearch
+                    : []
+                }
+                transcriptId={ this.props.transcriptId }
+                handleTimecodeClick={ this.handleTimecodeClick }
+                handleWordClick={ this.handleWordClick }
+                handleDeleteAnnotation={ this.handleDeleteAnnotation }
+                handleEditAnnotation={ this.handleEditAnnotation }
+              />
+            )}
           </Card.Body>
         </Card>
       </>

@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 import CustomFooter from '../lib/CustomFooter';
 import ItemsContainer from '../lib/ItemsContainer';
-import Collection from '../../firebase/Collection';
+import Collection from '../Firebase/Collection';
 import { deleteItem, updateItem, addItem } from '../../Context/reducers';
 
 const Projects = () => {

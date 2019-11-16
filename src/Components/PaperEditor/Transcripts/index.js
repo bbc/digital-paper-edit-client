@@ -13,7 +13,6 @@ import Transcript from './Transcript.js';
 import cuid from 'cuid';
 
 class Transcripts extends Component {
-
   // eslint-disable-next-line class-methods-use-this
   render() {
     const transcriptsElNav = this.props.transcripts.map((transcript, index) => {
@@ -23,18 +22,25 @@ class Transcripts extends Component {
             disabled={ transcript.status !== 'done' ? true : false }
             // title={ transcript.status !== 'done' ? transcript.status : transcript.title }
             eventKey={ transcript.id }
-
           >
-            { transcript.status === 'in-progress' ? <FontAwesomeIcon icon={ faClock }/> : '' }
-            { transcript.status === 'error' ? <FontAwesomeIcon icon={ faExclamationTriangle }/> : '' }
-            { `  ${ transcript.transcriptTitle }` }
+            {transcript.status === 'in-progress' ? (
+              <FontAwesomeIcon icon={ faClock } />
+            ) : (
+              ''
+            )}
+            {transcript.status === 'error' ? (
+              <FontAwesomeIcon icon={ faExclamationTriangle } />
+            ) : (
+              ''
+            )}
+            {`  ${ transcript.transcriptTitle }`}
           </Nav.Link>
         </Nav.Item>
       );
     });
     const transcriptsElTab = this.props.transcripts.map((transcript, index) => {
       return (
-        <Tab.Pane key={ cuid() } eventKey={ transcript.id } >
+        <Tab.Pane key={ cuid() } eventKey={ transcript.id }>
           <Transcript
             projectId={ this.props.projectId }
             transcriptId={ transcript.id }
@@ -51,7 +57,9 @@ class Transcripts extends Component {
     return (
       <>
         <Tab.Container
-          defaultActiveKey={ this.props.transcripts[0] ? this.props.transcripts[0].id : 'first' }
+          defaultActiveKey={
+            this.props.transcripts[0] ? this.props.transcripts[0].id : 'first'
+          }
         >
           <Row>
             <Col sm={ 3 }>
@@ -60,20 +68,18 @@ class Transcripts extends Component {
                 // className={ 'text-truncate' }
                 title={ 'Transcripts' }
               >
-                Transcripts</h2>
-              <hr/>
+                Transcripts
+              </h2>
+              <hr />
               <Nav variant="pills" className="flex-column">
-                { transcriptsElNav }
+                {transcriptsElNav}
               </Nav>
             </Col>
             <Col sm={ 9 }>
-              <Tab.Content>
-                { transcriptsElTab }
-              </Tab.Content>
+              <Tab.Content>{transcriptsElTab}</Tab.Content>
             </Col>
           </Row>
         </Tab.Container>
-
       </>
     );
   }

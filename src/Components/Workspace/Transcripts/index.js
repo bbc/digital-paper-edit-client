@@ -1,24 +1,24 @@
-import React, { useEffect, useState, useContext } from "react";
-import ItemsContainer from "../../lib/ItemsContainer";
-import PropTypes from "prop-types";
-import { deleteItem, updateItem, addItem } from "../../../Context/reducers";
-import ApiContext from "../../../Context/ApiContext";
-import Collections from "../../../firebase/Collection";
+import React, { useEffect, useState, useContext } from 'react';
+import ItemsContainer from '../../lib/ItemsContainer';
+import PropTypes from 'prop-types';
+import { deleteItem, updateItem, addItem } from '../../../Context/reducers';
+import ApiContext from '../../../Context/ApiContext';
+import Collections from '../../Firebase/Collection';
 const intervalInMs = 30000;
 
 const Transcripts = props => {
-  const api = Collections("transcripts");
+  const api = Collections('transcripts');
   // const api = useContext(ApiContext);
-  const [isFetch, setIsFetch] = useState(false);
-  const [items, setItems] = useState([]);
-  const [isInProgress, setIsInProgress] = useState(false);
-  const [interval, setInterval] = useState();
-  const type = "Transcript";
+  const [ isFetch, setIsFetch ] = useState(false);
+  const [ items, setItems ] = useState([]);
+  const [ isInProgress, setIsInProgress ] = useState(false);
+  const [ interval, setInterval ] = useState();
+  const type = 'Transcript';
 
   const isTranscriptionInProgress = transcripts => {
     if (transcripts.length !== 0) {
       const result = transcripts.find(transcript => {
-        return transcript.status === "in-progress";
+        return transcript.status === 'in-progress';
       });
 
       return result ? true : false;
@@ -29,7 +29,7 @@ const Transcripts = props => {
 
   useEffect(() => {
     const genUrl = id => {
-      return `#/projects/${props.projectId}/transcripts/${id}/correct`;
+      return `#/projects/${ props.projectId }/transcripts/${ id }/correct`;
     };
 
     const getTranscripts = async () => {
@@ -67,7 +67,7 @@ const Transcripts = props => {
     return () => {
       clearInterval(interval);
     };
-  }, [api, interval, isFetch, isInProgress, items, props.projectId]);
+  }, [ api, interval, isFetch, isInProgress, items, props.projectId ]);
 
   const updateTranscript = async (id, item) => {
     const queryParamsOptions = false;
@@ -88,7 +88,7 @@ const Transcripts = props => {
       const newItems = updateItem(id, editedTranscript, items);
       setItems(newItems);
     } else {
-      console.log("api.updateTranscript", response);
+      console.log('api.updateTranscript', response);
     }
   };
 
@@ -98,12 +98,12 @@ const Transcripts = props => {
       const newTranscript = response.transcript;
 
       newTranscript.display = true;
-      newTranscript.status = "in-progress";
+      newTranscript.status = 'in-progress';
 
       const newItems = addItem(newTranscript, items);
       setItems(newItems);
     } else {
-      console.log("api.updateTranscript", response);
+      console.log('api.updateTranscript', response);
     }
   };
 
@@ -123,7 +123,7 @@ const Transcripts = props => {
     } catch (e) {
       console.log(e);
     }
-    console.log("api.deleteTranscript", response);
+    console.log('api.deleteTranscript', response);
 
     return response;
   };
@@ -140,10 +140,10 @@ const Transcripts = props => {
     <ApiContext.Consumer>
       {() => (
         <ItemsContainer
-          type={type}
-          items={items}
-          handleSave={handleSave}
-          handleDelete={handleDelete}
+          type={ type }
+          items={ items }
+          handleSave={ handleSave }
+          handleDelete={ handleDelete }
         />
       )}
     </ApiContext.Consumer>

@@ -8,7 +8,7 @@ import CustomFooter from '../lib/CustomFooter';
 import Transcripts from './Transcripts';
 import PaperEdits from './PaperEdits';
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
-import Collection from '../../firebase/Collection';
+import Collection from '../Firebase/Collection';
 
 const genBreadcrumb = name => [
   {

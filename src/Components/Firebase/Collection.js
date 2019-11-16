@@ -1,6 +1,7 @@
-import admin from './admin';
+import Firebase from './index';
 import cuid from 'cuid';
-const db = admin.firestore();
+
+const db = Firebase.db;
 
 const getCollection = async collection => {
   const query = db.collection(collection);
