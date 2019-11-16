@@ -4,45 +4,31 @@ import Workspace from './Components/Workspace';
 import TranscriptEditor from './Components/Workspace/Transcripts/TranscriptEditor.js';
 import PaperEditor from './Components/PaperEditor';
 import { Switch, Route, HashRouter } from 'react-router-dom';
-
-// class DebugRouter extends HashRouter {
-//   constructor(props) {
-//     super(props);
-//     console.log('initial history is: ', JSON.stringify(this.history, null, 2));
-//     this.history.listen((location, action) => {
-//       console.log(
-//         `The current URL is ${ location.pathname }${ location.search }${ location.hash }`
-//       );
-//       console.log(`The last navigation action was ${ action }`, JSON.stringify(this.history, null, 2));
-//     });
-//   }
-// }
+import SignIn from './Components/SignIn';
+import * as ROUTES from './constants/routes';
 
 const PageNotFound = () => {
-  return (<div>
-    <h1>404 Page Not Found</h1>
-    <p>There was an error loading the page you requested!</p>
-  </div>
+  return (
+    <div>
+      <h1>404 Page Not Found</h1>
+      <p>There was an error loading the page you requested!</p>
+    </div>
   );
 };
 
 const Routes = () => {
   return (
-    <HashRouter basename='/'>
+    <HashRouter basename="/">
       <Switch>
-        <Route exact path="/" component={ Projects } />
-        <Route exact path="/projects" component={ Projects } />
-        <Route exact path="/projects/:projectId" component={ Workspace } />
+        <Route exact path={ ROUTES.SIGN_IN } component={ SignIn } />
+        <Route exact path={ ROUTES.PROJECTS } component={ Projects } />
+        <Route exact path={ ROUTES.WORKSPACE } component={ Workspace } />
+
+        <Route exact path={ ROUTES.PAPER_EDITOR } component={ PaperEditor } />
 
         <Route
           exact
-          path="/projects/:projectId/paperedits/:papereditId"
-          component={ PaperEditor }
-        />
-
-        <Route
-          exact
-          path="/projects/:projectId/transcripts/:transcriptId/correct"
+          path={ ROUTES.TRANSCRIPT_EDITOR }
           component={ TranscriptEditor }
         />
 

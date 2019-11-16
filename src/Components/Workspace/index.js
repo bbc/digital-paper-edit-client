@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
@@ -8,10 +8,9 @@ import CustomFooter from '../lib/CustomFooter';
 import Transcripts from './Transcripts';
 import PaperEdits from './PaperEdits';
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
+import Collection from '../../firebase/Collection';
 
-import ApiContext from '../../Context/ApiContext';
-
-const genBreadcrumb = (name) => [
+const genBreadcrumb = name => [
   {
     name: 'Projects',
     link: '/projects'
@@ -21,66 +20,59 @@ const genBreadcrumb = (name) => [
   }
 ];
 
-const WorkspaceView = (props) => {
-  const api = useContext(ApiContext);
+const WorkspaceView = props => {
+  // const api = useContext(ApiContext);
+  const projects = Collection('projects');
   const id = props.match.params.projectId;
+  // get ref
 
   const [ active, setActive ] = useState('transcripts');
   const [ name, setName ] = useState('Project Name');
 
   useEffect(() => {
-
     const getProjectName = async () => {
       try {
-        const response = await api.getProject(id);
-        setName(response.project.title);
+        const response = await projects.getItem(id);
+        setName(response.title);
       } catch (e) {
-        console.error('Could not get Project Id: ', id, e );
+        console.error('Could not get Project Id: ', id, e);
       }
     };
 
     getProjectName();
 
-    return () => {
-    };
-
-  }, [ api, id, name ]);
+    return () => {};
+  }, [ projects, id, name ]);
 
   return (
-    <ApiContext.Consumer>
-      { () => (
-        <>
-          <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
-            <Row>
-              <Col sm={ 12 }>
-                <Breadcrumb items={ genBreadcrumb(name) } />
-              </Col>
-            </Row>
+    <>
+      <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
+        <Row>
+          <Col sm={ 12 }>
+            <Breadcrumb items={ genBreadcrumb(name) } />
+          </Col>
+        </Row>
 
-            <Tabs
-              id="controlled-tab-example"
-              activeKey={ active }
-              onSelect={ tab => setActive(tab) }
-            >
-              <Tab eventKey="transcripts" title="Transcripts">
-                <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
-                  <Transcripts projectId={ id }/>
-                </Container>
-              </Tab>
+        <Tabs
+          id="controlled-tab-example"
+          activeKey={ active }
+          onSelect={ tab => setActive(tab) }
+        >
+          <Tab eventKey="transcripts" title="Transcripts">
+            <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
+              <Transcripts projectId={ id } />
+            </Container>
+          </Tab>
 
-              <Tab eventKey="paperedits" title="Paper Edits">
-                <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
-                  <PaperEdits projectId={ id } />
-                </Container>
-              </Tab>
-            </Tabs>
-
-          </Container>
-          <CustomFooter />
-        </>
-      ) }
-
-    </ApiContext.Consumer>
+          <Tab eventKey="paperedits" title="Paper Edits">
+            <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
+              <PaperEdits projectId={ id } />
+            </Container>
+          </Tab>
+        </Tabs>
+      </Container>
+      <CustomFooter />
+    </>
   );
 };
 

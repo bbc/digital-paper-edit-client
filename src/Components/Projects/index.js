@@ -1,22 +1,21 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 import CustomFooter from '../lib/CustomFooter';
 import ItemsContainer from '../lib/ItemsContainer';
-import ApiContext from '../../Context/ApiContext';
+import Collection from '../../firebase/Collection';
 import { deleteItem, updateItem, addItem } from '../../Context/reducers';
 
 const Projects = () => {
+  const api = Collection('projects');
   const [ isFetch, setIsFetch ] = useState(false);
   const [ items, setItems ] = useState([]);
-
   const type = 'Project';
-  const api = useContext(ApiContext);
 
-  const createProject = async (item) => {
-    const response = await api.createProject(item);
+  const createProject = async item => {
+    const response = await api.postItem(item);
     if (response.ok) {
       const newProject = response.project;
       newProject.display = true;
@@ -28,7 +27,7 @@ const Projects = () => {
   };
 
   const updateProject = async (id, item) => {
-    const response = await api.updateProject(id, item);
+    const response = await api.putItem(id, item);
 
     if (response.ok) {
       const project = response.project;
@@ -38,7 +37,7 @@ const Projects = () => {
     }
   };
 
-  const handleSave = async (item) => {
+  const handleSave = async item => {
     if (item.id) {
       return await updateProject(item.id, item);
     } else {
@@ -46,10 +45,10 @@ const Projects = () => {
     }
   };
 
-  const deleteProject = async (id) => {
+  const deleteProject = async id => {
     let response;
     try {
-      response = await api.deleteProject(id);
+      response = await api.deleteItem(id);
     } catch (e) {
       console.log(e);
     }
@@ -58,7 +57,7 @@ const Projects = () => {
     return response;
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = id => {
     console.log('handle delete');
     const response = deleteProject(id);
     if (response.ok) {
@@ -72,7 +71,7 @@ const Projects = () => {
       let allProjects = [];
 
       try {
-        const result = await api.getAllProjects();
+        const result = await api.getCollection();
         allProjects = result.map(project => {
           const id = project.id;
           project.key = id;
@@ -81,7 +80,6 @@ const Projects = () => {
 
           return project;
         });
-
       } catch (e) {
         console.log('Failed to get projects');
       }
@@ -94,28 +92,28 @@ const Projects = () => {
       setIsFetch(true);
     }
 
-    return () => {
-    };
-
+    return () => {};
   }, [ api, isFetch, items ]);
 
   const breadcrumbItems = [
     {
       name: `${ type }s`,
-      link: `/${ type }s`,
+      link: `/${ type }s`
     }
   ];
 
   return (
     <>
       <Container
-        data-testid='projectsContainer'
-        style={ { marginBottom: '5em', marginTop: '1em' } }>
+        data-testid="projectsContainer"
+        style={ { marginBottom: '5em', marginTop: '1em' } }
+      >
         <Row>
           <Col sm={ 12 }>
             <Breadcrumb
-              data-testid='projectsBreadcrumb'
-              items={ breadcrumbItems } />
+              data-testid="projectsBreadcrumb"
+              items={ breadcrumbItems }
+            />
           </Col>
         </Row>
         <ItemsContainer

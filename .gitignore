@@ -104,18 +104,19 @@ packages/client/build/
 *.wav
 *.mp3
 
-#ingore subtitles files
+#ignore subtitles files
 *.srt
 *.sbv
 *.vtt
 *.ttml
 *.itt
 
-
-
+# RPMS
 /build
 SPECS
 SOURCES
 *.service
 
+# firebase
 .firebase/*
+.env
