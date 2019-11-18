@@ -1,109 +1,87 @@
 import React, { useEffect, useState, useContext } from 'react';
 import ItemsContainer from '../../lib/ItemsContainer';
 import PropTypes from 'prop-types';
-import { deleteItem, updateItem, addItem } from '../../../Context/reducers';
-import ApiContext from '../../../Context/ApiContext';
+import Collection from '../../Firebase/Collection';
+import { withAuthorization } from '../../Session';
 
 const PaperEdits = props => {
-  const api = useContext(ApiContext);
+  const api = new Collection(props.firebase.db, 'paperedits');
   const [ items, setItems ] = useState([]);
-  const type = 'Paper Edit';
-  const [ isFetch, setIsFetch ] = useState(false);
+  const TYPE = 'Paper Edit';
+  const [ loading, setIsLoading ] = useState(false);
+
+  const genUrl = id => {
+    return `/projects/${ props.projectId }/paperedits/${ id }`;
+  };
 
   useEffect(() => {
-    const genUrl = id => {
-      return `/projects/${ props.projectId }/paperedits/${ id }`;
-    };
-
-    const getAllPaperEdits = async () => {
-      const allPaperEdits = await api.getAllPaperEdits(props.projectId);
-
-      const paperEdits = allPaperEdits.map(paperEdit => {
-        paperEdit.display = true;
-        paperEdit.url = genUrl(paperEdit.id);
-        paperEdit.projectId = props.projectId;
-
-        return paperEdit;
-      });
-      setItems(paperEdits);
+    const getPaperEdits = async () => {
+      try {
+        api.projectRef(props.projectId).onShapshot(snapshot => {
+          const paperEdits = snapshot.docs.map(doc => {
+            return { ...doc.data(), id: doc.id, display: true };
+          });
+          setItems(paperEdits);
+        });
+      } catch (error) {
+        console.log('Error getting documents: ', error);
+      }
     };
     // TODO: some error handling
-    if (!isFetch) {
-      getAllPaperEdits();
-      setIsFetch(true);
+    if (!loading) {
+      getPaperEdits();
+      setIsLoading(true);
     }
 
     return () => {};
-  }, [ api, isFetch, items, props.projectId ]);
+  }, [ api, loading, items, props.projectId ]);
 
   const createPaperEdit = async item => {
-    const response = await api.createPaperEdit(props.projectId, item);
-    if (response.ok) {
-      const newPaperEdit = response.paperedit;
-      newPaperEdit.display = true;
-      // newPaperEdit.url = genUrl(newPaperEdit.id);
+    item.projectId = props.projectId;
+    const docRef = await api.postItem(item);
+    item.url = genUrl(docRef.id);
 
-      const newItems = addItem(newPaperEdit, items);
-      setItems(newItems);
-    } else {
-      console.log('api.createPaperEdit', response);
-    }
+    docRef.update({
+      url: item.url
+    });
+
+    item.display = true;
+
+    return item;
   };
 
   const updatePaperEdit = async (id, item) => {
-    const response = await api.updatePaperEdit(props.projectId, id, item);
-    const paperEdit = response.paperedit;
-
-    if (response.ok && paperEdit) {
-      paperEdit.display = true;
-
-      const newItems = updateItem(id, paperEdit, items);
-      setItems(newItems);
-    } else {
-      console.log('api.createPaperEdit', response);
-    }
+    await api.put(id, item);
+    item.display = true;
   };
 
-  const handleSave = item => {
+  const handleSave = async item => {
     if (item.id) {
-      return updatePaperEdit(item.id, item);
+      return await updatePaperEdit(item.id, item);
     } else {
-      return createPaperEdit(item);
+      return await createPaperEdit(item);
     }
   };
 
   const deletePaperEdit = async id => {
-    let response;
     try {
-      response = await api.deletePaperEdit(props.projectId, id);
+      await api.delete(id);
     } catch (e) {
       console.log(e);
     }
-    console.log('api.deletePaperEdit', response);
-
-    return response;
   };
 
   const handleDelete = id => {
-    console.log('handle delete');
-    const response = deletePaperEdit(id);
-    if (response.ok) {
-      const newItems = deleteItem(id, items);
-      setItems(newItems);
-    }
+    deletePaperEdit(id);
   };
 
   return (
-    <ApiContext.Consumer>
-      {() => (
-        <ItemsContainer
-          type={ type }
-          items={ items }
-          handleSave={ handleSave }
-          handleDelete={ handleDelete }
-        />
-      )}
-    </ApiContext.Consumer>
+    <ItemsContainer
+      type={ TYPE }
+      items={ items }
+      handleSave={ handleSave }
+      handleDelete={ handleDelete }
+    />
   );
 };
 
@@ -111,4 +89,5 @@ PaperEdits.propTypes = {
   projectId: PropTypes.any
 };
 
-export default PaperEdits;
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(PaperEdits);

@@ -1,71 +1,59 @@
-import Firebase from './index';
-import cuid from 'cuid';
-
-const db = Firebase.db;
-
-const getCollection = async collection => {
-  const query = db.collection(collection);
-  const querySnapshot = await query.get();
-  const docs = querySnapshot.docs;
-
-  return docs.map(doc => {
-    const data = doc.data();
-    data.id = doc.id;
-
-    return data;
-  });
-};
-
-const getItem = async (collection, id) => {
-  const document = db.collection(collection).doc(id);
-  const item = await document.get();
-
-  return item.data();
-};
-
-const getRefItem = async (collection, refId) => {
-  // do something to get ref item
-};
-
-const postItem = async (collection, data) => {
-  await db
-    .collection(collection)
-    .doc('/' + cuid() + '/')
-    .create(data);
-};
-
-const putItem = async (collection, id, data) => {
-  await db
-    .collection(collection)
-    .doc(id)
-    .update(data);
-};
-
-const deleteItem = async (collection, id) => {
-  await db
-    .collection(collection)
-    .doc(id)
-    .delete();
-};
+import cuid from "cuid";
 
 class Collection {
-  constructor(name) {
+  constructor(db, name) {
     this.name = name;
+    this.collection = db.collection(name);
+    this.snapshot = [];
   }
-  deleteItem = id => deleteItem(this.name, id);
-  getCollection = () => getCollection(this.name);
-  getItem = id => getItem(this.name, id);
-  postItem = data => postItem(this.name, data);
-  putItem = (id, data) => putItem(this.name, id, data);
+
+  getCollection = async () => {
+    const querySnapshot = await this.collection.get();
+    const docs = querySnapshot.docs;
+
+    return docs.map(doc => {
+      const data = doc.data();
+      data.id = doc.id;
+
+      return data;
+    });
+  };
+
+  getItem = async id => {
+    const document = this.collection.doc(id);
+    const item = await document.get();
+
+    return item.data();
+  };
+
+  // const getRefItem = async (collection, refId) => {
+  // do something to get ref item
+  // };
+
+  postItem = async data => {
+    try {
+      const docRef = await this.collection.add(data);
+      console.log("Document written with ID: ", docRef.id);
+
+      return docRef;
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+  };
+
+  putItem = async (id, data) => {
+    await this.collection.doc(id).update(data);
+  };
+
+  deleteItem = async id => {
+    await this.collection.doc(id).delete();
+  };
+
+  userRef = userId => this.collection.where("users", "array-contains", userId);
+  user = async userId => await this.userRef(userId).get();
+
+  projectRef = projectId => this.collection.where("projectId", "==", projectId);
+  project = async projectId => await this.userRef(projectId).get();
 }
 
 export default Collection;
-
-// module.exports = {
-// db,
-// getCollection,
-// getItem,
-// postItem,
-// putItem,
-// deleteItem
-// };

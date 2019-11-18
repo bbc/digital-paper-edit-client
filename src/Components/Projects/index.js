@@ -6,36 +6,35 @@ import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 import CustomFooter from '../lib/CustomFooter';
 import ItemsContainer from '../lib/ItemsContainer';
 import Collection from '../Firebase/Collection';
-import { deleteItem, updateItem, addItem } from '../../Context/reducers';
 import { withAuthorization } from '../Session';
+import { PROJECTS } from '../../constants/routes';
 
-const Projects = () => {
-  const api = Collection('projects');
-  const [ isFetch, setIsFetch ] = useState(false);
+const Projects = props => {
+  const [ uid, setUid ] = useState();
+  const [ loading, setIsLoading ] = useState(false);
   const [ items, setItems ] = useState([]);
   const type = 'Project';
+  const api = new Collection(props.firebase.db, PROJECTS);
 
   const createProject = async item => {
-    const response = await api.postItem(item);
-    if (response.ok) {
-      const newProject = response.project;
-      newProject.display = true;
-      const newItems = addItem(newProject, items);
-      setItems(newItems);
-    } else {
-      console.error('Failed to add project', item);
-    }
+    item.users = [ uid ];
+    const docRef = await api.postItem(item);
+
+    item.url = `/projects/${ docRef.id }`;
+    docRef.update({
+      url: item.url
+    });
+
+    item.display = true;
+
+    return item;
   };
 
   const updateProject = async (id, item) => {
-    const response = await api.putItem(id, item);
+    await api.putItem(id, item);
+    item.display = true;
 
-    if (response.ok) {
-      const project = response.project;
-      project.display = true;
-      const newItems = updateItem(id, project, items);
-      setItems(newItems);
-    }
+    return item;
   };
 
   const handleSave = async item => {
@@ -47,54 +46,49 @@ const Projects = () => {
   };
 
   const deleteProject = async id => {
-    let response;
     try {
-      response = await api.deleteItem(id);
+      await api.deleteItem(id);
     } catch (e) {
       console.log(e);
     }
-    console.log('api.deleteProject', response);
-
-    return response;
   };
 
   const handleDelete = id => {
-    console.log('handle delete');
-    const response = deleteProject(id);
-    if (response.ok) {
-      const newItems = deleteItem(id, items);
-      setItems(newItems);
-    }
+    deleteProject(id);
   };
 
   useEffect(() => {
-    const getProjects = async () => {
-      let allProjects = [];
-
+    const getUserProjects = async () => {
       try {
-        const result = await api.getCollection();
-        allProjects = result.map(project => {
-          const id = project.id;
-          project.key = id;
-          project.url = `/projects/${ id }`;
-          project.display = true;
-
-          return project;
+        api.userRef(uid).onSnapshot(snapshot => {
+          const projects = snapshot.docs.map(doc => {
+            return { ...doc.data(), id: doc.id, display: true };
+          });
+          setItems(projects);
         });
-      } catch (e) {
-        console.log('Failed to get projects');
+      } catch (error) {
+        console.log('Error getting documents: ', error);
       }
-
-      setItems(allProjects);
     };
 
-    if (!isFetch) {
-      getProjects();
-      setIsFetch(true);
+    const authListener = props.firebase.onAuthUserListener(
+      authUser => {
+        if (authUser) {
+          setUid(authUser.uid);
+        }
+      },
+      () => setUid()
+    );
+
+    if (uid && !loading) {
+      getUserProjects(uid);
+      setIsLoading(true);
     }
 
-    return () => {};
-  }, [ api, isFetch, items ]);
+    return () => {
+      authListener();
+    };
+  }, [ api, items, loading, props.firebase, uid ]);
 
   const breadcrumbItems = [
     {
@@ -102,6 +96,8 @@ const Projects = () => {
       link: `/${ type }s`
     }
   ];
+
+  console.log(items);
 
   return (
     <>
@@ -117,17 +113,20 @@ const Projects = () => {
             />
           </Col>
         </Row>
-        <ItemsContainer
-          key={ type }
-          model={ type }
-          items={ items }
-          handleSave={ handleSave }
-          handleDelete={ handleDelete }
-        />
+        {items ? (
+          <ItemsContainer
+            key={ type }
+            model={ type }
+            items={ items }
+            handleSave={ handleSave }
+            handleDelete={ handleDelete }
+          />
+        ) : null}
       </Container>
       <CustomFooter />
     </>
   );
 };
+
 const condition = authUser => !!authUser;
 export default withAuthorization(condition)(Projects);

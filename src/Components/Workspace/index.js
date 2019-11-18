@@ -9,6 +9,8 @@ import Transcripts from './Transcripts';
 import PaperEdits from './PaperEdits';
 import Breadcrumb from '@bbc/digital-paper-edit-react-components/Breadcrumb';
 import Collection from '../Firebase/Collection';
+import * as ROUTES from '../../constants/routes';
+import { withAuthorization } from '../Session';
 
 const genBreadcrumb = name => [
   {
@@ -21,19 +23,16 @@ const genBreadcrumb = name => [
 ];
 
 const WorkspaceView = props => {
-  // const api = useContext(ApiContext);
-  const projects = Collection('projects');
+  const projects = new Collection(props.firebase.db, ROUTES.PROJECTS);
   const id = props.match.params.projectId;
-  // get ref
-
   const [ active, setActive ] = useState('transcripts');
   const [ name, setName ] = useState('Project Name');
 
   useEffect(() => {
     const getProjectName = async () => {
       try {
-        const response = await projects.getItem(id);
-        setName(response.title);
+        const doc = await projects.getItem(id);
+        setName(doc.title);
       } catch (e) {
         console.error('Could not get Project Id: ', id, e);
       }
@@ -42,7 +41,7 @@ const WorkspaceView = props => {
     getProjectName();
 
     return () => {};
-  }, [ projects, id, name ]);
+  }, [ id, projects ]);
 
   return (
     <>
@@ -75,5 +74,5 @@ const WorkspaceView = props => {
     </>
   );
 };
-
-export default WorkspaceView;
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(WorkspaceView);

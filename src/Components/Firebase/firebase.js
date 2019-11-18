@@ -1,6 +1,6 @@
 import app from 'firebase/app';
 import 'firebase/auth';
-import 'firebase/database';
+import 'firebase/firestore';
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -10,40 +10,41 @@ const config = {
   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID
 };
-
 class Firebase {
   constructor() {
     app.initializeApp(config);
     this.auth = app.auth();
-    this.db = app.database();
+    this.db = app.firestore();
   }
 
+  userRef = uid => this.db.doc(`users/${ uid }`);
+  usersRef = () => this.db.collection('users');
+
+  user = async uid => await this.userRef(uid).get();
+  users = async () => await this.usersRef().get();
   // *** Merge Auth and DB User API *** //
 
   onAuthUserListener = (next, fallback) =>
-    this.auth.onAuthStateChanged(authUser => {
+    this.auth.onAuthStateChanged(async authUser => {
       if (authUser) {
-        this.user(authUser.uid)
-          .once('value')
-          .then(snapshot => {
-            const dbUser = snapshot.val();
+        const dbSnapshot = await this.user(authUser.uid);
+        const dbUser = dbSnapshot.data();
 
-            // default empty roles
-            if (!dbUser.roles) {
-              dbUser.roles = {};
-            }
+        // default empty roles
+        if (!dbUser.roles) {
+          dbUser.roles = {};
+        }
 
-            // merge auth and db user
-            const mergeUser = {
-              uid: authUser.uid,
-              email: authUser.email,
-              emailVerified: authUser.emailVerified,
-              providerData: authUser.providerData,
-              ...dbUser
-            };
+        // merge auth and db user
+        const mergeUser = {
+          uid: authUser.uid,
+          email: authUser.email,
+          emailVerified: authUser.emailVerified,
+          providerData: authUser.providerData,
+          ...dbUser
+        };
 
-            next(mergeUser);
-          });
+        next(mergeUser);
       } else {
         fallback();
       }
@@ -56,9 +57,6 @@ class Firebase {
   doSignOut = () => this.auth.signOut();
   doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
   doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
-
-  user = uid => this.db.ref(`users/${ uid }`);
-  users = () => this.db.ref('users');
 }
 
 export default Firebase;

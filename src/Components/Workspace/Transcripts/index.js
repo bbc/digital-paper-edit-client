@@ -1,152 +1,91 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import ItemsContainer from '../../lib/ItemsContainer';
 import PropTypes from 'prop-types';
-import { deleteItem, updateItem, addItem } from '../../../Context/reducers';
-import ApiContext from '../../../Context/ApiContext';
-import Collections from '../../Firebase/Collection';
-const intervalInMs = 30000;
+import Collection from '../../Firebase/Collection';
+import { withAuthorization } from '../../Session';
 
 const Transcripts = props => {
-  const api = Collections('transcripts');
-  // const api = useContext(ApiContext);
-  const [ isFetch, setIsFetch ] = useState(false);
+  const api = new Collection(props.firebase.db, 'transcripts');
+  const [ loading, setIsLoading ] = useState(false);
   const [ items, setItems ] = useState([]);
-  const [ isInProgress, setIsInProgress ] = useState(false);
-  const [ interval, setInterval ] = useState();
-  const type = 'Transcript';
+  const TYPE = 'Transcript';
 
-  const isTranscriptionInProgress = transcripts => {
-    if (transcripts.length !== 0) {
-      const result = transcripts.find(transcript => {
-        return transcript.status === 'in-progress';
-      });
-
-      return result ? true : false;
-    }
-
-    return false;
+  const genUrl = id => {
+    return `#/projects/${ props.projectId }/transcripts/${ id }/correct`;
   };
 
   useEffect(() => {
-    const genUrl = id => {
-      return `#/projects/${ props.projectId }/transcripts/${ id }/correct`;
-    };
-
     const getTranscripts = async () => {
-      const response = await api.getItem(props.projectId); // get item based on reference
-
-      const newItems = response.transcripts.map(transcript => {
-        transcript.display = true;
-        transcript.url = genUrl(transcript.id);
-        transcript.projectId = props.projectId;
-
-        return transcript;
-      });
-      setItems(newItems);
+      try {
+        api.projectRef(props.projectId).onShapshot(snapshot => {
+          const transcripts = snapshot.docs.map(doc => {
+            return { ...doc.data(), id: doc.id, display: true };
+          });
+          setItems(transcripts);
+        });
+      } catch (error) {
+        console.log('Error getting documents: ', error);
+      }
     };
 
-    if (!isFetch) {
+    if (!loading) {
       getTranscripts();
-      setIsFetch(true);
+      setIsLoading(true);
     }
 
-    // For simplicity rather then handling all the edge cases (on start, save, delete,etc..), the interval runs periodicalicly,
-    // and only if there are items in progress in the list, it checks the backed for updates
-    if (isInProgress && !interval) {
-      setInterval(
-        setTimeout(() => {
-          getTranscripts();
-        }, intervalInMs)
-      );
-    }
-
-    if (items.length > 0) {
-      setIsInProgress(isTranscriptionInProgress(items));
-    }
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [ api, interval, isFetch, isInProgress, items, props.projectId ]);
+    return () => {};
+  }, [ api, api.collection, loading, props.projectId ]);
 
   const updateTranscript = async (id, item) => {
-    const queryParamsOptions = false;
-    const response = await api.updateTranscript(
-      props.projectId,
-      id,
-      queryParamsOptions,
-      item
-    );
+    await api.putItem(id, item);
+    item.display = true;
 
-    if (response.ok) {
-      const editedTranscript = response.transcript;
-      const index = items.findIndex(pe => pe.id === id);
-      const originalTranscript = items[index];
-
-      editedTranscript.display = true;
-      editedTranscript.status = originalTranscript.status;
-      const newItems = updateItem(id, editedTranscript, items);
-      setItems(newItems);
-    } else {
-      console.log('api.updateTranscript', response);
-    }
+    return item;
   };
 
   const createTranscript = async item => {
-    const response = await api.createTranscript(item);
-    if (response.ok) {
-      const newTranscript = response.transcript;
+    item.projectId = props.projectId;
+    const docRef = await api.postItem(item);
+    item.url = genUrl(docRef.id);
+    item.status = 'in-progress';
 
-      newTranscript.display = true;
-      newTranscript.status = 'in-progress';
+    docRef.update({
+      url: item.url,
+      status: item.status
+    });
 
-      const newItems = addItem(newTranscript, items);
-      setItems(newItems);
-    } else {
-      console.log('api.updateTranscript', response);
-    }
+    item.display = true;
+
+    return item;
   };
 
-  const handleSave = item => {
+  const handleSave = async item => {
     if (item.id) {
-      return updateTranscript(item.id, item);
+      return await updateTranscript(item.id, item);
     } else {
-      return createTranscript(item);
+      return await createTranscript(item);
     }
   };
 
   const deleteTranscript = async id => {
-    console.log(api);
-    let response;
     try {
-      response = await api.deleteTranscript(props.projectId, id);
+      await api.deleteItem(id);
     } catch (e) {
       console.log(e);
     }
-    console.log('api.deleteTranscript', response);
-
-    return response;
   };
 
   const handleDelete = id => {
-    const response = deleteTranscript(id);
-    if (response.ok) {
-      const newItems = deleteItem(id, items);
-      setItems(newItems);
-    }
+    deleteTranscript(id);
   };
 
   return (
-    <ApiContext.Consumer>
-      {() => (
-        <ItemsContainer
-          type={ type }
-          items={ items }
-          handleSave={ handleSave }
-          handleDelete={ handleDelete }
-        />
-      )}
-    </ApiContext.Consumer>
+    <ItemsContainer
+      type={ TYPE }
+      items={ items }
+      handleSave={ handleSave }
+      handleDelete={ handleDelete }
+    />
   );
 };
 
@@ -154,4 +93,5 @@ Transcripts.propTypes = {
   projectId: PropTypes.any
 };
 
-export default Transcripts;
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(Transcripts);
