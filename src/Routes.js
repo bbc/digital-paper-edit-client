@@ -20,6 +20,7 @@ const Routes = () => {
   return (
     <HashRouter basename="/">
       <Switch>
+        <Route exact path={ ROUTES.LANDING }></Route>
         <Route exact path={ ROUTES.SIGN_IN } component={ SignIn } />
         <Route exact path={ ROUTES.PROJECTS } component={ Projects } />
         <Route exact path={ ROUTES.WORKSPACE } component={ Workspace } />

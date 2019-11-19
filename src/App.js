@@ -38,7 +38,11 @@ const App = props => {
   return (
     <>
       {offlineWarning}
-      {authUser ? <p>Signed in as: {authUser.email}</p> : null}
+      {authUser ? (
+        <p>Signed in as: {authUser.email}</p>
+      ) : (
+        <a href="#/signin">Please sign in </a>
+      )}
       {authUser ? <SignOutButton /> : null}
       <Routes />
     </>

@@ -15,6 +15,7 @@ const SignInFormBase = props => {
   const [ password, setPassword ] = useState('');
   const [ error, setError ] = useState();
 
+  // TODO: IF signed in, forward always to somewhere else
   const onSubmit = async event => {
     try {
       await props.firebase.doSignInWithEmailAndPassword(email, password);
