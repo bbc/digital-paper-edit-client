@@ -4,7 +4,7 @@
 
 An application to make it faster, easier and more accessible to edit audio and video interviews using automatically generated transcriptions form STT service.
 
-See [intro](./docs/intro.md) for more info on the project. And [user journey](./docs/user-journey/user-journey.md) for a high level overview of the user journey.
+See [intro](./docs/intro.md) and [slides](https://docs.google.com/presentation/d/1vVe_hgTj6JhLhU2WuZBOWx41ajcKX-8m8Xa0NIVZT2M/edit?usp=sharing) for more info on the project and [user journey](./docs/user-journey/user-journey.md) for a high level overview of the user journey.
 
 ## Project Architecture
 
