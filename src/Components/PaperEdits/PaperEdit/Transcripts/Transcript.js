@@ -347,8 +347,8 @@ class Transcript extends Component {
 
         <Card>
           <Card.Header>
-            {/* // Preview video - HTML5 Video element or  @bbc/react-transcript-editor/VideoPlayer
-        // Media control - HTML5 default or @bbc/react-transcript-editor/MediaPlayer
+            {/* // Preview video - HTML5 Video element or  react-transcript-editor/VideoPlayer
+        // Media control - HTML5 default or react-transcript-editor/MediaPlayer
         // Search Bar - from TranscriptAnnotate component
         // Text -  from TranscriptAnnotate component */}
             <video

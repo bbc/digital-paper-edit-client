@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // import styles from './Transcript.module.css';
 // TODO: perhaps import TranscriptEditor on componentDidMount(?) to defer the load for later
 // https://facebook.github.io/create-react-app/docs/code-splitting
-import { TranscriptEditor } from '@bbc/react-transcript-editor';
+import { TranscriptEditor } from 'react-transcript-editor';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -48,9 +48,9 @@ class TranscriptCorrect extends Component {
     alert('save to server');
 
     // TODO: decide how to deal with transcript corrections
-    // exporting digitalpaperedit in @bbc/react-transcript-editor@latest doesn't give you
+    // exporting digitalpaperedit in react-transcript-editor@latest doesn't give you
     // corrected text with timecodes, only "original" uncorrected text even if transcript might
-    // have been corrected, because of outstandin PR in bbc/react-transcript-editor
+    // have been corrected, because of outstandin PR in react-transcript-editor
     // https://github.com/bbc/react-transcript-editor/pull/144
     // which should be addressed after https://github.com/bbc/react-transcript-editor/pull/160
     //
