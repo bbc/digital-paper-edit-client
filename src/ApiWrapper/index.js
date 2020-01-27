@@ -4,11 +4,11 @@ import whichJsEnv from '../Util/which-js-env';
 
 const jsENV = whichJsEnv();
 
-// dynamic export
-// https://medium.com/@WebReflection/javascript-dynamic-import-export-b0e8775a59d4
-export default ( () => {
+const dynamicApiWrapper = () => {
   // await async dependencies
   // export the module
+  console.debug(jsENV)
+
   if (jsENV === 'demo') {
     console.log('API Wrapper demo time!');
     const demoApiWrapper = new DemoApiWrapper();
@@ -29,4 +29,8 @@ export default ( () => {
 
     return electronWrapper;
   }
-})();
+};
+
+// dynamic export
+// https://medium.com/@WebReflection/javascript-dynamic-import-export-b0e8775a59d4
+export default dynamicApiWrapper();
