@@ -54,8 +54,11 @@ class ProgrammeScript extends Component {
   }
 
   updateVideoContextWidth = () => {
+    const maxScreenSizeForResponsivness = 350;
+    const newOffset = this.card.offsetWidth - 10;
+    const newOffsetAdjustedForLargeScreen = newOffset >= maxScreenSizeForResponsivness? maxScreenSizeForResponsivness : newOffset;
     this.setState({
-      width: this.card.offsetWidth - 10
+      width:newOffsetAdjustedForLargeScreen
     });
   }
 
