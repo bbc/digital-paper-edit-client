@@ -3,9 +3,6 @@
  * @returns - 'browser', 'electron', 'cep'. where cep stands for adobe CEP panel
  */
 function whichJsEnv() {
-  if (window.process.versions.electron !== undefined) {
-    return 'electron';
-  }
   // Is browser Eg client side app or locally testing (Node)
   if (
     window.process === undefined ||
@@ -16,6 +13,10 @@ function whichJsEnv() {
     }
 
     return 'browser';
+  }
+
+  if (window.process.versions.electron !== undefined) {
+    return 'electron';
   }
 
   if (window.process.versions.cep !== undefined) {
