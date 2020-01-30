@@ -1,6 +1,38 @@
 # User journeys  - overview
 
+
 High level, **low fidelity** overview of the main parts of the user journey 
+
+
+
+![high-level-user-journey](./high-level-user-journey.png)
+
+The workflow can scale up or down to tackle more simpler or complex productions. 
+- At a minimum the user can take a text snippets ad add it to a programme script. 
+- If they wish they can use an outline in the programme script to craft their story
+- They can also add an analyses stage where they can    
+    1. use default highlighting to identify relevant content
+    2. categories highlights with labels
+    3. annotate highlights
+
+_The content is then searchable and filterable, by text, speakers and labels. To make it easier to review it and/or add it to a programme script._
+
+<!-- User can 
+- select and transfer text snippets into programme script export
+
+|       |Transcription  | Analyses                  |  Transfer    | programme script    |  Export   |
+|---    |---            |---                        |---           |---                  |---        |
+|MVP 1.0|   📝          |   →                       |  ✔️         | reorder             |  ✔️       |
+|MVP 1.2|   📝          |   →                       |  ✔️         | outline + reorder   |  ✔️       |
+|MLP    |   📝          | 1.Default highlighting    |  ✔️         | outline + reorder   |  ✔️       |
+|MLP    |   📝          | 2.Categorization/Labels   |  ✔️️️         | outline + reorder   |  ✔️       |
+|MLP    |   📝          | 3.Annotate highlights     |  ✔️         | outline + reorder   |  ✔️       | 
+
+-->
+
+
+
+## Site map 
 
 ![Projects](./img/1.projects.png)
 
@@ -13,12 +45,12 @@ A user can create a project, add users to the project. And create a transcript a
 ![Projects List](./img/2.projects-list.png)
 
 
-## Users
+<!-- ## Users
 
 Within a project, the user can or remove other users to the project
 
 
-![Users](./img/3.users-list.png)
+![Users](./img/3.users-list.png) -->
 
 
 ## Transcripts
@@ -76,7 +108,15 @@ See taxonomy at the end of the doc for more info on terminology.
 ![paper edit voice over](./img/9.paper-edit-voice-over.png)
 
 
+#### Paper-edit - Program script - Preview
+
+![paper edit programme script preview](./img/10.paper-edit-preview.png)
+
+
+
 ## Export
+
+![export](./img/11.export.png)
 
 ### EDL 
 

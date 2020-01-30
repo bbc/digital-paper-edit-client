@@ -4,12 +4,12 @@ import Row from 'react-bootstrap/Row';
 import cuid from 'cuid';
 import Tab from 'react-bootstrap/Tab';
 import Card from 'react-bootstrap/Card';
-import PreviewCanvas from './PreviewCanvas/index.js';
+import PreviewCanvas from './PreviewCanvas2/index.js';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import EDL from 'edl_composer';
-import generateADL from '@bbc/aes31-adl-composer';
-import jsonToFCPX from '@bbc/fcpx-xml-composer';
+import generateADL from '@pietrop/aes31-adl-composer';
+import jsonToFCPX from '@pietrop/fcpx-xml-composer';
 import downloadjs from 'downloadjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -508,7 +508,9 @@ class ProgramScript extends Component {
           <Card.Header>
             {/* <hr/> */}
             { !this.state.resetPreview ?
-              <PreviewCanvas playlist={ this.state.playlist } width={ '300' }/>
+              <PreviewCanvas playlist={ this.state.playlist }
+               width={ 300 }
+               />
               : null }
           </Card.Header>
           <Card.Header>

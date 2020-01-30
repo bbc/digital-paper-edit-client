@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { shortTimecode } from 'react-transcript-editor/timecodeConverter';
+import { shortTimecode } from '@pietrop/react-transcript-editor/timecodeConverter';
 import styles from './index.module.css';
 
 /**

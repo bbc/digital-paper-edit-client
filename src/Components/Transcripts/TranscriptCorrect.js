@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // import styles from './Transcript.module.css';
 // TODO: perhaps import TranscriptEditor on componentDidMount(?) to defer the load for later
 // https://facebook.github.io/create-react-app/docs/code-splitting
-import { TranscriptEditor } from 'react-transcript-editor';
+import { TranscriptEditor } from '@pietrop/react-transcript-editor';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';

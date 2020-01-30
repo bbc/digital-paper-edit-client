@@ -4,39 +4,38 @@
 
 An application to make it faster, easier and more accessible to edit audio and video interviews using automatically generated transcriptions form STT service.
 
-See [intro](./docs/intro.md) for more info on the project. And [user journey](./docs/user-journey/user-journey.md) for a high level overview of the user journey.
+See [intro](./docs/intro.md) and [slides](https://docs.google.com/presentation/d/1vVe_hgTj6JhLhU2WuZBOWx41ajcKX-8m8Xa0NIVZT2M/edit?usp=sharing) for more info on the project and [user journey](./docs/user-journey/user-journey.md) for a high level overview of the user journey.
 
-## Project Architecture 
+## Project Architecture
 
 It's a React, Express, Electron, Adobe CEP, AWS stack to be able to deploy one modular code base as a Web app or Cross platform Desktop app (for Mac, win and linux).
 
-The project is organised across these repository 
+The project is organised across these repository
 
-- [`bbc/digital-paper-edit-client`](https://github.com/bbc/digital-paper-edit-client) - React Client - [npm](https://www.npmjs.com/package/@bbc/digital-paper-edit-client)
-- [`bbc/digital-paper-edit-react-components`](https://github.com/bbc/digital-paper-edit-react-components) - React Storybook for Client components - `npm`.
-- [`bbc/digital-paper-edit-api`](https://github.com/bbc/digital-paper-edit-api) - Express server API - [npm](https://www.npmjs.com/package/@bbc/digital-paper-edit-api)
-- [`bbc/digital-paper-edit-infrastructure`](https://github.com/bbc/digital-paper-edit-infrastructure) - AWS infrastructure for API server and Client.
-- [`bbc/digital-paper-edit-electron`](https://github.com/bbc/digital-paper-edit-electron) - Electron, Cross Platform Desktop app - Mac, Windows, Linux
-- [`bbc/digital-paper-edit-cep`](https://github.com/bbc/digital-paper-edit-cep) Adobe CEP (Common Extensibility Platform) - Premiere Pro Plugin Panel
+- [`pietrop/digital-paper-edit-client`](https://github.com/pietrop/digital-paper-edit-client) - React Client - [npm](https://www.npmjs.com/package/@pietrop/digital-paper-edit-client)
+- [`pietrop/digital-paper-edit-storybook`](https://github.com/pietrop/digital-paper-edit-storybook) - React Storybook for Client components - `npm`.
+- [`pietrop/digital-paper-edit-api`](https://github.com/pietrop/digital-paper-edit-api) - Express server API - [npm](https://www.npmjs.com/package/@pietrop/digital-paper-edit-api)
+- [`pietrop/digital-paper-edit-infrastructure`](https://github.com/pietrop/digital-paper-edit-infrastructure) - AWS infrastructure for API server and Client.
+- [`pietrop/digital-paper-edit-electron`](https://github.com/pietrop/digital-paper-edit-electron) - Electron, Cross Platform Desktop app - Mac, Windows, Linux
+- [`pietrop/digital-paper-edit-cep`](https://github.com/pietrop/digital-paper-edit-cep) Adobe CEP (Common Extensibility Platform) - Premiere Pro Plugin Panel
 
 Micro services for web app backend
 
-- [`bbc/digital-paper-edit-stt-proxy`](https://github.com/bbc/digital-paper-edit-stt-proxy) - An express server to connect to STT service
-- [`bbc/digital-paper-edit-video-preview-converter`](https://github.com/bbc/digital-paper-edit-video-preview-converterr) - An express server to generate an mp4 video preview using ffmpeg
-- [`bbc/digital-paper-edit-audio-converter`](https://github.com/bbc/digital-paper-edit-audio-converter) - An express server to generate an audio file with the stt specs to be able to send it to `STT Proxy`.
+- [`pietrop/digital-paper-edit-stt-proxy`](https://github.com/pietrop/digital-paper-edit-stt-proxy) - An express server to connect to STT service
+- [`pietrop/digital-paper-edit-video-preview-converter`](https://github.com/pietrop/digital-paper-edit-video-preview-converter) - An express server to generate an mp4 video preview using ffmpeg
+- [`pietrop/digital-paper-edit-audio-converter`](https://github.com/pietrop/digital-paper-edit-audio-converter) - An express server to generate an audio file with the stt specs to be able to send it to `STT Proxy`.
 
 [See here to see them as a list in github](https://github.com/topics/digital-paper-edit).
 
-See [modular architecture section](./docs/guides/modular-architecture.md) for more details on the stack and the [Modular Architecture ADR for more info on the implementation](https://github.com/bbc/digital-paper-edit-client/blob/master/docs/ADR/2019-05-09-modular-architecture.md)
+See [modular architecture section](./docs/guides/modular-architecture.md) for more details on the stack and the [Modular Architecture ADR for more info on the implementation](https://github.com/pietrop/digital-paper-edit-client/blob/master/docs/ADR/2019-05-09-modular-architecture.md)
 
 The projects use [npm semantic versioning](https://docs.npmjs.com/about-semantic-versioning)
 
-![](https://raw.githubusercontent.com/bbc/digital-paper-edit-infrastructure/master/docs/adr/newest_arch.png)
+<!-- ![](https://raw.githubusercontent.com/pietrop/digital-paper-edit-infrastructure/master/docs/adr/newest_arch.png) -->
 
+<!-- Between the 5 June and 17 July there is a sprint board used for organising the backlog for each two-week sprint cycle. -->
 
-Between the 5 June and 17 July there is a sprint board used for organising the backlog for each two-week sprint cycle.
-
-- [BBC News Labs - Digital Paper Edit - Sprint Board](https://github.com/orgs/bbc/projects/33) is a Github project board [with linked repository](https://help.github.com/en/articles/linking-a-repository-to-a-project-board) where issues are added from the relevant repository listed in architecture section.
+<!-- - [BBC News Labs - Digital Paper Edit - Sprint Board](https://github.com/orgs/bbc/projects/33) is a Github project board [with linked repository](https://help.github.com/en/articles/linking-a-repository-to-a-project-board) where issues are added from the relevant repository listed in architecture section. -->
 
 The project is divided into [concurrent milestones as described here](https://github.com/bbc/digital-paper-edit-client/milestones)
 
@@ -47,11 +46,10 @@ And there are [github project board for each milestone](https://github.com/bbc/d
 - [3 - Paper-editing](https://github.com/bbc/digital-paper-edit-client/projects/4)
 
 With UX being an overarching milestone that cuts across these different parts
+
 - [UX](https://github.com/bbc/digital-paper-edit-client/projects/1)
 
-
 See [UX Approach](./docs/guides/ux-approach.md) in docs guides for more info.
-
 
 ## Setup
 
@@ -61,9 +59,8 @@ _How to build and run the code/app_ -->
 
 See _optional_ [getting setup with the visual code workspace](docs/guides/visual-code-workspace-setup.md) to get up and running with the various repository needed for this project.
 
-
 ```
-git clone git@github.com:bbc/digital-paper-edit-client.git
+git clone git@github.com:pietrop/digital-paper-edit-client.git
 ```
 
 ```
@@ -71,11 +68,13 @@ cd digital-paper-edit-client
 ```
 
 Optional step to setup [nvm](https://github.com/nvm-sh/nvm) to use node version 10, otherwise just use node version 10
+
 ```
 nvm use || nvm install`
 ```
 
 in root of project
+
 ```
 npm install
 ```
@@ -84,8 +83,7 @@ npm install
 
 <!-- `cd` into the individual repository inside [`./packages`](./packages) and npm start, or see respective README and package.json for how deal with each. -->
 
-
-In root of the client project (`cd digital-paper-edit-client`) start React 
+In root of the client project (`cd digital-paper-edit-client`) start React
 
 ```
 npm run start
@@ -93,12 +91,11 @@ npm run start
 
 To developer for the web app [you will need to start setup and the API server](https://github.com/bbc/digital-paper-edit-api#setup) as well.
 
-
->Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+> Runs the app in the development mode.<br>
+> Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 >
->The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+> The page will reload if you make edits.<br>
+> You will also see any lint errors in the console.
 
 <!-- additionally to develop for electron also run ,in another terminal, in root of project.
 
@@ -106,31 +103,29 @@ You will also see any lint errors in the console.
 make start-electron
 ``` -->
 
-
 ## Usage - production
 
-The project is also publicly available in the npm registry [`@bbc/digital-paper-edit-client`](https://www.npmjs.com/package/@bbc/digital-paper-edit-client)
+The project is also publicly available in the npm registry [`@pietrop/digital-paper-edit-client`](https://www.npmjs.com/package/@bbc/digital-paper-edit-client)
 
- you can add it to your project
+you can add it to your project
+
 ```
-npm install @bbc/digital-paper-edit-client
+npm install @pietrop/digital-paper-edit-client
 ```
 
 and eg in an express server you can serve the static build as follows
 
 ```
-app.use("/", express.static(path.join(__dirname, '..', 'node_modules/@bbc/digital-paper-edit-client')));
+app.use("/", express.static(path.join(__dirname, '..', 'node_modules/@pietrop/digital-paper-edit-client')));
 ```
 
 ## System Architecture
 
 Client - React, is setup using [Create React App](https://facebook.github.io/create-react-app/docs/getting-started).
 
->You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+> You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 >
->To learn React, check out the [React documentation](https://reactjs.org/).
-
-
+> To learn React, check out the [React documentation](https://reactjs.org/).
 
 ## Development env
 
@@ -151,7 +146,7 @@ Node version is set in node version manager [`.nvmrc`](https://github.com/creati
 
 ## Documentation
 
-See [docs](./docs) folder 
+See [docs](./docs) folder
 
 - [`docs/features-list`](./docs/features-list.md) overview of main features of the app.
 - [`docs/user-journey/user-journey.md`](./docs/user-journey/user-journey.md) overview of main features of the app.
@@ -162,9 +157,9 @@ See [docs](./docs) folder
 > An architectural decision record (ADR) is a document that captures an important architectural decision made along with its context and consequences.
 
 We are using [this template for ADR](https://gist.github.com/iaincollins/92923cc2c309c2751aea6f1b34b31d95)
-<!-- 
-[There also QA testing docs](./docs/qa/README.md) to manual test the component before a major release, (QA testing does not require any technical knowledge). -->
 
+<!--
+[There also QA testing docs](./docs/qa/README.md) to manual test the component before a major release, (QA testing does not require any technical knowledge). -->
 
 ## Build
 
@@ -178,22 +173,37 @@ npm run build
 
 Build of react client side will be in `build`
 
->Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+> Builds the app for production to the `build` folder.<br>
+> It correctly bundles React in production mode and optimizes the build for the best performance.
 >
->The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+> The build is minified and the filenames include the hashes.<br>
+> Your app is ready to be deployed!
 
+### Electron
 
-<!-- 
-### Electron - Build
-First do `make build-react` then 
+See [docs](https://github.com/bbc/digital-paper-edit-client/commit/15a9fe2d06c9b8666b6bd9ddd1aaa64246de6bfd) for more information on how this works with Electron.
 
+In `public/index.html`:
+
+```js
+if(window.process && window.process.versions.electron){
+        const ElectronWrapper = require('../src/ElectronWrapper/index.js');
+        window.ElectronWrapper = ElectronWrapper;
+}
 ```
-make build-electron
-```
 
-`packages/client/dist` will contain your packaged version of the app for desktop -->
+`ElectronWrapper` needs to be on the Electron render process otherwise (i.e. from the main process) the app will hang.
+
+<!-- Build proc
+First do `make build-react` then `make build-electron`
+`packages/client/dist` will contain your packaged version of the app for desktop
+-->
+
+1. run `npm run build` which will output a `build` folder
+2. move the `build` folder to `digital-paper-edit-electron` repository
+3. from `digital-paper-edit-electron`, run `npm run start:prod`
+
+Running in development (`npm start:dev`) in `digital-paper-edit-electron` will not work. In development mode, the `electron-main.js` looks for the app served by webpack in `src/ElectronWrapper/index.js`, which doesn't resolve as that is in a different repository.
 
 ## Tests
 
@@ -213,11 +223,10 @@ During development you can use
 npm run test:watch
 ```
 
->Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+> Launches the test runner in the interactive watch mode.<br>
+> See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 <!-- See README for individual packages for more details -->
-
 
 <!-- ## Travis CI
 
@@ -241,14 +250,13 @@ npm run publish:public
 
 <!-- See README for individual packages for more details -->
 
-for more info on Create React app deployment: 
+for more info on Create React app deployment:
 
->See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
+> See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ## Demo page on github pages
 
-To update demo on github pages [bbc.github.io/digital-paper-edit-client](https://bbc.github.io/digital-paper-edit-client)
+To update demo on github pages [pietrop.github.io/digital-paper-edit-client](https://pietrop.github.io/digital-paper-edit-client)
 
 ```
 npm run deploy:ghpages
@@ -259,11 +267,11 @@ npm run deploy:ghpages
 See [CONTRIBUTING.md](./CONTRIBUTING.md) guidelines and [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) guidelines.
 
 ## Licence
+
 <!-- mention MIT Licence -->
+
 See [LICENCE](./LICENCE.md)
 
-## Legal Disclaimer
+## Legal Disclaimer
 
-_Despite using React and DraftJs, the BBC is not promoting any Facebook products or other commercial interest._
-
-
+_Despite using React and DraftJs, this repo is not promoting any Facebook products or other commercial interest._

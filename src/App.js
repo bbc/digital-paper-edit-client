@@ -57,6 +57,7 @@ class App extends Component {
       {offlineWarning}
 
       <HashRouter>
+      <div>
         <Switch>
           <Route exact path="/" component={ Projects } />
           <Route exact path="/projects" component={ Projects } />
@@ -73,6 +74,7 @@ class App extends Component {
           />
           <Route component={ NoMatch } />
         </Switch>
+        </div>
       </HashRouter>
     </>
     );

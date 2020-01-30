@@ -7,6 +7,7 @@ import ItemFormModal from '../lib/ItemFormModal';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb';
 import CustomFooter from '../lib/CustomFooter';
 import ApiWrapper from '../../ApiWrapper/index.js';
+import {HashRouter} from 'react-router-dom';
 
 class Projects extends React.Component {
   constructor(props) {
@@ -141,6 +142,7 @@ class Projects extends React.Component {
 
   render() {
     return (<>
+    <HashRouter>
       <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
         <Row>
           <Col sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 }>
@@ -173,6 +175,7 @@ class Projects extends React.Component {
         />
       </Container>
       <CustomFooter/>
+      </HashRouter>
     </>
     );
   }
