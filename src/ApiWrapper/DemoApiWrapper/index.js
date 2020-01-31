@@ -260,7 +260,7 @@ class DemoApiWrapper {
    * Helper SDK function to avoid making multiple calls client side when in Annotated Transcript view
    * Transcript + Annotations for that transcript + Labels for the project
    */
-  async get_TranscriptLabelsAnnotations(projectId, transcriptId) {
+  async getTranscriptLabelsAnnotations(projectId, transcriptId) {
     // GET Transcripts
     const transcriptResult = await this.getTranscript(projectId, transcriptId);
     // GET Labels for Project <-- or separate request in label component
@@ -285,7 +285,7 @@ class DemoApiWrapper {
 
   // Helper function to get program script & associated transcript
   // https://flaviocopes.com/javascript-async-await-array-map/
-  async get_ProgrammeScriptAndTranscripts(projectId, papereditId) { // // get transcripts list, this contain id, title, description only
+  async getProgrammeScriptAndTranscripts(projectId, papereditId) { // // get transcripts list, this contain id, title, description only
     const transcriptsResult = await this.getTranscripts(projectId);
     // use that list of ids to loop through and get json payload for each individual transcript
     // as separate request

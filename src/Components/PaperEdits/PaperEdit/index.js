@@ -34,7 +34,7 @@ class PaperEdit extends Component {
 
   componentDidMount = async () => {
 
-    ApiWrapper.get_ProgrammeScriptAndTranscripts(this.state.projectId, this.state.papereditId)
+    ApiWrapper.getProgrammeScriptAndTranscripts(this.state.projectId, this.state.papereditId)
       .then((json) => {
         this.setState({
           programmeTitle: json.programmeScript.title,
