@@ -60,7 +60,7 @@ class Project extends React.Component {
             </Tab>
           </Tabs>
         </Container>
-        <CustomFooter/>
+        {/* <CustomFooter/> */}
       </>
     );
   }

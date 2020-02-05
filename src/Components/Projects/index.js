@@ -174,7 +174,7 @@ class Projects extends React.Component {
           handleSaveForm={ this.handleSaveItem }
         />
       </Container>
-      <CustomFooter/>
+      {/* <CustomFooter/> */}
       </HashRouter>
     </>
     );
