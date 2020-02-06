@@ -44,6 +44,21 @@
         const ElectronWrapper = require(path.join(appPath,'src','ElectronWrapper','index.js'));
         window.ElectronWrapper = ElectronWrapper;
       }
+
+      if(window.process && window.process.versions.cep) {
+
+        try {
+            process.chdir(__dirname);
+            // process.chdir('..');
+            console.log('New directory: ' + process.cwd());
+
+            // const ElectronWrapper = require(path.join(__dirname,'src','ElectronWrapper','index.js'));
+            // window.ElectronWrapper = ElectronWrapper;
+          }
+          catch (err) {
+            console.log('chdir: ' + err);
+          }
+      }
   </script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>

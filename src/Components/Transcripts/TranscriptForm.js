@@ -178,7 +178,7 @@ class TranscriptForm extends Component {
               required
               type="file"
               label="Upload"
-              accept="audio/*,video/*"
+              accept="audio/*,video/*,.mxf"
               onChange={ this.handleFileUpload }
             />
             <Form.Text className="text-muted">
