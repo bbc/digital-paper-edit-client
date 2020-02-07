@@ -294,6 +294,12 @@ class ProgramScript extends Component {
     const edlSq = this.getSequenceJsonEDL();
     const firstElement = edlSq.events[0];
     // const result = generateADL(edlSq);
+
+    let mediaFps = defaultFps;
+    if(firstElement.fps && (firstElement.fps!== 'NA')){
+      mediaFps = firstElement.fps
+    }
+
     const result = generateADL({
       projectOriginator: 'Digital Paper Edit',
       // TODO: it be good to change sequence for the ADL to be same schema
@@ -308,7 +314,7 @@ class ProgramScript extends Component {
         };
       }),
       sampleRate: firstElement.sampleRate,
-      frameRate: firstElement.fps,
+      frameRate: mediaFps,
       projectName: edlSq.title
     });
     downloadjs(result, `${ this.state.programmeScript.title }.adl`, 'text/plain');
