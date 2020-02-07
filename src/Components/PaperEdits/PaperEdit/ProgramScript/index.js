@@ -245,6 +245,11 @@ class ProgramScript extends Component {
           return tr.id === element.transcriptId;
         });
 
+        let mediaFps = defaultFps;
+        if(currentTranscript.metadata && currentTranscript.metadata.fps && (currentTranscript.metadata.fps!== 'NA')){
+          mediaFps = currentTranscript.metadata.fps
+        }
+
         const result = {
           startTime: element.start,
           endTime: element.end,
@@ -253,7 +258,7 @@ class ProgramScript extends Component {
           // TODO: frameRate should be pulled from the clips in the sequence
           // Changing to 24 fps because that is the frame rate of the ted talk examples from youtube
           // but again frameRate should not be hard coded
-          fps: currentTranscript.metadata ? currentTranscript.metadata.fps : defaultFps,
+          fps: mediaFps,
           // TODO: if there is an offset this should added here, for now hard coding 0
           offset:  currentTranscript.metadata ? currentTranscript.metadata.timecode : defaultTimecodeOffset,
           sampleRate:  currentTranscript.metadata ? currentTranscript.metadata.sampleRate : defaultSampleRate
@@ -332,6 +337,10 @@ class ProgramScript extends Component {
           return tr.id === element.transcriptId;
         });
 
+        let mediaFps = defaultFps;
+        if(currentTranscript.metadata && currentTranscript.metadata.fps && (currentTranscript.metadata.fps!== 'NA')){
+          mediaFps = currentTranscript.metadata.fps
+        }
         const result = {
           ...element,
           startTime: element.start,
@@ -341,7 +350,7 @@ class ProgramScript extends Component {
           // TODO: frameRate should be pulled from the clips in the sequence
           // Changing to 24 fps because that is the frame rate of the ted talk examples from youtube
           // but again frameRate should not be hard coded
-          fps: currentTranscript.metadata ? currentTranscript.metadata.fps : defaultFps,
+          fps: mediaFps,
           sampleRate:  currentTranscript.metadata ? currentTranscript.metadata.sampleRate : defaultSampleRate,
           offset:  currentTranscript.metadata ? currentTranscript.metadata.timecode : defaultTimecodeOffset
         };
