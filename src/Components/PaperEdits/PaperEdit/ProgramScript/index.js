@@ -10,6 +10,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import EDL from 'edl_composer';
 import generateADL from '@pietrop/aes31-adl-composer';
 import jsonToFCPX from '@pietrop/fcpx-xml-composer';
+import jsonToAudition from 'audition-xml-composer';
 import downloadjs from 'downloadjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -328,6 +329,14 @@ class ProgramScript extends Component {
     downloadjs(result, `${ this.state.programmeScript.title }.fcpxml`, 'text/plain');
   }
 
+  handleExportXML = () => {
+    // alert('this function has not been implemented yet');
+    const edlSq = this.getSequenceJsonEDL();
+    console.log('edlSq',edlSq);
+    const result = jsonToAudition(edlSq);
+    downloadjs(result, `${ this.state.programmeScript.title }.xml`, 'text/plain');
+  }
+
   getProgrammeScriptJson = () => {
     // alert('this function has not been implemented yet');
     const edlSq = {
@@ -602,6 +611,12 @@ class ProgramScript extends Component {
                       title="export FCPX XML, to import the programme script as a sequence in Final Cut Pro X, video editing software"
                     >
                   FCPX <FontAwesomeIcon icon={ faInfoCircle } />
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={ this.handleExportXML }
+                      title="export XML, to import the programme script as a sequence into Adobe Premiere, Adobe Audition and Final Cut Pro 7"
+                    >
+                  XML - Audition <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item
