@@ -52,8 +52,8 @@
             // process.chdir('..');
             console.log('New directory: ' + process.cwd());
             const path = require('path');
-            const ElectronWrapper = require(path.join(__dirname,'src','ElectronWrapper','index.js'));
-            window.ElectronWrapper = ElectronWrapper;
+            const ElectronWrapper = require(path.join(__dirname,'src','AdobeCEPWrapper','index.js'));
+            window.AdobeCEPWrapper = AdobeCEPWrapper;
           }
           catch (err) {
             console.log('chdir: ' + err);
