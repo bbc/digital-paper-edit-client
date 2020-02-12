@@ -29,4 +29,11 @@ export default ( () => {
 
     return electronWrapper;
   }
+  if (jsENV === 'cep') {
+    const AdobeCEPWrapper = window.AdobeCEPWrapper;
+    const AdobeCEPWrapper = new AdobeCEPWrapper();
+    Object.freeze(AdobeCEPWrapper);
+
+    return AdobeCEPWrapper;
+  }
 })();
