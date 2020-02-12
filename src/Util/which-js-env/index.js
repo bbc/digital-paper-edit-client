@@ -24,14 +24,15 @@ function whichJsEnv() {
       //   console.info('In CEP (Adobe Common Extensibility Platform ) v: ', window.process.versions.cep);
       //   console.info('adjusting current working directory for Adobe CEP');
       //   console.log('Starting directory: ' + process.cwd());
-      try {
-        process.chdir(__dirname);
-        // process.chdir('..');
-        // console.log('New directory: ' + process.cwd());
-      }
-      catch (err) {
-        console.log('chdir: ' + err);
-      }
+      // try {
+      //   // commenting out because of error "chdir: Error: process.chdir is not supported"
+      //   // process.chdir(__dirname);
+      //   // process.chdir('..');
+      //   // console.log('New directory: ' + process.cwd());
+      // }
+      // catch (err) {
+      //   console.log('chdir: ' + err);
+      // }
 
       return 'cep';
 
