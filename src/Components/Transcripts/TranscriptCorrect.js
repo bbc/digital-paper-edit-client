@@ -45,7 +45,7 @@ class TranscriptCorrect extends Component {
 
   saveToServer = () => {
     // TODO: add Api call to save content of
-    alert('save to server');
+    alert('saved');
 
     // TODO: decide how to deal with transcript corrections
     // exporting digitalpaperedit in react-transcript-editor@latest doesn't give you
