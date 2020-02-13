@@ -31,8 +31,8 @@ export default ( () => {
   }
   if (jsENV === 'cep') {
     const AdobeCEPWrapper = window.AdobeCEPWrapper;
-    const AdobeCEPWrapper = new AdobeCEPWrapper();
-    Object.freeze(AdobeCEPWrapper);
+    const adobeCEPWrapper = new AdobeCEPWrapper();
+    Object.freeze(adobeCEPWrapper);
 
     return AdobeCEPWrapper;
   }
