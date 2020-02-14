@@ -83,7 +83,7 @@ class TranscriptForm extends Component {
     this.setState({ uploading: true });
 
     const formData = this.state.formData;
-    if(whichJsEnv!== 'cep'){
+    if(whichJsEnv() !== 'cep'){
       formData.append('title', this.state.title);
       formData.append('description', this.state.description);
       console.log("formData.get('path')", formData.get('path'));
@@ -106,17 +106,17 @@ class TranscriptForm extends Component {
       // is easier to pass another object with title, description
       // as well as the additional path to the file
       // rather then parsing a formData object in node etc..
-    //   window.__adobe_cep__.evalScript(`$._PPP.get_current_project_panel_selection_absolute_path()`,  (response)=>{
-    //     if(response !== ""){
-    //     //  const newFilePath = response;
-    //     //  fileName = path.basename(newFilePath);
-    //      data.path = response;
-    //    }
-    //    else{
-    //      // TODO: review logic for edge case
-    //      alert('select a clip')
-    //    }
-    //  })
+      //   window.__adobe_cep__.evalScript(`$._PPP.get_current_project_panel_selection_absolute_path()`,  (response)=>{
+      //     if(response !== ""){
+      //     //  const newFilePath = response;
+      //     //  fileName = path.basename(newFilePath);
+      //      data.path = response;
+      //    }
+      //    else{
+      //      // TODO: review logic for edge case
+      //      alert('select a clip')
+      //    }
+      //  })
 
       data = {
         title: this.state.title,
