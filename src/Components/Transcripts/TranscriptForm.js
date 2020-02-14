@@ -24,6 +24,7 @@ class TranscriptForm extends Component {
       description: this.props.description,
       id: this.props.id,
       formData: null,
+      adobeCepFilePath: null,
       savedNotification: null
     };
     // console.log(process.env);
@@ -37,6 +38,24 @@ class TranscriptForm extends Component {
     this.setState({ description: event.target.value });
   };
 
+  handleAdobeCepSetFilePath = ()=>{
+    window.__adobe_cep__.evalScript(`$._PPP.get_current_project_panel_selection_absolute_path()`,  (response)=>{
+      console.log('handleAdobeCepSetFilePath');
+      if(response !== ""){
+        console.log('handleAdobeCepSetFilePath', response);
+      //  const newFilePath = response;
+      //  fileName = path.basename(newFilePath);
+       data.path = response;
+       this.setState({
+         adobeCepFilePath: response
+       })
+     }
+     else{
+       // TODO: review logic for edge case
+       alert('select a clip')
+     }
+   })
+  }
   // https://codeburst.io/react-image-upload-with-kittens-cc96430eaece
   handleFileUpload = e => {
     const files = Array.from(e.target.files);
@@ -84,21 +103,27 @@ class TranscriptForm extends Component {
       // is easier to pass another object with title, description
       // as well as the additional path to the file
       // rather then parsing a formData object in node etc..
-      window.__adobe_cep__.evalScript(`$._PPP.get_current_project_panel_selection_absolute_path()`,  (response)=>{
-        if(response !== ""){
-        //  const newFilePath = response;
-        //  fileName = path.basename(newFilePath);
-         data.path = response;
-       }
-       else{
-         // TODO: review logic for edge case
-         alert('select a clip')
-       }
-     })
+    //   window.__adobe_cep__.evalScript(`$._PPP.get_current_project_panel_selection_absolute_path()`,  (response)=>{
+    //     if(response !== ""){
+    //     //  const newFilePath = response;
+    //     //  fileName = path.basename(newFilePath);
+    //      data.path = response;
+    //    }
+    //    else{
+    //      // TODO: review logic for edge case
+    //      alert('select a clip')
+    //    }
+    //  })
 
+      data = {
+        title: this.state.title,
+        description: this.state.description,
+        path: this.state.adobeCepFilePath
+      };
      
-      data.title = formData.get('title');
-      data.description = formData.get('description');
+      // data.title =this.state.title;
+      // data.description = this.state.description;
+      // data.path = this.state.adobeCepFilePath;
         // path: formData.get('path')
       // };
     }
@@ -222,6 +247,7 @@ class TranscriptForm extends Component {
             </Button>
           </Modal.Footer>
         </Form>
+        <Button  variant="primary" onClick={this.handleAdobeCepSetFilePath}>Pick a file</Button>
       </>
     );
   }
