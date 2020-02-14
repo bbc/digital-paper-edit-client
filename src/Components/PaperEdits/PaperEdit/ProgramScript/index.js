@@ -347,7 +347,7 @@ class ProgramScript extends Component {
 
     const programmeScriptPaperCuts = this.state.programmeScript.elements.map((element) => {
       if (element.type === 'paper-cut') {
-        console.log('paper-cut::', element);
+        // console.log('paper-cut::', element);
         // Get clipName for current transcript
         const currentTranscript = this.props.transcripts.find((tr) => {
           return tr.id === element.transcriptId;
@@ -385,7 +385,7 @@ class ProgramScript extends Component {
       return el;
     });
     edlSq.events.push(...programmeScriptPaperCutsWithId);
-    console.log(edlSq);
+    // console.log(edlSq);
 
     return edlSq;
   }
@@ -424,12 +424,17 @@ class ProgramScript extends Component {
     // var tmpEdl = {edlJson:  this.makeEDLJSON(false) };
     // console.log(JSON.stringify( tmpEdl, null,2));
     const programmeScriptJson = this.getProgrammeScriptJson();
-    console.log('programmeScriptJson ', programmeScriptJson);
+    console.log('handleCepExportSequence - programmeScriptJson ', programmeScriptJson);
+
+    const paperCuts = programmeScriptJson.filter((el)=>{
+      return el.type ==='paper-cut'
+    })
+    console.log('handleCepExportSequence - paperCuts ', paperCuts);
     // TODO: need to remove 
     const tmpEdl = {
-      edlJson: programmeScriptJson
+      edlJson: paperCuts
     }
-    window.__adobe_cep__.evalScript("$._PPP.create_sequence_from_paper_edit('" + JSON.stringify(tmpEdl)+"')", function (response){
+    window.__adobe_cep__.evalScript("$._PPP.create_sequence_from_paper_edit('" + JSON.stringify(tmpEdl) +"')", function (response){
       // done 
       console.info('done exporting sequence')
     })
