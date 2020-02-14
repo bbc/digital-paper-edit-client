@@ -39,6 +39,7 @@ class TranscriptForm extends Component {
     this.setState({ description: event.target.value });
   };
 
+  // This is used in Aobe CEP Panel integration only 
   handleAdobeCepSetFilePath = ()=>{
     window.__adobe_cep__.evalScript(`$._PPP.get_current_project_panel_selection_absolute_path()`,  (response)=>{
       console.log('handleAdobeCepSetFilePath');
@@ -82,11 +83,11 @@ class TranscriptForm extends Component {
     this.setState({ uploading: true });
 
     const formData = this.state.formData;
-
-    formData.append('title', this.state.title);
-    formData.append('description', this.state.description);
-    console.log("formData.get('path')", formData.get('path'));
-
+    if(whichJsEnv!== 'cep'){
+      formData.append('title', this.state.title);
+      formData.append('description', this.state.description);
+      console.log("formData.get('path')", formData.get('path'));
+    }
     let data = {};
     if (whichJsEnv() === 'electron') {
       // if client run inside of electron
