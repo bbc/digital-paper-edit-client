@@ -45,8 +45,9 @@ class TranscriptForm extends Component {
         console.log('handleAdobeCepSetFilePath', response);
       //  const newFilePath = response;
       //  fileName = path.basename(newFilePath);
-       data.path = response;
+      // TODO: add some visual quee that this worked (eg alert box at top? or file name/path somewhere)
        this.setState({
+         title: path.basename(response),
          adobeCepFilePath: response
        })
      }
