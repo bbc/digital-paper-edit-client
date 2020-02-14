@@ -6,6 +6,7 @@ import ApiWrapper from '../../ApiWrapper/index.js';
 import CustomAlert from '../lib/CustomAlert/index.js';
 import './index.module.css';
 import whichJsEnv from '../../Util/which-js-env';
+import path from 'path'; 
 // setOriginalFetch(window.fetch);
 // window.fetch = progressBarFetch;
 
