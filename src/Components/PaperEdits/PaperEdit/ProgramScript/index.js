@@ -28,6 +28,7 @@ import ProgrammeScript from './ProgrammeScript.js';
 import getDataFromUserWordsSelection from './get-data-from-user-selection.js';
 import { divideWordsSelectionsIntoParagraphs, isOneParagraph } from './divide-words-selections-into-paragraphs/index.js';
 import ApiWrapper from '../../../../ApiWrapper/index.js';
+import whichJsEnv from '../../../../Util/which-js-env';
 
 const defaultReelName = 'NA';
 const defaultFps = 25;
@@ -418,6 +419,23 @@ class ProgramScript extends Component {
     downloadjs(programmeScriptText, `${ this.state.programmeScript.title }.json`, 'text/plain');
   }
 
+  handleCepExportSequence = () =>{
+    console.log('handleCepExportSequence');
+    // var tmpEdl = {edlJson:  this.makeEDLJSON(false) };
+    // console.log(JSON.stringify( tmpEdl, null,2));
+    const programmeScriptJson = this.getProgrammeScriptJson();
+    console.log('programmeScriptJson ', programmeScriptJson);
+    // TODO: need to remove 
+    const tmpEdl = {
+      edlJson: programmeScriptJson
+    }
+    window.__adobe_cep__.evalScript("$._PPP.create_sequence_from_paper_edit('" + JSON.stringify(tmpEdl)+"')", function (response){
+      // done 
+      console.info('done exporting sequence')
+    })
+  }
+
+
   handleExportTxt = () => {
     const programmeScriptJson = this.getProgrammeScriptJson();
     const programmeScriptText = this.programmeScriptJsonToText(programmeScriptJson);
@@ -588,11 +606,20 @@ class ProgramScript extends Component {
                 </Button>
               </Col>
               <Col sm={ 12 } md={ 3 } ld={ 3 } xl={ 3 }>
+
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-secondary">
                     <FontAwesomeIcon icon={ faShare } /> Export
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
+                  {(whichJsEnv() === 'cep')? (<>
+                    <Dropdown.Item
+                      onClick={ this.handleCepExportSequence }
+                      title="export the programme script as a sequence in Adobe Premiere"
+                    >
+                    Premiere - Sequence <FontAwesomeIcon icon={ faInfoCircle } />
+                    </Dropdown.Item>
+                  </>): (<>
                     <Dropdown.Item
                       onClick={ this.handleExportEDL }
                       title="export EDL, edit decision list, to import the programme script as a sequence in video editing software - Avid, Premiere, Davinci Resolve, for FCPX choose FCPX XML"
@@ -638,6 +665,7 @@ class ProgramScript extends Component {
                     >
                   Json <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
+                  </>)}
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>

@@ -225,8 +225,16 @@ class TranscriptForm extends Component {
                 Please chose a description for your transcript
             </Form.Control.Feedback>
           </Form.Group>
-          { (whichJsEnv() !== 'cep')?(
-          <Form.Group controlId="formTranscriptMediaFile">
+          { (whichJsEnv() === 'cep')?(
+              <>
+              <Button  variant="light" onClick={this.handleAdobeCepSetFilePath} block>Pick a file</Button>
+              <Form.Text className="text-muted">
+                Select an audio or video file to transcribe. Click on a file in the Adobe Premiere project browser window, and the click <code>pick a file</code> to select a file to transcribe. Then 
+                click <code>save</code> when you are ready to start the transcriptiion.
+              </Form.Text>
+            </>
+          ):(
+            <Form.Group controlId="formTranscriptMediaFile">
             <Form.Control
               required
               type="file"
@@ -235,14 +243,14 @@ class TranscriptForm extends Component {
               onChange={ this.handleFileUpload }
             />
             <Form.Text className="text-muted">
-        Select an audio or video file to upload
+            Select an audio or video file to transcribe
             </Form.Text>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             <Form.Control.Feedback type="invalid">
-        Please chose a audio or video file to upload
+              Please chose a audio or video file to transcribe
             </Form.Control.Feedback>
           </Form.Group>
-          ):null}
+          )}
           
           <Modal.Footer>
             <Button variant="primary" type="submit">
@@ -250,7 +258,7 @@ class TranscriptForm extends Component {
             </Button>
           </Modal.Footer>
         </Form>
-        <Button  variant="primary" onClick={this.handleAdobeCepSetFilePath}>Pick a file</Button>
+      
       </>
     );
   }
