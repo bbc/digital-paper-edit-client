@@ -97,11 +97,10 @@ class TranscriptForm extends Component {
      })
 
      
-      data = {
-        title: formData.get('title'),
-        description: formData.get('description'),
+      data.title = formData.get('title');
+      data.description = formData.get('description');
         // path: formData.get('path')
-      };
+      // };
     }
     // TODO: do you need a try catch?
     try {
