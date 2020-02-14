@@ -78,6 +78,31 @@ class TranscriptForm extends Component {
         path: formData.get('path')
       };
     }
+
+    if (whichJsEnv() === 'cep') {
+      // if client run inside of Adobe CEP
+      // is easier to pass another object with title, description
+      // as well as the additional path to the file
+      // rather then parsing a formData object in node etc..
+      window.__adobe_cep__.evalScript(`$._PPP.get_current_project_panel_selection_absolute_path()`,  (response)=>{
+        if(response !== ""){
+        //  const newFilePath = response;
+        //  fileName = path.basename(newFilePath);
+         data.path = response;
+       }
+       else{
+         // TODO: review logic for edge case
+         alert('select a clip')
+       }
+     })
+
+     
+      data = {
+        title: formData.get('title'),
+        description: formData.get('description'),
+        // path: formData.get('path')
+      };
+    }
     // TODO: do you need a try catch?
     try {
       ApiWrapper.createTranscript(this.state.projectId, this.state.formData, data)
@@ -173,6 +198,7 @@ class TranscriptForm extends Component {
                 Please chose a description for your transcript
             </Form.Control.Feedback>
           </Form.Group>
+          { (whichJsEnv() !== 'cep')?(
           <Form.Group controlId="formTranscriptMediaFile">
             <Form.Control
               required
@@ -189,6 +215,8 @@ class TranscriptForm extends Component {
         Please chose a audio or video file to upload
             </Form.Control.Feedback>
           </Form.Group>
+          ):null}
+          
           <Modal.Footer>
             <Button variant="primary" type="submit">
               Save
