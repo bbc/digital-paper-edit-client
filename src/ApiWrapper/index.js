@@ -34,6 +34,6 @@ export default ( () => {
     const adobeCEPWrapper = new AdobeCEPWrapper();
     Object.freeze(adobeCEPWrapper);
 
-    return AdobeCEPWrapper;
+    return adobeCEPWrapper;
   }
 })();
