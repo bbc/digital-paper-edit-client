@@ -1,6 +1,6 @@
 {
   "name": "@pietrop/digital-paper-edit-client",
-  "version": "1.3.3-alpha.26",
+  "version": "1.3.3-alpha.27",
   "description": "Digital paper edit application, using transcriptions from automated STT, to do text based video editing on audio and video interviews. Modular architecture with  - React - Express - Electron - Adobe CEP",
   "main": "index.js",
   "scripts": {

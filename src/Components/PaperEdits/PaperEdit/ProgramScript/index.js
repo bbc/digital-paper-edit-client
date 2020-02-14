@@ -426,7 +426,7 @@ class ProgramScript extends Component {
     const programmeScriptJson = this.getProgrammeScriptJson();
     console.log('handleCepExportSequence - programmeScriptJson ', programmeScriptJson);
 
-    const paperCuts = programmeScriptJson.filter((el)=>{
+    const paperCuts = programmeScriptJson.events.filter((el)=>{
       return el.type ==='paper-cut'
     })
     console.log('handleCepExportSequence - paperCuts ', paperCuts);
