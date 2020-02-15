@@ -30,6 +30,7 @@
     "chroma-js": "^2.0.3",
     "css-color-names": "^1.0.1",
     "cuid": "^2.1.6",
+    "docx": "^5.0.2",
     "downloadjs": "^1.4.7",
     "edl_composer": "^1.0.3",
     "express": "^4.17.1",

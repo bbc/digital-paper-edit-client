@@ -29,6 +29,7 @@ import getDataFromUserWordsSelection from './get-data-from-user-selection.js';
 import { divideWordsSelectionsIntoParagraphs, isOneParagraph } from './divide-words-selections-into-paragraphs/index.js';
 import ApiWrapper from '../../../../ApiWrapper/index.js';
 import whichJsEnv from '../../../../Util/which-js-env';
+import programmeScriptJsonToDocx from './programme-script-json-to-docx/index.js';
 
 const defaultReelName = 'NA';
 const defaultFps = 25;
@@ -443,8 +444,14 @@ class ProgramScript extends Component {
 
   handleExportTxt = () => {
     const programmeScriptJson = this.getProgrammeScriptJson();
-    const programmeScriptText = this.programmeScriptJsonToText(programmeScriptJson);
+    const programmeScriptText = this.programmeScriptJsonToText (programmeScriptJson);
     downloadjs(programmeScriptText, `${ this.state.programmeScript.title }.txt`, 'text/plain');
+  }
+
+  handleExportDocx = async () => {
+    const programmeScriptJson = this.getProgrammeScriptJson();
+    const programmeScriptDocx = await programmeScriptJsonToDocx(programmeScriptJson);
+    downloadjs(programmeScriptDocx, `${ this.state.programmeScript.title }.docx`, 'text/docx');
   }
 
   handleUpdatePreview = () => {
@@ -658,7 +665,7 @@ class ProgramScript extends Component {
                   Text File <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
                     <Dropdown.Item
-                      onClick={ () => {alert('export word doc not implemented yet');} }
+                      onClick={ this.handleExportDocx }
                       title="export docx, export the programme script as a word document"
                     >
                   Word Document <FontAwesomeIcon icon={ faInfoCircle } />
