@@ -8,7 +8,7 @@ import {
 } from 'docx';
 import {secondsToTimecode, timecodeToSeconds, shortTimecode} from "@pietrop/react-transcript-editor/timecodeConverter";
 
-const programmeScriptJsonToDocx = (edlJson) => {
+const programmeScriptJsonToDocx = (edlJson,isWithClipReference) => {
     console.log('edlJson', edlJson.title)
     const transcriptTitle = edlJson.title;
 
@@ -28,14 +28,14 @@ const programmeScriptJsonToDocx = (edlJson) => {
         } else if (event.type === 'voice-over') {
             sections.push(new Paragraph({
                 children: [
-                    new TextRun(
-                        {text: `Voice Over:\t`, italics: true, bold: true}
-                    ),
-                    new TextRun(
-                        {text: `${
-                                event.text
-                            }`}
-                    ),
+                    new TextRun({ 
+                        text: `Voice Over:\t`, 
+                        italics: false, 
+                        bold: true
+                    }),
+                    new TextRun({
+                        text: `${ event.text}`
+                    }),
                 ],
                 spacing: {
                     after: 200
@@ -65,19 +65,33 @@ const programmeScriptJsonToDocx = (edlJson) => {
 
             sections.push(new Paragraph({
                 children: [
-                    new TextRun(
-                        {text: `${
-                                event.speaker
-                            }\t`, bold: true}
-                    ),
-                    new TextRun(
-                        {text: `${text}`}
-                    ),
+                    new TextRun({
+                        text: `${event.speaker}\t`, 
+                        bold: true,
+                        allCaps: true
+                    }),
+                    new TextRun({
+                        text: `${text}`
+                    })
+                ],
+                spacing: {
+                    after: 100
+                }
+            }))
+
+            if(isWithClipReference){
+            sections.push(new Paragraph({
+                children: [
+                    new TextRun({
+                        text: `${event.clipName}\t [${shortTimecode(event.start)} - ${shortTimecode(event.end)}]`,
+                        size: 18
+                    }),
                 ],
                 spacing: {
                     after: 200
                 }
             }))
+            }
         }
 
         return null;

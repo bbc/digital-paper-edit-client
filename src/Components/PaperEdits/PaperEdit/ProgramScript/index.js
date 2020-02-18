@@ -358,6 +358,8 @@ class ProgramScript extends Component {
         if(currentTranscript.metadata && currentTranscript.metadata.fps && (currentTranscript.metadata.fps!== 'NA')){
           mediaFps = currentTranscript.metadata.fps
         }
+        console.log('currentTranscript.clipName', currentTranscript, currentTranscript.clipName);
+
         const result = {
           ...element,
           startTime: element.start,
@@ -386,7 +388,7 @@ class ProgramScript extends Component {
       return el;
     });
     edlSq.events.push(...programmeScriptPaperCutsWithId);
-    // console.log(edlSq);
+    console.log('edlSq',edlSq);
 
     return edlSq;
   }
@@ -433,8 +435,12 @@ class ProgramScript extends Component {
     console.log('handleCepExportSequence - paperCuts ', paperCuts);
     // TODO: need to remove 
     const tmpEdl = {
-      edlJson: paperCuts
+      edlJson: {
+        events: paperCuts,
+        title: this.state.programmeScript.title
+      } 
     }
+    console.log('tmpEdl', tmpEdl)
     window.__adobe_cep__.evalScript("$._PPP.create_sequence_from_paper_edit('" + JSON.stringify(tmpEdl) +"')", function (response){
       // done 
       console.info('done exporting sequence')
@@ -450,7 +456,17 @@ class ProgramScript extends Component {
 
   handleExportDocx = async () => {
     const programmeScriptJson = this.getProgrammeScriptJson();
-    const programmeScriptDocx = await programmeScriptJsonToDocx(programmeScriptJson);
+    console.log('programmeScriptJson',programmeScriptJson)
+    const isWithClipReference = false;
+    const programmeScriptDocx = await programmeScriptJsonToDocx(programmeScriptJson, isWithClipReference);
+    downloadjs(programmeScriptDocx, `${ this.state.programmeScript.title }.docx`, 'text/docx');
+  }
+
+  handleExportDocxWithClipReference = async () => {
+    const programmeScriptJson = this.getProgrammeScriptJson();
+    console.log('programmeScriptJson',programmeScriptJson)
+    const isWithClipReference = true;
+    const programmeScriptDocx = await programmeScriptJsonToDocx(programmeScriptJson, isWithClipReference);
     downloadjs(programmeScriptDocx, `${ this.state.programmeScript.title }.docx`, 'text/docx');
   }
 
@@ -669,6 +685,12 @@ class ProgramScript extends Component {
                       title="export docx, export the programme script as a word document"
                     >
                   Word Document <FontAwesomeIcon icon={ faInfoCircle } />
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={ this.handleExportDocxWithClipReference }
+                      title="export docx, export the programme script as a word document, with clip name and timecode references, for text selections"
+                    >
+                   Word Doc (with ref) <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item
