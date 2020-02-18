@@ -128,10 +128,8 @@ class Transcript extends Component {
     }
   };
 
-  handleShowParagraphsMatchingSearch = () => {
-    this.setState((state) => {
-      return { showParagraphsMatchingSearch: !state.showParagraphsMatchingSearch };
-    });
+  handleShowParagraphsMatchingSearch = (isShowParagraphsMatchingSearch) => {
+    this.setState({ showParagraphsMatchingSearch: isShowParagraphsMatchingSearch });
   }
 
   handleLabelsSearchChange = (selectedOptionLabelSearch) => {
