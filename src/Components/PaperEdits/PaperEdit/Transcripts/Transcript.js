@@ -426,6 +426,8 @@ class Transcript extends Component {
 
             {highlights}
 
+            {this.props.transcript && !this.state.componentMounted && <i>Loading transcription</i>}
+
             {this.props.transcript && this.state.componentMounted &&
             <Paragraphs
               labelsOptions={ this.state.labelsOptions && this.state.labelsOptions }
