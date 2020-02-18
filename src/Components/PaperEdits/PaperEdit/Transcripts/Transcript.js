@@ -63,7 +63,8 @@ class Transcript extends Component {
       annotations: [],
       isLabelsListOpen: true,
       labelsOptions: this.props.labelsOptions,
-      currentTime: 0
+      currentTime: 0,
+      componentMounted: false
     };
   }
 
@@ -72,7 +73,8 @@ class Transcript extends Component {
       .then(json => {
         // console.log(' ApiWrapper.getAllAnnotations', json);
         this.setState({
-          annotations: json.annotations
+          annotations: json.annotations,
+          componentMounted: true
         });
       });
   }
@@ -424,7 +426,7 @@ class Transcript extends Component {
 
             {highlights}
 
-            {this.props.transcript &&
+            {this.props.transcript && this.state.componentMounted &&
             <Paragraphs
               labelsOptions={ this.state.labelsOptions && this.state.labelsOptions }
               annotations={ this.state.annotations ? this.state.annotations : [] }
