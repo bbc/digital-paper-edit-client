@@ -359,9 +359,16 @@ class ProgramScript extends Component {
           mediaFps = currentTranscript.metadata.fps
         }
         console.log('currentTranscript.clipName', currentTranscript, currentTranscript.clipName);
+        // const words = event.words.map((word) => {
+        //     word.text = word.text.replace(/'/,'\'');
+        //   return word;
+        // })
+
+        console.log('element', element);
 
         const result = {
           ...element,
+          // words,
           startTime: element.start,
           endTime: element.end,
           reelName:  currentTranscript.metadata ? currentTranscript.metadata.reelName : defaultReelName,
@@ -407,7 +414,8 @@ class ProgramScript extends Component {
         return `[ ${ event.text }]`;
       }
       else if (event.type === 'paper-cut') {
-        return `${ timecodes.fromSeconds(event.startTime) }\t${ timecodes.fromSeconds(event.endTime) }\t${ event.speaker }\t-\t${ event.clipName }     \n${ event.words.map((word) => {return word.text;}).join(' ') }`;
+        // need to escape ' otherwise Premiere.jsx chockes 
+        return `${ timecodes.fromSeconds(event.startTime) }\t${ timecodes.fromSeconds(event.endTime) }\t${ event.speaker }\t-\t${ event.clipName }     \n${ event.words.map((word) => {return word.text.replace(/'/,'\'');}).join(' ') }`;
       }
 
       return null;
@@ -441,7 +449,9 @@ class ProgramScript extends Component {
       } 
     }
     console.log('tmpEdl', tmpEdl)
-    window.__adobe_cep__.evalScript("$._PPP.create_sequence_from_paper_edit('" + JSON.stringify(tmpEdl) +"')", function (response){
+    const premiereCommandString = "$._PPP.create_sequence_from_paper_edit('" + JSON.stringify(tmpEdl) + "')";
+    console.log('premiereCommandString:: ',premiereCommandString)
+    window.__adobe_cep__.evalScript(premiereCommandString, function (response){
       // done 
       console.info('done exporting sequence')
     })
