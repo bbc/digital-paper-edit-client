@@ -74,9 +74,15 @@ class Transcript extends Component {
         // console.log(' ApiWrapper.getAllAnnotations', json);
         this.setState({
           annotations: json.annotations,
-          componentMounted: true
+          // componentMounted: true
         });
       });
+  }
+
+  handleLoadTranscription = () =>{
+    this.setState({
+      componentMounted: true
+    });
   }
 
   onLabelCreate = (newLabel) => {
@@ -424,7 +430,7 @@ class Transcript extends Component {
 
             {highlights}
 
-            {this.props.transcript && !this.state.componentMounted && <i>Loading transcription</i>}
+            {this.props.transcript && !this.state.componentMounted && <Button variant="light" onClick={ this.handleLoadTranscription }block>Load transcription</Button>}
 
             {this.props.transcript && this.state.componentMounted &&
             <Paragraphs
