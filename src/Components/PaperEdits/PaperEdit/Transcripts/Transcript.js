@@ -357,7 +357,7 @@ class Transcript extends Component {
         // Media control - HTML5 default or react-transcript-editor/MediaPlayer
         // Search Bar - from TranscriptAnnotate component
         // Text -  from TranscriptAnnotate component */}
-            <video
+          {this.state.componentMounted &&   <video
               src={ this.props.url }
               ref={ this.videoRef }
               onTimeUpdate={ (e) => {this.setState({ currentTime: e.target.currentTime });} }
@@ -368,7 +368,7 @@ class Transcript extends Component {
                 height:'10em',
                 backgroundColor: 'black'
               } }
-              controls/>
+            controls/> }
           </Card.Header>
           <Card.Header>
             <Row>
