@@ -358,9 +358,8 @@ class ProgramScript extends Component {
         if(currentTranscript.metadata && currentTranscript.metadata.fps && (currentTranscript.metadata.fps!== 'NA')){
           mediaFps = currentTranscript.metadata.fps
         }
-        console.log('currentTranscript.clipName', currentTranscript, currentTranscript.clipName);
-        // const words = event.words.map((word) => {
-        //     word.text = word.text.replace(/'/,'\'');
+        // const words = element.words.map((word) => {
+        //   word.text = word.text.replace(/'/g,"\'"); 
         //   return word;
         // })
 
@@ -441,10 +440,15 @@ class ProgramScript extends Component {
       return el.type ==='paper-cut'
     })
     console.log('handleCepExportSequence - paperCuts ', paperCuts);
+
+    const paperCutsWithoutWords = paperCuts.map((el)=>{
+      delete el.words;
+      return el;
+    })
     // TODO: need to remove 
     const tmpEdl = {
       edlJson: {
-        events: paperCuts,
+        events: paperCutsWithoutWords,
         title: this.state.programmeScript.title
       } 
     }
