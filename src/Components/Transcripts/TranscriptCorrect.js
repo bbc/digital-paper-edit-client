@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import path from 'path';
 // import './index.module.css';
 // import styles from './Transcript.module.css';
 // TODO: perhaps import TranscriptEditor on componentDidMount(?) to defer the load for later
@@ -34,11 +35,13 @@ class TranscriptCorrect extends Component {
     ApiWrapper.getTranscript(this.state.projectId, this.state.transcriptId)
       // TODO: add error handling
       .then(json => {
+        console.log('json',json)
         this.setState({
           projectTitle: json.projectTitle,
           transcriptTitle: json.transcriptTitle,
           transcriptJson: json.transcript,
-          url: json.url
+          url: json.url,
+          clipName: json.clipName
         });
       });
   }
@@ -103,6 +106,19 @@ class TranscriptCorrect extends Component {
   }
 
   render() {
+    // Workaround to change layout of TranscriptEditor for audio files. 
+    // For now only handling limited numnber of file extension that have more of a certainty of being audio
+    // as opposed to more ambiguos extensions such as ogg or mp4 that could be either video or audio
+    // there might be better ways to determine if a clip is audio or video, especially node/"server side" but
+    // might also be more of a setup eg using ffprobe etc..
+    let mediaType = 'video';
+    if(path.extname(this.state.clipName) ==='.wav' 
+      || path.extname(this.state.clipName) ==='.mp3' 
+      || path.extname(this.state.clipName) ==='.m4a' 
+      || path.extname(this.state.clipName) ==='.flac' 
+      || path.extname(this.state.clipName) ==='.aiff'){
+      mediaType = 'audio'
+    }
     return (
       <>
         {this.renderRedirect()}
@@ -156,6 +172,7 @@ class TranscriptCorrect extends Component {
             title={ this.state.transcriptTitle }
             // fileName={ this.state.projectTitle }// optional*
             ref={ this.transcriptEditorRef }
+            mediaType={ mediaType }
           />}
         </Container>
       </>
