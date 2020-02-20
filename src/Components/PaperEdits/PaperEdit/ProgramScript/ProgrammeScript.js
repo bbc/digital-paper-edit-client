@@ -25,7 +25,10 @@ const InsertPoint = (({ text }) => <span style={ { width: '100%', backgroundColo
 
 const DragHandle = sortableHandle(() => <span> <FontAwesomeIcon icon={ faGripLines } /> </span>);
 
-const SortableItem = sortableElement(({ value, index, type, handleDelete, handleEdit }) => {
+
+
+
+const SortableItem = sortableElement(({ indexNumber, value, type, handleDelete, handleEdit } ) => {
   return (<li>
     <Row>
       <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
@@ -36,12 +39,11 @@ const SortableItem = sortableElement(({ value, index, type, handleDelete, handle
       </Col>
       <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
         {/* TODO: if paper-cut  then don't show edit/pen icon */}
-        {type !== 'paper-cut' && type !== 'insert-point' ? <FontAwesomeIcon className={ 'text-muted' } icon={ faPen } onClick={ () => { handleEdit(index); } } /> : null}
-
+        {type !== 'paper-cut' && type !== 'insert-point' ? <FontAwesomeIcon className={ 'text-muted' } icon={ faPen } onClick={ () => { handleEdit(indexNumber); } } /> : null}
       </Col>
       <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
         {/* TODO: pass a prop to remove element from list */}
-        {type !== 'insert-point' ? <FontAwesomeIcon className={ 'text-muted' } icon={ faTrash } onClick={ () => {handleDelete(index);} } /> : null}
+  {type !== 'insert-point' ? <FontAwesomeIcon className={ 'text-muted' } icon={ faTrash } onClick={ () => {handleDelete(indexNumber);} } /> : null}
         {type === 'insert-point' ? <FontAwesomeIcon style={ { color: 'white' } } icon={ faArrowAltCircleLeft } /> : null}
       </Col>
     </Row>
@@ -77,7 +79,7 @@ class ProgrammeScript extends Component {
     let programme;
     let sortableProgramme;
     if (this.props.programmeScriptElements) {
-      programme = this.props.programmeScriptElements.map((el) => {
+      programme = this.props.programmeScriptElements.map((el,index) => {
         switch (el.type) {
         case 'title':
           return { el:<TitleHeading key={ el.id } title={ el.text } />, type: el.type };
@@ -99,16 +101,17 @@ class ProgrammeScript extends Component {
 
     if (this.props.programmeScriptElements) {
       sortableProgramme = <SortableContainer useDragHandle onSortEnd={ this.onSortEnd }>
-        {programme.map((value, index) => (
-          <SortableItem
+        {programme.map((value, index) => {
+          console.log(index)
+          return <SortableItem
             key={ `item-${ index }` }
-            index={ index }
+            indexNumber={ index }
             value={ value.el }
             type={ value.type }
             handleDelete={ this.props.handleDeleteProgrammeScriptElement }
             handleEdit={ this.props.handleEditProgrammeScriptElement }
           />
-        ))}
+        })}
       </SortableContainer>;
     }
 

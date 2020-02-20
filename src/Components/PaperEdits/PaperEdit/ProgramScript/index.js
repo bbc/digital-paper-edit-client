@@ -89,7 +89,7 @@ class ProgramScript extends Component {
   handleDeleteProgrammeScriptElement = (i) => {
     // TODO: add a prompt, like are you shure you want to delete, confirm etc..?
     // alert('handle delete');
-    console.log(i);
+    console.log('handleDeleteProgrammeScriptElement ',i);
     this.setState(({ programmeScript }) => {
       const index = i;
       const list = programmeScript.elements;
@@ -104,7 +104,7 @@ class ProgramScript extends Component {
   }
 
   handleEditProgrammeScriptElement = (i) => {
-    console.log(i);
+    console.log('handleEditProgrammeScriptElement',i);
     const { programmeScript } = this.state;
     const elements = programmeScript.elements;
     const currentElement = elements[i];
@@ -440,7 +440,7 @@ class ProgramScript extends Component {
       return el.type ==='paper-cut'
     })
     console.log('handleCepExportSequence - paperCuts ', paperCuts);
-
+    // not quier sure how to escapte  ' in word text attribute, so since it's not needed for premiere export, removing the words
     const paperCutsWithoutWords = paperCuts.map((el)=>{
       delete el.words;
       return el;
