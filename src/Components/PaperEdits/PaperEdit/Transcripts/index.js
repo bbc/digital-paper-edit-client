@@ -17,7 +17,7 @@ class Transcripts extends Component {
   render() {
     const transcriptsElNav = this.props.transcripts.map((transcript, index) => {
       return (
-        <Nav.Item key={ transcript.id }>
+        <Nav.Item key={ transcript.id  }>
           <Nav.Link
             disabled={ transcript.status !== 'done' ? true : false }
             // title={ transcript.status !== 'done' ? transcript.status : transcript.title }

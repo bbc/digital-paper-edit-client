@@ -105,6 +105,7 @@ class ProgrammeScript extends Component {
           console.log(index)
           return <SortableItem
             key={ `item-${ index }` }
+            index={index}
             indexNumber={ index }
             value={ value.el }
             type={ value.type }
