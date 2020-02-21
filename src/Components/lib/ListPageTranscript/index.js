@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import CustomTranscriptCard from '../CustomTranscriptCard';
 import includesText from '../../../Util/includes-text';
-
+import whichJsEnv from '../../../Util/which-js-env';
 // TODO: add error handling, eg custom alert if server is not responding
 class ListPageTranscript extends Component {
   constructor(props) {
@@ -102,14 +102,29 @@ class ListPageTranscript extends Component {
     return (
       <>
         <Row>
-          <Col sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
+          <Col xs={ 12 } sm={ 6 } md={ 7 } lg={ 7 } xl={ 7 }>
             {searchEl}
           </Col>
-          <Col xs={ 12 } sm={ 3 } md={ 3 } ld={ 3 } xl={ 3 }>
+          { (whichJsEnv() !== 'cep')?(
+            <>
+            <Col xs={ 12 } sm={ 3 } md={ 2 } lg={ 2 } xl={ 2 }>
             <Button onClick={ this.props.handleShowCreateNewItemForm } variant="outline-secondary" size="sm" block>
                 New {this.props.model}
             </Button>
-          </Col>
+            </Col>
+            <Col xs={ 12 } sm={ 3 } md={ 3 } lg={ 3 } xl={ 3 }>
+            <Button onClick={ this.props.handleShowCreateNewBatchForm } variant="outline-secondary" size="sm" block>
+                New Batch {this.props.model}s
+            </Button>
+            </Col>
+            </>
+          ): (
+            <Col xs={ 12 } sm={ 6 } md={ 5 } lg={ 5 } xl={ 5 }>
+            <Button onClick={ this.props.handleShowCreateNewItemForm } variant="outline-secondary" size="sm" block>
+                New {this.props.model}
+            </Button>
+            </Col>
+          )}
         </Row>
         {content}
       </>

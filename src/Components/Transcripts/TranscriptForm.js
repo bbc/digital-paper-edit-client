@@ -102,33 +102,13 @@ class TranscriptForm extends Component {
     }
 
     if (whichJsEnv() === 'cep') {
-      // if client run inside of Adobe CEP
-      // is easier to pass another object with title, description
-      // as well as the additional path to the file
-      // rather then parsing a formData object in node etc..
-      //   window.__adobe_cep__.evalScript(`$._PPP.get_current_project_panel_selection_absolute_path()`,  (response)=>{
-      //     if(response !== ""){
-      //     //  const newFilePath = response;
-      //     //  fileName = path.basename(newFilePath);
-      //      data.path = response;
-      //    }
-      //    else{
-      //      // TODO: review logic for edge case
-      //      alert('select a clip')
-      //    }
-      //  })
-
+  
       data = {
         title: this.state.title,
         description: this.state.description,
         path: this.state.adobeCepFilePath
       };
-     
-      // data.title =this.state.title;
-      // data.description = this.state.description;
-      // data.path = this.state.adobeCepFilePath;
-        // path: formData.get('path')
-      // };
+    
     }
     // TODO: do you need a try catch?
     try {
@@ -191,6 +171,33 @@ class TranscriptForm extends Component {
           validated={ this.state.validated }
           onSubmit={ e => this.handleSubmit(e) }
         >
+           { (whichJsEnv() === 'cep')?(
+              <>
+              <Button  variant="light" onClick={this.handleAdobeCepSetFilePath} block>Pick a file</Button>
+              <Form.Text className="text-muted">
+                Select an audio or video file to transcribe. Click on a file in the Adobe Premiere project browser window, and the click <code>pick a file</code> to select a file to transcribe. Then 
+                click <code>save</code> when you are ready to start the transcriptiion.
+              </Form.Text>
+            </>
+          ):(
+            <Form.Group controlId="formTranscriptMediaFile">
+            <Form.Control
+              required
+              type="file"
+              label="Upload"
+              accept="audio/*,video/*,.mxf"
+              onChange={ this.handleFileUpload }
+            />
+            <Form.Text className="text-muted">
+            Select an audio or video file to transcribe
+            </Form.Text>
+            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              Please chose a audio or video file to transcribe
+            </Form.Control.Feedback>
+          </Form.Group>
+          )}
+          
           <Form.Group controlId="formTranscriptTitle">
             <Form.Label>Title </Form.Label>
             <Form.Control
@@ -225,32 +232,7 @@ class TranscriptForm extends Component {
                 Please chose a description for your transcript
             </Form.Control.Feedback>
           </Form.Group>
-          { (whichJsEnv() === 'cep')?(
-              <>
-              <Button  variant="light" onClick={this.handleAdobeCepSetFilePath} block>Pick a file</Button>
-              <Form.Text className="text-muted">
-                Select an audio or video file to transcribe. Click on a file in the Adobe Premiere project browser window, and the click <code>pick a file</code> to select a file to transcribe. Then 
-                click <code>save</code> when you are ready to start the transcriptiion.
-              </Form.Text>
-            </>
-          ):(
-            <Form.Group controlId="formTranscriptMediaFile">
-            <Form.Control
-              required
-              type="file"
-              label="Upload"
-              accept="audio/*,video/*,.mxf"
-              onChange={ this.handleFileUpload }
-            />
-            <Form.Text className="text-muted">
-            Select an audio or video file to transcribe
-            </Form.Text>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            <Form.Control.Feedback type="invalid">
-              Please chose a audio or video file to transcribe
-            </Form.Control.Feedback>
-          </Form.Group>
-          )}
+         
           
           <Modal.Footer>
             <Button variant="primary" type="submit">

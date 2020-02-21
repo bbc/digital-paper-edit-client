@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import Container from 'react-bootstrap/Container';
-import { faFileAlt } from '@fortawesome/free-solid-svg-icons';
+import { faFileAlt, faGrinTongueSquint } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ListPageTranscript from '../lib/ListPageTranscript';
 import NewTranscriptFormModal from './NewTranscriptFormModal';
+import NewBatchTranscriptFormModal from './NewBatchTranscriptFormModal';
 import ItemFormModal from '../lib/ItemFormModal';
 import ApiWrapper from '../../ApiWrapper';
 
@@ -16,6 +17,7 @@ class Transcripts extends Component {
       projectId: this.props.projectId,
       items: [],
       isNewItemModalShow: false,
+      isNewBatchModalShow: false,
       title:'',
       description: '',
       itemId: null,
@@ -100,6 +102,50 @@ class Transcripts extends Component {
     });
   }
 
+  // TODO: adjust for multiuple
+  handleSaveBatch = (itemsProps) => {
+    console.log('handleSaveBatch', itemsProps);
+
+    this.setState({
+      isNewBatchModalShow: false
+    })
+
+    if(itemsProps.length){
+      const newItems = itemsProps.map((item)=>{
+        item.display = true;
+        return item;
+      })
+      const { items } = this.state;
+      const itemsList = [ ...items ];
+      const newItemsList = [...itemsList, ...newItems]
+      this.setState({
+        items: newItemsList,
+        title:'',
+        itemId: null,
+        description: '',
+        isNewBatchModalShow: false
+      }, () => {
+        console.log('setState - itemsProps.length', this.state.isNewBatchModalShow);
+      });
+    }else{
+    const newItem = itemsProps;
+    newItem.display = true;
+    const { items } = this.state;
+    const newitems = [ ...items ];
+    newitems.push(newItem);
+    this.setState({
+      items: newitems,
+      title:'',
+      itemId: null,
+      description: '',
+      isNewItemModalShow: false
+    }, () => {
+      console.log('setState - single',  this.state.isNewBatchModalShow);
+    });
+    }
+   
+  }
+
   handleSaveEditedItem = (transcript) => {
     const newEditedItem = transcript;
     console.log('newEditedITem', newEditedItem);
@@ -176,12 +222,26 @@ class Transcripts extends Component {
     this.setState({ isNewItemModalShow: true });
   }
 
+  handleShowCreateNewBatchForm = ()=>{
+    console.log('handleShowCreateNewBatchForm')
+    this.setState({ isNewBatchModalShow: true });
+  }
+
   handleCloseModal = () => {
     this.setState({
       title:'',
       itemId: null,
       description: '',
       isNewItemModalShow: false
+    });
+  }
+
+  handleCloseBatchModal = () => {
+    this.setState({
+      title:'',
+      itemId: null,
+      description: '',
+      isNewBatchModalShow: false
     });
   }
 
@@ -208,12 +268,14 @@ class Transcripts extends Component {
             model={ 'Transcript' }
             items={ this.state.items }
             handleShowCreateNewItemForm={ this.handleShowCreateNewItemForm }
+            handleShowCreateNewBatchForm={ this.handleShowCreateNewBatchForm }
             handleEdit={ this.handleEditItem }
             handleDelete={ this.handleDelete }
             showLinkPath={ this.showLinkPathToItem }
             handleUpdateList={ this.handleUpdateList }
             //
             handleCloseModal={ this.handleCloseModal }
+            handleCloseBatchModal={ this.handleCloseBatchModal }
             icon={ <FontAwesomeIcon icon={ faFileAlt } /> }
           />
           <NewTranscriptFormModal
@@ -226,6 +288,18 @@ class Transcripts extends Component {
             handleCloseModal={ this.handleCloseModal }
             handleSaveForm={ this.handleSaveItem }
           />
+
+        <NewBatchTranscriptFormModal
+            projectId={ this.state.projectId }
+            title={ this.state.title }
+            description={ this.state.description }
+            id={ this.state.itemId }
+            modalTitle={ 'New Batch Transcripts' }
+            show={ this.state.isNewBatchModalShow }
+            handleCloseModal={ this.handleCloseBatchModal }
+            handleSaveForm={ this.handleSaveBatch }
+          />
+          
           <ItemFormModal
             title={ this.state.title }
             description={ this.state.description }
