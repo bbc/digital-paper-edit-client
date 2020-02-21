@@ -140,7 +140,7 @@ class BatchTranscriptForm extends Component {
       })
       
     }
-    if(whichJsEnv() !== 'cep'){
+    if(whichJsEnv() === 'browser'){
       const formData = this.state.formData;
       const listOfFiles = formData.getAll('file');
       const listOfFileTypes = formData.getAll('type');
@@ -190,8 +190,9 @@ class BatchTranscriptForm extends Component {
         }
       
       })
-
-      
+    }
+    if (whichJsEnv() === 'cep') {
+      alert('not implemented in adobe CEP')
     }
   };
 
