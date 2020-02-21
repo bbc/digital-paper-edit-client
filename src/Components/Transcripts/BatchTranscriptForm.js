@@ -97,7 +97,7 @@ class BatchTranscriptForm extends Component {
       listOfFilesPath.forEach((filePath)=>{
         data = {
           title: path.basename(filePath),
-          description: `Batch imported - ${path.basename(filePath)}`,
+          description: `${path.basename(filePath)}`,
           path: filePath
         };
 
@@ -149,11 +149,11 @@ class BatchTranscriptForm extends Component {
         individualFileFormData.append('file', individualFile);
         individualFileFormData.append('type',  listOfFileTypes[index]);
         individualFileFormData.append('title', individualFile.name);
-        individualFileFormData.append('description', 'batch imported with default name');
+        individualFileFormData.append('description', '');
         // individualFileFormData.append('type', file.type);
         const  data = {
           title: individualFile.name,
-          description: 'batch imported with default name',
+          description: '',
           // path: 
         };
 
