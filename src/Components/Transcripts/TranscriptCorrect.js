@@ -173,6 +173,10 @@ class TranscriptCorrect extends Component {
             // fileName={ this.state.projectTitle }// optional*
             ref={ this.transcriptEditorRef }
             mediaType={ mediaType }
+            handleAnalyticsEvents = {()=>{
+              console.log('handleAnalyticsEvents')
+            }}
+          
           />}
         </Container>
       </>

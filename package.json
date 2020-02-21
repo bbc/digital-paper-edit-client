@@ -1,6 +1,6 @@
 {
   "name": "@pietrop/digital-paper-edit-client",
-  "version": "1.3.3-alpha.35",
+  "version": "1.3.3-alpha.36",
   "description": "Digital paper edit application, using transcriptions from automated STT, to do text based video editing on audio and video interviews. Modular architecture with  - React - Express - Electron - Adobe CEP",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "@pietrop/aes31-adl-composer": "^1.0.1",
     "@pietrop/digital-paper-edit-storybook": "^1.3.3",
     "@pietrop/fcpx-xml-composer": "^1.0.0",
-    "@pietrop/react-transcript-editor": "^1.3.0",
+    "@pietrop/react-transcript-editor": "^1.3.4",
     "array-move": "^2.1.0",
     "audition-xml-composer": "^1.0.0",
     "bootstrap-css-only": "^4.3.1",
