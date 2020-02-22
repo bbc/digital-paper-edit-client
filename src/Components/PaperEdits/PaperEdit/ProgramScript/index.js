@@ -7,7 +7,7 @@ import Card from 'react-bootstrap/Card';
 import PreviewCanvas from './PreviewCanvas2/index.js';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
-import EDL from 'edl_composer';
+import EDL from '@pietrop/edl-composer';
 import generateADL from '@pietrop/aes31-adl-composer';
 import jsonToFCPX from '@pietrop/fcpx-xml-composer';
 import jsonToAudition from 'audition-xml-composer';
@@ -284,7 +284,7 @@ class ProgramScript extends Component {
   }
 
   // https://www.npmjs.com/package/downloadjs
-  // https://www.npmjs.com/package/edl_composer
+  // https://www.npmjs.com/package/@pietrop/edl-composer
   handleExportEDL = () => {
     const edlSq = this.getSequenceJsonEDL();
     const edl = new EDL(edlSq);

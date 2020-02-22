@@ -129,9 +129,9 @@ Docs on EDL format
 
 [https://autoedit.gitbook.io/documentation/appendix/edl-format](./img/https://autoedit.gitbook.io/documentation/appendix/edl-format) 
 
-Module on github [https://github.com/pietrop/edl_composer](./img/https://github.com/pietrop/edl_composer) 
+Module on github [https://github.com/pietrop/edl-composer](./img/https://github.com/pietrop/edl-composer) 
 
-Module on npm: [https://www.npmjs.com/package/edl_composer](./img/https://www.npmjs.com/package/edl_composer)
+Module on npm: [https://www.npmjs.com/package/edl-composer](./img/https://www.npmjs.com/package/edl-composer)
 
 
 ### XML
