@@ -138,6 +138,7 @@ class ProgramScript extends Component {
   handleAddTranscriptElementToProgrammeScript = (elementType) => {
     const { programmeScript } = this.state;
     const elements = this.state.programmeScript.elements;
+    console.log('handleAddTranscriptElementToProgrammeScript elements', elements)
     // TODO: refactor - with helper functions
     if (elementType === 'title'
       || elementType === 'note'
@@ -511,6 +512,8 @@ class ProgramScript extends Component {
         const currentTranscript = this.props.transcripts.find((tr) => {
           return tr.id === element.transcriptId;
         });
+        console.log('handleUpdatePreview - currentTranscript', currentTranscript)
+        console.log('handleUpdatePreview - element', element)
         const duration = element.end - element.start;
         // TODO: handle audio only type (eg for radio), get from transcript json?
         const result = {
@@ -528,6 +531,7 @@ class ProgramScript extends Component {
 
       return null;
     }).filter((el) => {return el !== null;});
+    console.log('handleUpdatePreview - playlist',playlist)
 
     // Workaround to mound and unmoun the `PreviewCanvas` component
     // to update the playlist
@@ -541,9 +545,9 @@ class ProgramScript extends Component {
       });
     });
     // console.log('handleUpdatePreview', playlist);
-    // this.setState({
-    //   playlist: playlist
-    // });
+    this.setState({
+      playlist: playlist
+    });
   }
 
   handleDoubleClickOnProgrammeScript = (e) => {
@@ -733,7 +737,8 @@ class ProgramScript extends Component {
                   onClick={ this.handleSaveProgrammeScript }
                   // size="sm"
                   title="save programme script"
-                  title=  { `Last saved  ${diffDateInMinutes(this.state.lastSaved, (new Date()))} Minutes ago at ${this.state.lastSaved.toLocaleString()}`}
+                  // title=  { `Last saved  ${diffDateInMinutes(this.state.lastSaved, (new Date()))} Minutes ago at ${this.state.lastSaved.toLocaleString()}`}
+                  title=  { `Last saved at ${this.state.lastSaved.toLocaleString()}`}
                   block
                 >
                   <FontAwesomeIcon icon={ faSave } />

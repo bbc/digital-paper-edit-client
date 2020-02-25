@@ -65,8 +65,10 @@ class ProgrammeScript extends Component {
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {
+    console.log('ProgrammeScript')
+    console.log(this.props.programmeScriptElements)
     const result = arrayMove(this.props.programmeScriptElements, oldIndex, newIndex);
-    // console.log(result);
+    console.log(result);
     this.props.handleProgrammeScriptOrderChange(result);
   };
 
