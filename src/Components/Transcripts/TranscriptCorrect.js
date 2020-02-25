@@ -49,7 +49,6 @@ class TranscriptCorrect extends Component {
   saveToServer = () => {
     // TODO: add Api call to save content of
     alert('saved');
-
     // TODO: decide how to deal with transcript corrections
     // exporting digitalpaperedit in react-transcript-editor@latest doesn't give you
     // corrected text with timecodes, only "original" uncorrected text even if transcript might
@@ -77,6 +76,35 @@ class TranscriptCorrect extends Component {
             heading={ 'Transcript saved' }
             message={ <p>Transcript: <b>{this.state.transcriptTitle}</b> has been saved</p> }
           />
+        });
+      }
+    }).catch((e) => {
+      console.error('error saving transcript:: ', e);
+      this.setState({
+        savedNotification: <CustomAlert
+          dismissable={ true }
+          variant={ 'danger' }
+          heading={ 'Error saving transcript' }
+          message={ <p>There was an error trying to save this transcript: <b>{this.state.transcriptTitle}</b></p> }
+        />
+      });
+    });
+  }
+
+  handleAutoSave = (autoSaveData) =>{
+    console.log('handleAutoSave', autoSaveData)
+    const data = autoSaveData;
+    data.title = this.state.transcriptTitle;
+    data.transcriptTitle = this.state.transcriptTitle;
+    const queryParamsOptions = false;
+    ApiWrapper.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, data).then((response) => {
+      console.log('ApiWrapper.updateTranscript', response );
+      if (response.ok) {
+      // show message or redirect
+        console.log('updated');
+        // More discrete auto save notification 
+        this.setState({
+        savedNotification:  <small className={'text-success'}>Transcript: <b>{this.state.transcriptTitle}</b> has been saved at <b>{(new Date()).toLocaleString()}</b></small>
         });
       }
     }).catch((e) => {
@@ -125,7 +153,7 @@ class TranscriptCorrect extends Component {
         <Container style={ { marginBottom: '5em' } } fluid>
           <br/>
           <Row>
-            <Col sm={ 12 } md={ 11 } ld={ 11 } xl={ 11 }>
+            <Col sm={ 12 } md={ 11 } ld={ 11 } xl={ 11 } style={{marginBottom: '0'}}>
               <CustomBreadcrumb
                 items={ [ {
                   name: 'Projects',
@@ -176,7 +204,8 @@ class TranscriptCorrect extends Component {
             handleAnalyticsEvents = {()=>{
               console.log('handleAnalyticsEvents')
             }}
-          
+            autoSaveContentType={'digitalpaperedit'}
+            handleAutoSaveChanges={ this.handleAutoSave }
           />}
         </Container>
       </>
