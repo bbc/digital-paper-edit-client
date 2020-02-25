@@ -30,6 +30,7 @@ import { divideWordsSelectionsIntoParagraphs, isOneParagraph } from './divide-wo
 import ApiWrapper from '../../../../ApiWrapper/index.js';
 import whichJsEnv from '../../../../Util/which-js-env';
 import programmeScriptJsonToDocx from './programme-script-json-to-docx/index.js';
+import diffDateInMinutes from '../../../../Util/diff-dates-in-minutes';
 
 const defaultReelName = 'NA';
 const defaultFps = 25;
@@ -40,6 +41,7 @@ class ProgramScript extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      lastSaved: new Date(),
       programmeScript: null,
       resetPreview: false,
       // demo content
@@ -74,13 +76,16 @@ class ProgramScript extends Component {
 
   // TODO: save to server
   handleProgrammeScriptOrderChange = (list) => {
-    console.log('handleProgrammeScriptOrderChange', list);
+    // console.log('handleProgrammeScriptOrderChange', list);
     this.setState(({ programmeScript }) => {
       programmeScript.elements = list;
 
       return {
         programmeScript: programmeScript
       };
+    },()=>{
+      this.handleSaveProgrammeScript()
+      this.handleUpdatePreview();
     }
     );
   }
@@ -89,7 +94,7 @@ class ProgramScript extends Component {
   handleDeleteProgrammeScriptElement = (i) => {
     // TODO: add a prompt, like are you shure you want to delete, confirm etc..?
     // alert('handle delete');
-    console.log('handleDeleteProgrammeScriptElement ',i);
+    // console.log('handleDeleteProgrammeScriptElement ',i);
     this.setState(({ programmeScript }) => {
       const index = i;
       const list = programmeScript.elements;
@@ -99,17 +104,20 @@ class ProgramScript extends Component {
       return {
         programmeScript: programmeScript
       };
+    },()=>{
+      this.handleSaveProgrammeScript();
+      this.handleUpdatePreview();
     }
     );
   }
 
   handleEditProgrammeScriptElement = (i) => {
-    console.log('handleEditProgrammeScriptElement',i);
+    // console.log('handleEditProgrammeScriptElement',i);
     const { programmeScript } = this.state;
     const elements = programmeScript.elements;
     const currentElement = elements[i];
     const newText = prompt('Edit', currentElement.text);
-    console.log(newText);
+    // console.log(newText);
     if (newText) {
       currentElement.text = newText;
       elements[i] = currentElement;
@@ -117,13 +125,13 @@ class ProgramScript extends Component {
       // TODO: save to server
       this.setState({
         programmeScript: programmeScript
+      },()=>{
+          this.handleSaveProgrammeScript();
+          // For now programme script elements other
+          // than paper cuts don't show in preview canvas
+          // so commenting this out for now
+          // this.handleUpdatePreview();
       });
-      // TODO: consider using set state function to avoid race condition? if needed?
-      // this.setState(({ programmeScript }) => {
-      //   return {
-      //     programmeScript: programmeScript
-      //   };
-      // });
     }
   }
 
@@ -135,7 +143,7 @@ class ProgramScript extends Component {
       || elementType === 'note'
       || elementType === 'voice-over') {
       const text = prompt('Add some text for a section title', 'Some place holder text');
-      console.log(text);
+      // console.log(text);
 
       const indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
       const newElement = {
@@ -144,11 +152,17 @@ class ProgramScript extends Component {
         type: elementType,
         text: text
       };
+  
+      console.log('handleAddTranscriptElementToProgrammeScript', programmeScript)
+
       elements.splice(indexOfInsertPoint, 0, newElement);
       programmeScript.elements = elements;
+      console.log('handleAddTranscriptElementToProgrammeScript',indexOfInsertPoint, programmeScript)
       // TODO: save to server
       this.setState({
         programmeScript: programmeScript
+      },()=>{
+        this.handleSaveProgrammeScript()
       });
     }
   }
@@ -170,9 +184,9 @@ class ProgramScript extends Component {
   // TODO: needs to handle when selection spans across multiple paragraphs
   handleAddTranscriptSelectionToProgrammeScript = () => {
     const result = getDataFromUserWordsSelection();
-    console.log('getDataFromUserWordsSelection::', result);
+    // console.log('getDataFromUserWordsSelection::', result);
     if (result) {
-      console.log(JSON.stringify(result, null, 2));
+      // console.log(JSON.stringify(result, null, 2));
 
       // result.words
       // TODO: if there's just one speaker in selection do following
@@ -224,11 +238,14 @@ class ProgramScript extends Component {
       // TODO: save to server
       this.setState({
         programmeScript: programmeScript
+      }, ()=>{
+        this.handleSaveProgrammeScript();
+        this.handleUpdatePreview();
       });
     }
     else {
       alert('Select some text in the transcript to add to the programme script');
-      console.log('nothing selected');
+      // console.log('nothing selected');
     }
   }
 
@@ -288,7 +305,7 @@ class ProgramScript extends Component {
   handleExportEDL = () => {
     const edlSq = this.getSequenceJsonEDL();
     const edl = new EDL(edlSq);
-    console.log(edl.compose());
+    // console.log(edl.compose());
     downloadjs(edl.compose(), `${ this.state.programmeScript.title }.edl`, 'text/plain');
   }
 
@@ -326,7 +343,7 @@ class ProgramScript extends Component {
   handleExportFCPX = () => {
     // alert('this function has not been implemented yet');
     const edlSq = this.getSequenceJsonEDL();
-    console.log(edlSq);
+    // console.log(edlSq);
     const result = jsonToFCPX(edlSq);
     downloadjs(result, `${ this.state.programmeScript.title }.fcpxml`, 'text/plain');
   }
@@ -334,7 +351,7 @@ class ProgramScript extends Component {
   handleExportXML = () => {
     // alert('this function has not been implemented yet');
     const edlSq = this.getSequenceJsonEDL();
-    console.log('edlSq',edlSq);
+    // console.log('edlSq',edlSq);
     const result = jsonToAudition(edlSq);
     downloadjs(result, `${ this.state.programmeScript.title }.xml`, 'text/plain');
   }
@@ -363,7 +380,7 @@ class ProgramScript extends Component {
         //   return word;
         // })
 
-        console.log('element', element);
+        // console.log('element', element);
 
         const result = {
           ...element,
@@ -394,7 +411,7 @@ class ProgramScript extends Component {
       return el;
     });
     edlSq.events.push(...programmeScriptPaperCutsWithId);
-    console.log('edlSq',edlSq);
+    // console.log('edlSq',edlSq);
 
     return edlSq;
   }
@@ -430,16 +447,16 @@ class ProgramScript extends Component {
   }
 
   handleCepExportSequence = () =>{
-    console.log('handleCepExportSequence');
+    // console.log('handleCepExportSequence');
     // var tmpEdl = {edlJson:  this.makeEDLJSON(false) };
     // console.log(JSON.stringify( tmpEdl, null,2));
     const programmeScriptJson = this.getProgrammeScriptJson();
-    console.log('handleCepExportSequence - programmeScriptJson ', programmeScriptJson);
+    // console.log('handleCepExportSequence - programmeScriptJson ', programmeScriptJson);
 
     const paperCuts = programmeScriptJson.events.filter((el)=>{
       return el.type ==='paper-cut'
     })
-    console.log('handleCepExportSequence - paperCuts ', paperCuts);
+    // console.log('handleCepExportSequence - paperCuts ', paperCuts);
     // not quier sure how to escapte  ' in word text attribute, so since it's not needed for premiere export, removing the words
     const paperCutsWithoutWords = paperCuts.map((el)=>{
       delete el.words;
@@ -452,9 +469,9 @@ class ProgramScript extends Component {
         title: this.state.programmeScript.title
       } 
     }
-    console.log('tmpEdl', tmpEdl)
+    // console.log('tmpEdl', tmpEdl)
     const premiereCommandString = "$._PPP.create_sequence_from_paper_edit('" + JSON.stringify(tmpEdl) + "')";
-    console.log('premiereCommandString:: ',premiereCommandString)
+    // console.log('premiereCommandString:: ',premiereCommandString)
     window.__adobe_cep__.evalScript(premiereCommandString, function (response){
       // done 
       console.info('done exporting sequence')
@@ -478,7 +495,7 @@ class ProgramScript extends Component {
 
   handleExportDocxWithClipReference = async () => {
     const programmeScriptJson = this.getProgrammeScriptJson();
-    console.log('programmeScriptJson',programmeScriptJson)
+    // console.log('programmeScriptJson',programmeScriptJson)
     const isWithClipReference = true;
     const programmeScriptDocx = await programmeScriptJsonToDocx(programmeScriptJson, isWithClipReference);
     downloadjs(programmeScriptDocx, `${ this.state.programmeScript.title }.docx`, 'text/docx');
@@ -517,16 +534,16 @@ class ProgramScript extends Component {
     this.setState({
       resetPreview: true
     }, () => {
-      console.log('handleUpdatePreview', playlist);
+      // console.log('handleUpdatePreview', playlist);
       this.setState({
         resetPreview: false,
         playlist: playlist
       });
     });
-    console.log('handleUpdatePreview', playlist);
-    this.setState({
-      playlist: playlist
-    });
+    // console.log('handleUpdatePreview', playlist);
+    // this.setState({
+    //   playlist: playlist
+    // });
   }
 
   handleDoubleClickOnProgrammeScript = (e) => {
@@ -536,14 +553,16 @@ class ProgramScript extends Component {
       // TODO: set current time in preview canvas
       // Video context probably needs more info like, which clip/track in the sequence?
       // investigate how to set currentTime in video context
-      console.log('wordCurrentTime::', wordCurrentTime);
+      // console.log('wordCurrentTime::', wordCurrentTime);
     }
   }
 
   handleSaveProgrammeScript = () => {
     const { programmeScript } = this.state;
-    if (programmeScript) {
-      const elements = programmeScript.elements;
+    // cloning programmeScript to avoid overriding original
+    const latestProgrammeScript = {...programmeScript}
+    if (latestProgrammeScript) {
+      const elements = [...latestProgrammeScript.elements];
       // finding an removing insert point before saving to server
       // find insert point in list,
       const insertPointElement = elements.find((el) => {
@@ -555,23 +574,13 @@ class ProgramScript extends Component {
         elements.splice(indexOfInsertPoint, 1);
       }
 
-      programmeScript.elements = elements;
-      ApiWrapper.updatePaperEdit(this.props.projectId, this.props.papereditId, programmeScript)
+      latestProgrammeScript.elements = elements;
+      ApiWrapper.updatePaperEdit(this.props.projectId, this.props.papereditId, latestProgrammeScript)
         .then((json) => {
           if (json.status === 'ok') {
-            alert('saved programme script');
+            // alert('saved programme script');
+            this.setState({lastSaved: new Date()})
           }
-          // const programmeScript = json.programmeScript;
-          // Adding an insert point at the end of the list
-          // programmeScript.elements.push({ type: 'insert-point', text: 'Insert Point to add selection' });
-          // this.setState({
-          //   programmeScript: programmeScript
-          // }
-          // TODO: figure out how to update preview
-          // , () => {
-          //   this.handleUpdatePreview();
-          // }
-          // );
         });
     }
   }
@@ -718,15 +727,19 @@ class ProgramScript extends Component {
                 </Dropdown>
               </Col>
               <Col sm={ 12 } md={ 1 } ld={ 1 } xl={ 1 }>
-                <Button variant="outline-secondary"
+                <Button 
+                  // variant={ diffDateInMinutes(this.state.lastSaved, (new Date())) === 0? 'outline-primary': 'outline-secondary' }
+                  variant={ 'outline-secondary' }
                   onClick={ this.handleSaveProgrammeScript }
                   // size="sm"
                   title="save programme script"
+                  title=  { `Last saved  ${diffDateInMinutes(this.state.lastSaved, (new Date()))} Minutes ago at ${this.state.lastSaved.toLocaleString()}`}
                   block
                 >
                   <FontAwesomeIcon icon={ faSave } />
                   {/* Save */}
-                </Button>
+                
+                </Button> 
               </Col>
             </Row>
 
