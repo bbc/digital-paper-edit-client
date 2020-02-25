@@ -8,8 +8,8 @@
 function parseWordElDataset(wordEl) {
 
   return {
-    start: wordEl.dataset.start,
-    end: wordEl.dataset.end,
+    start: parseFloat(wordEl.dataset.start),
+    end: parseFloat(wordEl.dataset.end),
     // you could also get the word from wordEl.dataset.text
     // but the word there is lowercase and without punctuation coz is used
     // for the search  functionality so using innerText

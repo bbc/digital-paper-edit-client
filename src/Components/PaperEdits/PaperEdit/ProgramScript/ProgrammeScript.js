@@ -65,10 +65,8 @@ class ProgrammeScript extends Component {
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {
-    // this.setState(({ items }) => ({
-    //   items:
-    // })
-    // );
+    console.log('ProgrammeScript')
+    console.log(this.props.programmeScriptElements)
     const result = arrayMove(this.props.programmeScriptElements, oldIndex, newIndex);
     console.log(result);
     this.props.handleProgrammeScriptOrderChange(result);
@@ -102,7 +100,6 @@ class ProgrammeScript extends Component {
     if (this.props.programmeScriptElements) {
       sortableProgramme = <SortableContainer useDragHandle onSortEnd={ this.onSortEnd }>
         {programme.map((value, index) => {
-          console.log(index)
           return <SortableItem
             key={ `item-${ index }` }
             index={index}
