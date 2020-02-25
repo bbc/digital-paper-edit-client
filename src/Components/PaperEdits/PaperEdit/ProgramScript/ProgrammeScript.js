@@ -100,7 +100,6 @@ class ProgrammeScript extends Component {
     if (this.props.programmeScriptElements) {
       sortableProgramme = <SortableContainer useDragHandle onSortEnd={ this.onSortEnd }>
         {programme.map((value, index) => {
-          console.log(index)
           return <SortableItem
             key={ `item-${ index }` }
             index={index}
