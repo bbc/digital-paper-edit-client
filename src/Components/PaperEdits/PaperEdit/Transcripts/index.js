@@ -61,7 +61,9 @@ class Transcripts extends Component {
                 Transcripts</h2>
               <hr/>
               <Nav variant="pills" className="flex-column">
+                <div style={{height: '97vh', overflow: 'scroll'}}>
                 { transcriptsElNav }
+                </div>
               </Nav>
             </Col>
             <Col sm={ 9 }>

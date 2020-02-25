@@ -733,7 +733,7 @@ class ProgramScript extends Component {
           </Card.Header>
           <Card.Body>
             <article
-              style={ { height: '60vh', overflow: 'scroll' } }
+              style={ { height: '55vh', overflow: 'scroll' } }
               onDoubleClick={ this.handleDoubleClickOnProgrammeScript }
             >
               { this.state.programmeScript ? <ProgrammeScript

@@ -366,6 +366,7 @@ class Transcript extends Component {
                 // display: this.state.isVideoTranscriptPreviewShow,
                 width: '100%',
                 height:'10em',
+                marginTop: '0em',
                 backgroundColor: 'black'
               } }
             controls/> }
@@ -425,7 +426,7 @@ class Transcript extends Component {
           <Card.Body
             onDoubleClick={ this.handleWordClick }
             onClick={ this.handleTimecodeClick }
-            style={ { height: '60vh', overflow: 'scroll' } }
+            style={ { height: '62.5vh', overflow: 'scroll' } }
           >
 
             {highlights}
