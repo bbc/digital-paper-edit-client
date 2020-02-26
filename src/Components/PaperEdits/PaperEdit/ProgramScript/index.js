@@ -358,6 +358,7 @@ class ProgramScript extends Component {
         if(currentTranscript.metadata && currentTranscript.metadata.fps && (currentTranscript.metadata.fps!== 'NA')){
           mediaFps = currentTranscript.metadata.fps
         }
+        console.log('getProgrammeScriptJson', currentTranscript)
         // TODO: need to find a way to escape text containing ' in word text attribute 
         // const words = element.words.map((word) => {
         //   word.text = word.text.replace(/'/g,"\'"); 
@@ -367,6 +368,8 @@ class ProgramScript extends Component {
         const result = {
           ...element,
           // words,
+          // TODO: this is point to the proxy preview locally on the user's computer 
+          src: currentTranscript.url,
           startTime: element.start,
           endTime: element.end,
           reelName:  currentTranscript.metadata ? currentTranscript.metadata.reelName : defaultReelName,
