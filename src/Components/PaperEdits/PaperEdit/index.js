@@ -6,8 +6,8 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faAngleUp,
-  faAngleDown
+  faEyeSlash,
+  faEye
 } from '@fortawesome/free-solid-svg-icons';
 import CustomBreadcrumb from '../../lib/CustomBreadcrumb/index.js';
 import CustomFooter from '../../lib/CustomFooter/index.js';
@@ -70,7 +70,7 @@ class PaperEdit extends Component {
       <Container style={ { marginBottom: '5em' } } fluid>
         <br/>
         <Row>
-          <Col sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 }>
+          <Col sm={ 12 } md={ 8 } ld={ 8 } xl={ 8 }>
             <CustomBreadcrumb
               items={ [ {
                 name: 'Projects',
@@ -89,33 +89,36 @@ class PaperEdit extends Component {
               ] }
             />
           </Col>
-          {/* <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
-            <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
-              Save
-            </Button>
-          </Col> */}
-        </Row>
-
-        <Container fluid={ true }>
+          <Col xs={ 12 } sm={ 4 } md={ 4 } ld={ 4 } xl={ 4 }>
           <div className="d-flex flex-column">
-            <ButtonGroup
-              size="sm" className="mt-12"
+          <ButtonGroup
+              className="mt-2"
+              size="md"
+              block
             >
               <Button
                 onClick={ this.toggleTranscripts }
-                variant={ this.state.isTranscriptsShown ? 'secondary' : 'outline-secondary' }
-              >
-               Transcripts <FontAwesomeIcon icon={ this.state.isTranscriptsShown ? faAngleDown : faAngleUp } /> { this.state.isTranscriptsShown ? 'hide' : 'show'}
+                variant={ this.state.isTranscriptsShown ? 'outline-secondary' : 'secondary' }
+      
+                // block
+             >
+               Transcripts <FontAwesomeIcon icon={ this.state.isTranscriptsShown ?faEye :faEyeSlash }/> 
               </Button>
               <Button
                 onClick={ this.toggleProgramScript }
-                variant={ this.state.isProgramScriptShown ? 'secondary' : 'outline-secondary' }
-              >
-                 Program Script  <FontAwesomeIcon icon={ this.state.isProgramScriptShown ? faAngleDown : faAngleUp } />  { this.state.isProgramScriptShown ? 'hide' : 'show'}
+                variant={ this.state.isProgramScriptShown ? 'outline-secondary' : 'secondary' }
+  
+                // block
+             >
+                 Program Script  <FontAwesomeIcon icon={ this.state.isProgramScriptShown ? faEye : faEyeSlash}/> 
               </Button>
             </ButtonGroup>
-          </div>
+          
+        </div>
+          </Col>
+        </Row>
 
+        <Container fluid={ true }>
           <Row>
             <Col
               xs={ { span: 12, offset:0 } }
