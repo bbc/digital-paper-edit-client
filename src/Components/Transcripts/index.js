@@ -60,8 +60,6 @@ class Transcripts extends Component {
         this.setState({
           projectTitle: result.projectTitle,
           items: tmpList
-        }, () => {
-          console.log('getTranscripts-tmpList');
         });
       }
   }

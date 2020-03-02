@@ -70,7 +70,7 @@ class PaperEdit extends Component {
       <Container style={ { marginBottom: '5em' } } fluid>
         <br/>
         <Row>
-          <Col sm={ 12 } md={ 8 } ld={ 8 } xl={ 8 }>
+          <Col xs={ 12 }  sm={ 8 } md={ 8 } ld={ 8 } xl={ 8 }>
             <CustomBreadcrumb
               items={ [ {
                 name: 'Projects',

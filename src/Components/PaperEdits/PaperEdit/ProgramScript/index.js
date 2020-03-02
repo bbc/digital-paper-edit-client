@@ -60,10 +60,8 @@ class ProgramScript extends Component {
     ApiWrapper.getPaperEdit(this.props.projectId, this.props.papereditId)
       .then((json) => {
         const programmeScript = json.programmeScript;
-        console.log(JSON.stringify(programmeScript, null, 2))
         // Adding an insert point at the end of the list
         programmeScript.elements.push({ type: 'insert-point', text: 'Insert Point to add selection' });
-        console.log('componentDidMount programmeScript', programmeScript)
         this.setState({
           programmeScript: programmeScript
         });
