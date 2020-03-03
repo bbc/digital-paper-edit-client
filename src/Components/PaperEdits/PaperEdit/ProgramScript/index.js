@@ -21,7 +21,8 @@ import {
   faPlus,
   faSync,
   faInfoCircle,
-  faSave
+  faSave,
+  faListUl
 } from '@fortawesome/free-solid-svg-icons';
 import timecodes from 'node-timecodes';
 import ProgrammeScript from './ProgrammeScript.js';
@@ -560,14 +561,12 @@ class ProgramScript extends Component {
     return (
 
       <>
-        <h2
+        <h4
           className={ [ 'text-truncate', 'text-muted' ].join(' ') }
           title={ `Programme Script Title: ${ this.state.programmeScript ? this.state.programmeScript.title : '' }` }>
-          {/* Programme:  */}
-          {/* <small> */}
           {this.state.programmeScript ? this.state.programmeScript.title : ''}
-          {/* </small> */}
-        </h2>
+        </h4>
+        <br/>
         <Card>
           <Card.Header>
             {/* <hr/> */}
@@ -593,7 +592,7 @@ class ProgramScript extends Component {
               <Col sm={ 4 } md={ 2 }lg={ 2 } xl={ 2 }>
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-secondary">
-                    <FontAwesomeIcon icon={ faPlus } />
+                    <FontAwesomeIcon icon={ faListUl } />
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item

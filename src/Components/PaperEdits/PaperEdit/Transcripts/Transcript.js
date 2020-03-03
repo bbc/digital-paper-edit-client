@@ -319,12 +319,12 @@ class Transcript extends Component {
           {`${ this.state.sentenceToSearchCSSInHighlights } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
         </style>
 
-        <h2
+        {/* <h4
           className={ [ 'text-truncate', 'text-muted' ].join(' ') }
           title={ `Transcript Title: ${ this.props.title }` }
         >
          {this.props.title}
-        </h2>
+        </h4> */}
 
         <Card>
           <Card.Header>

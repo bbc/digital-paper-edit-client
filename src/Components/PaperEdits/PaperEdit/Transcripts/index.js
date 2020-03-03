@@ -3,10 +3,13 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
+import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
-  faExclamationTriangle
+  faExclamationTriangle,
+  faFilter,
+  faSearch
 } from '@fortawesome/free-solid-svg-icons';
 
 import Transcript from './Transcript.js';
@@ -26,8 +29,8 @@ class Transcripts extends Component {
       selectedOptionLabelSearch: [],
       selectedOptionSpeakerSearch: [],
       selectedOptionTranscriptsSearch: [],
+      transcriptIdsList: [],
       showParagraphsMatchingSearch: false,
-      transcriptIdsList: []
     }
   }
 
@@ -72,7 +75,7 @@ class Transcripts extends Component {
   // }
   // New 
   handleSearch = (e, searchPreferences) => {
-    console.log('Transcripts::',e.target.value, searchPreferences)
+    console.log('Transcripts:: SEARCH:::',e.target.value, searchPreferences)
     // TODO: debounce to optimise
     if (e.target.value !== '') {
       const searchString = e.target.value;
@@ -123,28 +126,24 @@ class Transcripts extends Component {
 
   // New
   handleLabelsSearchChange = (selectedOptionLabelSearch) => {
-    console.log('Transcripts::','handleLabelsSearchChange', selectedOptionLabelSearch);
     this.setState({
       selectedOptionLabelSearch
     });
   }
   // New 
   handleSpeakersSearchChange = (selectedOptionSpeakerSearch) => {
-    console.log('Transcripts::','handleSpeakersSearchChange', selectedOptionSpeakerSearch);
     this.setState({
       selectedOptionSpeakerSearch
     });
   }
   // new new 
   handleTranscriptSearchChange = (selectedOptionTranscriptsSearch) => {
-    console.log('Transcripts::','handleTranscriptSearchChange', selectedOptionTranscriptsSearch);
     this.setState({
       selectedOptionTranscriptsSearch
     });
   }
   // New 
   handleShowParagraphsMatchingSearch = (isShowParagraphsMatchingSearch) => {
-    console.log('Transcripts::','handleShowParagraphsMatchingSearch', isShowParagraphsMatchingSearch);
     this.setState({ showParagraphsMatchingSearch: isShowParagraphsMatchingSearch });
   }
 
@@ -156,6 +155,20 @@ class Transcripts extends Component {
       // this.videoRef.current.play();
     }
   };
+
+  handleFilterResults = ()=>{
+    console.log('handleFilterResults')
+    this.setState({
+      searchString: '',
+      sentenceToSearchCSS: '',
+      sentenceToSearchCSSInHighlights: '',
+      selectedOptionLabelSearch: [],
+      selectedOptionSpeakerSearch: [],
+      selectedOptionTranscriptsSearch: [],
+      transcriptIdsList: []
+    })
+    // this.setState({showParagraphsMatchingSearch: false})
+  }
 
   // eslint-disable-next-line class-methods-use-this
   render() {
@@ -223,20 +236,20 @@ class Transcripts extends Component {
     // console.log('transcriptsUniqueListOfSpeakersNoDuplicates', transcriptsUniqueListOfSpeakersNoDuplicates)
    
     /* TODO: Will this work? */
-    const searchBarTranscriptsElement =  <SearchBarTranscripts
-    labelsOptions={  this.props.labelsOptions }
-    speakersOptions={ transcriptsUniqueListOfSpeakersNoDuplicates }
-    handleSearch={ this.handleSearch }
-    handleLabelsSearchChange={ this.handleLabelsSearchChange }
-    handleSpeakersSearchChange={ this.handleSpeakersSearchChange }
-    handleShowParagraphsMatchingSearch={ this.handleShowParagraphsMatchingSearch }
-    transcriptOptions={ transcriptsOptions}
-    handleTranscriptSearchChange={this.handleTranscriptSearchChange}
-  />
+    const searchBarTranscriptsElement = <SearchBarTranscripts
+      labelsOptions={  this.props.labelsOptions }
+      speakersOptions={ transcriptsUniqueListOfSpeakersNoDuplicates }
+      handleSearch={ this.handleSearch }
+      searchValue={this.state.searchString}
+      handleLabelsSearchChange={ this.handleLabelsSearchChange }
+      handleSpeakersSearchChange={ this.handleSpeakersSearchChange }
+      handleShowParagraphsMatchingSearch={ this.handleShowParagraphsMatchingSearch }
+      transcriptOptions={ transcriptsOptions}
+      handleTranscriptSearchChange={this.handleTranscriptSearchChange}
+      handleFilterResults={this.handleFilterResults}
+    />
 
-    const transcriptsElTab = this.props.transcripts.map((transcript, index) => {
-    
-      // console.log(' this.props.labelsOptions ',  this.props.labelsOptions )
+    const transcriptsElTab = this.props.transcripts.map((transcript,) => {
       return (
         <Tab.Pane key={ transcript.id } eventKey={ transcript.id } >
           <Transcript
@@ -253,36 +266,28 @@ class Transcripts extends Component {
 
    const  searchedParagraphsAcrossTranscripts = this.props.transcripts.map((transcript, index)=>{
      if(transcript.transcript && this.state.selectedOptionTranscriptsSearch.find((t)=> {return transcript.id === t.id})){
-       // if transcript ia in list of this.state.selectedOptionTranscriptsSearch
-      //  const annotations = await this.getAnnoations(this.props.projectId, transcript.id)
-      //  console.log('annotations',annotations)
-      // const currentTranscript = transcriptIdsList.find((tr)=>{tr.id === t.id})
-      // console.log('transcript',transcript)
-      console.log('NEW transcript.annotations',transcript.annotations)
       return <Paragraphs
-      labelsOptions={ this.props.labelsOptions }
-      // labelsOptions={ this.state.selectedOptionLabelSearch && this.state.selectedOptionLabelSearch }
-      // annotations={ this.state.annotations ? this.state.annotations : [] }
-      annotations={transcript.annotations? transcript.annotations : []}
-      transcriptJson={ transcript.transcript }
-      searchString={ this.state.searchString ? this.state.searchString : '' }
-      showParagraphsMatchingSearch={ this.state.showParagraphsMatchingSearch }
-      selectedOptionLabelSearch={ this.state.selectedOptionLabelSearch ? this.state.selectedOptionLabelSearch : [] }
-      selectedOptionSpeakerSearch={ this.state.selectedOptionSpeakerSearch ? this.state.selectedOptionSpeakerSearch : [] }
-      transcriptId={ transcript.id }
-      handleTimecodeClick={ this.handleTimecodeClick }
-      // handleWordClick={ ()=>{alert('not implemented in this view, switch to individual transcript')}}
-      handleWordClick={ this.handleWordClick }
-      // handleDeleteAnnotation={ this.handleDeleteAnnotation }
-      handleDeleteAnnotation={ ()=>{alert('not implemented in this view, switch to individual transcript')} }
-      // handleEditAnnotation={ this.handleEditAnnotation }
-      handleEditAnnotation={ ()=>{alert('not implemented in this view, switch to individual transcript')} }
-    />
+        labelsOptions={ this.props.labelsOptions }
+        // labelsOptions={ this.state.selectedOptionLabelSearch && this.state.selectedOptionLabelSearch }
+        // annotations={ this.state.annotations ? this.state.annotations : [] }
+        annotations={transcript.annotations? transcript.annotations : []}
+        transcriptJson={ transcript.transcript }
+        searchString={ this.state.searchString ? this.state.searchString : '' }
+        showParagraphsMatchingSearch={ this.state.showParagraphsMatchingSearch }
+        selectedOptionLabelSearch={ this.state.selectedOptionLabelSearch ? this.state.selectedOptionLabelSearch : [] }
+        selectedOptionSpeakerSearch={ this.state.selectedOptionSpeakerSearch ? this.state.selectedOptionSpeakerSearch : [] }
+        transcriptId={ transcript.id }
+        handleTimecodeClick={ this.handleTimecodeClick }
+        // handleWordClick={ ()=>{alert('not implemented in this view, switch to individual transcript')}}
+        handleWordClick={ this.handleWordClick }
+        // handleDeleteAnnotation={ this.handleDeleteAnnotation }
+        handleDeleteAnnotation={ ()=>{ alert('not implemented in this view, switch to individual transcript') } }
+        // handleEditAnnotation={ this.handleEditAnnotation }
+        handleEditAnnotation={ ()=>{ alert('not implemented in this view, switch to individual transcript') } }
+      />
+     } else {
+       return null;
      }
-     else {
-       return null
-     }
-    
     })
 
     return (
@@ -299,12 +304,11 @@ class Transcripts extends Component {
         
           <Col sm={  !this.state.showParagraphsMatchingSearch? 3 : 0 }>
           { !this.state.showParagraphsMatchingSearch?  <>
-              <h2
+              <h4
                 className={ [ 'text-truncate', 'text-muted' ].join(' ') }
-                // className={ 'text-truncate' }
                 title={ 'Transcripts' }
               >
-                Transcripts</h2>
+                Transcripts</h4>
               <hr/>
              
               <Nav variant="pills" className="flex-column">
@@ -318,10 +322,19 @@ class Transcripts extends Component {
             <Col sm={ !this.state.showParagraphsMatchingSearch? 9 : 12 }>
               <Tab.Content>
                 {searchBarTranscriptsElement}
-                <hr/>
+                <br/>
                 { this.state.showParagraphsMatchingSearch?
                 <> 
-                 {searchedParagraphsAcrossTranscripts}
+                <section style={{ 
+                  height: '80vh', 
+                  overflow: 'auto',
+                  border: 'solid',
+                  borderWidth: '0.01em',
+                  borderColor: 'lightgrey'
+                  }}>
+                {searchedParagraphsAcrossTranscripts}
+                </section>
+              
                 </>
                 :
                 <> 

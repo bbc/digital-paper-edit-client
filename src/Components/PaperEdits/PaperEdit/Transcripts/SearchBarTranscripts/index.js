@@ -13,7 +13,8 @@ import {
   faTag,
   faUser,
   faSearch,
-  faFileAlt
+  faFileAlt,
+  faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import colourStyles from '../LabelsList/select-color-styles.js';
 import speakersColorStyles from './select-speakers-color-styles.js';
@@ -56,6 +57,7 @@ class SearchBarTranscripts extends Component {
   };
 
    handleFilterResults = ()=>{
+    this.props.handleFilterResults()
     this.setState((state) => {
       if(!state.isShowingFilterOptions){
         this.props.handleShowParagraphsMatchingSearch( true );
@@ -91,6 +93,22 @@ class SearchBarTranscripts extends Component {
 
      return (
        <>
+           
+       
+
+            {!this.state.showParagraphsMatchingSearch?
+             <Button  
+             onClick={this.handleFilterResults}
+             variant={"outline-secondary"} 
+             block
+             title={'Search across transcripts in this project'}
+             >   <FontAwesomeIcon icon={faSearch}/> 
+             {/* <FontAwesomeIcon icon={faTag}/> 
+             <FontAwesomeIcon icon={faUser}/> 
+              <FontAwesomeIcon icon={faFileAlt}/> */}
+                {/* <FontAwesomeIcon icon={faFilter}/> */}
+           </Button>:
+           <>
            <InputGroup className="mb-3">
              <InputGroup.Prepend>
                <InputGroup.Text>
@@ -100,28 +118,31 @@ class SearchBarTranscripts extends Component {
              {/* Search */}
              <FormControl
                //  TODO: pass labels, speakers, and paragraph pref
-               onChange={ (e) => {this.props.handleSearch(e, {
+               onChange={ (e) => { this.props.handleSearch(e, {
                  showParagraphsMatchingSearch: this.state.showParagraphsMatchingSearch,
                  showLabelsSearchPreferences: this.state.showLabelsSearchPreferences,
                  showSpeakersSearchPreferences: this.state.showSpeakersSearchPreferences,
                  selectedOptionTranscriptSearch: this.state.selectedOptionTranscriptSearch
                });} }
+               value={ this.props.searchValue }
                placeholder="Search text..."
                aria-label="search"
                aria-describedby="search"
              />
               <InputGroup.Append>
                 <Button 
-                  variant="outline-secondary"
+                  variant="outline-primary"
                   onClick={this.handleFilterResults}
+                  title={"close search across transcript in a project"}
                 >
-                    <FontAwesomeIcon 
-                      icon={ faFilter }
-                      title="Filter results" 
-                      />
+                  <FontAwesomeIcon 
+                   icon={ faTimes }
+                  />
                 </Button>
               </InputGroup.Append>
            </InputGroup>
+
+           </> }
 
            { this.state.showLabelsSearchPreferences
              ? <>
