@@ -131,7 +131,7 @@ class SearchBar extends Component {
                      isSearchable
                      options={ this.props.labelsOptions }
                      styles={ colourStyles }
-                     placeholder={ 'Filter by label...' }
+                     placeholder={ 'Filter by labels...' }
                    />
                  </Col>
                </Row>
@@ -156,7 +156,7 @@ class SearchBar extends Component {
                      isSearchable
                      options={ this.props.speakersOptions }
                      styles={ speakersColorStyles }
-                     placeholder={ 'Filter by speaker...' }
+                     placeholder={ 'Filter by speakers...' }
                    />
                  </Col>
                </Row>

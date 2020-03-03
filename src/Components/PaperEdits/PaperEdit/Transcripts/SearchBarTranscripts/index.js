@@ -144,57 +144,7 @@ class SearchBarTranscripts extends Component {
 
            </> }
 
-           { this.state.showLabelsSearchPreferences
-             ? <>
-               <Row className="mb-3">
-                 <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
-                   <InputGroup.Prepend>
-                     <InputGroup.Text>
-                       <FontAwesomeIcon icon={ faTag } />
-                     </InputGroup.Text>
-                   </InputGroup.Prepend>
-                 </Col>
-                 <Col xs={ 10 } sm={ 11 } md={ 11 } ld={ 11 } xl={ 11 }>
-                   <Select
-                     value={ this.state.selectedOptionLabelSearch }
-                     onChange={ this.handleLabelsSearchChange }
-                     isMulti
-                     isSearchable
-                     options={ this.props.labelsOptions }
-                     styles={ colourStyles }
-                     placeholder={ 'Filter by label...' }
-                   />
-                 </Col>
-               </Row>
-             </>
-             : ''}
-
-           { this.state.showSpeakersSearchPreferences
-             ? <>
-               <Row className="mb-3">
-                 <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
-                   <InputGroup.Prepend>
-                     <InputGroup.Text>
-                       <FontAwesomeIcon icon={ faUser } />
-                     </InputGroup.Text>
-                   </InputGroup.Prepend>
-                 </Col>
-                 <Col xs={ 10 } sm={ 11 } md={ 11 } ld={ 11 } xl={ 11 }>
-                   <Select
-                     value={ this.state.selectedOptionSpeakerSearch }
-                     onChange={ this.handleSpeakersSearchChange }
-                     isMulti
-                     isSearchable
-                     options={ this.props.speakersOptions }
-                     styles={ speakersColorStyles }
-                     placeholder={ 'Filter by speaker...' }
-                   />
-                 </Col>
-               </Row>
-             </>
-             : ''}
-
-          { this.state.selectedOptionTranscriptSearch? 
+           { this.state.selectedOptionTranscriptSearch? 
           <>
                <Row className="mb-3">
                  <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
@@ -218,6 +168,60 @@ class SearchBarTranscripts extends Component {
                </Row>
              </>
             : ''} 
+
+          { this.state.showSpeakersSearchPreferences
+             ? <>
+               <Row className="mb-3">
+                 <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
+                   <InputGroup.Prepend>
+                     <InputGroup.Text>
+                       <FontAwesomeIcon icon={ faUser } />
+                     </InputGroup.Text>
+                   </InputGroup.Prepend>
+                 </Col>
+                 <Col xs={ 10 } sm={ 11 } md={ 11 } ld={ 11 } xl={ 11 }>
+                   <Select
+                     value={ this.state.selectedOptionSpeakerSearch }
+                     onChange={ this.handleSpeakersSearchChange }
+                     isMulti
+                     isSearchable
+                     options={ this.props.speakersOptions }
+                     styles={ speakersColorStyles }
+                     placeholder={ 'Filter by speakers...' }
+                   />
+                 </Col>
+               </Row>
+             </>
+             : ''}
+
+           { this.state.showLabelsSearchPreferences
+             ? <>
+               <Row className="mb-3">
+                 <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
+                   <InputGroup.Prepend>
+                     <InputGroup.Text>
+                       <FontAwesomeIcon icon={ faTag } />
+                     </InputGroup.Text>
+                   </InputGroup.Prepend>
+                 </Col>
+                 <Col xs={ 10 } sm={ 11 } md={ 11 } ld={ 11 } xl={ 11 }>
+                   <Select
+                     value={ this.state.selectedOptionLabelSearch }
+                     onChange={ this.handleLabelsSearchChange }
+                     isMulti
+                     isSearchable
+                     options={ this.props.labelsOptions }
+                     styles={ colourStyles }
+                     placeholder={ 'Filter by labels...' }
+                   />
+                 </Col>
+               </Row>
+             </>
+             : ''}
+
+      
+
+      
           {/* In this type of search across transcript, it would always filter the result
           to show only matching paragraphs, so commenting this out for now, waiting to get
           a UX review on this and the overall "paper edit workspace" interace */}
