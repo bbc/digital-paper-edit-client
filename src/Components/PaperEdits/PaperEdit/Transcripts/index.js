@@ -148,6 +148,15 @@ class Transcripts extends Component {
     this.setState({ showParagraphsMatchingSearch: isShowParagraphsMatchingSearch });
   }
 
+  handleWordClick = e => {
+    if (e.target.className === 'words' ) {
+      const wordEl = e.target;
+      console.log('wordEl',wordEl)
+      // this.videoRef.current.currentTime = wordEl.dataset.start;
+      // this.videoRef.current.play();
+    }
+  };
+
   // eslint-disable-next-line class-methods-use-this
   render() {
     const transcriptsElNav = this.props.transcripts.map((transcript, index) => {
@@ -262,9 +271,12 @@ class Transcripts extends Component {
       selectedOptionSpeakerSearch={ this.state.selectedOptionSpeakerSearch ? this.state.selectedOptionSpeakerSearch : [] }
       transcriptId={ transcript.id }
       handleTimecodeClick={ this.handleTimecodeClick }
+      // handleWordClick={ ()=>{alert('not implemented in this view, switch to individual transcript')}}
       handleWordClick={ this.handleWordClick }
-      handleDeleteAnnotation={ this.handleDeleteAnnotation }
-      handleEditAnnotation={ this.handleEditAnnotation }
+      // handleDeleteAnnotation={ this.handleDeleteAnnotation }
+      handleDeleteAnnotation={ ()=>{alert('not implemented in this view, switch to individual transcript')} }
+      // handleEditAnnotation={ this.handleEditAnnotation }
+      handleEditAnnotation={ ()=>{alert('not implemented in this view, switch to individual transcript')} }
     />
      }
      else {
@@ -284,7 +296,9 @@ class Transcripts extends Component {
           defaultActiveKey={ this.props.transcripts[0] ? this.props.transcripts[0].id : 'first' }
         >
           <Row>
-            <Col sm={ 3 }>
+        
+          <Col sm={  !this.state.showParagraphsMatchingSearch? 3 : 0 }>
+          { !this.state.showParagraphsMatchingSearch?  <>
               <h2
                 className={ [ 'text-truncate', 'text-muted' ].join(' ') }
                 // className={ 'text-truncate' }
@@ -292,13 +306,16 @@ class Transcripts extends Component {
               >
                 Transcripts</h2>
               <hr/>
+             
               <Nav variant="pills" className="flex-column">
                 <div style={{height: '97vh', overflow: 'scroll'}}>
                 { transcriptsElNav }
                 </div>
-              </Nav>
+              </Nav> 
+                    </>   : null }
             </Col>
-            <Col sm={ 9 }>
+   
+            <Col sm={ !this.state.showParagraphsMatchingSearch? 9 : 12 }>
               <Tab.Content>
                 {searchBarTranscriptsElement}
                 <hr/>
