@@ -19,34 +19,10 @@ import LabelsList from './LabelsList/index.js';
 import onlyCallOnce from '../../../../Util/only-call-once/index.js';
 import getTimeFromUserWordsSelection from './get-user-selection.js';
 import ApiWrapper from '../../../../ApiWrapper/index.js';
-
+import makeListOfUniqueSpeakers from './makeListOfUniqueSpeakers.js';
 // import Paragraph from './Paragraph.js';
 
-/**
- * Makes list of unique speakers
- * from transcript.paragraphs list
- * to be used in react-select component
- *
- * TODO: decide if to move server side, and return unique list of speaker to client
- * Or if to move to separate file as util, perhaps generalise as reusable funciton?
- *
- * https://codeburst.io/javascript-array-distinct-5edc93501dc4
- */
-function makeListOfUniqueSpeakers(array) {
-  const result = [];
-  const map = new Map();
-  for (const item of array) {
-    if (!map.has(item.speaker)) {
-      map.set(item.speaker, true); // set any value to Map
-      result.push({
-        value: item.speaker,
-        label: item.speaker
-      });
-    }
-  }
 
-  return result;
-}
 
 class Transcript extends Component {
   constructor(props) {
@@ -318,7 +294,7 @@ class Transcript extends Component {
         {`span.words[data-prev-times~="${ Math.floor(time) }"][data-transcript-id="${ this.props.transcriptId }"] { color: ${ unplayedColor } }`}
       </style>
     );
-
+      console.log('ORIGINAL this.state.annotations ', this.state.annotations )
     return (
       <>
 
@@ -347,8 +323,7 @@ class Transcript extends Component {
           className={ [ 'text-truncate', 'text-muted' ].join(' ') }
           title={ `Transcript Title: ${ this.props.title }` }
         >
-          {/* <FontAwesomeIcon icon={ this.state.isVideoTranscriptPreviewShow === 'none' ? faEye : faEyeSlash } onClick={ this.handleVideoTranscriptPreviewDisplay }/> */}
-          {this.props.title}
+         {this.props.title}
         </h2>
 
         <Card>
@@ -414,15 +389,16 @@ class Transcript extends Component {
               </Col>
             </Row>
           </Card.Header>
-          <SearchBar
-            labelsOptions={ this.state.labelsOptions }
-            speakersOptions={ this.props.transcript ? makeListOfUniqueSpeakers(this.props.transcript.paragraphs) : null }
-            handleSearch={ this.handleSearch }
-            handleLabelsSearchChange={ this.handleLabelsSearchChange }
-            handleSpeakersSearchChange={ this.handleSpeakersSearchChange }
-            handleShowParagraphsMatchingSearch={ this.handleShowParagraphsMatchingSearch }
-          />
-
+          <Card.Header> 
+            <SearchBar
+              labelsOptions={ this.state.labelsOptions }
+              speakersOptions={ this.props.transcript ? makeListOfUniqueSpeakers(this.props.transcript.paragraphs) : null }
+              handleSearch={ this.handleSearch }
+              handleLabelsSearchChange={ this.handleLabelsSearchChange }
+              handleSpeakersSearchChange={ this.handleSpeakersSearchChange }
+              handleShowParagraphsMatchingSearch={ this.handleShowParagraphsMatchingSearch }
+            />
+          </Card.Header>
           <Card.Body
             onDoubleClick={ this.handleWordClick }
             onClick={ this.handleTimecodeClick }

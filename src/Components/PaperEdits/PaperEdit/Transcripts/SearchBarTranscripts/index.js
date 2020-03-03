@@ -13,11 +13,12 @@ import {
   faTag,
   faUser,
   faSearch,
+  faFileAlt
 } from '@fortawesome/free-solid-svg-icons';
 import colourStyles from '../LabelsList/select-color-styles.js';
 import speakersColorStyles from './select-speakers-color-styles.js';
 
-class SearchBar extends Component {
+class SearchBarTranscripts extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,18 +26,19 @@ class SearchBar extends Component {
       showParagraphsMatchingSearch: false,
       showTextSearchPreferences: false,
       showSpeakersSearchPreferences: false,
-      showLabelsSearchPreferences: false
+      showLabelsSearchPreferences: false,
+      selectedOptionTranscriptSearch: false
     };
   }
 
   handleSpeakersSearchChange = selectedOptionSpeakerSearch => {
     this.props.handleSpeakersSearchChange(selectedOptionSpeakerSearch);
-    this.setState({ selectedOptionSpeakerSearch });
+    // this.setState({ selectedOptionSpeakerSearch });
   };
 
    handleLabelsSearchChange = selectedOptionLabelSearch => {
      this.props.handleLabelsSearchChange(selectedOptionLabelSearch);
-     this.setState({ selectedOptionLabelSearch });
+    //  this.setState({ selectedOptionLabelSearch });
    };
 
    handleShowParagraphsMatchingSearch = () => {
@@ -48,6 +50,11 @@ class SearchBar extends Component {
      });
    }
 
+   handleTranscriptSearchChange = selectedOptionTranscriptSearch => {
+    this.props.handleTranscriptSearchChange(selectedOptionTranscriptSearch);
+    this.setState({ selectedOptionTranscriptSearch });
+  };
+
    handleFilterResults = ()=>{
     this.setState((state) => {
       if(!state.isShowingFilterOptions){
@@ -58,7 +65,8 @@ class SearchBar extends Component {
           showSpeakersSearchPreferences: true,
           showLabelsSearchPreferences: true,
           // defaults to show only matching paragraph to be checked
-          showParagraphsMatchingSearch: true
+          showParagraphsMatchingSearch: true,
+          selectedOptionTranscriptSearch: true
         };
       }else{
         this.props.handleShowParagraphsMatchingSearch( false );
@@ -68,7 +76,8 @@ class SearchBar extends Component {
           showSpeakersSearchPreferences: false,
           showLabelsSearchPreferences: false,
           // remove preferences for showing matching paragraphjs when removing filters
-          showParagraphsMatchingSearch: false
+          showParagraphsMatchingSearch: false,
+          selectedOptionTranscriptSearch: false
         };
       }
     
@@ -77,7 +86,7 @@ class SearchBar extends Component {
 
 
 
-   /* TODO: move searchBar to a Search Toolbar component? */
+   /* TODO: move SearchBarTranscripts to a Search Toolbar component? */
    render() {
 
      return (
@@ -94,7 +103,8 @@ class SearchBar extends Component {
                onChange={ (e) => {this.props.handleSearch(e, {
                  showParagraphsMatchingSearch: this.state.showParagraphsMatchingSearch,
                  showLabelsSearchPreferences: this.state.showLabelsSearchPreferences,
-                 showSpeakersSearchPreferences: this.state.showSpeakersSearchPreferences
+                 showSpeakersSearchPreferences: this.state.showSpeakersSearchPreferences,
+                 selectedOptionTranscriptSearch: this.state.selectedOptionTranscriptSearch
                });} }
                placeholder="Search text..."
                aria-label="search"
@@ -163,7 +173,34 @@ class SearchBar extends Component {
              </>
              : ''}
 
-           { this.state.showTextSearchPreferences
+          { this.state.selectedOptionTranscriptSearch? 
+          <>
+               <Row className="mb-3">
+                 <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
+                   <InputGroup.Prepend>
+                     <InputGroup.Text>
+                       <FontAwesomeIcon icon={ faFileAlt } />
+                     </InputGroup.Text>
+                   </InputGroup.Prepend>
+                 </Col>
+                 <Col xs={ 10 } sm={ 11 } md={ 11 } ld={ 11 } xl={ 11 }>
+                   <Select
+                     value={ this.state.selectedOptionTranscriptSearch }
+                     onChange={ this.handleTranscriptSearchChange }
+                     isMulti
+                     isSearchable
+                     options={ this.props.transcriptOptions }
+                     styles={ speakersColorStyles }
+                     placeholder={ 'Filter by transcripts...' }
+                   />
+                 </Col>
+               </Row>
+             </>
+            : ''} 
+          {/* In this type of search across transcript, it would always filter the result
+          to show only matching paragraphs, so commenting this out for now, waiting to get
+          a UX review on this and the overall "paper edit workspace" interace */}
+           {/* { this.state.showTextSearchPreferences
              ? (<>
                <Form.Check
                  type="checkbox"
@@ -180,10 +217,11 @@ class SearchBar extends Component {
                  </> }
                />
              </>)
-             : ''}
+             : ''} */}
+
        </>
      );
    }
 }
 
-export default SearchBar;
+export default SearchBarTranscripts;
