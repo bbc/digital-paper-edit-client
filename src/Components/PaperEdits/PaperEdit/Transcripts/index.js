@@ -191,29 +191,30 @@ class Transcripts extends Component {
     // id - value - label - color - description 
     // const transcriptOptions = [{value: 'test', label: 'test'}];
     const transcriptsOptions = this.props.transcripts.map((transcript)=>{
-      if(transcript.id&& transcript.transcriptTitle){
+      if(transcript.id && transcript.transcriptTitle ){
         return {
-          id: transcript.id,
+         id: transcript.id,
          value: transcript.id,
          label: transcript.transcriptTitle,
-         description: transcript.description
+         description: transcript.description,
+         status: transcript.status 
         }
       }else{
         return {
-          id: 'NA',
-         value: 'NA',
-         label: 'NA',
-         description:'NA'
+        //  id: 'NA',
+        //  value: 'NA',
+        //  label: 'NA',
+        //  description:'NA',
+         status: transcript.status 
         }
       }
-     
-    })// TODO: add filter to remove transcripts that  don't are in progress
-    // or have an error 
-    // console.log('transcriptsOptions', transcriptsOptions)
-    // console.log(' this.props.transcripts',  this.props.transcripts)
+    }) // Filter to show only transcripts that are done. excluding in progress and errored 
+    .filter((transcript)=>{
+     return transcript.status ==='done'
+    })
+    
     const transcriptsUniqueListOfSpeakers2D = this.props.transcripts.map((transcript)=>{
       if(transcript.transcript &&transcript.transcript.paragraphs){
-        // console.log(transcript.transcript.paragraphs)
         return makeListOfUniqueSpeakers(transcript.transcript.paragraphs)
       }
       else{
@@ -299,7 +300,7 @@ class Transcripts extends Component {
         </style>
         <Tab.Container
           defaultActiveKey={ this.props.transcripts[0] ? this.props.transcripts[0].id : 'first' }
-        >
+         >
           <Row>
         
           <Col sm={  !this.state.showParagraphsMatchingSearch? 3 : 0 }>
@@ -319,11 +320,11 @@ class Transcripts extends Component {
                     </>   : null }
             </Col>
    
-            <Col sm={ !this.state.showParagraphsMatchingSearch? 9 : 12 }>
+            <Col sm={ !this.state.showParagraphsMatchingSearch ? 9 : 12 }>
               <Tab.Content>
                 {searchBarTranscriptsElement}
                 <br/>
-                { this.state.showParagraphsMatchingSearch?
+                { this.state.showParagraphsMatchingSearch ?
                 <> 
                 <section style={{ 
                   height: '80vh', 

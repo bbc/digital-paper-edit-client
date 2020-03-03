@@ -407,7 +407,7 @@ class Transcript extends Component {
 
             {highlights}
 
-            {this.props.transcript && !this.state.componentMounted && <Button variant="light" onClick={ this.handleLoadTranscription }block>Load transcription</Button>}
+            {this.props.transcript && !this.state.componentMounted && <Button size="lg" variant="light" onClick={ this.handleLoadTranscription }block>Load transcription</Button>}
 
             {this.props.transcript && this.state.componentMounted &&
             <Paragraphs

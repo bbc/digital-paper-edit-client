@@ -93,21 +93,16 @@ class SearchBarTranscripts extends Component {
 
      return (
        <>
-           
-       
-
             {!this.state.showParagraphsMatchingSearch?
              <Button  
-             onClick={this.handleFilterResults}
-             variant={"outline-secondary"} 
-             block
-             title={'Search across transcripts in this project'}
-             >   <FontAwesomeIcon icon={faSearch}/> 
-             {/* <FontAwesomeIcon icon={faTag}/> 
-             <FontAwesomeIcon icon={faUser}/> 
-              <FontAwesomeIcon icon={faFileAlt}/> */}
-                {/* <FontAwesomeIcon icon={faFilter}/> */}
-           </Button>:
+              onClick={this.handleFilterResults}
+              variant={"outline-secondary"} 
+              block
+              title={'Search across transcripts in this project'}
+              size={'sm'}
+             > 
+                <FontAwesomeIcon icon={faSearch}/> 
+           </Button> :
            <>
            <InputGroup className="mb-3">
              <InputGroup.Prepend>
@@ -219,9 +214,6 @@ class SearchBarTranscripts extends Component {
              </>
              : ''}
 
-      
-
-      
           {/* In this type of search across transcript, it would always filter the result
           to show only matching paragraphs, so commenting this out for now, waiting to get
           a UX review on this and the overall "paper edit workspace" interace */}
@@ -243,7 +235,6 @@ class SearchBarTranscripts extends Component {
                />
              </>)
              : ''} */}
-
        </>
      );
    }
