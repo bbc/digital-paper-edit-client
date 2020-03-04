@@ -559,14 +559,7 @@ class ProgramScript extends Component {
 
   render() {
     return (
-
       <>
-        <h4
-          className={ [ 'text-truncate', 'text-muted' ].join(' ') }
-          title={ `Programme Script Title: ${ this.state.programmeScript ? this.state.programmeScript.title : '' }` }>
-          {this.state.programmeScript ? this.state.programmeScript.title : ''}
-        </h4>
-        <br/>
         <Card>
           <Card.Header>
             {/* <hr/> */}
@@ -700,20 +693,8 @@ class ProgramScript extends Component {
               </Col>
               <Col sm={ 12 } md={ 3 }lg={ 3 } xl={ 3 }>
                 <div>
-              <small className={'text-secondary'} style={{marginBottom: '0em'}}>{ `Last saved at`}<br/>{ `${this.state.lastSaved.toLocaleString()}`}</small>
-              </div>
-                {/* <Button 
-                  // variant={ diffDateInMinutes(this.state.lastSaved, (new Date())) === 0? 'outline-primary': 'outline-secondary' }
-                  variant={ 'outline-secondary' }
-                  onClick={ this.handleSaveProgrammeScript }
-                  // size="sm"
-                  title="save programme script"
-                  // title=  { `Last saved  ${diffDateInMinutes(this.state.lastSaved, (new Date()))} Minutes ago at ${this.state.lastSaved.toLocaleString()}`}
-                  title={ `Last saved at ${this.state.lastSaved.toLocaleString()}`}
-                  block
-                >
-                  <FontAwesomeIcon icon={ faSave } />               
-                </Button>  */}
+                  <small className={'text-secondary'} style={{marginBottom: '0em'}}>{ `Last saved at`}<br/>{ `${this.state.lastSaved.toLocaleString()}`}</small>
+                </div>
               </Col>
             </Row>
 

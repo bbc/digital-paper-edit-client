@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
-import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
-import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faFilter,
+  faAngleLeft,
   faTag,
   faUser,
   faSearch,
-  faFileAlt,
-  faTimes
+  faFileAlt
 } from '@fortawesome/free-solid-svg-icons';
 import colourStyles from '../LabelsList/select-color-styles.js';
 import speakersColorStyles from './select-speakers-color-styles.js';
@@ -34,12 +31,10 @@ class SearchBarTranscripts extends Component {
 
   handleSpeakersSearchChange = selectedOptionSpeakerSearch => {
     this.props.handleSpeakersSearchChange(selectedOptionSpeakerSearch);
-    // this.setState({ selectedOptionSpeakerSearch });
   };
 
    handleLabelsSearchChange = selectedOptionLabelSearch => {
      this.props.handleLabelsSearchChange(selectedOptionLabelSearch);
-    //  this.setState({ selectedOptionLabelSearch });
    };
 
    handleShowParagraphsMatchingSearch = () => {
@@ -56,91 +51,51 @@ class SearchBarTranscripts extends Component {
     this.setState({ selectedOptionTranscriptSearch });
   };
 
-   handleFilterResults = ()=>{
-    this.props.handleFilterResults()
-    this.setState((state) => {
-      if(!state.isShowingFilterOptions){
-        this.props.handleShowParagraphsMatchingSearch( true );
-        return {
-          isShowingFilterOptions: true,
-          showTextSearchPreferences: true,
-          showSpeakersSearchPreferences: true,
-          showLabelsSearchPreferences: true,
-          // defaults to show only matching paragraph to be checked
-          showParagraphsMatchingSearch: true,
-          selectedOptionTranscriptSearch: true
-        };
-      }else{
-        this.props.handleShowParagraphsMatchingSearch( false );
-        return {
-          isShowingFilterOptions: false,
-          showTextSearchPreferences: false,
-          showSpeakersSearchPreferences: false,
-          showLabelsSearchPreferences: false,
-          // remove preferences for showing matching paragraphjs when removing filters
-          showParagraphsMatchingSearch: false,
-          selectedOptionTranscriptSearch: false
-        };
-      }
-    
-    });
-   }
-
-
-
    /* TODO: move SearchBarTranscripts to a Search Toolbar component? */
    render() {
 
      return (
        <>
-            {!this.state.showParagraphsMatchingSearch?
-             <Button  
-              onClick={this.handleFilterResults}
-              variant={"outline-secondary"} 
-              block
-              title={'Search across transcripts in this project'}
-              size={'sm'}
-             > 
-                <FontAwesomeIcon icon={faSearch}/> 
-           </Button> :
-           <>
-           <InputGroup className="mb-3">
-             <InputGroup.Prepend>
-               <InputGroup.Text>
-                 <FontAwesomeIcon icon={ faSearch } />
-               </InputGroup.Text>
-             </InputGroup.Prepend>
-             {/* Search */}
-             <FormControl
-               //  TODO: pass labels, speakers, and paragraph pref
-               onChange={ (e) => { this.props.handleSearch(e, {
-                 showParagraphsMatchingSearch: this.state.showParagraphsMatchingSearch,
-                 showLabelsSearchPreferences: this.state.showLabelsSearchPreferences,
-                 showSpeakersSearchPreferences: this.state.showSpeakersSearchPreferences,
-                 selectedOptionTranscriptSearch: this.state.selectedOptionTranscriptSearch
-               });} }
-               value={ this.props.searchValue }
-               placeholder="Search text..."
-               aria-label="search"
-               aria-describedby="search"
-             />
-              <InputGroup.Append>
-                <Button 
+              <Row className="mb-3">
+                 <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
+                 <Button 
+                  // block
                   variant="outline-primary"
-                  onClick={this.handleFilterResults}
+                  onClick={this.props.handleShowAdvancedSearchViewSearchingAcrossTranscripts}
                   title={"close search across transcript in a project"}
                 >
                   <FontAwesomeIcon 
-                   icon={ faTimes }
+                   icon={ faAngleLeft }
                   />
                 </Button>
-              </InputGroup.Append>
-           </InputGroup>
-
-           </> }
-
-           { this.state.selectedOptionTranscriptSearch? 
-          <>
+                 </Col>
+                 <Col xs={ 10 } sm={ 11 } md={ 11 } ld={ 11 } xl={ 11 }>
+                 <InputGroup >
+                    {/* Search */}
+                    <FormControl
+                      //  TODO: pass labels, speakers, and paragraph pref
+                      onChange={ (e) => { this.props.handleSearch(e, {
+                        showParagraphsMatchingSearch: this.state.showParagraphsMatchingSearch,
+                        showLabelsSearchPreferences: this.state.showLabelsSearchPreferences,
+                        showSpeakersSearchPreferences: this.state.showSpeakersSearchPreferences,
+                        selectedOptionTranscriptSearch: this.state.selectedOptionTranscriptSearch
+                      });} }
+                      value={ this.props.searchValue }
+                      placeholder="Search text..."
+                      aria-label="search"
+                      aria-describedby="search"
+                    />
+                    <InputGroup.Append>
+                      <InputGroup.Text>
+                        <FontAwesomeIcon icon={ faSearch } />
+                      </InputGroup.Text>
+                    </InputGroup.Append>
+                </InputGroup>
+                {/* <Form.Text className="text-muted">
+                Search Text within a transcript 
+              </Form.Text> */}
+                </Col>
+               </Row>
                <Row className="mb-3">
                  <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
                    <InputGroup.Prepend>
@@ -159,13 +114,11 @@ class SearchBarTranscripts extends Component {
                      styles={ speakersColorStyles }
                      placeholder={ 'Filter by transcripts...' }
                    />
+                {/* <Form.Text className="text-muted">
+                Filter by transcripts in the current project
+                </Form.Text> */}
                  </Col>
                </Row>
-             </>
-            : ''} 
-
-          { this.state.showSpeakersSearchPreferences
-             ? <>
                <Row className="mb-3">
                  <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
                    <InputGroup.Prepend>
@@ -184,13 +137,11 @@ class SearchBarTranscripts extends Component {
                      styles={ speakersColorStyles }
                      placeholder={ 'Filter by speakers...' }
                    />
+                {/* <Form.Text className="text-muted">
+                  Filter by speaker in the current project
+                </Form.Text> */}
                  </Col>
                </Row>
-             </>
-             : ''}
-
-           { this.state.showLabelsSearchPreferences
-             ? <>
                <Row className="mb-3">
                  <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
                    <InputGroup.Prepend>
@@ -209,32 +160,11 @@ class SearchBarTranscripts extends Component {
                      styles={ colourStyles }
                      placeholder={ 'Filter by labels...' }
                    />
+                {/* <Form.Text className="text-muted">
+                  Filter by labels in the current project
+                </Form.Text> */}
                  </Col>
                </Row>
-             </>
-             : ''}
-
-          {/* In this type of search across transcript, it would always filter the result
-          to show only matching paragraphs, so commenting this out for now, waiting to get
-          a UX review on this and the overall "paper edit workspace" interace */}
-           {/* { this.state.showTextSearchPreferences
-             ? (<>
-               <Form.Check
-                 type="checkbox"
-                 checked={ this.state.showParagraphsMatchingSearch }
-                 onChange={ this.handleShowParagraphsMatchingSearch }
-                 label={ <>
-                   <Form.Text
-                     className="text-muted"
-                     title="Show only matching paragraphs"
-                     onClick={ this.handleShowParagraphsMatchingSearch }
-                   >
-                       Show only matching paragraphs
-                   </Form.Text>
-                 </> }
-               />
-             </>)
-             : ''} */}
        </>
      );
    }
