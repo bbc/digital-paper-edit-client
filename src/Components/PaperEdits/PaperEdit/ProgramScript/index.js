@@ -21,7 +21,8 @@ import {
   faPlus,
   faSync,
   faInfoCircle,
-  faSave
+  faSave,
+  faListUl
 } from '@fortawesome/free-solid-svg-icons';
 import timecodes from 'node-timecodes';
 import ProgrammeScript from './ProgrammeScript.js';
@@ -176,6 +177,7 @@ class ProgramScript extends Component {
   handleAddTranscriptSelectionToProgrammeScript = () => {
     const result = getDataFromUserWordsSelection();
     if (result) {
+      console.log('result',result);
       // result.words
       // TODO: if there's just one speaker in selection do following
       // if it's multiple split list of words into multiple groups
@@ -356,7 +358,7 @@ class ProgramScript extends Component {
         if(currentTranscript.metadata && currentTranscript.metadata.fps && (currentTranscript.metadata.fps!== 'NA')){
           mediaFps = currentTranscript.metadata.fps
         }
-        console.log('getProgrammeScriptJson', currentTranscript)
+        // console.log('getProgrammeScriptJson', currentTranscript)
         // TODO: need to find a way to escape text containing ' in word text attribute 
         // const words = element.words.map((word) => {
         //   word.text = word.text.replace(/'/g,"\'"); 
@@ -478,7 +480,7 @@ class ProgramScript extends Component {
     let timelineStartTime = 0;
     // playlist elements for  previe canvas
     // { type:'video', start:0, sourceStart: 30, duration:10, src:'https://download.ted.com/talks/MorganVague_2018X.mp4' },
-    console.log(JSON.stringify(this.state.programmeScript, null, 2))
+    // console.log(JSON.stringify(this.state.programmeScript, null, 2))
     const playlist = this.state.programmeScript.elements.map((element) => {
       if (element.type === 'paper-cut') {
         // Get clipName for current transcript
@@ -504,7 +506,7 @@ class ProgramScript extends Component {
     }).filter((el) => {return el !== null;});
     // Workaround to mound and unmoun the `PreviewCanvas` component
     // to update the playlist
-    console.log('handleUpdatePreview - playlist',playlist)
+    // console.log('handleUpdatePreview - playlist',playlist)
     this.setState({
       resetPreview: true
     }, () => {
@@ -559,14 +561,12 @@ class ProgramScript extends Component {
     return (
 
       <>
-        <h2
+        <h4
           className={ [ 'text-truncate', 'text-muted' ].join(' ') }
           title={ `Programme Script Title: ${ this.state.programmeScript ? this.state.programmeScript.title : '' }` }>
-          {/* Programme:  */}
-          {/* <small> */}
           {this.state.programmeScript ? this.state.programmeScript.title : ''}
-          {/* </small> */}
-        </h2>
+        </h4>
+        <br/>
         <Card>
           <Card.Header>
             {/* <hr/> */}
@@ -592,7 +592,7 @@ class ProgramScript extends Component {
               <Col sm={ 4 } md={ 2 }lg={ 2 } xl={ 2 }>
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-secondary">
-                    <FontAwesomeIcon icon={ faPlus } />
+                    <FontAwesomeIcon icon={ faListUl } />
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item
