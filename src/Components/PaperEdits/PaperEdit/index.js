@@ -140,6 +140,7 @@ class PaperEdit extends Component {
               } }
               style={ { display: this.state.isTranscriptsShown ? 'block' : 'none' } }
             >
+              <div className={['d-block','d-sm-none'].join(' ')}><br/></div>
               { this.state.transcripts.length ?
                 <Transcripts
                   projectId={ this.state.projectId }

@@ -155,14 +155,18 @@ class Transcripts extends Component {
   // eslint-disable-next-line class-methods-use-this
   render() {
     const transcriptsElNav = this.props.transcripts.map((transcript, index) => {
+      // Note: that if there are transcripts in progress, current setup
+      // won't show when they are done in this view
+      // only in project's view list of transcript you get a UI update when they are done 
       return (
         <Nav.Item key={ transcript.id  }>
           <Nav.Link
             disabled={ transcript.status !== 'done' ? true : false }
             eventKey={ transcript.id }
+            variant={'outline-secondary'}
           >
             { transcript.status === 'in-progress' ? <FontAwesomeIcon icon={ faClock }/> : '' }
-            { transcript.status === 'error' ? <FontAwesomeIcon icon={ faExclamationTriangle }/> : '' }
+            { (transcript.status !=='done' && transcript.status !== 'in-progress' )|| transcript.status === 'error' ? <FontAwesomeIcon icon={ faExclamationTriangle }/> : '' }
             { `  ${ transcript.transcriptTitle }` }
           </Nav.Link>
         </Nav.Item>
@@ -297,7 +301,7 @@ class Transcripts extends Component {
    
             <Col sm={ !this.state.showAdvancedSearchViewSearchingAcrossTranscripts ? 9 : 12 }>
               <Tab.Content>
-                { this.state.showAdvancedSearchViewSearchingAcrossTranscripts ? <> {searchBarTranscriptsElement} <br/>
+                { this.state.showAdvancedSearchViewSearchingAcrossTranscripts ? <> {searchBarTranscriptsElement}
                 
                 <section style={{ 
                   height: '80vh', 
