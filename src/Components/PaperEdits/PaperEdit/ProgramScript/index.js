@@ -559,14 +559,7 @@ class ProgramScript extends Component {
 
   render() {
     return (
-
       <>
-        <h4
-          className={ [ 'text-truncate', 'text-muted' ].join(' ') }
-          title={ `Programme Script Title: ${ this.state.programmeScript ? this.state.programmeScript.title : '' }` }>
-          {this.state.programmeScript ? this.state.programmeScript.title : ''}
-        </h4>
-        <br/>
         <Card>
           <Card.Header>
             {/* <hr/> */}
@@ -579,7 +572,7 @@ class ProgramScript extends Component {
           <Card.Header>
 
             <Row noGutters>
-              <Col sm={ 12 } md={ 3 }lg={ 3 } xl={ 3 }>
+              <Col xs={6} sm={ 3 } md={ 3 }lg={ 3 } xl={ 3 }>
                 <Button
                   // block
                   variant="outline-secondary"
@@ -589,7 +582,7 @@ class ProgramScript extends Component {
                   <FontAwesomeIcon icon={ faPlus } /> Selection
                 </Button>
               </Col>
-              <Col sm={ 4 } md={ 2 }lg={ 2 } xl={ 2 }>
+              <Col  xs={3}  sm={ 2 } md={ 2 }lg={ 2 } xl={ 2 }>
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-secondary">
                     <FontAwesomeIcon icon={ faListUl } />
@@ -616,7 +609,7 @@ class ProgramScript extends Component {
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
-              <Col sm={ 4 } md={ 1 }lg={ 1 } xl={ 1 }>
+              <Col  xs={2} sm={ 1 } md={ 1 }lg={ 1 } xl={ 1 }>
                 <Button variant="outline-secondary"
                   onClick={ this.handleUpdatePreview }
                   // size="sm"
@@ -626,7 +619,7 @@ class ProgramScript extends Component {
                   <FontAwesomeIcon icon={ faSync } />
                 </Button>
               </Col>
-              <Col sm={ 12 } md={ 2 }lg={ 2 } xl={ 2 }>
+              <Col  xs={6} sm={ 2 } md={ 2 }lg={ 2 } xl={ 2 }>
                 <Dropdown>
                   <Dropdown.Toggle title={'Export programme script, click to see options'} variant="outline-secondary">
                     <FontAwesomeIcon icon={ faShare } /> Export
@@ -695,25 +688,13 @@ class ProgramScript extends Component {
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
-              <Col sm={ 1 } md={ 1 }lg={1 } xl={ 1 }>
+              <Col xs={0} sm={ 0 } md={ 1 }lg={1 } xl={ 1 }>
 
               </Col>
-              <Col sm={ 12 } md={ 3 }lg={ 3 } xl={ 3 }>
+              <Col  xs={6} sm={ 3 } md={ 3 }lg={ 3 } xl={ 3 }>
                 <div>
-              <small className={'text-secondary'} style={{marginBottom: '0em'}}>{ `Last saved at`}<br/>{ `${this.state.lastSaved.toLocaleString()}`}</small>
-              </div>
-                {/* <Button 
-                  // variant={ diffDateInMinutes(this.state.lastSaved, (new Date())) === 0? 'outline-primary': 'outline-secondary' }
-                  variant={ 'outline-secondary' }
-                  onClick={ this.handleSaveProgrammeScript }
-                  // size="sm"
-                  title="save programme script"
-                  // title=  { `Last saved  ${diffDateInMinutes(this.state.lastSaved, (new Date()))} Minutes ago at ${this.state.lastSaved.toLocaleString()}`}
-                  title={ `Last saved at ${this.state.lastSaved.toLocaleString()}`}
-                  block
-                >
-                  <FontAwesomeIcon icon={ faSave } />               
-                </Button>  */}
+                  <small className={'text-secondary'} style={{marginBottom: '0em'}}>{ `Last saved at`}<br/>{ `${this.state.lastSaved.toLocaleString()}`}</small>
+                </div>
               </Col>
             </Row>
 

@@ -248,21 +248,6 @@ class Transcript extends Component {
     }
   }
 
-  showLabelsReference = () => {
-    // if (this.state.isShowLabelsReference) {
-    //   this.props.showLabelsReference();
-    //   // this.setState({
-    //   //   isShowLabelsReference: false
-    //   // });
-    // }
-    // else {
-    //   this.props.showLabelsReference();
-    //   // this.setState({
-    //   //   isShowLabelsReference: true
-    //   // });
-    // }
-  }
-
   getCurrentWordTime = () => {
     const { words } = this.props.transcript;
 
@@ -297,48 +282,18 @@ class Transcript extends Component {
       console.log('ORIGINAL this.state.annotations ', this.state.annotations )
     return (
       <>
-
-        {/* <div style={ {
-          display:
-          // this.state.isShowLabelsReference ?
-           'block'
-          //  : 'none'
-          ,
-          position: 'absolute',
-          top: '0px',
-          left: '0px',
-          width: '5vw',
-          height: '100vh',
-          backgroundColor: 'black'
-        } }>
-            Test
-        </div> */}
         <style scoped>
           {/* This is to style of the Paragraph component programmatically */}
           {`${ this.state.sentenceToSearchCSS } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
           {`${ this.state.sentenceToSearchCSSInHighlights } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
         </style>
-
-        {/* <h4
-          className={ [ 'text-truncate', 'text-muted' ].join(' ') }
-          title={ `Transcript Title: ${ this.props.title }` }
-        >
-         {this.props.title}
-        </h4> */}
-
         <Card>
           <Card.Header>
-            {/* // Preview video - HTML5 Video element or  react-transcript-editor/VideoPlayer
-        // Media control - HTML5 default or react-transcript-editor/MediaPlayer
-        // Search Bar - from TranscriptAnnotate component
-        // Text -  from TranscriptAnnotate component */}
           {this.state.componentMounted &&   <video
               src={ this.props.url }
               ref={ this.videoRef }
               onTimeUpdate={ (e) => {this.setState({ currentTime: e.target.currentTime });} }
-              // onTimeUpdate={ (e) => {console.log(e.target.currentTime); } }
               style={ {
-                // display: this.state.isVideoTranscriptPreviewShow,
                 width: '100%',
                 height:'10em',
                 marginTop: '0em',

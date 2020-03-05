@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
   faExclamationTriangle,
-  faFilter,
   faSearch
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -17,7 +16,6 @@ import SearchBarTranscripts from './SearchBarTranscripts/index.js';
 import onlyCallOnce from '../../../../Util/only-call-once/index.js';
 import makeListOfUniqueSpeakers from './makeListOfUniqueSpeakers.js';
 import Paragraphs from './Paragraphs/index.js';
-import ApiWrapper from '../../../../ApiWrapper/index.js';
 
 class Transcripts extends Component {
   constructor(props) {
@@ -29,50 +27,11 @@ class Transcripts extends Component {
       selectedOptionLabelSearch: [],
       selectedOptionSpeakerSearch: [],
       selectedOptionTranscriptsSearch: [],
-      transcriptIdsList: [],
       showParagraphsMatchingSearch: false,
+      showAdvancedSearchViewSearchingAcrossTranscripts: false
     }
   }
 
-  componentDidMount = () =>{
-   const transcriptIdsList = this.props.transcripts.filter((transcript)=>{
-      return transcript.id&& transcript.transcriptTitle;
-    })
-    console.log(transcriptIdsList)
-    this.setState({
-      transcriptIdsList
-    })
-  // const  annotationsByTranscript = transcriptIdsList.map((transcript)=>{
-  //   return {
-  //     transcriptId: transcript.id,
-  //     annotations: transcript.annotations
-  //   }
-  // })
-  // console.log(annotationsByTranscript)
-
-
-    // ApiWrapper.getAllAnnotations(this.props.projectId, this.props.transcriptId)
-    // .then(json => {
-    //   this.setState({
-    //     annotations: json.annotations,
-    //   });
-    // });
-  }
-
-  // getAnnoations = async (projectId, transcriptId) =>{
-  //   return new Promise((resolve, error)=>{ 
-  //     // ApiWrapper.getAllAnnotations(this.props.projectId, this.props.transcriptId)
-  //     ApiWrapper.getAllAnnotations(projectId, transcriptId)
-  //         .then(json => {
-  //           resolve(json.annotations)
-  //           // this.setState({
-  //           //   annotations: json.annotations,
-  //           // });
-  //         }).catch((err)=>{
-  //           error(err)
-  //         })
-  //     })
-  // }
   // New 
   handleSearch = (e, searchPreferences) => {
     console.log('Transcripts:: SEARCH:::',e.target.value, searchPreferences)
@@ -124,29 +83,30 @@ class Transcripts extends Component {
     });
   };
 
-  // New
+  // To search across all transcripts 
   handleLabelsSearchChange = (selectedOptionLabelSearch) => {
     this.setState({
       selectedOptionLabelSearch
     });
   }
-  // New 
+  // To search across all transcripts 
   handleSpeakersSearchChange = (selectedOptionSpeakerSearch) => {
     this.setState({
       selectedOptionSpeakerSearch
     });
   }
-  // new new 
+  // To search across all transcripts 
   handleTranscriptSearchChange = (selectedOptionTranscriptsSearch) => {
     this.setState({
       selectedOptionTranscriptsSearch
     });
   }
-  // New 
+  // To search across all transcripts 
   handleShowParagraphsMatchingSearch = (isShowParagraphsMatchingSearch) => {
     this.setState({ showParagraphsMatchingSearch: isShowParagraphsMatchingSearch });
   }
 
+  // TODO: Not yet implemented - low priority
   handleWordClick = e => {
     if (e.target.className === 'words' ) {
       const wordEl = e.target;
@@ -164,25 +124,49 @@ class Transcripts extends Component {
       sentenceToSearchCSSInHighlights: '',
       selectedOptionLabelSearch: [],
       selectedOptionSpeakerSearch: [],
-      selectedOptionTranscriptsSearch: [],
-      transcriptIdsList: []
+      selectedOptionTranscriptsSearch: []
     })
-    // this.setState({showParagraphsMatchingSearch: false})
+  }
+
+  handleShowAdvancedSearchViewSearchingAcrossTranscripts = ()=>{
+    this.setState((prevState) => {
+      if(!prevState.showAdvancedSearchViewSearchingAcrossTranscripts){
+        return  {
+          showAdvancedSearchViewSearchingAcrossTranscripts: true,
+          // in this advanced search view - when searchign across paragraphs always show paragraphs matching searches
+          // which means segmenting transcript to show only paragraphs that metch serching criteria 
+          showParagraphsMatchingSearch: true 
+        };
+      }else{
+        return {
+          showAdvancedSearchViewSearchingAcrossTranscripts: false,
+          // in this advanced search view - when searchign across paragraphs always show paragraphs matching searches
+          // which means segmenting transcript to show only paragraphs that metch serching criteria 
+          showParagraphsMatchingSearch: false,
+          // reset search if closing view  
+          selectedOptionLabelSearch: [],
+          selectedOptionSpeakerSearch: [],
+          selectedOptionTranscriptsSearch: []
+        };
+      }
+    })
   }
 
   // eslint-disable-next-line class-methods-use-this
   render() {
     const transcriptsElNav = this.props.transcripts.map((transcript, index) => {
+      // Note: that if there are transcripts in progress, current setup
+      // won't show when they are done in this view
+      // only in project's view list of transcript you get a UI update when they are done 
       return (
         <Nav.Item key={ transcript.id  }>
           <Nav.Link
             disabled={ transcript.status !== 'done' ? true : false }
-            // title={ transcript.status !== 'done' ? transcript.status : transcript.title }
             eventKey={ transcript.id }
-
+            variant={'outline-secondary'}
           >
             { transcript.status === 'in-progress' ? <FontAwesomeIcon icon={ faClock }/> : '' }
-            { transcript.status === 'error' ? <FontAwesomeIcon icon={ faExclamationTriangle }/> : '' }
+            { (transcript.status !=='done' && transcript.status !== 'in-progress' )|| transcript.status === 'error' ? <FontAwesomeIcon icon={ faExclamationTriangle }/> : '' }
             { `  ${ transcript.transcriptTitle }` }
           </Nav.Link>
         </Nav.Item>
@@ -201,10 +185,6 @@ class Transcripts extends Component {
         }
       }else{
         return {
-        //  id: 'NA',
-        //  value: 'NA',
-        //  label: 'NA',
-        //  description:'NA',
          status: transcript.status 
         }
       }
@@ -230,11 +210,7 @@ class Transcripts extends Component {
       //  https://stackoverflow.com/questions/2218999/remove-duplicates-from-an-array-of-objects-in-javascript
       return Array.from(new Set(array.map(JSON.stringify))).map(JSON.parse);
     };
-
-    // console.log('transcriptsUniqueListOfSpeakers', transcriptsUniqueListOfSpeakers)
     const transcriptsUniqueListOfSpeakersNoDuplicates = removeDuplicates(transcriptsUniqueListOfSpeakers)
-    // const transcriptsUniqueListOfSpeakersNoDuplicates = [...new Set(transcriptsUniqueListOfSpeakers)]
-    // console.log('transcriptsUniqueListOfSpeakersNoDuplicates', transcriptsUniqueListOfSpeakersNoDuplicates)
    
     /* TODO: Will this work? */
     const searchBarTranscriptsElement = <SearchBarTranscripts
@@ -248,6 +224,7 @@ class Transcripts extends Component {
       transcriptOptions={ transcriptsOptions}
       handleTranscriptSearchChange={this.handleTranscriptSearchChange}
       handleFilterResults={this.handleFilterResults}
+      handleShowAdvancedSearchViewSearchingAcrossTranscripts={this.handleShowAdvancedSearchViewSearchingAcrossTranscripts}
     />
 
     const transcriptsElTab = this.props.transcripts.map((transcript,) => {
@@ -269,8 +246,6 @@ class Transcripts extends Component {
      if(transcript.transcript && this.state.selectedOptionTranscriptsSearch.find((t)=> {return transcript.id === t.id})){
       return <Paragraphs
         labelsOptions={ this.props.labelsOptions }
-        // labelsOptions={ this.state.selectedOptionLabelSearch && this.state.selectedOptionLabelSearch }
-        // annotations={ this.state.annotations ? this.state.annotations : [] }
         annotations={transcript.annotations? transcript.annotations : []}
         transcriptJson={ transcript.transcript }
         searchString={ this.state.searchString ? this.state.searchString : '' }
@@ -279,6 +254,7 @@ class Transcripts extends Component {
         selectedOptionSpeakerSearch={ this.state.selectedOptionSpeakerSearch ? this.state.selectedOptionSpeakerSearch : [] }
         transcriptId={ transcript.id }
         handleTimecodeClick={ this.handleTimecodeClick }
+        // TODO: these attributes below have not been implemented - low priority 
         // handleWordClick={ ()=>{alert('not implemented in this view, switch to individual transcript')}}
         handleWordClick={ this.handleWordClick }
         // handleDeleteAnnotation={ this.handleDeleteAnnotation }
@@ -303,13 +279,16 @@ class Transcripts extends Component {
          >
           <Row>
         
-          <Col sm={  !this.state.showParagraphsMatchingSearch? 3 : 0 }>
-          { !this.state.showParagraphsMatchingSearch?  <>
-              <h4
-                className={ [ 'text-truncate', 'text-muted' ].join(' ') }
-                title={ 'Transcripts' }
-              >
-                Transcripts</h4>
+          <Col sm={  !this.state.showAdvancedSearchViewSearchingAcrossTranscripts? 3 : 0 }>
+          { !this.state.showAdvancedSearchViewSearchingAcrossTranscripts?  <>
+                <Button  
+              onClick={this.handleShowAdvancedSearchViewSearchingAcrossTranscripts}
+              variant={"outline-secondary"} 
+              block
+              title={'Search across transcripts in this project'}
+              size={'sm'}
+             ><FontAwesomeIcon icon={faSearch}/> Project's Transcripts
+           </Button>
               <hr/>
              
               <Nav variant="pills" className="flex-column">
@@ -320,12 +299,10 @@ class Transcripts extends Component {
                     </>   : null }
             </Col>
    
-            <Col sm={ !this.state.showParagraphsMatchingSearch ? 9 : 12 }>
+            <Col sm={ !this.state.showAdvancedSearchViewSearchingAcrossTranscripts ? 9 : 12 }>
               <Tab.Content>
-                {searchBarTranscriptsElement}
-                <br/>
-                { this.state.showParagraphsMatchingSearch ?
-                <> 
+                { this.state.showAdvancedSearchViewSearchingAcrossTranscripts ? <> {searchBarTranscriptsElement}
+                
                 <section style={{ 
                   height: '80vh', 
                   overflow: 'auto',
@@ -335,12 +312,11 @@ class Transcripts extends Component {
                   }}>
                 {searchedParagraphsAcrossTranscripts}
                 </section>
-              
-                </>
-                :
-                <> 
+                
+                </>:<> 
                 {transcriptsElTab} 
-                </> }
+                </> } 
+             
               </Tab.Content>
             </Col>
           </Row>
