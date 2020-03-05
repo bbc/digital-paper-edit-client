@@ -46,6 +46,7 @@ class ProgramScript extends Component {
       lastSaved: new Date(),
       programmeScript: null,
       resetPreview: false,
+      isAdvancedSelect: false,
       // demo content
       playlist:[
         // start - is relative to timeline
@@ -64,6 +65,10 @@ class ProgramScript extends Component {
       const result = getDataFromUserWordsSelection();
       if (result) {
         this.setState({tmpSelection: result})
+        // if advanced select is on, copy over to programme scfript
+        if(this.state.isAdvancedSelect){
+          this.handleAddTranscriptSelectionToProgrammeScript()
+        }
       }
     }
   }
@@ -691,6 +696,13 @@ class ProgramScript extends Component {
     }
   }
 
+  handleAdvancedSelectCheckbox = (event) => {
+    const target = event.target;
+    this.setState({
+      isAdvancedSelect:  target.checked
+    });
+  }
+
   render() {
     return (
       <>
@@ -715,6 +727,13 @@ class ProgramScript extends Component {
                 >
                   <FontAwesomeIcon icon={ faPlus } /> Selection
                 </Button>
+                <input
+                  name="advancedSelect"
+                  type="checkbox"
+                  title="advanced selection - check this box to auto copy across transcript selections to insert point in programme script"
+                  checked={this.state.isAdvancedSelect}
+                  onChange={this.handleAdvancedSelectCheckbox} 
+                />
               </Col>
               <Col  xs={3}  sm={ 2 } md={ 2 }lg={ 2 } xl={ 2 }>
                 <Dropdown>

@@ -22,7 +22,8 @@ import {
   faTimes,
   faHeading,
   faMicrophoneAlt,
-  faStickyNote
+  faStickyNote,
+  faPaste
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -98,7 +99,7 @@ const SortableItem = sortableElement(({
         ><FontAwesomeIcon icon={faTimes}/></Button>
          <Button variant="outline-secondary" 
           onClick={()=>{handleAddTranscriptSelectionToProgrammeScript(indexNumber); setContextMenuVisibility(false)}}
-        >Paste Selection</Button>
+        ><FontAwesomeIcon icon={ faPaste } /> Paste Selection</Button>
         <Button variant="outline-secondary" 
           onClick={()=>{handleAddTranscriptElementToProgrammeScript('title',indexNumber); setContextMenuVisibility(false)}}
         ><FontAwesomeIcon icon={ faHeading } /> Heading</Button>
@@ -111,7 +112,7 @@ const SortableItem = sortableElement(({
            <Button variant="outline-secondary"
           onClick={()=>{handleChangeInsertPointPosition(indexNumber);  setContextMenuVisibility(false)}}  
           title={'move insert point'}
-        ><FontAwesomeIcon icon={ faArrowAltCircleRight } />Move insert Point<FontAwesomeIcon icon={ faArrowAltCircleLeft } /></Button>
+        >Move insert Point<FontAwesomeIcon icon={ faArrowAltCircleRight } /><FontAwesomeIcon icon={ faArrowAltCircleLeft } /></Button>
       </ButtonGroup> 
     : null }
       </Col>
