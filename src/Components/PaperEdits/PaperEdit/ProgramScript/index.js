@@ -58,6 +58,16 @@ class ProgramScript extends Component {
     };
   }
 
+   mouseUpListener = ()=>{
+    // makign sure mouse up event is also associated with a selection 
+    if (window.getSelection|| document.selection) {
+      const result = getDataFromUserWordsSelection();
+      if (result) {
+        this.setState({tmpSelection: result})
+      }
+    }
+  }
+
   componentDidMount = () => {
     ApiWrapper.getPaperEdit(this.props.projectId, this.props.papereditId)
       .then((json) => {
@@ -72,19 +82,15 @@ class ProgramScript extends Component {
       // to save those tmp selection to enable to 
       // use contextual menu in programme script to 
       // paste those selections in the programme script
-      document.addEventListener('mouseup',()=>{
-        // makign sure mouse up event is also associated with a selection 
-        if (window.getSelection|| document.selection) {
-          const result = getDataFromUserWordsSelection();
-          if (result) {
-            this.setState({tmpSelection: result})
-          }
-        }
-      })
+      document.addEventListener('mouseup',this.mouseUpListener)
   }
   componentWillUnmount = ()=>{
     // removing selection listener
-    document.removeEventListener('mouseup')
+    try {
+      document.removeEventListener('mouseup',this.mouseUpListener);
+    } catch (error) {
+     console.error('error removing listener mouseup', error)
+    }
   }
 
   // TODO: save to server
