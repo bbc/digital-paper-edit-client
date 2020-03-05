@@ -26,36 +26,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-// https://www.kirupa.com/html5/getting_mouse_click_position.htm
-// helper function to get an element's exact position
-function getPosition(el) {
-  var xPosition = 0;
-  var yPosition = 0;
- 
-  while (el) {
-    if (el.tagName == "BODY") {
-      // deal with browser quirks with body/window/document and page scroll
-      var xScrollPos = el.scrollLeft || document.documentElement.scrollLeft;
-      var yScrollPos = el.scrollTop || document.documentElement.scrollTop;
- 
-      xPosition += (el.offsetLeft - xScrollPos + el.clientLeft);
-      yPosition += (el.offsetTop - yScrollPos + el.clientTop);
-    } else {
-      xPosition += (el.offsetLeft - el.scrollLeft + el.clientLeft);
-      yPosition += (el.offsetTop - el.scrollTop + el.clientTop);
-    }
- 
-    el = el.offsetParent;
-  }
-  return {
-    x: xPosition,
-    y: yPosition
-  };
-}
-
 const InsertPoint = (({ text }) => <span style={ { width: '100%', backgroundColor: 'orange', color: 'white' } }> <FontAwesomeIcon icon={ faArrowAltCircleRight } /> {text} </span>);
 
 const DragHandle = sortableHandle(() => <span style={{ cursor: 'move'}}> <FontAwesomeIcon icon={ faGripLines } /> </span>);
+
 const sharedStyle = {
   border:'none',
   width: '100%',
@@ -64,9 +38,18 @@ const sharedStyle = {
   backgroundColor: 'white',
 }
 
-const SortableItem = sortableElement(({ indexNumber, value, type, handleDelete, handleEdit, handleAddTranscriptElementToProgrammeScript } ) => {
+const SortableItem = sortableElement(({ 
+  indexNumber, 
+  value, 
+  type, 
+  handleDelete, 
+  handleEdit, 
+  handleAddTranscriptElementToProgrammeScript,
+  handleAddTranscriptSelectionToProgrammeScriptTmpSave 
+} ) => {
+
   const [isContextMenuVisible, setContextMenuVisibility] = useState(false);
-  const [contextMenuCoordinates, setContextMenuCoordinates] = useState({clickX:0, clickY: 0});
+
   const [customStyle, setStyle] = useState({ 
       ...sharedStyle,
       backgroundColor: 'white',
@@ -75,20 +58,17 @@ const SortableItem = sortableElement(({ indexNumber, value, type, handleDelete, 
   const handleContextMenu = (event) =>{
     event.preventDefault();
     setContextMenuVisibility(true)
-    // console.log(event, event.target)
-    // const clickX = event.screenX;
-    // const clickY = event.screenY;
-    // console.log(clickX, clickY);
-    // const {x,y} = getPosition(event.target);
-    // console.log(x,y)
-    // setContextMenuCoordinates({clickX:y, clickY: x})
+  }
+
+  const handleAddTranscriptSelectionToProgrammeScript =(indexNumber)=>{
+    handleAddTranscriptSelectionToProgrammeScriptTmpSave(indexNumber);
   }
 
   return (<li style={{
     //  borderStyle: 'dashed',
     // borderWidth: '0.01em',
     // borderColor: 'lightgray',
-    // padding: '0.5em'
+    // padding: '1.5em'
   }
     }>
   
@@ -116,9 +96,9 @@ const SortableItem = sortableElement(({ indexNumber, value, type, handleDelete, 
         <Button variant="outline-secondary" 
           onClick={()=>{setContextMenuVisibility(false);}} 
         ><FontAwesomeIcon icon={faTimes}/></Button>
-         {/* <Button variant="outline-secondary" 
-          onClick={()=>{handleAddTranscriptElementToProgrammeScript('title',indexNumber); setContextMenuVisibility(false)}}
-        >Paste Selection</Button> */}
+         <Button variant="outline-secondary" 
+          onClick={()=>{handleAddTranscriptSelectionToProgrammeScript(indexNumber); setContextMenuVisibility(false)}}
+        >Paste Selection</Button>
         <Button variant="outline-secondary" 
           onClick={()=>{handleAddTranscriptElementToProgrammeScript('title',indexNumber); setContextMenuVisibility(false)}}
         ><FontAwesomeIcon icon={ faHeading } /> Heading</Button>
@@ -190,10 +170,7 @@ class ProgrammeScript extends Component {
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {
-    console.log('ProgrammeScript')
-    console.log(this.props.programmeScriptElements)
     const result = arrayMove(this.props.programmeScriptElements, oldIndex, newIndex);
-    console.log(result);
     this.props.handleProgrammeScriptOrderChange(result);
   };
 
@@ -216,7 +193,6 @@ class ProgrammeScript extends Component {
           return { el: <InsertPoint text={ el.text } />, type: el.type };
         default:
           console.error('invalid programme element type');
-
           return null;
         }
       });
@@ -234,6 +210,7 @@ class ProgrammeScript extends Component {
             handleDelete={ this.props.handleDeleteProgrammeScriptElement }
             handleEdit={ this.props.handleEditProgrammeScriptElement }
             handleAddTranscriptElementToProgrammeScript={this.props.handleAddTranscriptElementToProgrammeScript}
+            handleAddTranscriptSelectionToProgrammeScriptTmpSave={this.props.handleAddTranscriptSelectionToProgrammeScriptTmpSave}
           />
         })}
       </SortableContainer>;

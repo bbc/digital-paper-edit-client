@@ -67,12 +67,27 @@ class ProgramScript extends Component {
           programmeScript: programmeScript
         });
       });
-
+      // listening for word selections in transcripts
+      // to save those tmp selection to enable to 
+      // use contextual menu in programme script to 
+      // paste those selections in the programme script
+      document.addEventListener('mouseup',()=>{
+        // makign sure mouse up event is also associated with a selection 
+        if (window.getSelection|| document.selection) {
+          const result = getDataFromUserWordsSelection();
+          if (result) {
+            this.setState({tmpSelection: result})
+          }
+        }
+      })
+  }
+  componentWillUnmount = ()=>{
+    // removing selection listener
+    document.removeEventListener('mouseup')
   }
 
   // TODO: save to server
   handleProgrammeScriptOrderChange = (list) => {
-    // console.log('handleProgrammeScriptOrderChange', list);
     this.setState(({ programmeScript }) => {
       programmeScript.elements = list;
 
@@ -89,8 +104,6 @@ class ProgramScript extends Component {
   // TODO: save to server
   handleDeleteProgrammeScriptElement = (i) => {
     // TODO: add a prompt, like are you shure you want to delete, confirm etc..?
-    // alert('handle delete');
-    // console.log('handleDeleteProgrammeScriptElement ',i);
     this.setState(({ programmeScript }) => {
       const index = i;
       const list = programmeScript.elements;
@@ -108,12 +121,10 @@ class ProgramScript extends Component {
   }
 
   handleEditProgrammeScriptElement = (i) => {
-    // console.log('handleEditProgrammeScriptElement',i);
     const { programmeScript } = this.state;
     const elements = programmeScript.elements;
     const currentElement = elements[i];
     const newText = prompt('Edit', currentElement.text);
-    // console.log(newText);
     if (newText) {
       currentElement.text = newText;
       elements[i] = currentElement;
@@ -139,9 +150,7 @@ class ProgramScript extends Component {
       || elementType === 'note'
       || elementType === 'voice-over') {
       const text = prompt('Add some text for a section title', 'Some place holder text');
-      console.log('text',text)
       if(text){
-        console.log('text2',text)
         let indexOfInsertPoint = 0;
         if(indexNumber){
           indexOfInsertPoint = indexNumber+1;
@@ -180,21 +189,95 @@ class ProgramScript extends Component {
     return indexOfInsertPoint;
   }
 
-  // TODO: save to server
-  // TODO: needs to handle when selection spans across multiple paragraphs
-  handleAddTranscriptSelectionToProgrammeScript = () => {
-    const result = getDataFromUserWordsSelection();
-    if (result) {
-      console.log('result',result);
-      // result.words
+  handleAddTranscriptSelectionToProgrammeScriptTmpSave =(indexNumber)=>{
+    // getting results of word selection from tmpSelection in state
+    // tmpSelection in populated via the on mouse app selection listener
+    // initialised in componentDidMount
+    const result = this.state.tmpSelection;
+    // extra validation to make sure it doesn't accidentally try to paste paper-cuts
+    // if the user selects those words 
+    if (result && result.transcriptId && result.speaker) {
       // TODO: if there's just one speaker in selection do following
       // if it's multiple split list of words into multiple groups
       // and add a papercut for each to the programme script
       const { programmeScript } = this.state;
       const elements = programmeScript.elements;
       // TODO: insert at insert point
+      console.log('handleAddTranscriptSelectionToProgrammeScriptTmpSave - indexNumber', indexNumber)
+      let indexOfInsertPoint = 0;
+        if(indexNumber || indexNumber===0){
+          indexOfInsertPoint = indexNumber+1;
+        }else{
+          indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
+        }
+      if (isOneParagraph(result.words)) {
+        // create new element
+        // TODO: Create new element could be refactored into helper function
+        const newElement = {
+          id: cuid(),
+          index: elements.length,
+          type: 'paper-cut',
+          start:result.start,
+          end: result.end,
+          speaker: result.speaker,
+          words: result.words,
+          transcriptId: result.transcriptId,
+          labelId: []
+        };
+        // add element just above of insert point
+        elements.splice(indexOfInsertPoint, 0, newElement);
+        programmeScript.elements = elements;
+      }
+      else {
+        const paragraphs = divideWordsSelectionsIntoParagraphs(result.words);
+        paragraphs.reverse().forEach((paragraph) => {
+          const newElement = {
+            id: cuid(),
+            index: elements.length,
+            type: 'paper-cut',
+            start:paragraph[0].start,
+            end: paragraph[paragraph.length - 1].end,
+            speaker: paragraph[0].speaker,
+            words: paragraph,
+            transcriptId: paragraph[0].transcriptId,
+            // TODO: ignoring labels for now
+            labelId: []
+          };
+          // add element just above of insert point
+          elements.splice(indexOfInsertPoint, 0, newElement);
+          programmeScript.elements = elements;
+        });
+      }
+      // TODO: save to server
+      this.setState({
+        programmeScript: programmeScript
+      }, ()=>{
+        this.handleSaveProgrammeScript();
+        this.handleUpdatePreview();
+      });
+    }
+    else {
+      alert('Select some text in the transcript to add to the programme script');
+    }
+  }
 
-      const indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
+  // TODO: save to server
+  // TODO: needs to handle when selection spans across multiple paragraphs
+  handleAddTranscriptSelectionToProgrammeScript = (e, indexNumber) => {
+    const result = getDataFromUserWordsSelection();
+    if (result) {
+      // TODO: if there's just one speaker in selection do following
+      // if it's multiple split list of words into multiple groups
+      // and add a papercut for each to the programme script
+      const { programmeScript } = this.state;
+      const elements = programmeScript.elements;
+      // insert at insert point
+      let indexOfInsertPoint = 0;
+        if(indexNumber){
+          indexOfInsertPoint = indexNumber+1;
+        }else{
+          indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
+        }
       if (isOneParagraph(result.words)) {
         // create new element
         // TODO: Create new element could be refactored into helper function
@@ -366,7 +449,6 @@ class ProgramScript extends Component {
         if(currentTranscript.metadata && currentTranscript.metadata.fps && (currentTranscript.metadata.fps!== 'NA')){
           mediaFps = currentTranscript.metadata.fps
         }
-        // console.log('getProgrammeScriptJson', currentTranscript)
         // TODO: need to find a way to escape text containing ' in word text attribute 
         // const words = element.words.map((word) => {
         //   word.text = word.text.replace(/'/g,"\'"); 
@@ -488,7 +570,6 @@ class ProgramScript extends Component {
     let timelineStartTime = 0;
     // playlist elements for  previe canvas
     // { type:'video', start:0, sourceStart: 30, duration:10, src:'https://download.ted.com/talks/MorganVague_2018X.mp4' },
-    // console.log(JSON.stringify(this.state.programmeScript, null, 2))
     const playlist = this.state.programmeScript.elements.map((element) => {
       if (element.type === 'paper-cut') {
         // Get clipName for current transcript
@@ -514,7 +595,6 @@ class ProgramScript extends Component {
     }).filter((el) => {return el !== null;});
     // Workaround to mound and unmoun the `PreviewCanvas` component
     // to update the playlist
-    // console.log('handleUpdatePreview - playlist',playlist)
     this.setState({
       resetPreview: true
     }, () => {
@@ -718,7 +798,8 @@ class ProgramScript extends Component {
                 handleDeleteProgrammeScriptElement={ this.handleDeleteProgrammeScriptElement }
                 handleEditProgrammeScriptElement={ this.handleEditProgrammeScriptElement }
                 handleAddTranscriptElementToProgrammeScript={this.handleAddTranscriptElementToProgrammeScript}
-              />
+                handleAddTranscriptSelectionToProgrammeScriptTmpSave={this.handleAddTranscriptSelectionToProgrammeScriptTmpSave}
+                />
                 : null }
             </article>
           </Card.Body>
