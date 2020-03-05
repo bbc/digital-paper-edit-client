@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component,useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
+import Button from 'react-bootstrap/Button'
 import {
   sortableContainer,
   sortableElement,
@@ -11,25 +13,65 @@ import VoiceOver from './VoiceOver';
 import PaperCut from './PaperCut';
 import TitleHeading from './TitleHeading';
 import Note from './Note';
-
 import {
   faGripLines,
   faPen,
   faTrash,
   faArrowAltCircleLeft,
-  faArrowAltCircleRight
+  faArrowAltCircleRight,
+  faTimes,
+  faHeading,
+  faMicrophoneAlt,
+  faStickyNote
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const InsertPoint = (({ text }) => <span style={ { width: '100%', backgroundColor: 'orange', color: 'white' } }> <FontAwesomeIcon icon={ faArrowAltCircleRight } /> {text} </span>);
 
-const DragHandle = sortableHandle(() => <span> <FontAwesomeIcon icon={ faGripLines } /> </span>);
+const DragHandle = sortableHandle(() => <span style={{ cursor: 'move'}}> <FontAwesomeIcon icon={ faGripLines } /> </span>);
 
+const sharedStyle = {
+  border:'none',
+  width: '100%',
+  marginTop: '0.75em',
+  height: '0.1em',
+  backgroundColor: 'white',
+}
 
+const SortableItem = sortableElement(({ 
+  indexNumber, 
+  value, 
+  type, 
+  handleDelete, 
+  handleEdit, 
+  handleAddTranscriptElementToProgrammeScript,
+  handleAddTranscriptSelectionToProgrammeScriptTmpSave 
+} ) => {
 
+  const [isContextMenuVisible, setContextMenuVisibility] = useState(false);
 
-const SortableItem = sortableElement(({ indexNumber, value, type, handleDelete, handleEdit } ) => {
-  return (<li>
+  const [customStyle, setStyle] = useState({ 
+      ...sharedStyle,
+      backgroundColor: 'white',
+    });
+
+  const handleContextMenu = (event) =>{
+    event.preventDefault();
+    setContextMenuVisibility(true)
+  }
+
+  const handleAddTranscriptSelectionToProgrammeScript =(indexNumber)=>{
+    handleAddTranscriptSelectionToProgrammeScriptTmpSave(indexNumber);
+  }
+
+  return (<li style={{
+    //  borderStyle: 'dashed',
+    // borderWidth: '0.01em',
+    // borderColor: 'lightgray',
+    // padding: '1.5em'
+  }
+    }>
+  
     <Row>
       <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
         <DragHandle />
@@ -39,13 +81,76 @@ const SortableItem = sortableElement(({ indexNumber, value, type, handleDelete, 
       </Col>
       <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
         {/* TODO: if paper-cut  then don't show edit/pen icon */}
-        {type !== 'paper-cut' && type !== 'insert-point' ? <FontAwesomeIcon className={ 'text-muted' } icon={ faPen } onClick={ () => { handleEdit(indexNumber); } } /> : null}
+        {type !== 'paper-cut' && type !== 'insert-point' ? <FontAwesomeIcon className={ 'text-muted' } style={{ cursor: 'pointer'}} icon={ faPen } onClick={ () => { handleEdit(indexNumber); } } /> : null}
       </Col>
       <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
         {/* TODO: pass a prop to remove element from list */}
-  {type !== 'insert-point' ? <FontAwesomeIcon className={ 'text-muted' } icon={ faTrash } onClick={ () => {handleDelete(indexNumber);} } /> : null}
+        {type !== 'insert-point' ? <FontAwesomeIcon className={ 'text-muted' }   style={{ cursor: 'pointer'}} icon={ faTrash } onClick={ () => {handleDelete(indexNumber);} } /> : null}
         {type === 'insert-point' ? <FontAwesomeIcon style={ { color: 'white' } } icon={ faArrowAltCircleLeft } /> : null}
       </Col>
+    </Row>
+    <Row>
+      <Col>
+    {isContextMenuVisible? 
+      <ButtonGroup size="sm" block aria-label="Basic example" style={{ cursor: 'pointer', width:'100%'}}>
+        <Button variant="outline-secondary" 
+          onClick={()=>{setContextMenuVisibility(false);}} 
+        ><FontAwesomeIcon icon={faTimes}/></Button>
+         <Button variant="outline-secondary" 
+          onClick={()=>{handleAddTranscriptSelectionToProgrammeScript(indexNumber); setContextMenuVisibility(false)}}
+        >Paste Selection</Button>
+        <Button variant="outline-secondary" 
+          onClick={()=>{handleAddTranscriptElementToProgrammeScript('title',indexNumber); setContextMenuVisibility(false)}}
+        ><FontAwesomeIcon icon={ faHeading } /> Heading</Button>
+        <Button variant="outline-secondary"
+          onClick={()=>{handleAddTranscriptElementToProgrammeScript('voice-over',indexNumber); setContextMenuVisibility(false)}} 
+        ><FontAwesomeIcon icon={ faMicrophoneAlt } />  Voice over</Button>
+        <Button variant="outline-secondary"
+          onClick={()=>{handleAddTranscriptElementToProgrammeScript('note',indexNumber);  setContextMenuVisibility(false)}}  
+        ><FontAwesomeIcon icon={ faStickyNote } /> Note</Button>
+      </ButtonGroup> 
+    : null }
+      </Col>
+    </Row>
+    <Row>
+   
+    <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } 
+        style={{ cursor: 'context-menu'}}
+        onMouseOver={()=>{
+          setStyle({ 
+          ...sharedStyle,
+          backgroundColor: 'lightgrey'
+        });
+      }}
+        onMouseLeave={()=>{
+          setStyle({ 
+          ...sharedStyle,
+          backgroundColor: 'white'
+        });
+      }}
+        onClick={handleContextMenu}
+        >
+         {customStyle.backgroundColor === 'lightgrey'? <span style={{color:'grey'}}>{'+'}</span>:null}
+    </Col>
+    <Col xs={ 11 } sm={ 11 } md={ 11 } ld={ 11 } xl={ 11 } 
+          style={{ cursor: 'context-menu'}}
+          onMouseOver={()=>{
+          setStyle({ 
+          ...sharedStyle,
+          backgroundColor: 'lightgrey'
+        })}}
+      onMouseLeave={()=>{
+        setStyle({ 
+          ...sharedStyle,
+          backgroundColor: 'white'
+        });
+        // setContextMenuVisibility(false);
+      }}
+        onClick={handleContextMenu}
+        >
+      <div  className={'insertDiv'} style={customStyle} 
+      ></div>
+    </Col>
     </Row>
   </li>);
 });
@@ -65,10 +170,7 @@ class ProgrammeScript extends Component {
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {
-    console.log('ProgrammeScript')
-    console.log(this.props.programmeScriptElements)
     const result = arrayMove(this.props.programmeScriptElements, oldIndex, newIndex);
-    console.log(result);
     this.props.handleProgrammeScriptOrderChange(result);
   };
 
@@ -91,7 +193,6 @@ class ProgrammeScript extends Component {
           return { el: <InsertPoint text={ el.text } />, type: el.type };
         default:
           console.error('invalid programme element type');
-
           return null;
         }
       });
@@ -108,6 +209,8 @@ class ProgrammeScript extends Component {
             type={ value.type }
             handleDelete={ this.props.handleDeleteProgrammeScriptElement }
             handleEdit={ this.props.handleEditProgrammeScriptElement }
+            handleAddTranscriptElementToProgrammeScript={this.props.handleAddTranscriptElementToProgrammeScript}
+            handleAddTranscriptSelectionToProgrammeScriptTmpSave={this.props.handleAddTranscriptSelectionToProgrammeScriptTmpSave}
           />
         })}
       </SortableContainer>;
