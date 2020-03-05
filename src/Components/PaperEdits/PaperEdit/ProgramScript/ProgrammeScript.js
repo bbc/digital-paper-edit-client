@@ -45,7 +45,8 @@ const SortableItem = sortableElement(({
   handleDelete, 
   handleEdit, 
   handleAddTranscriptElementToProgrammeScript,
-  handleAddTranscriptSelectionToProgrammeScriptTmpSave 
+  handleAddTranscriptSelectionToProgrammeScriptTmpSave,
+  handleChangeInsertPointPosition 
 } ) => {
 
   const [isContextMenuVisible, setContextMenuVisibility] = useState(false);
@@ -71,7 +72,6 @@ const SortableItem = sortableElement(({
     // padding: '1.5em'
   }
     }>
-  
     <Row>
       <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 } style={ { backgroundColor: type === 'insert-point' ? 'orange' : '' } }>
         <DragHandle />
@@ -108,6 +108,10 @@ const SortableItem = sortableElement(({
         <Button variant="outline-secondary"
           onClick={()=>{handleAddTranscriptElementToProgrammeScript('note',indexNumber);  setContextMenuVisibility(false)}}  
         ><FontAwesomeIcon icon={ faStickyNote } /> Note</Button>
+           <Button variant="outline-secondary"
+          onClick={()=>{handleChangeInsertPointPosition(indexNumber);  setContextMenuVisibility(false)}}  
+          title={'move insert point'}
+        ><FontAwesomeIcon icon={ faArrowAltCircleRight } />Move insert Point<FontAwesomeIcon icon={ faArrowAltCircleLeft } /></Button>
       </ButtonGroup> 
     : null }
       </Col>
@@ -211,6 +215,7 @@ class ProgrammeScript extends Component {
             handleEdit={ this.props.handleEditProgrammeScriptElement }
             handleAddTranscriptElementToProgrammeScript={this.props.handleAddTranscriptElementToProgrammeScript}
             handleAddTranscriptSelectionToProgrammeScriptTmpSave={this.props.handleAddTranscriptSelectionToProgrammeScriptTmpSave}
+            handleChangeInsertPointPosition={this.props.handleChangeInsertPointPosition}
           />
         })}
       </SortableContainer>;

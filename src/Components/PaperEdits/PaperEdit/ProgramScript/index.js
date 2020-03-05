@@ -37,6 +37,7 @@ const defaultReelName = 'NA';
 const defaultFps = 25;
 const defaultTimecodeOffset = '00:00:00:00';
 const defaultSampleRate = '16000';
+const INSERT_POINT_ELEMENT = { type: 'insert-point', text: 'Insert Point to add selection' }
 
 class ProgramScript extends Component {
   constructor(props) {
@@ -62,7 +63,7 @@ class ProgramScript extends Component {
       .then((json) => {
         const programmeScript = json.programmeScript;
         // Adding an insert point at the end of the list
-        programmeScript.elements.push({ type: 'insert-point', text: 'Insert Point to add selection' });
+        programmeScript.elements.push(INSERT_POINT_ELEMENT);
         this.setState({
           programmeScript: programmeScript
         });
@@ -642,6 +643,48 @@ class ProgramScript extends Component {
     }
   }
 
+  // TODO:
+  handleChangeInsertPointPosition = (indexNumber)=>{
+    console.log('handleChangeInsertPointPosition-indexNumber',indexNumber)
+    const { programmeScript } = this.state;
+    const latestProgrammeScript = {...programmeScript}
+    // insert new programme script
+    // remove insert point from old programme script (eg index different from new one)
+    // save programme script
+    if (latestProgrammeScript) {
+      const elements = [...latestProgrammeScript.elements];
+      // finding an removing insert point before saving to server
+      // find insert point in list,
+      const insertPointElement = elements.find((el) => {
+        return el.type === 'insert-point';
+      });
+      // add new insert point
+      const newInsertPoint = {...INSERT_POINT_ELEMENT}
+      elements.splice( indexNumber+1, 0, newInsertPoint);
+      console.log('handleChangeInsertPointPosition', elements)
+      // remove previous  insert point 
+      if (insertPointElement) {
+        // get insertpoint index
+        const indexOfInsertPoint = elements.indexOf(insertPointElement);
+        elements.splice(indexOfInsertPoint, 1);
+      }
+
+      latestProgrammeScript.elements = elements;
+      ApiWrapper.updatePaperEdit(this.props.projectId, this.props.papereditId, latestProgrammeScript)
+        .then((json) => {
+          if (json.status === 'ok') {
+            this.setState({
+              // playlist: playlist,
+              lastSaved: new Date(),
+              programmeScript: latestProgrammeScript
+            }, () =>{
+              // this.handleUpdatePreview()
+            })
+          }
+        });
+    }
+  }
+
   render() {
     return (
       <>
@@ -796,6 +839,7 @@ class ProgramScript extends Component {
                 handleEditProgrammeScriptElement={ this.handleEditProgrammeScriptElement }
                 handleAddTranscriptElementToProgrammeScript={this.handleAddTranscriptElementToProgrammeScript}
                 handleAddTranscriptSelectionToProgrammeScriptTmpSave={this.handleAddTranscriptSelectionToProgrammeScriptTmpSave}
+                handleChangeInsertPointPosition={this.handleChangeInsertPointPosition}
                 />
                 : null }
             </article>
