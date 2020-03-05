@@ -112,8 +112,8 @@ const SortableItem = sortableElement(({ indexNumber, value, type, handleDelete, 
     <Row>
       <Col>
     {isContextMenuVisible? 
-      <ButtonGroup size="sm" block aria-label="Basic example" style={{ cursor: 'pointer'}}>
-        <Button variant="link" 
+      <ButtonGroup size="sm" block aria-label="Basic example" style={{ cursor: 'pointer', width:'100%'}}>
+        <Button variant="outline-secondary" 
           onClick={()=>{setContextMenuVisibility(false);}} 
         ><FontAwesomeIcon icon={faTimes}/></Button>
          {/* <Button variant="outline-secondary" 
