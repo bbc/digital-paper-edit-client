@@ -131,7 +131,7 @@ class ProgramScript extends Component {
     }
   }
 
-  handleAddTranscriptElementToProgrammeScript = (elementType) => {
+  handleAddTranscriptElementToProgrammeScript = (elementType, indexNumber) => {
     const { programmeScript } = this.state;
     const elements = this.state.programmeScript.elements;
     // TODO: refactor - with helper functions
@@ -139,8 +139,13 @@ class ProgramScript extends Component {
       || elementType === 'note'
       || elementType === 'voice-over') {
       const text = prompt('Add some text for a section title', 'Some place holder text');
-
-      const indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
+      
+      let indexOfInsertPoint = 0;
+      if(indexNumber){
+        indexOfInsertPoint = indexNumber+1;
+      }else{
+        indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
+      }
       const newElement = {
         id: cuid(),
         index: elements.length,
@@ -709,7 +714,7 @@ class ProgramScript extends Component {
                 handleProgrammeScriptOrderChange={ this.handleProgrammeScriptOrderChange }
                 handleDeleteProgrammeScriptElement={ this.handleDeleteProgrammeScriptElement }
                 handleEditProgrammeScriptElement={ this.handleEditProgrammeScriptElement }
-
+                handleAddTranscriptElementToProgrammeScript={this.handleAddTranscriptElementToProgrammeScript}
               />
                 : null }
             </article>
