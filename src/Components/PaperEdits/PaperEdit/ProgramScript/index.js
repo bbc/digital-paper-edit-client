@@ -722,18 +722,23 @@ class ProgramScript extends Component {
                 <Button
                   // block
                   variant="outline-secondary"
+                  size="sm"
                   onClick={ this.handleAddTranscriptSelectionToProgrammeScript }
                   title="Add a text selection, select text in the transcript, then click this button to add it to the programme script"
                 >
                   <FontAwesomeIcon icon={ faPlus } /> Selection
-                </Button>
+                </Button><br/>
                 <input
                   name="advancedSelect"
                   type="checkbox"
                   title="advanced selection - check this box to auto copy across transcript selections to insert point in programme script"
                   checked={this.state.isAdvancedSelect}
                   onChange={this.handleAdvancedSelectCheckbox} 
-                />
+                /> <small 
+                    className={'text-secondary'} 
+                    style={{marginBottom: '0em'}}
+                    title="advanced selection - check this box to auto copy across transcript selections to insert point in programme script"
+                    >{'Auto copy selections'}</small>
               </Col>
               <Col  xs={3}  sm={ 2 } md={ 2 }lg={ 2 } xl={ 2 }>
                 <Dropdown>
