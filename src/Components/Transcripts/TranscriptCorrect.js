@@ -205,7 +205,7 @@ class TranscriptCorrect extends Component {
               console.log('handleAnalyticsEvents')
             }}
             autoSaveContentType={'digitalpaperedit'}
-            handleAutoSaveChanges={ this.handleAutoSave }
+            // handleAutoSaveChanges={ this.handleAutoSave }
           />}
         </Container>
       </>
