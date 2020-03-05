@@ -139,28 +139,31 @@ class ProgramScript extends Component {
       || elementType === 'note'
       || elementType === 'voice-over') {
       const text = prompt('Add some text for a section title', 'Some place holder text');
-      
-      let indexOfInsertPoint = 0;
-      if(indexNumber){
-        indexOfInsertPoint = indexNumber+1;
-      }else{
-        indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
-      }
-      const newElement = {
-        id: cuid(),
-        index: elements.length,
-        type: elementType,
-        text: text
-      };
+      console.log('text',text)
+      if(text){
+        console.log('text2',text)
+        let indexOfInsertPoint = 0;
+        if(indexNumber){
+          indexOfInsertPoint = indexNumber+1;
+        }else{
+          indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
+        }
+        const newElement = {
+          id: cuid(),
+          index: elements.length,
+          type: elementType,
+          text: text
+        };
 
-      elements.splice(indexOfInsertPoint, 0, newElement);
-      programmeScript.elements = elements;
-      // TODO: save to server
-      this.setState({
-        programmeScript: programmeScript
-      },()=>{
-        this.handleSaveProgrammeScript()
-      });
+        elements.splice(indexOfInsertPoint, 0, newElement);
+        programmeScript.elements = elements;
+        // TODO: save to server
+        this.setState({
+          programmeScript: programmeScript
+        },()=>{
+          this.handleSaveProgrammeScript()
+        });
+      }
     }
   }
 
