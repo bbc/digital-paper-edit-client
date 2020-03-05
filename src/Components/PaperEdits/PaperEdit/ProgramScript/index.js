@@ -143,6 +143,7 @@ class ProgramScript extends Component {
   }
 
   handleAddTranscriptElementToProgrammeScript = (elementType, indexNumber) => {
+    console.log('handleAddTranscriptElementToProgrammeScript', elementType, indexNumber)
     const { programmeScript } = this.state;
     const elements = this.state.programmeScript.elements;
     // TODO: refactor - with helper functions
@@ -152,7 +153,7 @@ class ProgramScript extends Component {
       const text = prompt('Add some text for a section title', 'Some place holder text');
       if(text){
         let indexOfInsertPoint = 0;
-        if(indexNumber){
+        if(indexNumber || indexNumber ===0 ){
           indexOfInsertPoint = indexNumber+1;
         }else{
           indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
@@ -204,7 +205,7 @@ class ProgramScript extends Component {
       const elements = programmeScript.elements;
       // TODO: insert at insert point
       let indexOfInsertPoint = 0;
-        if(indexNumber || indexNumber===0){
+        if(indexNumber || indexNumber ===0 ){
           indexOfInsertPoint = indexNumber+1;
         }else{
           indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
@@ -272,7 +273,7 @@ class ProgramScript extends Component {
       const elements = programmeScript.elements;
       // insert at insert point
       let indexOfInsertPoint = 0;
-        if(indexNumber){
+      if(indexNumber || indexNumber === 0 ){
           indexOfInsertPoint = indexNumber+1;
         }else{
           indexOfInsertPoint = this.getIndexPositionOfInsertPoint();
