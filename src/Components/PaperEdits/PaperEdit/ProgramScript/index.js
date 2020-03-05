@@ -203,7 +203,6 @@ class ProgramScript extends Component {
       const { programmeScript } = this.state;
       const elements = programmeScript.elements;
       // TODO: insert at insert point
-      console.log('handleAddTranscriptSelectionToProgrammeScriptTmpSave - indexNumber', indexNumber)
       let indexOfInsertPoint = 0;
         if(indexNumber || indexNumber===0){
           indexOfInsertPoint = indexNumber+1;
@@ -392,13 +391,10 @@ class ProgramScript extends Component {
     // alert('this function has not been implemented yet');
     const edlSq = this.getSequenceJsonEDL();
     const firstElement = edlSq.events[0];
-    // const result = generateADL(edlSq);
-
     let mediaFps = defaultFps;
     if(firstElement.fps && (firstElement.fps!== 'NA')){
       mediaFps = firstElement.fps
     }
-
     const result = generateADL({
       projectOriginator: 'Digital Paper Edit',
       // TODO: it be good to change sequence for the ADL to be same schema
