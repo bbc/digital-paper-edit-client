@@ -776,7 +776,7 @@ class ProgramScript extends Component {
     const sequence = this.getSequenceJsonForFfmpegRemix();
     const programmeScriptTitle = this.state.programmeScript.title;
     // TODO: add date time stamp 
-    const fileName = `${programmeScriptTitle}-${new Date().toISOString()}.mp4`;
+    const fileName = `${programmeScriptTitle}-${new Date().toISOString()}.wav`;
     ApiWrapper.exportAudio(sequence, fileName).then((res)=>{
       console.log('exported', res)
     })
