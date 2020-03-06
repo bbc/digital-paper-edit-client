@@ -762,11 +762,11 @@ class ProgramScript extends Component {
   }
 
   handleExportVideoPreview= ()=>{
-
     const sequence = this.getSequenceJsonForFfmpegRemix();
     const programmeScriptTitle = this.state.programmeScript.title;
-    // TODO: add date time stamp 
-    const fileName = `${programmeScriptTitle}-${new Date().toISOString()}.mp4`;
+    // timeNow -  eg "3-6-2020_5.41.35PM"
+    const timeNow = new Date().toLocaleString().replace(/\//g,'-').replace(/,\ /g,'_').replace(/:/g,'.').replace(/\ /g,'');
+    const fileName = `${programmeScriptTitle}_${timeNow}.wav`;
     ApiWrapper.exportVideo(sequence, fileName).then((res)=>{
       console.log('exported', res)
     })
@@ -775,8 +775,9 @@ class ProgramScript extends Component {
   handleExportAudioPreview= ()=>{
     const sequence = this.getSequenceJsonForFfmpegRemix();
     const programmeScriptTitle = this.state.programmeScript.title;
-    // TODO: add date time stamp 
-    const fileName = `${programmeScriptTitle}-${new Date().toISOString()}.wav`;
+    // timeNow -  eg "3-6-2020_5.41.35PM"
+    const timeNow = new Date().toLocaleString().replace(/\//g,'-').replace(/,\ /g,'_').replace(/:/g,'.').replace(/\ /g,'');
+    const fileName = `${programmeScriptTitle}_${timeNow}.wav`;
     ApiWrapper.exportAudio(sequence, fileName).then((res)=>{
       console.log('exported', res)
     })
