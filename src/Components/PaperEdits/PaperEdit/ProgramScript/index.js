@@ -767,7 +767,7 @@ class ProgramScript extends Component {
     const programmeScriptTitle = this.state.programmeScript.title;
     // TODO: add date time stamp 
     const fileName = `${programmeScriptTitle}-${new Date().toISOString()}.mp4`;
-    ApiWrapper.exportVideo(sequence, programmeScriptTitle).then((res)=>{
+    ApiWrapper.exportVideo(sequence, fileName).then((res)=>{
       console.log('exported', res)
     })
   }
