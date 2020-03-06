@@ -766,7 +766,7 @@ class ProgramScript extends Component {
     const programmeScriptTitle = this.state.programmeScript.title;
     // timeNow -  eg "3-6-2020_5.41.35PM"
     const timeNow = new Date().toLocaleString().replace(/\//g,'-').replace(/,\ /g,'_').replace(/:/g,'.').replace(/\ /g,'');
-    const fileName = `${programmeScriptTitle}_${timeNow}.wav`;
+    const fileName = `${programmeScriptTitle}_${timeNow}.mp4`;
     ApiWrapper.exportVideo(sequence, fileName).then((res)=>{
       console.log('exported', res)
     })
