@@ -422,7 +422,8 @@ class ProgramScript extends Component {
        // TODO: add a check that exports only if urls all contain mp4s, if not cannot send to ffmpeg-remix(?)
         const result = {
           start: element.start,
-          duration: element.end-element.start,
+          end: element.end,
+          // duration: element.end-element.start,
           source: `${ currentTranscript.url }`,
         };
 
