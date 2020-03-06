@@ -916,7 +916,7 @@ class ProgramScript extends Component {
                    <FontAwesomeIcon icon={ faFileWord } /> Word Doc (with ref) <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
                     <Dropdown.Divider />
-                    {whichJsEnv()!=='electron'?
+                    {whichJsEnv()==='electron'?
                       <>
                         <Dropdown.Item
                           onClick={ this.handleExportAudioPreview }
