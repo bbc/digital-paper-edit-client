@@ -32,7 +32,8 @@ import {
   faHeadphones,
   faVideo,
   faFileWord,
-  faFileAlt
+  faFileAlt,
+  faFlask
 } from '@fortawesome/free-solid-svg-icons';
 import timecodes from 'node-timecodes';
 import ProgrammeScript from './ProgrammeScript.js';
@@ -403,42 +404,25 @@ class ProgramScript extends Component {
   }
 
   getSequenceJsonForFfmpegRemix = () => {
-    // const edlSq = {
-    //   'title': this.state.programmeScript.title,
-    //   'events': [ ]
-    // };
 
     const programmeScriptPaperCuts = this.state.programmeScript.elements.map((element) => {
       if (element.type === 'paper-cut') {
+        console.log(element)
         // Get clipName for current transcript
         const currentTranscript = this.props.transcripts.find((tr) => {
           return tr.id === element.transcriptId;
         });
-
-        let mediaFps = defaultFps;
-        if(currentTranscript.metadata && currentTranscript.metadata.fps && (currentTranscript.metadata.fps!== 'NA')){
-          mediaFps = currentTranscript.metadata.fps
-        }
-       // TODO: add a check that exports only if urls all contain mp4s, if not cannot send to ffmpeg-remix(?)
+         // TODO: add a check that exports only if urls all contain mp4s, if not cannot send to ffmpeg-remix(?)
         const result = {
-          start: element.start,
-          end: element.end,
+          start: parseFloat(element.start),
+          end: parseFloat(element.end),
           // duration: element.end-element.start,
           source: `${ currentTranscript.url }`,
         };
-
         return result;
       }
-
       return null;
     }).filter((el) => {return el !== null;});
-    // adding ids to EDL
-    // const programmeScriptPaperCutsWithId = programmeScriptPaperCuts.map((el, index) => {
-    //   el.id = index + 1;
-
-    //   return el;
-    // });
-    // edlSq.events.push(...programmeScriptPaperCuts);
 
     return programmeScriptPaperCuts;
   }
@@ -778,14 +762,22 @@ class ProgramScript extends Component {
   }
 
   handleExportVideoPreview= ()=>{
+
     const sequence = this.getSequenceJsonForFfmpegRemix();
-    ApiWrapper.exportVideo(sequence).then((res)=>{
+    const programmeScriptTitle = this.state.programmeScript.title;
+    // TODO: add date time stamp 
+    const fileName = `${programmeScriptTitle}-${new Date().toISOString()}.mp4`;
+    ApiWrapper.exportVideo(sequence, programmeScriptTitle).then((res)=>{
       console.log('exported', res)
     })
   }
 
   handleExportAudioPreview= ()=>{
-    ApiWrapper.exportAudio().then((res)=>{
+    const sequence = this.getSequenceJsonForFfmpegRemix();
+    const programmeScriptTitle = this.state.programmeScript.title;
+    // TODO: add date time stamp 
+    const fileName = `${programmeScriptTitle}-${new Date().toISOString()}.mp4`;
+    ApiWrapper.exportAudio(sequence, fileName).then((res)=>{
       console.log('exported', res)
     })
   }
@@ -924,19 +916,19 @@ class ProgramScript extends Component {
                    <FontAwesomeIcon icon={ faFileWord } /> Word Doc (with ref) <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
                     <Dropdown.Divider />
-                    {whichJsEnv()==='electron'?
+                    {whichJsEnv()!=='electron'?
                       <>
                         <Dropdown.Item
                           onClick={ this.handleExportAudioPreview }
-                          title="export wav audio preview" 
+                          title="Export wav audio preview - Experimental feature, at the moment you cannot combine audio and video in the same export."
                           >
-                          <FontAwesomeIcon icon={ faFileAudio } /> Audio (wav) <FontAwesomeIcon icon={ faInfoCircle } />
+                          <FontAwesomeIcon icon={ faFileAudio } /> Audio (wav) <FontAwesomeIcon icon={ faFlask } /><FontAwesomeIcon icon={ faInfoCircle } />
                         </Dropdown.Item>
                         <Dropdown.Item
                           onClick={ this.handleExportVideoPreview }
-                          title="export mp4 video preview"
+                          title="Export mp4 video preview - Experimental feature, at the moment you cannot combine audio and video in the same export."
                         >
-                          <FontAwesomeIcon icon={ faFileVideo } /> Video (mp4) <FontAwesomeIcon icon={ faInfoCircle } />
+                          <FontAwesomeIcon icon={ faFileVideo } /> Video (mp4) <FontAwesomeIcon icon={ faFlask } /> <FontAwesomeIcon icon={ faInfoCircle } />
                         </Dropdown.Item>
                         <Dropdown.Divider /> 
                       </>: null   }
