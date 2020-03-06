@@ -22,7 +22,17 @@ import {
   faSync,
   faInfoCircle,
   faTrash,
-  faListUl
+  faListUl,
+  faJsSquare,
+  faFileCode,
+  faFilm,
+  faFileVideo,
+  faStream,
+  faFileAudio,
+  faHeadphones,
+  faVideo,
+  faFileWord,
+  faFileAlt
 } from '@fortawesome/free-solid-svg-icons';
 import timecodes from 'node-timecodes';
 import ProgrammeScript from './ProgrammeScript.js';
@@ -819,52 +829,52 @@ class ProgramScript extends Component {
                       onClick={ this.handleExportEDL }
                       title="export EDL, edit decision list, to import the programme script as a sequence in video editing software - Avid, Premiere, Davinci Resolve, for FCPX choose FCPX XML"
                     >
-                    EDL - Video <FontAwesomeIcon icon={ faInfoCircle } />
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={ this.handleExportADL }
-                      title="export ADL, audio decision list, to import the programme script as a sequence in audio editing software such as SADiE"
-                    >
-                      {/* <FontAwesomeIcon icon={ faFileExport } />  */}
-                  ADL - Audio  <FontAwesomeIcon icon={ faInfoCircle } />
+                    <FontAwesomeIcon icon={ faVideo } /> EDL - Video <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
                     <Dropdown.Item
                       onClick={ this.handleExportFCPX }
                       title="export FCPX XML, to import the programme script as a sequence in Final Cut Pro X, video editing software"
                     >
-                  FCPX <FontAwesomeIcon icon={ faInfoCircle } />
+                  <FontAwesomeIcon icon={ faVideo } /> FCPX <FontAwesomeIcon icon={ faInfoCircle } />
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item
+                      onClick={ this.handleExportADL }
+                      title="export ADL, audio decision list, to import the programme script as a sequence in audio editing software such as SADiE"
+                    >
+                      {/* <FontAwesomeIcon icon={ faFileExport } />  */}
+                      <FontAwesomeIcon icon={ faHeadphones } /> ADL - Audio  <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
                     <Dropdown.Item
                       onClick={ this.handleExportXML }
                       title="export XML, to import the programme script as a sequence into Adobe Premiere, Adobe Audition and Final Cut Pro 7"
                     >
-                  XML - Audition <FontAwesomeIcon icon={ faInfoCircle } />
+                    <FontAwesomeIcon icon={ faHeadphones } /> XML - Audition <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item
                       onClick={ this.handleExportTxt }
                       title="export Text, export the programme script as a text version"
                     >
-                  Text File <FontAwesomeIcon icon={ faInfoCircle } />
+                    <FontAwesomeIcon icon={ faFileAlt } /> Text File <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
                     <Dropdown.Item
                       onClick={ this.handleExportDocx }
                       title="export docx, export the programme script as a word document"
-                    >
-                  Word Document <FontAwesomeIcon icon={ faInfoCircle } />
+                    ><FontAwesomeIcon icon={ faFileWord } /> Word Document <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
                     <Dropdown.Item
                       onClick={ this.handleExportDocxWithClipReference }
                       title="export docx, export the programme script as a word document, with clip name and timecode references, for text selections"
                     >
-                   Word Doc (with ref) <FontAwesomeIcon icon={ faInfoCircle } />
+                   <FontAwesomeIcon icon={ faFileWord } /> Word Doc (with ref) <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item
                       onClick={ this.handleExportJson }
                       title="export Json, export the programme script as a json file"
                     >
-                  Json <FontAwesomeIcon icon={ faInfoCircle } />
+                    <FontAwesomeIcon icon={ faFileCode } /> Json <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
                   </>)}
                   </Dropdown.Menu>
