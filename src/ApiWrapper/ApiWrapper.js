@@ -305,6 +305,26 @@ class ApiWrapper {
 
     return results;
   }
+
+  async exportVideo(data){
+    return new Promise((resolve, reject) => {
+      // In electron prompt for file destination 
+      // default to desktop on first pass 
+
+      const ffmpegRemixData = {
+        input: data, 
+        output: '~/Desktop/test.mp4',
+        ffmpegPath: ''//add electron ffmpeg bin 
+      }
+      resolve(ffmpegRemixData)
+    })
+  }
+
+  async exportAudio(data){
+    return new Promise((resolve, reject) => {
+      resolve(data)
+    })
+  }
 }
 
 export default ApiWrapper;

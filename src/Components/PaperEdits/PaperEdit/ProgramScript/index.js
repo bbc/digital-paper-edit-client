@@ -402,6 +402,46 @@ class ProgramScript extends Component {
     return edlSq;
   }
 
+  getSequenceJsonForFfmpegRemix = () => {
+    // const edlSq = {
+    //   'title': this.state.programmeScript.title,
+    //   'events': [ ]
+    // };
+
+    const programmeScriptPaperCuts = this.state.programmeScript.elements.map((element) => {
+      if (element.type === 'paper-cut') {
+        // Get clipName for current transcript
+        const currentTranscript = this.props.transcripts.find((tr) => {
+          return tr.id === element.transcriptId;
+        });
+
+        let mediaFps = defaultFps;
+        if(currentTranscript.metadata && currentTranscript.metadata.fps && (currentTranscript.metadata.fps!== 'NA')){
+          mediaFps = currentTranscript.metadata.fps
+        }
+       // TODO: add a check that exports only if urls all contain mp4s, if not cannot send to ffmpeg-remix(?)
+        const result = {
+          start: element.start,
+          duration: element.end-element.start,
+          source: `${ currentTranscript.url }`,
+        };
+
+        return result;
+      }
+
+      return null;
+    }).filter((el) => {return el !== null;});
+    // adding ids to EDL
+    // const programmeScriptPaperCutsWithId = programmeScriptPaperCuts.map((el, index) => {
+    //   el.id = index + 1;
+
+    //   return el;
+    // });
+    // edlSq.events.push(...programmeScriptPaperCuts);
+
+    return programmeScriptPaperCuts;
+  }
+
   // https://www.npmjs.com/package/downloadjs
   // https://www.npmjs.com/package/@pietrop/edl-composer
   handleExportEDL = () => {
@@ -734,8 +774,21 @@ class ProgramScript extends Component {
     }else{
       alert('ok no worries, nothing changed')
     }
-
   }
+
+  handleExportVideoPreview= ()=>{
+    const sequence = this.getSequenceJsonForFfmpegRemix();
+    ApiWrapper.exportVideo(sequence).then((res)=>{
+      console.log('exported', res)
+    })
+  }
+
+  handleExportAudioPreview= ()=>{
+    ApiWrapper.exportAudio().then((res)=>{
+      console.log('exported', res)
+    })
+  }
+
 
   render() {
     return (
@@ -870,6 +923,22 @@ class ProgramScript extends Component {
                    <FontAwesomeIcon icon={ faFileWord } /> Word Doc (with ref) <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
                     <Dropdown.Divider />
+                    {whichJsEnv()==='electron'?
+                      <>
+                        <Dropdown.Item
+                          onClick={ this.handleExportAudioPreview }
+                          title="export wav audio preview" 
+                          >
+                          <FontAwesomeIcon icon={ faFileAudio } /> Audio (wav) <FontAwesomeIcon icon={ faInfoCircle } />
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={ this.handleExportVideoPreview }
+                          title="export mp4 video preview"
+                        >
+                          <FontAwesomeIcon icon={ faFileVideo } /> Video (mp4) <FontAwesomeIcon icon={ faInfoCircle } />
+                        </Dropdown.Item>
+                        <Dropdown.Divider /> 
+                      </>: null   }
                     <Dropdown.Item
                       onClick={ this.handleExportJson }
                       title="export Json, export the programme script as a json file"
