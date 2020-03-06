@@ -279,7 +279,6 @@ class Transcript extends Component {
         {`span.words[data-prev-times~="${ Math.floor(time) }"][data-transcript-id="${ this.props.transcriptId }"] { color: ${ unplayedColor } }`}
       </style>
     );
-      console.log('ORIGINAL this.state.annotations ', this.state.annotations )
     return (
       <>
         <style scoped>
