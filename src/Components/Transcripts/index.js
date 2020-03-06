@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Container from 'react-bootstrap/Container';
-import { faFileAlt, faGrinTongueSquint } from '@fortawesome/free-solid-svg-icons';
+import { faFileAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ListPageTranscript from '../lib/ListPageTranscript';
 import NewTranscriptFormModal from './NewTranscriptFormModal';

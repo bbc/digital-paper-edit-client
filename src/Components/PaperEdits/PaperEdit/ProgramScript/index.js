@@ -21,7 +21,7 @@ import {
   faPlus,
   faSync,
   faInfoCircle,
-  faSave,
+  faTrash,
   faListUl
 } from '@fortawesome/free-solid-svg-icons';
 import timecodes from 'node-timecodes';
@@ -656,7 +656,6 @@ class ProgramScript extends Component {
 
   // TODO:
   handleChangeInsertPointPosition = (indexNumber)=>{
-    console.log('handleChangeInsertPointPosition-indexNumber',indexNumber)
     const { programmeScript } = this.state;
     const latestProgrammeScript = {...programmeScript}
     // insert new programme script
@@ -672,7 +671,6 @@ class ProgramScript extends Component {
       // add new insert point
       const newInsertPoint = {...INSERT_POINT_ELEMENT}
       elements.splice( indexNumber+1, 0, newInsertPoint);
-      console.log('handleChangeInsertPointPosition', elements)
       // remove previous  insert point 
       if (insertPointElement) {
         // get insertpoint index
@@ -703,6 +701,32 @@ class ProgramScript extends Component {
     });
   }
 
+  handleDeleteProgrammeScriptContent = ()=>{
+   // eslint-disable-next-line no-restricted-globals
+    const confirmation = confirm('Are you usure you want to delete the content of your programme script?');
+    if(confirmation){
+      const { programmeScript } = this.state;
+      const latestProgrammeScript = {...programmeScript}
+      // latestProgrammeScript.elements = [];
+      latestProgrammeScript.elements = [{...INSERT_POINT_ELEMENT}]
+      ApiWrapper.updatePaperEdit(this.props.projectId, this.props.papereditId, latestProgrammeScript)
+      .then((json) => {
+        if (json.status === 'ok') {
+          this.setState({
+            // playlist: playlist,
+            lastSaved: new Date(),
+            programmeScript: latestProgrammeScript
+          }, () =>{
+            this.handleUpdatePreview()
+          })
+        }
+      });
+    }else{
+      alert('ok no worries, nothing changed')
+    }
+
+  }
+
   render() {
     return (
       <>
@@ -718,7 +742,7 @@ class ProgramScript extends Component {
           <Card.Header>
 
             <Row noGutters>
-              <Col xs={6} sm={ 3 } md={ 3 }lg={ 3 } xl={ 3 }>
+              <Col xs={5} sm={ 3 } md={ 3 }lg={ 3 } xl={ 3 }>
                 <Button
                   // block
                   variant="outline-secondary"
@@ -740,7 +764,7 @@ class ProgramScript extends Component {
                     title="advanced selection - check this box to auto copy across transcript selections to insert point in programme script"
                     >{'Auto copy selections'}</small>
               </Col>
-              <Col  xs={3}  sm={ 2 } md={ 2 }lg={ 2 } xl={ 2 }>
+              <Col  xs={4}  sm={ 2 } md={ 2 }lg={ 2 } xl={ 2 }>
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-secondary">
                     <FontAwesomeIcon icon={ faListUl } />
@@ -767,7 +791,7 @@ class ProgramScript extends Component {
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
-              <Col  xs={2} sm={ 1 } md={ 1 }lg={ 1 } xl={ 1 }>
+              <Col  xs={3} sm={ 1 } md={ 1 }lg={ 1 } xl={ 1 }>
                 <Button variant="outline-secondary"
                   onClick={ this.handleUpdatePreview }
                   // size="sm"
@@ -777,7 +801,7 @@ class ProgramScript extends Component {
                   <FontAwesomeIcon icon={ faSync } />
                 </Button>
               </Col>
-              <Col  xs={6} sm={ 2 } md={ 2 }lg={ 2 } xl={ 2 }>
+              <Col  xs={5} sm={ 2 } md={ 2 }lg={ 2 } xl={ 2 }>
                 <Dropdown>
                   <Dropdown.Toggle title={'Export programme script, click to see options'} variant="outline-secondary">
                     <FontAwesomeIcon icon={ faShare } /> Export
@@ -846,13 +870,25 @@ class ProgramScript extends Component {
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
-              <Col xs={0} sm={ 0 } md={ 1 }lg={1 } xl={ 1 }>
-
+              <Col className={'d-none d-sm-block'} sm={ 0 } md={ 1 }lg={1 } xl={ 1 }>
               </Col>
-              <Col  xs={6} sm={ 3 } md={ 3 }lg={ 3 } xl={ 3 }>
+              <Col  xs={4} sm={ 2} md={ 2 }lg={ 2 } xl={ 2 }>
                 <div>
-                  <small className={'text-secondary'} style={{marginBottom: '0em'}}>{ `Last saved at`}<br/>{ `${this.state.lastSaved.toLocaleString()}`}</small>
+                  <small className={'text-secondary'} style={{marginBottom: '0em'}}
+                  title={`Last Saved at ${this.state.lastSaved.toLocaleString()}`}
+                  >{ `Saved at`}<br/>{ `${this.state.lastSaved.toLocaleTimeString()}`}</small>
                 </div>
+              </Col>
+              <Col  xs={3} sm={ 1} md={ 1 }lg={ 1 } xl={ 1}>
+              <Button variant="outline-secondary"
+                  onClick={ this.handleDeleteProgrammeScriptContent }
+                  // size="sm"
+                  title="Delete programme script content"
+                  // block
+                >
+                       <FontAwesomeIcon icon={ faTrash } />
+                </Button>
+       
               </Col>
             </Row>
 
