@@ -32,7 +32,8 @@ import {
   faHeadphones,
   faVideo,
   faFileWord,
-  faFileAlt
+  faFileAlt,
+  faFlask
 } from '@fortawesome/free-solid-svg-icons';
 import timecodes from 'node-timecodes';
 import ProgrammeScript from './ProgrammeScript.js';
@@ -402,6 +403,30 @@ class ProgramScript extends Component {
     return edlSq;
   }
 
+  getSequenceJsonForFfmpegRemix = () => {
+
+    const programmeScriptPaperCuts = this.state.programmeScript.elements.map((element) => {
+      if (element.type === 'paper-cut') {
+        console.log(element)
+        // Get clipName for current transcript
+        const currentTranscript = this.props.transcripts.find((tr) => {
+          return tr.id === element.transcriptId;
+        });
+         // TODO: add a check that exports only if urls all contain mp4s, if not cannot send to ffmpeg-remix(?)
+        const result = {
+          start: parseFloat(element.start),
+          end: parseFloat(element.end),
+          // duration: element.end-element.start,
+          source: `${ currentTranscript.url }`,
+        };
+        return result;
+      }
+      return null;
+    }).filter((el) => {return el !== null;});
+
+    return programmeScriptPaperCuts;
+  }
+
   // https://www.npmjs.com/package/downloadjs
   // https://www.npmjs.com/package/@pietrop/edl-composer
   handleExportEDL = () => {
@@ -734,8 +759,43 @@ class ProgramScript extends Component {
     }else{
       alert('ok no worries, nothing changed')
     }
-
   }
+
+  handleExportVideoPreview= ()=>{
+    const sequence = this.getSequenceJsonForFfmpegRemix();
+    const programmeScriptTitle = this.state.programmeScript.title;
+    // timeNow -  eg "3-6-2020_5.41.35PM"
+    const timeNow = new Date().toLocaleString().replace(/\//g,'-').replace(/,\ /g,'_').replace(/:/g,'.').replace(/\ /g,'');
+    const fileName = `${programmeScriptTitle}_${timeNow}.mp4`;
+    ApiWrapper.exportVideo(sequence, fileName).then((res)=>{
+      console.log('exported', res)
+    })
+  }
+
+  handleExportAudioPreview= ()=>{
+    const sequence = this.getSequenceJsonForFfmpegRemix();
+    const programmeScriptTitle = this.state.programmeScript.title;
+    // timeNow -  eg "3-6-2020_5.41.35PM"
+    const timeNow = new Date().toLocaleString().replace(/\//g,'-').replace(/,\ /g,'_').replace(/:/g,'.').replace(/\ /g,'');
+    const fileName = `${programmeScriptTitle}_${timeNow}.wav`;
+    const waveForm = false;
+    ApiWrapper.exportAudio(sequence, fileName, false).then((res)=>{
+      console.log('exported', res)
+    })
+  }
+
+  handleExportAudioPreviewWithVideoWaveform = ()=>{
+    const sequence = this.getSequenceJsonForFfmpegRemix();
+    const programmeScriptTitle = this.state.programmeScript.title;
+    // timeNow -  eg "3-6-2020_5.41.35PM"
+    const timeNow = new Date().toLocaleString().replace(/\//g,'-').replace(/,\ /g,'_').replace(/:/g,'.').replace(/\ /g,'');
+    const fileName = `${programmeScriptTitle}_${timeNow}.mp4`;
+    const waveForm = true;
+    ApiWrapper.exportAudio(sequence, fileName, waveForm).then((res)=>{
+      console.log('exported', res)
+    })
+  }
+
 
   render() {
     return (
@@ -870,6 +930,28 @@ class ProgramScript extends Component {
                    <FontAwesomeIcon icon={ faFileWord } /> Word Doc (with ref) <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
                     <Dropdown.Divider />
+                    {whichJsEnv()==='electron'?
+                      <>
+                        <Dropdown.Item
+                          onClick={ this.handleExportAudioPreview }
+                          title="Export wav audio preview - Experimental feature, at the moment you cannot combine audio and video in the same export."
+                          >
+                          <FontAwesomeIcon icon={ faFileAudio } /> Audio (wav) <FontAwesomeIcon icon={ faFlask } /><FontAwesomeIcon icon={ faInfoCircle } />
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={ this.handleExportAudioPreviewWithVideoWaveform }
+                          title="Export audio preview as video with animated wave form - Experimental feature, at the moment you cannot combine audio and video in the same export."
+                          >
+                          <FontAwesomeIcon icon={ faFileAudio } /> Audio (mp4) video <FontAwesomeIcon icon={ faFlask } /><FontAwesomeIcon icon={ faInfoCircle } />
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={ this.handleExportVideoPreview }
+                          title="Export mp4 video preview - Experimental feature, at the moment you cannot combine audio and video in the same export."
+                        >
+                          <FontAwesomeIcon icon={ faFileVideo } /> Video (mp4) <FontAwesomeIcon icon={ faFlask } /> <FontAwesomeIcon icon={ faInfoCircle } />
+                        </Dropdown.Item>
+                        <Dropdown.Divider /> 
+                      </>: null   }
                     <Dropdown.Item
                       onClick={ this.handleExportJson }
                       title="export Json, export the programme script as a json file"
