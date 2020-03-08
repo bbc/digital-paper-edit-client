@@ -778,7 +778,20 @@ class ProgramScript extends Component {
     // timeNow -  eg "3-6-2020_5.41.35PM"
     const timeNow = new Date().toLocaleString().replace(/\//g,'-').replace(/,\ /g,'_').replace(/:/g,'.').replace(/\ /g,'');
     const fileName = `${programmeScriptTitle}_${timeNow}.wav`;
-    ApiWrapper.exportAudio(sequence, fileName).then((res)=>{
+    const waveForm = false;
+    ApiWrapper.exportAudio(sequence, fileName, false).then((res)=>{
+      console.log('exported', res)
+    })
+  }
+
+  handleExportAudioPreviewWithVideoWaveform = ()=>{
+    const sequence = this.getSequenceJsonForFfmpegRemix();
+    const programmeScriptTitle = this.state.programmeScript.title;
+    // timeNow -  eg "3-6-2020_5.41.35PM"
+    const timeNow = new Date().toLocaleString().replace(/\//g,'-').replace(/,\ /g,'_').replace(/:/g,'.').replace(/\ /g,'');
+    const fileName = `${programmeScriptTitle}_${timeNow}.mp4`;
+    const waveForm = true;
+    ApiWrapper.exportAudio(sequence, fileName, waveForm).then((res)=>{
       console.log('exported', res)
     })
   }
@@ -924,6 +937,12 @@ class ProgramScript extends Component {
                           title="Export wav audio preview - Experimental feature, at the moment you cannot combine audio and video in the same export."
                           >
                           <FontAwesomeIcon icon={ faFileAudio } /> Audio (wav) <FontAwesomeIcon icon={ faFlask } /><FontAwesomeIcon icon={ faInfoCircle } />
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={ this.handleExportAudioPreviewWithVideoWaveform }
+                          title="Export audio preview as video with animated wave form - Experimental feature, at the moment you cannot combine audio and video in the same export."
+                          >
+                          <FontAwesomeIcon icon={ faFileAudio } /> Audio (mp4) video <FontAwesomeIcon icon={ faFlask } /><FontAwesomeIcon icon={ faInfoCircle } />
                         </Dropdown.Item>
                         <Dropdown.Item
                           onClick={ this.handleExportVideoPreview }

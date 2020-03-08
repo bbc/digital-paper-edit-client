@@ -319,7 +319,7 @@ class ApiWrapper {
     })
   }
 
-  async exportAudio(data, fileName){
+  async exportAudio(data, fileName,waveForm){
     return new Promise((resolve, reject) => {
       // In electron prompt for file destination 
       // default to desktop on first pass 
