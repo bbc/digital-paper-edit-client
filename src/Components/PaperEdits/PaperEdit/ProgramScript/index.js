@@ -801,8 +801,7 @@ class ProgramScript extends Component {
     return (
       <>
         <Card>
-          <Card.Header>
-            {/* <hr/> */}
+          <Card.Header style={{ padding: '1em',paddingTop: '0em'}}>
             { !this.state.resetPreview ?
               <PreviewCanvas playlist={ this.state.playlist }
                width={ 300 }
