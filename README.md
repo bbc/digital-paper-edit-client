@@ -6,11 +6,12 @@ See [intro](./docs/intro.md) and [slides](https://docs.google.com/presentation/d
 
 ## Current status
 
-The client and [API](https://github.com/bbc/digital-paper-edit-api/) is **currently not actively developed** by the BBC. The actively developed and maintained version of Digital Paper Edit is the [firebase version](https://github.com/bbc/digital-paper-edit-firebase). For the full list of active/inactive DPE repos, see [here](https://github.com/bbc/digital-paper-edit-client/#active)
- 
-This is because we are prioritising getting Digital Paper Edit in front of our journalist.
+The client and API was initially developed to be portable to any platform - i.e local, web, cloud provider, and Electron.
+We are currently developing and maintaining a **[firebase version](https://github.com/bbc/digital-paper-edit-firebase)** that merged the functionalities of the client (this repo) and [API](https://github.com/bbc/digital-paper-edit-api/). The BBC is **not actively working on this repo and digital-paper-edit-api**. This is because we are prioritising getting Digital Paper Edit in front of our journalists. For the full list of active/inactive DPE repos, see [here](https://github.com/bbc/digital-paper-edit-client/#active).
 
-The client and API was initially developed to be portable to any platform - i.e local, web, cloud provider, and Electron. The client and API version is actively maintained by @pietrop. [See Pietro's fork here.](https://github.com/pietrop/digital-paper-edit-client)
+A fork of the client and API is still being developed in the open, in a **[separate fork](https://github.com/pietrop/digital-paper-edit-client)**, thanks to @pietrop. 
+
+We don't want the opensource collaboration to stop, so we will be pulling in changes from the forks. If there's a valuable feature that we haven't yet implemented from the fork, please open an issue in **[this repo](https://github.com/bbc/digital-paper-edit-firebase)** or get in touch with us!
 
 ### Collaborating across forks
 
@@ -30,6 +31,8 @@ When manually adding changes to the changes from a fork - there are challenges o
 These dependencies (non-exhaustive) they might've been forked also. In this case, this is a matter of updating the BBC's version with the newest changes from the dependency's forks and making sure everything works together.
 
 For understanding the approach see [this PR](https://github.com/bbc/digital-paper-edit-client/pull/94).
+
+---
 
 ## Project Architecture
 
