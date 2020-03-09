@@ -45,7 +45,7 @@ class Paragraph extends Component {
         <Col xs={ 12 } sm={ 12 } md={ 3 } lg={ 3 } xl={ 2 }
           style={ { cursor: 'pointer', width: '100%' } }
           className={ 'text-truncate' }
-          title={ `${ this.props.speakerName.toUpperCase() } -  ${ shortTimecode(this.props.paragraph[0].start) }` }>
+          title={ `${ this.props.speakerName.toUpperCase() } -  ${ shortTimecode(this.props.paragraph[0].start) } | Click on a speaker to jump to the corresponding time in the media.` }>
           <span
             className={ [ styles.speaker, styles.unselectable, 'timecode' ].join(' ') }
             data-start={ this.props.paragraph[0].start }

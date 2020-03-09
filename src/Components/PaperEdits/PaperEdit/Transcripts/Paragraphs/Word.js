@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { shortTimecode } from '@pietrop/react-transcript-editor/timecodeConverter';
 // import removePunctuation from '../../../../../../Util/remove-punctuation/index.js';
 import removePunctuation from '../../../../../Util/remove-punctuation/index.js';
 
@@ -25,7 +26,8 @@ class Word extends Component {
 
     return (
       <span
-        title={ `start:${ word.start } - end:${ word.end }` }
+        style={{cursor: 'pointer'}}
+        title={ `start:${ shortTimecode(word.start) } - end:${ shortTimecode(word.end) } | Double click on a word to jump to the corresponding time in the media.` }
         data-prev-times = { this.generatePreviousTimes( word.start) }
         className={ [ 'words',
           // , styles.highlightedWord
