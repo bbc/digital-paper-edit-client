@@ -1,5 +1,5 @@
 /**
- * TODO: remove this and export from @bbc/react-transcript-editor digital-paper-edit STT import draftJs converter
+ * TODO: remove this and export from react-transcript-editor digital-paper-edit STT import draftJs converter
 
  edge cases
 - more segments then words - not an issue if you start by matching words with segment

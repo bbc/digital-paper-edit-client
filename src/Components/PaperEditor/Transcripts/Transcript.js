@@ -334,6 +334,7 @@ class Transcript extends Component {
             onTimeUpdate={ (e) => {this.setState({ currentTime: e.target.currentTime });} }
             style={ {
               width: '100%',
+              height: '200px',
               backgroundColor: 'black'
             } }
             controls/>
@@ -347,7 +348,9 @@ class Transcript extends Component {
             ref={ this.videoRef }
             onTimeUpdate={ (e) => {this.setState({ currentTime: e.target.currentTime });} }
             style={ {
+              marginTop: '0',
               width: '100%',
+              height: '200px',
               backgroundColor: 'black'
             } }
             controls/>

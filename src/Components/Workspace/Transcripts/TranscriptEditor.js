@@ -52,9 +52,9 @@ class TranscriptEditor extends Component {
     alert('save to server');
 
     // TODO: decide how to deal with transcript corrections
-    // exporting digitalpaperedit in @bbc/react-transcript-editor@latest doesn't give you
+    // exporting digitalpaperedit in react-transcript-editor@latest doesn't give you
     // corrected text with timecodes, only "original" uncorrected text even if transcript might
-    // have been corrected, because of outstandin PR in bbc/react-transcript-editor
+    // have been corrected, because of outstandin PR in react-transcript-editor
     // https://github.com/bbc/react-transcript-editor/pull/144
     // which should be addressed after https://github.com/bbc/react-transcript-editor/pull/160
     //
