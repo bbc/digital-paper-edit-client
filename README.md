@@ -6,8 +6,8 @@ See [intro](./docs/intro.md) and [slides](https://docs.google.com/presentation/d
 
 ## Current status
 
-The client and [API](https://github.com/bbc/digital-paper-edit-api/) is currently not actively being developed by the BBC. The actively developed and maintained version of Digital Paper Edit is the [firebase version](https://github.com/bbc/digital-paper-edit-firebase).
-
+The client and [API](https://github.com/bbc/digital-paper-edit-api/) is **currently not actively developed** by the BBC. The actively developed and maintained version of Digital Paper Edit is the [firebase version](https://github.com/bbc/digital-paper-edit-firebase). For the full list of active/inactive DPE repos, see [here](https://github.com/bbc/digital-paper-edit-client/#active)
+ 
 This is because we are prioritising getting Digital Paper Edit in front of our journalist.
 
 The client and API was initially developed to be portable to any platform - i.e local, web, cloud provider, and Electron. The client and API version is actively maintained by @pietrop. [See Pietro's fork here.](https://github.com/pietrop/digital-paper-edit-client)
