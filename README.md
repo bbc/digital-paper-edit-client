@@ -1,10 +1,35 @@
 # Digital Paper Edit - Client
 
----> _Work in progress_ <--
-
 An application to make it faster, easier and more accessible to edit audio and video interviews using automatically generated transcriptions form STT service.
 
 See [intro](./docs/intro.md) and [slides](https://docs.google.com/presentation/d/1vVe_hgTj6JhLhU2WuZBOWx41ajcKX-8m8Xa0NIVZT2M/edit?usp=sharing) for more info on the project and [user journey](./docs/user-journey/user-journey.md) for a high level overview of the user journey.
+
+## Current status
+
+The client and [API](https://github.com/bbc/digital-paper-edit-api/) is currently not actively being developed by the BBC. The actively developed and maintained version of Digital Paper Edit is the [firebase version](https://github.com/bbc/digital-paper-edit-firebase).
+
+This is because we are prioritising getting Digital Paper Edit in front of our journalist.
+
+The client and API was initially developed to be portable to any platform - i.e local, web, cloud provider, and Electron. The client and API version is actively maintained by @pietrop. [See Pietro's fork here.](https://github.com/pietrop/digital-paper-edit-client)
+
+### Collaborating across forks
+
+We will look at the changes in the [fork](https://github.com/pietrop/digital-paper-edit-client) and manually add them to our [firebase version](https://github.com/bbc/digital-paper-edit-firebase).
+
+When manually adding changes to the changes from a fork - there are challenges of pulling in dependencies, such as:
+
+```javascript
+[
+  ("@bbc/aes31-adl-composer": "^1.0.1"),
+  ("@bbc/digital-paper-edit-react-components": "^1.3.2"),
+  ("@bbc/fcpx-xml-composer": "^1.0.0"),
+  ("@bbc/react-transcript-editor": "^1.4.0")
+];
+```
+
+These dependencies (non-exhaustive) they might've been forked also. In this case, this is a matter of updating the BBC's version with the newest changes from the dependency's forks and making sure everything works together.
+
+For understanding the approach see [this PR](https://github.com/bbc/digital-paper-edit-client/pull/94).
 
 ## Project Architecture
 
@@ -12,18 +37,27 @@ It's a React, Express, Electron, Adobe CEP, AWS stack to be able to deploy one m
 
 The project is organised across these repository
 
-- [`bbc/digital-paper-edit-client`](https://github.com/bbc/digital-paper-edit-client) - React Client - [npm](https://www.npmjs.com/package/@bbc/digital-paper-edit-client)
+### Active
+
 - [`bbc/digital-paper-edit-react-components`](https://github.com/bbc/digital-paper-edit-react-components) - React Storybook for Client components - `npm`.
+- [`bbc/digital-paper-edit-infrastructure`](https://github.com/bbc/digital-paper-edit-infrastructure) - Private repo: AWS infrastructure for API server and Client.
+- [`bbc/digital-paper-edit-stt-proxy`](https://github.com/bbc/digital-paper-edit-stt-proxy) - An express server to connect to STT service
+
+### Inactive
+
+- [`bbc/digital-paper-edit-client`](https://github.com/bbc/digital-paper-edit-client) - React Client - [npm](https://www.npmjs.com/package/@bbc/digital-paper-edit-client)
 - [`bbc/digital-paper-edit-api`](https://github.com/bbc/digital-paper-edit-api) - Express server API - [npm](https://www.npmjs.com/package/@bbc/digital-paper-edit-api)
-- [`bbc/digital-paper-edit-infrastructure`](https://github.com/bbc/digital-paper-edit-infrastructure) - AWS infrastructure for API server and Client.
 - [`bbc/digital-paper-edit-electron`](https://github.com/bbc/digital-paper-edit-electron) - Electron, Cross Platform Desktop app - Mac, Windows, Linux
 - [`bbc/digital-paper-edit-cep`](https://github.com/bbc/digital-paper-edit-cep) Adobe CEP (Common Extensibility Platform) - Premiere Pro Plugin Panel
 
+#### Archived
+
 Micro services for web app backend
 
-- [`bbc/digital-paper-edit-stt-proxy`](https://github.com/bbc/digital-paper-edit-stt-proxy) - An express server to connect to STT service
 - [`bbc/digital-paper-edit-video-preview-converter`](https://github.com/bbc/digital-paper-edit-video-preview-converter) - An express server to generate an mp4 video preview using ffmpeg
 - [`bbc/digital-paper-edit-audio-converter`](https://github.com/bbc/digital-paper-edit-audio-converter) - An express server to generate an audio file with the stt specs to be able to send it to `STT Proxy`.
+
+---
 
 [See here to see them as a list in github](https://github.com/topics/digital-paper-edit).
 
@@ -186,9 +220,9 @@ See [docs](https://github.com/bbc/digital-paper-edit-client/commit/15a9fe2d06c9b
 In `public/index.html`:
 
 ```js
-if(window.process && window.process.versions.electron){
-        const ElectronWrapper = require('../src/ElectronWrapper/index.js');
-        window.ElectronWrapper = ElectronWrapper;
+if (window.process && window.process.versions.electron) {
+  const ElectronWrapper = require("../src/ElectronWrapper/index.js");
+  window.ElectronWrapper = ElectronWrapper;
 }
 ```
 
