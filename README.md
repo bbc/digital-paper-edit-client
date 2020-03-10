@@ -70,8 +70,6 @@ The projects use [npm semantic versioning](https://docs.npmjs.com/about-semantic
 
 ![](https://raw.githubusercontent.com/bbc/digital-paper-edit-infrastructure/master/docs/adr/newest_arch.png)
 
-Between the 5 June and 17 July there is a sprint board used for organising the backlog for each two-week sprint cycle.
-
 - [BBC News Labs - Digital Paper Edit - Sprint Board](https://github.com/orgs/bbc/projects/33) is a Github project board [with linked repository](https://help.github.com/en/articles/linking-a-repository-to-a-project-board) where issues are added from the relevant repository listed in architecture section.
 
 The project is divided into [concurrent milestones as described here](https://github.com/bbc/digital-paper-edit-client/milestones)
