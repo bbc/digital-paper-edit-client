@@ -345,6 +345,8 @@ class ProgramScript extends Component {
       }, ()=>{
         this.handleSaveProgrammeScript();
         this.handleUpdatePreview();
+        // clearing the selection to avoid bugs
+        window.getSelection().collapse(document,0);
       });
     }
     else {
