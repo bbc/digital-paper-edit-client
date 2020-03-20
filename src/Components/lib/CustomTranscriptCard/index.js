@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
 import Alert from 'react-bootstrap/Alert';
+import ListGroup from 'react-bootstrap/ListGroup';
 import Spinner from 'react-bootstrap/Spinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -72,11 +73,11 @@ class CustomTranscriptCard extends Component {
     }
 
     return (
-      <Card
+      <ListGroup.Item
         border={ borderStatus }
-        style={ { width: '100%', marginBottom: '2em' } }
+        // style={ { width: '100%', marginBottom: '2em' } }
       >
-        <Card.Body>
+        {/* <Card.Body> */}
           <Row>
             <Col xs={ 12 } sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
               <Card.Title>
@@ -87,7 +88,7 @@ class CustomTranscriptCard extends Component {
               <Card.Link>
                 <Button
                   onClick={ this.handleEdit }
-                  variant="outline-secondary"
+                  variant="btn-secondary"
                   size="sm"
                 >
                   <FontAwesomeIcon icon={ faPen } />
@@ -98,7 +99,7 @@ class CustomTranscriptCard extends Component {
               <Card.Link>
                 <Button
                   onClick={ this.handleDelete }
-                  variant="outline-secondary"
+                  variant="btn-secondary"
                   size="sm"
                 >
                   <FontAwesomeIcon icon={ faTrash } />
@@ -148,8 +149,8 @@ class CustomTranscriptCard extends Component {
               {description}
             </Col>
           </Row>
-        </Card.Body>
-      </Card>
+        {/* </Card.Body> */}
+      </ListGroup.Item>
     );
   }
 }

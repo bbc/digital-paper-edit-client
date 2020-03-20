@@ -1,4 +1,5 @@
 import React from 'react';
+import ListGroup from 'react-bootstrap/ListGroup';
 import SimpleCard from '../SimpleCard';
 
 class List extends React.Component {
@@ -24,9 +25,11 @@ class List extends React.Component {
     });
 
     return (<>
-      <section style={ { height: '75vh', overflow: 'scroll' } }>
+      <ListGroup style={ { height: '75vh', overflow: 'scroll' } } 
+      variant="flush"
+      >
         {listItems}
-      </section>
+      </ListGroup>
     </>
     );
   }

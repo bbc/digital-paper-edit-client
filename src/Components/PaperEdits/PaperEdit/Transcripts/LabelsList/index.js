@@ -91,7 +91,7 @@ class LabelsList extends Component {
               {label.label}
             </Col>
 
-            <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }>
+            <Col xs={ 1 } sm={2 } md={2 } lg={2 } xl={2 }>
               {/* Edit label */}
 
               {label.label.toLowerCase() !== 'default' ?
@@ -102,11 +102,11 @@ class LabelsList extends Component {
                   labelId={ label.id }
                   show={ this.state.isLabelmodalShown }
                   onLabelSaved={ this.onLabelSaved }
-                  openBtn={ <span> <FontAwesomeIcon icon={ faPen } /></span> }
+                  openBtn={ <span><FontAwesomeIcon icon={ faPen } /></span> }
                 /> : <Button title={ 'edit label' } variant="link" size="sm" disabled>
-                  <FontAwesomeIcon icon={ faPen } /> </Button> }
+                  <FontAwesomeIcon icon={ faPen } /></Button> }
             </Col>
-            <Col xs={ 1 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }>
+            <Col xs={ 1 } sm={2 } md={ 2 } lg={ 2 } xl={ 2 }>
               <Button title={ 'delete label' } variant="link" size="sm"
                 onClick={ (e) => {this.removeLabel(label.id, e);} }
                 disabled={ label.label.toLowerCase() === 'default' ? true : false }>
@@ -141,12 +141,12 @@ class LabelsList extends Component {
 
       {this.props.isLabelsListOpen ? <>
         {/* <br/> */}
-        <Card>
-          <Card.Header>
+        <div>
+          <Card.Body>
             <FontAwesomeIcon icon={ faTags } /> <FontAwesomeIcon icon={ faCog } /> Labels
-          </Card.Header>
+          </Card.Body>
           { labelsList }
-          <Card.Footer className="text-muted">
+          <Card.Body className="text-muted">
             <LabelModal
               color={ randomColor() }
               label={ '' }
@@ -154,10 +154,10 @@ class LabelsList extends Component {
               labelId={ null }
               show={ this.state.isLabelmodalShown }
               onLabelSaved={ this.onLabelSaved }
-              openBtn={ <Button variant="outline-secondary" block><FontAwesomeIcon icon={ faTag } /> Create New Label</Button> }
+              openBtn={ <><FontAwesomeIcon icon={ faTag } /> Create New Label</> }
             />
-          </Card.Footer>
-        </Card>
+          </Card.Body>
+        </div>
       </> : ''}
 
     </>

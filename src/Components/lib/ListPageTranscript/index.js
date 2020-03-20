@@ -3,6 +3,7 @@ import SearchBar from '../SearchBar';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import ListGroup from 'react-bootstrap/ListGroup';
 import CustomTranscriptCard from '../CustomTranscriptCard';
 import includesText from '../../../Util/includes-text';
 import whichJsEnv from '../../../Util/which-js-env';
@@ -89,9 +90,11 @@ class ListPageTranscript extends Component {
     if (this.props.items !== null && this.props.items.length !== 0) {
       content = (
         <>
-          <section style={ { height: '75vh', overflow: 'scroll' } }>
+          <ListGroup style={ { height: '75vh', overflow: 'scroll' } }
+           variant="flush"
+           >
             {itemsCards}
-          </section>
+          </ListGroup>
         </>
       );
     }
@@ -108,19 +111,19 @@ class ListPageTranscript extends Component {
           { (whichJsEnv() !== 'cep')?(
             <>
             <Col xs={ 12 } sm={ 3 } md={ 2 } lg={ 2 } xl={ 2 }>
-            <Button onClick={ this.props.handleShowCreateNewItemForm } variant="outline-secondary" size="sm" block>
+            <Button onClick={ this.props.handleShowCreateNewItemForm } variant="btn-secondary" size="sm" block>
                 New {this.props.model}
             </Button>
             </Col>
             <Col xs={ 12 } sm={ 3 } md={ 3 } lg={ 3 } xl={ 3 }>
-            <Button onClick={ this.props.handleShowCreateNewBatchForm } variant="outline-secondary" size="sm" block>
+            <Button onClick={ this.props.handleShowCreateNewBatchForm } variant="btn-secondary" size="sm" block>
                 New Batch {this.props.model}s
             </Button>
             </Col>
             </>
           ): (
             <Col xs={ 12 } sm={ 6 } md={ 5 } lg={ 5 } xl={ 5 }>
-            <Button onClick={ this.props.handleShowCreateNewItemForm } variant="outline-secondary" size="sm" block>
+            <Button onClick={ this.props.handleShowCreateNewItemForm } variant="btn-secondary" size="sm" block>
                 New {this.props.model}
             </Button>
             </Col>

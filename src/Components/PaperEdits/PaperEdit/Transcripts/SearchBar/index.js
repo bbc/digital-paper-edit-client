@@ -101,15 +101,21 @@ class SearchBar extends Component {
                aria-describedby="search"
              />
               <InputGroup.Append>
-                <Button 
-                  variant="outline-secondary"
+                {/* <Button 
+                  variant="btn-secondary"
                   onClick={this.handleFilterResults}
-                >
-                    <FontAwesomeIcon 
+                > */}
+                  <InputGroup.Text
+                  style={{cursor: 'pointer'}}
+                    onClick={this.handleFilterResults}
+                    >
+                  <FontAwesomeIcon 
                       icon={ faFilter }
                       title="Filter results" 
                       />
-                </Button>
+                  </InputGroup.Text>
+                   
+                {/* </Button> */}
               </InputGroup.Append>
            </InputGroup>
 

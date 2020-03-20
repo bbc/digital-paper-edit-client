@@ -121,7 +121,7 @@ class LabelForm extends Component {
                   border: 'solid',
                   borderWidth:'0.01em',
                   borderColor: 'grey',
-                  padding: '0'
+                  padding: '1em'
                 } }>
               </Col>
             </Row>

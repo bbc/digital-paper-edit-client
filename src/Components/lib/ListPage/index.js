@@ -55,7 +55,7 @@ class Page extends React.Component {
         </Col>
 
         <Col xs={ 12 } sm={ 3 } md={ 3 } ld={ 3 } xl={ 3 }>
-          <Button onClick={ this.props.handleShowCreateNewItemForm } variant="outline-secondary" size="sm" block>
+          <Button onClick={ this.props.handleShowCreateNewItemForm } variant="btn-secondary" size="sm" block>
                 New {this.props.model}
           </Button>
         </Col>

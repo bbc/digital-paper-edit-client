@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import { LinkContainer } from 'react-router-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -36,8 +37,11 @@ class SimpleCard extends Component {
   render() {
 
     return (
-      <Card style={ { width: '100%', marginBottom: '1em' } }>
-        <Card.Body>
+      <ListGroup.Item style={ { 
+        // width: '100%', 
+      // marginBottom: '1em' 
+      } }>
+        {/* <Card.Body> */}
           <Row>
             <LinkContainer to={ this.showLinkPath() } style={ { cursor: 'pointer' } } >
               <Col xs={ 8 } sm={ 10 } md={ 10 } ld={ 10 } xl={ 10 }>
@@ -52,7 +56,7 @@ class SimpleCard extends Component {
               <Card.Link>
                 <Button
                   onClick={ this.handleEdit }
-                  variant="outline-secondary"
+                  variant="btn-secondary"
                   size="sm"
                 >
                   <FontAwesomeIcon icon={ faPen } />
@@ -63,7 +67,7 @@ class SimpleCard extends Component {
               <Card.Link>
                 <Button
                   onClick={ this.handleDelete }
-                  variant="outline-secondary"
+                  variant="btn-secondary"
                   size="sm"
                 >
                   <FontAwesomeIcon icon={ faTrash } />
@@ -80,8 +84,8 @@ class SimpleCard extends Component {
               </Col>
             </Row>
           </LinkContainer>
-        </Card.Body>
-      </Card>
+        {/* </Card.Body> */}
+      </ListGroup.Item>
     );
   }
 }

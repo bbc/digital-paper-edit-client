@@ -816,7 +816,7 @@ class ProgramScript extends Component {
               <Col xs={5} sm={ 3 } md={ 3 }lg={ 3 } xl={ 3 }>
                 <Button
                   // block
-                  variant="outline-secondary"
+                  variant="btn-secondary"
                   size="sm"
                   onClick={ this.handleAddTranscriptSelectionToProgrammeScript }
                   title="Add a text selection, select text in the transcript, then click this button to add it to the programme script"
@@ -837,7 +837,7 @@ class ProgramScript extends Component {
               </Col>
               <Col  xs={4}  sm={ 2 } md={ 2 }lg={ 2 } xl={ 2 }>
                 <Dropdown>
-                  <Dropdown.Toggle variant="outline-secondary">
+                  <Dropdown.Toggle variant="btn-secondary">
                     <FontAwesomeIcon icon={ faListUl } />
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
@@ -863,7 +863,7 @@ class ProgramScript extends Component {
                 </Dropdown>
               </Col>
               <Col  xs={3} sm={ 1 } md={ 1 }lg={ 1 } xl={ 1 }>
-                <Button variant="outline-secondary"
+                <Button variant="btn-secondary"
                   onClick={ this.handleUpdatePreview }
                   // size="sm"
                   title="update programme script audio/video preview"
@@ -874,7 +874,7 @@ class ProgramScript extends Component {
               </Col>
               <Col  xs={5} sm={ 2 } md={ 2 }lg={ 2 } xl={ 2 }>
                 <Dropdown>
-                  <Dropdown.Toggle title={'Export programme script, click to see options'} variant="outline-secondary">
+                  <Dropdown.Toggle title={'Export programme script, click to see options'} variant="btn-secondary">
                     <FontAwesomeIcon icon={ faShare } /> Export
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
@@ -973,7 +973,7 @@ class ProgramScript extends Component {
                 </div>
               </Col>
               <Col  xs={3} sm={ 1} md={ 1 }lg={ 1 } xl={ 1}>
-              <Button variant="outline-secondary"
+              <Button variant="btn-secondary"
                   onClick={ this.handleDeleteProgrammeScriptContent }
                   // size="sm"
                   title="Delete programme script content"
