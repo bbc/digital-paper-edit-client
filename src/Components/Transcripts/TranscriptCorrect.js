@@ -178,13 +178,13 @@ class TranscriptCorrect extends Component {
               />
             </Col>
             {/* <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
-              <Button variant="btn-secondary" onClick={ this.redirectToAnnotatePage } size="lg" block>
+              <Button variant="outline-secondary" onClick={ this.redirectToAnnotatePage } size="lg" block>
               Annotate
               </Button>
               <br/>
             </Col> */}
             <Col xs={ 12 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
-              <Button variant="btn-secondary" onClick={ this.saveToServer } size="lg" block>
+              <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
               Save
               </Button>
               <br/>

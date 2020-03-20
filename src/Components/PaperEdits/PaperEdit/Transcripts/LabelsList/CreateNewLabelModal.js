@@ -205,7 +205,7 @@ class CreateNewLabelModal extends React.Component {
 
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={ this.handleClose }>
+            <Button variant="outline-secondary" onClick={ this.handleClose }>
                 Close
             </Button>
             <Button variant="primary" onClick={ this.handleSave } >

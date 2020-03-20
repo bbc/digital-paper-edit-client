@@ -56,7 +56,7 @@ class SimpleCard extends Component {
               <Card.Link>
                 <Button
                   onClick={ this.handleEdit }
-                  variant="btn-secondary"
+                  variant="outline-secondary"
                   size="sm"
                 >
                   <FontAwesomeIcon icon={ faPen } />
@@ -67,7 +67,7 @@ class SimpleCard extends Component {
               <Card.Link>
                 <Button
                   onClick={ this.handleDelete }
-                  variant="btn-secondary"
+                  variant="outline-secondary"
                   size="sm"
                 >
                   <FontAwesomeIcon icon={ faTrash } />

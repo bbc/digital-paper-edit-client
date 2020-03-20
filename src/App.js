@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Switch, Route, HashRouter } from 'react-router-dom';
-// import 'bootstrap-css-only/css/bootstrap.css';
+import 'bootstrap-css-only/css/bootstrap.css';
 // TODO: Note: Replace ^[theme]^ (examples: materia, darkly, slate, cosmo, spacelab, and superhero. See https://bootswatch.com for current theme names.)
 // https://www.npmjs.com/package/react-bootstrap-theme-switcher
-import "bootswatch/dist/materia/bootstrap.min.css"; 
+// import "bootswatch/dist/litera/bootstrap.min.css"; 
 import Projects from './Components/Projects/index.js';
 import Project from './Components/Projects/Project.js';
 import TranscriptCorrect from './Components/Transcripts/TranscriptCorrect.js';

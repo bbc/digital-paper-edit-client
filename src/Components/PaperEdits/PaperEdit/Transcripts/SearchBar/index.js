@@ -102,7 +102,7 @@ class SearchBar extends Component {
              />
               <InputGroup.Append>
                 {/* <Button 
-                  variant="btn-secondary"
+                  variant="outline-secondary"
                   onClick={this.handleFilterResults}
                 > */}
                   <InputGroup.Text

@@ -45,7 +45,7 @@ class Controls extends React.PureComponent {
           <Button
             size="sm"
             block
-            variant="btn-secondary"
+            variant="outline-secondary"
             onClick={ this.state.isPlaying ? this.handlePause : this.handlePlay }
           >
             { this.state.isPlaying ? pauseIcon : playIcon }
@@ -58,7 +58,7 @@ class Controls extends React.PureComponent {
           <Button
             size="sm"
             block
-            variant="btn-secondary"
+            variant="outline-secondary"
             onClick={ this.handleStop }
           >
             { stopIcon }
