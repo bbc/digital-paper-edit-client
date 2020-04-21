@@ -6,6 +6,8 @@ An application to make it faster, easier and more accessible to edit audio and v
 
 See [intro](./docs/intro.md) and [slides](https://docs.google.com/presentation/d/1vVe_hgTj6JhLhU2WuZBOWx41ajcKX-8m8Xa0NIVZT2M/edit?usp=sharing) for more info on the project and [user journey](./docs/user-journey/user-journey.md) for a high level overview of the user journey.
 
+[Github project board (for my forks) - across linked repos](https://github.com/users/pietrop/projects/1)
+
 ## Project Architecture
 
 It's a React, Express, Electron, Adobe CEP, AWS stack to be able to deploy one modular code base as a Web app or Cross platform Desktop app (for Mac, win and linux).
