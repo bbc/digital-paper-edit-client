@@ -12,7 +12,7 @@ class Note extends Component {
 
   render() {
     return (
-      <p className={ 'text-outline-secondary' }>
+      <p className={ 'text-secondary' }>
         <FontAwesomeIcon icon={ faStickyNote } /> { this.props.text }
       </p>
     );

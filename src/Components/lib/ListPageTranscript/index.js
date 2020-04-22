@@ -116,19 +116,19 @@ class ListPageTranscript extends Component {
           { (whichJsEnv() !== 'cep')?(
             <>
             <Col xs={ 12 } sm={ 3 } md={ 2 } lg={ 2 } xl={ 2 }>
-            <Button onClick={ this.props.handleShowCreateNewItemForm } variant="outline-secondary" size="sm" block>
+            <Button onClick={ this.props.handleShowCreateNewItemForm } variant="secondary" size="sm" block>
                 New {this.props.model}
             </Button>
             </Col>
             <Col xs={ 12 } sm={ 3 } md={ 3 } lg={ 3 } xl={ 3 }>
-            <Button onClick={ this.props.handleShowCreateNewBatchForm } variant="outline-secondary" size="sm" block>
+            <Button onClick={ this.props.handleShowCreateNewBatchForm } variant="secondary" size="sm" block>
                 New Batch {this.props.model}s
             </Button>
             </Col>
             </>
           ): (
             <Col xs={ 12 } sm={ 6 } md={ 5 } lg={ 5 } xl={ 5 }>
-            <Button onClick={ this.props.handleShowCreateNewItemForm } variant="outline-secondary" size="sm" block>
+            <Button onClick={ this.props.handleShowCreateNewItemForm } variant="secondary" size="sm" block>
                 New {this.props.model}
             </Button>
             </Col>

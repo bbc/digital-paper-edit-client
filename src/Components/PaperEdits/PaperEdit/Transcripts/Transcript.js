@@ -309,7 +309,7 @@ class Transcript extends Component {
                   as={ ButtonGroup } 
                   style={ { width: '100%' } } >
                     <Button 
-                    variant="outline-secondary"
+                    variant="secondary"
                      data-label-id={ 'default' } 
                       onClick={ this.handleCreateAnnotation } 
                     >
@@ -317,7 +317,7 @@ class Transcript extends Component {
                       {/* */}
                     </Button>
                     <Dropdown.Toggle split 
-                    variant="outline-secondary" 
+                    variant="secondary" 
                     data-lable-id={ 0 }/>
                     <Dropdown.Menu onClick={ this.handleCreateAnnotation }>
                       {this.state.labelsOptions && this.state.labelsOptions.map((label) => {
@@ -337,7 +337,7 @@ class Transcript extends Component {
                     as={ ButtonGroup }
                     title={ <FontAwesomeIcon icon={ faCog }/> }
                     id="bg-nested-dropdown"
-                    variant='outline-secondary'
+                    variant='secondary'
                   >
                     <LabelsList
                       isLabelsListOpen={ this.state.isLabelsListOpen }

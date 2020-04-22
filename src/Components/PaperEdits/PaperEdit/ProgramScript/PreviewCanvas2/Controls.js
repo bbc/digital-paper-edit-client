@@ -34,7 +34,7 @@ const Controls = (props) => {
         <Button
           size="sm"
           block
-          variant="outline-secondary"
+          variant="secondary"
           onClick={ isPlaying ? handlePause : handlePlay }
         >
           { isPlaying ? pauseIcon : playIcon }
@@ -46,7 +46,7 @@ const Controls = (props) => {
         <Button
           size="sm"
           block
-          variant="outline-secondary"
+          variant="secondary"
           onClick={ handleStop }
         >
           { stopIcon }

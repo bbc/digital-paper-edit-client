@@ -90,7 +90,7 @@ class CustomTranscriptCard extends Component {
               <Card.Link>
                 <Button
                   onClick={ this.handleEdit }
-                  variant="outline-secondary"
+                  variant="secondary"
                   size="sm"
                 >
                   <FontAwesomeIcon icon={ faPen } />
@@ -101,7 +101,7 @@ class CustomTranscriptCard extends Component {
               <Card.Link>
                 <Button
                   onClick={ this.handleDelete }
-                  variant="outline-secondary"
+                  variant="secondary"
                   size="sm"
                 >
                   <FontAwesomeIcon icon={ faTrash } />

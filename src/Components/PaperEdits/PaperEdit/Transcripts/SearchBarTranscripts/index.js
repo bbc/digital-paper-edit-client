@@ -60,7 +60,7 @@ class SearchBarTranscripts extends Component {
                  <Col xs={ 1 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
                  <Button 
                   // block
-                  variant="outline-secondary"
+                  variant="secondary"
                   onClick={this.props.handleShowAdvancedSearchViewSearchingAcrossTranscripts}
                   title={"close search across transcript in a project"}
                 >
