@@ -17,18 +17,21 @@ class ListPageTranscript extends Component {
   }
 
   handleSearch = searchText => {
-    const results = this.props.items.filter(project => {
+    const results = this.props.items.filter(transcript => {
+      console.log('transcript', transcript)
       if (
-        includesText(project.title, searchText) ||
-        includesText(project.description, searchText)
+        includesText(transcript.title, searchText) ||
+        includesText(transcript.description, searchText) ||
+        includesText(transcript.clipName, searchText) || 
+        includesText(transcript.sttEngine, searchText) 
       ) {
-        project.display = true;
+        transcript.display = true;
 
-        return project;
+        return transcript;
       } else {
-        project.display = false;
+        transcript.display = false;
 
-        return project;
+        return transcript;
       }
     });
 
@@ -46,6 +49,8 @@ class ListPageTranscript extends Component {
           if (item.display) {
             return (
               <CustomTranscriptCard
+                sttEngine={item.sttEngine}
+                clipName={item.clipName}
                 icon={ this.props.icon }
                 key={ 'key__' + item.id }
                 id={ item.id }
