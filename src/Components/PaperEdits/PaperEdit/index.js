@@ -98,7 +98,7 @@ class PaperEdit extends Component {
             >
               <Button
                 onClick={ this.toggleTranscripts }
-                variant={ this.state.isTranscriptsShown ? 'outline-secondary' : 'secondary' }
+                variant={ this.state.isTranscriptsShown ? 'secondary' : 'secondary' }
       
                 // block
              >
@@ -106,7 +106,7 @@ class PaperEdit extends Component {
               </Button>
               <Button
                 onClick={ this.toggleProgramScript }
-                variant={ this.state.isProgramScriptShown ? 'outline-secondary' : 'secondary' }
+                variant={ this.state.isProgramScriptShown ? 'secondary' : 'secondary' }
   
                 // block
              >

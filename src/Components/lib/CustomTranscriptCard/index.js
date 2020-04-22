@@ -5,7 +5,9 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
 import Alert from 'react-bootstrap/Alert';
+import ListGroup from 'react-bootstrap/ListGroup';
 import Spinner from 'react-bootstrap/Spinner';
+import Accordion from 'react-bootstrap/Accordion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTrash,
@@ -36,16 +38,17 @@ class CustomTranscriptCard extends Component {
   // TODO: this can be refactored to clean up the logic
   render() {
     let status;
-    let description;
+    let errorMessageAlert;
+    let statusBadge;
     if (this.props.status === 'error') {
       status = 'danger';
     }
     if (this.props.status === 'in-progress') {
       status = 'info';
-      description = <Badge variant="info">In progress</Badge>;
+      statusBadge = <Badge variant="info">In progress</Badge>;
     }
     if (this.props.status === 'done') {
-      description = <Badge variant="success">Success</Badge>;
+      statusBadge = <Badge variant="success">Success</Badge>;
       status = 'success';
     }
     let borderStatus;
@@ -60,7 +63,7 @@ class CustomTranscriptCard extends Component {
     }
 
     if (this.props.status === 'error') {
-      description = (
+      errorMessageAlert = (
         <>
           <Alert variant="danger">
             <FontAwesomeIcon icon={ faExclamationTriangle } />{' '}
@@ -72,11 +75,11 @@ class CustomTranscriptCard extends Component {
     }
 
     return (
-      <Card
+      <ListGroup.Item
         border={ borderStatus }
-        style={ { width: '100%', marginBottom: '2em' } }
+        // style={ { width: '100%', marginBottom: '2em' } }
       >
-        <Card.Body>
+        {/* <Card.Body> */}
           <Row>
             <Col xs={ 12 } sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
               <Card.Title>
@@ -87,7 +90,7 @@ class CustomTranscriptCard extends Component {
               <Card.Link>
                 <Button
                   onClick={ this.handleEdit }
-                  variant="outline-secondary"
+                  variant="secondary"
                   size="sm"
                 >
                   <FontAwesomeIcon icon={ faPen } />
@@ -98,7 +101,7 @@ class CustomTranscriptCard extends Component {
               <Card.Link>
                 <Button
                   onClick={ this.handleDelete }
-                  variant="outline-secondary"
+                  variant="secondary"
                   size="sm"
                 >
                   <FontAwesomeIcon icon={ faTrash } />
@@ -144,12 +147,35 @@ class CustomTranscriptCard extends Component {
             </Col>
           </Row>
           <Row>
+         
+            {/* </Row>
+            <Row> */}
+            <Col xs={ 12 } sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 } >
+            <Accordion>
+              <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                <Badge variant="light">Info</Badge>
+              </Accordion.Toggle>
+              <Accordion.Collapse eventKey="0">
+                <>
+                  {this.props.sttEngine?<>STT Engine: <Badge variant="light">{this.props.sttEngine}</Badge></>:null}<br/>
+                  {this.props.clipName? <>File Name: <Badge variant="light">{this.props.clipName}</Badge></>:null}
+                  </>
+                </Accordion.Collapse>
+            </Accordion>
+            </Col>
+            {/* <Col xs={ 2 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 } className={'text-right'}>
+               {statusBadge}
+            </Col> */}
+          </Row>
+
+          {errorMessageAlert? <>
+            <Row>
             <Col xs={ 12 } sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 }>
-              {description}
+              {errorMessageAlert}
             </Col>
           </Row>
-        </Card.Body>
-      </Card>
+          </>:null}
+      </ListGroup.Item>
     );
   }
 }

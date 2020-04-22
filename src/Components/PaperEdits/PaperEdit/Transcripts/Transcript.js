@@ -287,7 +287,7 @@ class Transcript extends Component {
           {`${ this.state.sentenceToSearchCSSInHighlights } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
         </style>
         <Card>
-          <Card.Header style={{backgroundColor:'black', padding: '0px'}}>
+          <Card.Body style={{backgroundColor:'black', padding: '0px'}}>
           {this.state.componentMounted &&   <video
               src={ this.props.url }
               ref={ this.videoRef }
@@ -300,17 +300,25 @@ class Transcript extends Component {
                 boxShadow: 'none'
               } }
             controls/> }
-          </Card.Header>
-          <Card.Header>
+          </Card.Body>
+          <Card.Body>
             <Row>
               <Col xs={ 12 } sm={ 12 } md={ 12 } lg={ 12 } xl={ 12 }>
                 <ButtonGroup style={ { width: '100%' } }>
-                  <Dropdown as={ ButtonGroup } style={ { width: '100%' } } >
-                    <Button variant="outline-secondary" data-label-id={ 'default' } onClick={ this.handleCreateAnnotation } >
+                  <Dropdown 
+                  as={ ButtonGroup } 
+                  style={ { width: '100%' } } >
+                    <Button 
+                    variant="secondary"
+                     data-label-id={ 'default' } 
+                      onClick={ this.handleCreateAnnotation } 
+                    >
                       <FontAwesomeIcon icon={ faHighlighter } flip="horizontal"/> Highlight
                       {/* */}
                     </Button>
-                    <Dropdown.Toggle split variant="outline-secondary" data-lable-id={ 0 }/>
+                    <Dropdown.Toggle split 
+                    variant="secondary" 
+                    data-lable-id={ 0 }/>
                     <Dropdown.Menu onClick={ this.handleCreateAnnotation }>
                       {this.state.labelsOptions && this.state.labelsOptions.map((label) => {
                         return (
@@ -324,13 +332,12 @@ class Transcript extends Component {
                       })}
                     </Dropdown.Menu>
                   </Dropdown>
-
                   <DropdownButton
                     drop={ 'right' }
                     as={ ButtonGroup }
                     title={ <FontAwesomeIcon icon={ faCog }/> }
                     id="bg-nested-dropdown"
-                    variant='outline-secondary'
+                    variant='secondary'
                   >
                     <LabelsList
                       isLabelsListOpen={ this.state.isLabelsListOpen }
@@ -343,8 +350,8 @@ class Transcript extends Component {
                 </ButtonGroup>
               </Col>
             </Row>
-          </Card.Header>
-          <Card.Header> 
+          </Card.Body>
+          <Card.Body style={{ paddingBottom: '0px'}}> 
             <SearchBar
               labelsOptions={ this.state.labelsOptions }
               speakersOptions={ this.props.transcript ? makeListOfUniqueSpeakers(this.props.transcript.paragraphs) : null }
@@ -353,13 +360,13 @@ class Transcript extends Component {
               handleSpeakersSearchChange={ this.handleSpeakersSearchChange }
               handleShowParagraphsMatchingSearch={ this.handleShowParagraphsMatchingSearch }
             />
-          </Card.Header>
+          </Card.Body>
+          <hr style={{ margin: '0px'}}/>
           <Card.Body
             onDoubleClick={ this.handleWordClick }
             onClick={ this.handleTimecodeClick }
             style={ { height: '62.5vh', overflow: 'scroll' } }
           >
-
             {highlights}
 
             {this.props.transcript && !this.state.componentMounted && <Button size="lg" variant="light" onClick={ this.handleLoadTranscription }block>Load transcription</Button>}

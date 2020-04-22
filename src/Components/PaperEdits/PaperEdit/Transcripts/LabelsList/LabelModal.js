@@ -37,9 +37,8 @@ class LabelModal extends Component {
   render() {
     return (
       <>
-        <Button variant="link" size="sm" onClick={ this.handleShow } block>
-          {this.props.openBtn}
-        </Button>
+      
+        <Button variant="link" onClick={ this.handleShow } block>{this.props.openBtn}</Button>
         <Modal show={ this.state.show } onHide={ this.handleClose }>
           <Modal.Header closeButton>
             <Modal.Title><FontAwesomeIcon icon={ faTag } />  Label </Modal.Title>

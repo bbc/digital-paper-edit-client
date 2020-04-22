@@ -12,3 +12,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+
+.btn-secondary {
+  color: #6c757d!important;
+  border-color: #6c757d!important;
+  background: transparent!important;
+}
+
+.btn-secondary:hover {
+  color: #fff!important;
+  background-color: #6c757d!important;
+  border-color: #6c757d!important;
+}
+
+/* .breadcrumb {
+  margin-bottom: 1rem!important;
+  background-color: transparent!important;
+  border-radius: 0em!important;
+  border-bottom: solid lightgrey 0.01em!important;
+  padding-left: 0em!important;
+} */

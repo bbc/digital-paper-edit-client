@@ -803,20 +803,20 @@ class ProgramScript extends Component {
     return (
       <>
         <Card>
-          <Card.Header style={{ padding: '1em',paddingTop: '0em'}}>
+          <Card.Body style={{ padding: '1em',paddingTop: '0em'}}>
             { !this.state.resetPreview ?
               <PreviewCanvas playlist={ this.state.playlist }
                width={ 300 }
                />
               : null }
-          </Card.Header>
-          <Card.Header>
+          </Card.Body>
+          <Card.Body>
 
             <Row noGutters>
               <Col xs={5} sm={ 3 } md={ 3 }lg={ 3 } xl={ 3 }>
                 <Button
                   // block
-                  variant="outline-secondary"
+                  variant="secondary"
                   size="sm"
                   onClick={ this.handleAddTranscriptSelectionToProgrammeScript }
                   title="Add a text selection, select text in the transcript, then click this button to add it to the programme script"
@@ -837,7 +837,7 @@ class ProgramScript extends Component {
               </Col>
               <Col  xs={4}  sm={ 2 } md={ 2 }lg={ 2 } xl={ 2 }>
                 <Dropdown>
-                  <Dropdown.Toggle variant="outline-secondary">
+                  <Dropdown.Toggle variant="secondary">
                     <FontAwesomeIcon icon={ faListUl } />
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
@@ -863,7 +863,7 @@ class ProgramScript extends Component {
                 </Dropdown>
               </Col>
               <Col  xs={3} sm={ 1 } md={ 1 }lg={ 1 } xl={ 1 }>
-                <Button variant="outline-secondary"
+                <Button variant="secondary"
                   onClick={ this.handleUpdatePreview }
                   // size="sm"
                   title="update programme script audio/video preview"
@@ -874,7 +874,7 @@ class ProgramScript extends Component {
               </Col>
               <Col  xs={5} sm={ 2 } md={ 2 }lg={ 2 } xl={ 2 }>
                 <Dropdown>
-                  <Dropdown.Toggle title={'Export programme script, click to see options'} variant="outline-secondary">
+                  <Dropdown.Toggle title={'Export programme script, click to see options'} variant="secondary">
                     <FontAwesomeIcon icon={ faShare } /> Export
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
@@ -973,7 +973,7 @@ class ProgramScript extends Component {
                 </div>
               </Col>
               <Col  xs={3} sm={ 1} md={ 1 }lg={ 1 } xl={ 1}>
-              <Button variant="outline-secondary"
+              <Button variant="secondary"
                   onClick={ this.handleDeleteProgrammeScriptContent }
                   // size="sm"
                   title="Delete programme script content"
@@ -985,10 +985,11 @@ class ProgramScript extends Component {
               </Col>
             </Row>
 
-          </Card.Header>
-          <Card.Body>
+          </Card.Body>
+          <hr style={{margin: '0px'}}/>
+          <Card.Body style={{paddingTop: '0px'}}>
             <article
-              style={ { height: '55vh', overflow: 'scroll' } }
+              style={ { height: '55vh', overflow: 'scroll', paddingTop: '1em' } }
               onDoubleClick={ this.handleDoubleClickOnProgrammeScript }
             >
               { this.state.programmeScript ? <ProgrammeScript

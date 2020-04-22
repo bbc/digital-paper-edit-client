@@ -94,22 +94,22 @@ const SortableItem = sortableElement(({
       <Col>
     {isContextMenuVisible? 
       <ButtonGroup size="sm" block aria-label="Basic example" style={{ cursor: 'pointer', width:'100%'}}>
-        <Button variant="outline-secondary" 
+        <Button variant="secondary" 
           onClick={()=>{setContextMenuVisibility(false);}} 
         ><FontAwesomeIcon icon={faTimes}/></Button>
-         <Button variant="outline-secondary" 
+         <Button variant="secondary" 
           onClick={()=>{handleAddTranscriptSelectionToProgrammeScript(indexNumber); setContextMenuVisibility(false)}}
         ><FontAwesomeIcon icon={ faPaste } /> Paste Selection</Button>
-        <Button variant="outline-secondary" 
+        <Button variant="secondary" 
           onClick={()=>{handleAddTranscriptElementToProgrammeScript('title',indexNumber); setContextMenuVisibility(false)}}
         ><FontAwesomeIcon icon={ faHeading } /> Heading</Button>
-        <Button variant="outline-secondary"
+        <Button variant="secondary"
           onClick={()=>{handleAddTranscriptElementToProgrammeScript('voice-over',indexNumber); setContextMenuVisibility(false)}} 
         ><FontAwesomeIcon icon={ faMicrophoneAlt } />  Voice over</Button>
-        <Button variant="outline-secondary"
+        <Button variant="secondary"
           onClick={()=>{handleAddTranscriptElementToProgrammeScript('note',indexNumber);  setContextMenuVisibility(false)}}  
         ><FontAwesomeIcon icon={ faStickyNote } /> Note</Button>
-           <Button variant="outline-secondary"
+           <Button variant="secondary"
           onClick={()=>{handleChangeInsertPointPosition(indexNumber);  setContextMenuVisibility(false)}}  
           title={'move insert point'}
         >Move insert Point<FontAwesomeIcon icon={ faArrowAltCircleRight } /><FontAwesomeIcon icon={ faArrowAltCircleLeft } /></Button>

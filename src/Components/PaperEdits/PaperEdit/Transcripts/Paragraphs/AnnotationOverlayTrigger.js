@@ -36,7 +36,7 @@ class AnnotationOverlayTrigger extends Component {
 
       overlayContent = <OverlayTrigger rootClose={ true } trigger="click" placement="bottom"
         overlay={
-          <Popover id="popover-basic">
+          <Popover id="popover-basic" style={{padding: '1em'}}>
             <Row>
               <Col md={ 1 } style={ { backgroundColor: label.color, marginLeft:'1em' } }></Col>
               <Col >

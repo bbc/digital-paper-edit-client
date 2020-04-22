@@ -150,7 +150,9 @@ class TranscriptCorrect extends Component {
     return (
       <>
         {this.renderRedirect()}
-        <Container style={ { marginBottom: '5em' } } fluid>
+        <Container style={ { marginBottom: '5em', 
+        // backgroundColor: '#f1f1f1' 
+        } } fluid>
           <br/>
           <Row>
             <Col sm={ 12 } md={ 11 } ld={ 11 } xl={ 11 } style={{marginBottom: '0'}}>
@@ -176,13 +178,13 @@ class TranscriptCorrect extends Component {
               />
             </Col>
             {/* <Col xs={ 12 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 }>
-              <Button variant="outline-secondary" onClick={ this.redirectToAnnotatePage } size="lg" block>
+              <Button variant="secondary" onClick={ this.redirectToAnnotatePage } size="lg" block>
               Annotate
               </Button>
               <br/>
             </Col> */}
             <Col xs={ 12 } sm={ 1 } md={ 1 } ld={ 1 } xl={ 1 }>
-              <Button variant="outline-secondary" onClick={ this.saveToServer } size="lg" block>
+              <Button variant="secondary" onClick={ this.saveToServer } size="lg" block>
               Save
               </Button>
               <br/>
