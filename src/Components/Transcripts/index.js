@@ -274,7 +274,7 @@ class Transcripts extends Component {
             //
             handleCloseModal={ this.handleCloseModal }
             handleCloseBatchModal={ this.handleCloseBatchModal }
-            icon={ <FontAwesomeIcon icon={ faFileAlt } /> }
+            icon={ <FontAwesomeIcon icon={ faFileAlt } color="#007bff" /> }
           />
           <NewTranscriptFormModal
             projectId={ this.state.projectId }

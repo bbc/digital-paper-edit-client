@@ -75,11 +75,7 @@ class CustomTranscriptCard extends Component {
     }
 
     return (
-      <ListGroup.Item
-        border={ borderStatus }
-        // style={ { width: '100%', marginBottom: '2em' } }
-      >
-        {/* <Card.Body> */}
+      <ListGroup.Item>
           <Row>
             <Col xs={ 12 } sm={ 9 } md={ 9 } ld={ 9 } xl={ 9 }>
               <Card.Title>
@@ -147,9 +143,6 @@ class CustomTranscriptCard extends Component {
             </Col>
           </Row>
           <Row>
-         
-            {/* </Row>
-            <Row> */}
             <Col xs={ 12 } sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 } >
             <Accordion>
               <Accordion.Toggle as={Button} variant="link" eventKey="0">
@@ -163,9 +156,6 @@ class CustomTranscriptCard extends Component {
                 </Accordion.Collapse>
             </Accordion>
             </Col>
-            {/* <Col xs={ 2 } sm={ 2 } md={ 2 } ld={ 2 } xl={ 2 } className={'text-right'}>
-               {statusBadge}
-            </Col> */}
           </Row>
 
           {errorMessageAlert? <>

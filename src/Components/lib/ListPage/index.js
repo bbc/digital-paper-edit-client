@@ -65,6 +65,7 @@ class Page extends React.Component {
 
       {this.props.items ?
         <List
+          icon={this.props.icon}
           items={ this.props.items }
           handleEdit={ this.props.handleEdit }
           handleDelete={ this.props.handleDelete }

@@ -37,17 +37,14 @@ class SimpleCard extends Component {
   render() {
 
     return (
-      <ListGroup.Item style={ { 
-        // width: '100%', 
-      // marginBottom: '1em' 
-      } }>
+      <ListGroup.Item>
         {/* <Card.Body> */}
           <Row>
             <LinkContainer to={ this.showLinkPath() } style={ { cursor: 'pointer' } } >
               <Col xs={ 8 } sm={ 10 } md={ 10 } ld={ 10 } xl={ 10 }>
                 <Card.Title>
-                  <a href={ `#${ this.showLinkPath() }` } >
-                    {this.props.title}
+                {this.props.icon} <a href={ `#${ this.showLinkPath() }` } >
+                  {this.props.title}
                   </a>
                 </Card.Title>
               </Col>

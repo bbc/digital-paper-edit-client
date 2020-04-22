@@ -8,7 +8,8 @@ import CustomBreadcrumb from '../lib/CustomBreadcrumb';
 import CustomFooter from '../lib/CustomFooter';
 import ApiWrapper from '../../ApiWrapper/index.js';
 import {HashRouter} from 'react-router-dom';
-
+import { faFolder } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 class Projects extends React.Component {
   constructor(props) {
     super(props);
@@ -156,6 +157,7 @@ class Projects extends React.Component {
         <ListPage
           model={ 'Project' }
           items={ this.state.items }
+          icon={ <FontAwesomeIcon icon={ faFolder } color="#007bff"/> }
           handleShowCreateNewItemForm={ this.handleShowCreateNewItemForm }
           deleteItem={ this.createNew }
           editItem={ this.createNew }

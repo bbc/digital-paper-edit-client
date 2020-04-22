@@ -12,6 +12,7 @@ class List extends React.Component {
           key={ item.id }
           id={ item.id }
           title={ item.title }
+          icon={ this.props.icon }
           description={ item.description }
           handleEdit={ this.props.handleEdit }
           handleDelete={ this.props.handleDelete }
@@ -25,8 +26,9 @@ class List extends React.Component {
     });
 
     return (<>
-      <ListGroup style={ { height: '75vh', overflow: 'scroll' } } 
-      variant="flush"
+      <ListGroup 
+      style={ { height: '75vh', overflow: 'scroll' } } 
+      // variant="flush"
       >
         {listItems}
       </ListGroup>

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Container from 'react-bootstrap/Container';
+import { faColumns } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ListPage from '../lib/ListPage';
 import ItemFormModal from '../lib/ItemFormModal';
 import ApiWrapper from '../../ApiWrapper/index.js';
@@ -141,6 +143,7 @@ class PaperEdits extends Component {
           <ListPage
             model={ 'Paper Edit' }
             items={ this.state.items }
+            icon={ <FontAwesomeIcon icon={ faColumns } color="#007bff"/> }
             handleShowCreateNewItemForm={ this.handleShowCreateNewItemForm }
             // deleteItem={ this.createNew }
             // editItem={ this.createNew }

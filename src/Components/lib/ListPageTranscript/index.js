@@ -95,8 +95,9 @@ class ListPageTranscript extends Component {
     if (this.props.items !== null && this.props.items.length !== 0) {
       content = (
         <>
-          <ListGroup style={ { height: '75vh', overflow: 'scroll' } }
-           variant="flush"
+          <ListGroup 
+          style={ { height: '75vh', overflow: 'scroll' } }
+          //  variant="flush"
            >
             {itemsCards}
           </ListGroup>
