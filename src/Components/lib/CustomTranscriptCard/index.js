@@ -144,7 +144,7 @@ class CustomTranscriptCard extends Component {
           </Row>
           <Row>
             <Col xs={ 12 } sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 } >
-            <Accordion>
+          {this.props.sttEngine && this.props.clipName &&  <Accordion>
               <Accordion.Toggle as={Button} variant="link" eventKey="0">
                 <Badge variant="light">Info</Badge>
               </Accordion.Toggle>
@@ -154,7 +154,7 @@ class CustomTranscriptCard extends Component {
                   {this.props.clipName? <>File Name: <Badge variant="light">{this.props.clipName}</Badge></>:null}
                   </>
                 </Accordion.Collapse>
-            </Accordion>
+            </Accordion>}
             </Col>
           </Row>
 
