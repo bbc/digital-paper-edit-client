@@ -22,6 +22,15 @@ class CustomBreadcrumb extends Component {
     });
 
     return (
+      <>
+      <style scoped>
+        {`
+        .breadcrumb{ 
+          background-color: ${this.props.backgroundColor};
+          ${this.props.backgroundColor? ' margin: 0px':''} 
+          }
+        `}
+      </style>
       <div
       // className="d-none d-sm-block"
       >
@@ -29,6 +38,7 @@ class CustomBreadcrumb extends Component {
           {breadcrumbs}
         </Breadcrumb>
       </div>
+      </>
     );
   }
 }

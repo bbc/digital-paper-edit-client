@@ -72,6 +72,7 @@ class PaperEdit extends Component {
         <Row>
           <Col xs={ 12 }  sm={ 8 } md={ 8 } ld={ 8 } xl={ 8 }>
             <CustomBreadcrumb
+               backgroundColor={'transparent'}
               items={ [ {
                 name: 'Projects',
                 link: '/projects'
