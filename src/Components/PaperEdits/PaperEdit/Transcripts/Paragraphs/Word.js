@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { shortTimecode } from '@pietrop/react-transcript-editor/timecodeConverter';
+import { shortTimecode } from 'slate-transcript-editor';
 // import removePunctuation from '../../../../../../Util/remove-punctuation/index.js';
 import removePunctuation from '../../../../../Util/remove-punctuation/index.js';
 

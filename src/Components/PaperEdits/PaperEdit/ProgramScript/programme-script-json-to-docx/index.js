@@ -6,7 +6,7 @@ import {
     TextRun,
     Packer
 } from 'docx';
-import {secondsToTimecode, timecodeToSeconds, shortTimecode} from "@pietrop/react-transcript-editor/timecodeConverter";
+import {secondsToTimecode, timecodeToSeconds, shortTimecode} from "slate-transcript-editor";
 
 const programmeScriptJsonToDocx = (edlJson,isWithClipReference) => {
     console.log('edlJson', edlJson.title)
