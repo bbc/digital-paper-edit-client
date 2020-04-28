@@ -105,8 +105,8 @@ class TranscriptCorrect extends Component {
     return (
       <>
         {this.renderRedirect()}
-        <Container style={ { marginBottom: '5em', 
-        backgroundColor: '#eee' 
+        <Container style={ { 
+          backgroundColor: '#eee' 
         } } fluid>
           <br/>
           <Row>
