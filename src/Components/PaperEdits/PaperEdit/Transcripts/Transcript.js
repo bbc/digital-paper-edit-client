@@ -287,7 +287,8 @@ class Transcript extends Component {
           {`${ this.state.sentenceToSearchCSSInHighlights } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
         </style>
         <Card style={{backgroundColor: '#eee', 
-            boxShadow: '0 0 10px #ccc'}}>
+            boxShadow: '0 0 10px #ccc'
+            }}>
           <Card.Body style={{backgroundColor:'black', padding: '0px'}}>
           {this.state.componentMounted &&   <video
               src={ this.props.url }
