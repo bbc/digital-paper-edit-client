@@ -825,8 +825,10 @@ class ProgramScript extends Component {
 
 
   render() {
+    const position = window.matchMedia('(max-width: 767px)').matches? true:false;
     return (
       <>
+      position: {JSON.stringify(position)}
         <Card style={{ 
           // backgroundColor:'#eee',
           // boxShadow: '0 0 10px #ccc'
@@ -840,7 +842,7 @@ class ProgramScript extends Component {
           </Card.Body>
           <Card.Body style={{paddingTop: '0px', paddingBottom: '0.6em'}}>
             <Row noGutters>
-              <ButtonGroup style={{ width: '100%'}} block>
+              <ButtonGroup style={{ width: '100%'}} vertical={position} block>
               <OverlayTrigger
                 placement={'top'}
                 delay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
