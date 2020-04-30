@@ -7,6 +7,10 @@ import Card from 'react-bootstrap/Card';
 import PreviewCanvas from './PreviewCanvas2/index.js';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
+import Overlay from 'react-bootstrap/Overlay';
+import Tooltip from 'react-bootstrap/Tooltip';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import EDL from '@pietrop/edl-composer';
 import generateADL from '@pietrop/aes31-adl-composer';
 import jsonToFCPX from '@pietrop/fcpx-xml-composer';
@@ -43,7 +47,7 @@ import ApiWrapper from '../../../../ApiWrapper/index.js';
 import whichJsEnv from '../../../../Util/which-js-env';
 import programmeScriptJsonToDocx from './programme-script-json-to-docx/index.js';
 import diffDateInMinutes from '../../../../Util/diff-dates-in-minutes';
-
+const TOOLTIP_DEPLAY_IN_MILLISECONDS = 2000;
 const defaultReelName = 'NA';
 const defaultFps = 25;
 const defaultTimecodeOffset = '00:00:00:00';
@@ -803,40 +807,64 @@ class ProgramScript extends Component {
     return (
       <>
         <Card style={{ backgroundColor:'#eee'}}>
-          <Card.Body style={{ padding: '1em',paddingTop: '0em'}}>
+          <Card.Body style={{ padding: '1em',paddingTop: '0em',paddingBottom: '0.6em'}}>
             { !this.state.resetPreview ?
               <PreviewCanvas playlist={ this.state.playlist }
                width={ 300 }
                />
               : null }
           </Card.Body>
-          <Card.Body>
-
+          <Card.Body style={{paddingTop: '0px',paddingBottom: '0.6em'}}>
             <Row noGutters>
-              <Col xs={5} sm={ 3 } md={ 3 }lg={ 3 } xl={ 3 }>
-                <Button
-                  // block
+              <ButtonGroup block>
+              <OverlayTrigger
+                placement={'top'}
+                delay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
+                overlay={
+                  <Tooltip >
+                  To add a text selection, select text in the transcript, then click this button to add it to the programme script, at the orange insert point/
+                  </Tooltip>
+                    }>
+                  <Button
                   variant="light"
                   size="sm"
                   onClick={ this.handleAddTranscriptSelectionToProgrammeScript }
-                  title="Add a text selection, select text in the transcript, then click this button to add it to the programme script"
                 >
                   <FontAwesomeIcon icon={ faPlus } /> Selection
-                </Button><br/>
+                </Button>
+                </OverlayTrigger>
+                <OverlayTrigger
+                placement={'top'}
+                delay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
+                overlay={
+                  <Tooltip >
+                  Advanced selection - check this box to auto copy across transcript selections to insert point in programme script
+                  </Tooltip>
+                    }>
+                     <Button  variant="light" 
+                style={{cursor: 'default'}}>
                 <input
+                style={{cursor: 'pointer'}}
                   name="advancedSelect"
                   type="checkbox"
-                  title="advanced selection - check this box to auto copy across transcript selections to insert point in programme script"
                   checked={this.state.isAdvancedSelect}
                   onChange={this.handleAdvancedSelectCheckbox} 
                 /> <small 
                     className={'text-secondary'} 
                     style={{marginBottom: '0em'}}
-                    title="advanced selection - check this box to auto copy across transcript selections to insert point in programme script"
                     >{'Auto copy selections'}</small>
-              </Col>
-              <Col  xs={4}  sm={ 2 } md={ 2 }lg={ 2 } xl={ 2 }>
-                <Dropdown>
+                    </Button>
+                </OverlayTrigger>
+
+                <OverlayTrigger
+                placement={'top'}
+                delay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
+                overlay={
+                  <Tooltip >
+                  Add header, note, or voice over text to the programme script
+                  </Tooltip>
+                    }>
+                   <Dropdown>
                   <Dropdown.Toggle variant="light">
                     <FontAwesomeIcon icon={ faListUl } />
                   </Dropdown.Toggle>
@@ -861,20 +889,31 @@ class ProgramScript extends Component {
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
-              </Col>
-              <Col  xs={3} sm={ 1 } md={ 1 }lg={ 1 } xl={ 1 }>
-                <Button variant="light"
+                </OverlayTrigger>
+                <OverlayTrigger
+                placement={'top'}
+                delay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
+                overlay={
+                  <Tooltip >
+              update programme script audio/video preview
+                  </Tooltip>
+                    }>
+                   <Button variant="light"
                   onClick={ this.handleUpdatePreview }
-                  // size="sm"
-                  title="update programme script audio/video preview"
-                  block
                 >
                   <FontAwesomeIcon icon={ faSync } />
                 </Button>
-              </Col>
-              <Col  xs={5} sm={ 2 } md={ 2 }lg={ 2 } xl={ 2 }>
+                </OverlayTrigger>
+                <OverlayTrigger
+                placement={'top'}
+                delay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
+                overlay={
+                  <Tooltip >
+              Export programme script, click to see options
+                  </Tooltip>
+                    }>
                 <Dropdown>
-                  <Dropdown.Toggle title={'Export programme script, click to see options'} variant="light">
+                  <Dropdown.Toggle  variant="light">
                     <FontAwesomeIcon icon={ faShare } /> 
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
@@ -903,7 +942,6 @@ class ProgramScript extends Component {
                       onClick={ this.handleExportADL }
                       title="export ADL, audio decision list, to import the programme script as a sequence in audio editing software such as SADiE"
                     >
-                      {/* <FontAwesomeIcon icon={ faFileExport } />  */}
                       <FontAwesomeIcon icon={ faHeadphones } /> ADL - Audio  <FontAwesomeIcon icon={ faInfoCircle } />
                     </Dropdown.Item>
                     <Dropdown.Item
@@ -962,27 +1000,33 @@ class ProgramScript extends Component {
                   </>)}
                   </Dropdown.Menu>
                 </Dropdown>
-              </Col>
-              <Col className={'d-none d-sm-block'} sm={ 0 } md={ 1 }lg={1 } xl={ 1 }>
-              </Col>
-              <Col  xs={4} sm={ 2} md={ 2 }lg={ 2 } xl={ 2 }>
-                <div>
-                  <small className={'text-secondary'} style={{marginBottom: '0em'}}
-                  title={`Last Saved at ${this.state.lastSaved.toLocaleString()}`}
-                  >{ `Saved at`}<br/>{ `${this.state.lastSaved.toLocaleTimeString()}`}</small>
-                </div>
-              </Col>
-              <Col  xs={3} sm={ 1} md={ 1 }lg={ 1 } xl={ 1}>
-              <Button variant="light"
+                </OverlayTrigger>
+                <OverlayTrigger
+                placement={'top'}
+                // delay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
+                overlay={
+                  <Tooltip >
+            {` Last Saved at ${this.state.lastSaved.toLocaleString()}`}
+                  </Tooltip>
+                    }>
+                   <Button variant="light" disabled>
+                    <small className={'text-secondary'} style={{marginBottom: '0em'}}>{ `${this.state.lastSaved.toLocaleTimeString()}`}</small>
+                    </Button>
+                </OverlayTrigger>
+                <OverlayTrigger
+                placement={'top'}
+                delay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
+                overlay={
+                  <Tooltip >
+             Delete programme script content. 
+                  </Tooltip>
+                    }>
+               <Button variant="light"
                   onClick={ this.handleDeleteProgrammeScriptContent }
-                  // size="sm"
-                  title="Delete programme script content"
-                  // block
-                >
-                       <FontAwesomeIcon icon={ faTrash } />
+                ><FontAwesomeIcon icon={ faTrash } />
                 </Button>
-       
-              </Col>
+                </OverlayTrigger>
+                </ButtonGroup>
             </Row>
 
           </Card.Body>
