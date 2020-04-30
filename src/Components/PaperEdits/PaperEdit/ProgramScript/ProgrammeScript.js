@@ -94,7 +94,10 @@ const SortableItem = sortableElement(({
       <Col>
       <Row>
     {isContextMenuVisible? 
-      <ButtonGroup size="sm" block style={{ cursor: 'pointer', width:'100%', border:'solid 0.06em lightgrey', paddingBottom: '0.01em'}}>
+      <ButtonGroup size="sm" block style={{ cursor: 'pointer', width:'100%', 
+      // border:'solid 0.06em lightgrey', 
+      // paddingBottom: '0.01em'
+      }}>
         <Button variant="light" 
           onClick={()=>{setContextMenuVisibility(false);}} 
         ><FontAwesomeIcon icon={faTimes}/></Button>

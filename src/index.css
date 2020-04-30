@@ -13,7 +13,6 @@ code {
     monospace;
 }
 
-
 .btn-secondary {
   color: #6c757d!important;
   border-color: #6c757d!important;
@@ -26,6 +25,19 @@ code {
   border-color: #6c757d!important;
 }
 
+.btn-light:hover {
+  color: #212529;
+  background-color: #f8f9fa!important;
+  border-color: #ced4da!important;
+}
+
+.btn-light {
+  color: #212529;
+  background-color: #e9ecef!important;
+  /* border: 1px solid #ced4da; */
+  border-color: #ced4da!important;
+  /* border-color: #f8f9fa; */
+}
 /* .breadcrumb {
   margin-bottom: 1rem!important;
   background-color: transparent!important;

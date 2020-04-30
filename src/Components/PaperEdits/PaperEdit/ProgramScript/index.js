@@ -47,7 +47,7 @@ import ApiWrapper from '../../../../ApiWrapper/index.js';
 import whichJsEnv from '../../../../Util/which-js-env';
 import programmeScriptJsonToDocx from './programme-script-json-to-docx/index.js';
 import diffDateInMinutes from '../../../../Util/diff-dates-in-minutes';
-const TOOLTIP_DEPLAY_IN_MILLISECONDS = 2000;
+const TOOLTIP_DEPLAY_IN_MILLISECONDS = 3000;
 const defaultReelName = 'NA';
 const defaultFps = 25;
 const defaultTimecodeOffset = '00:00:00:00';
