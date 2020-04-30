@@ -27,7 +27,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const InsertPoint = (({ text }) => <span style={ { width: '100%', backgroundColor: 'orange', color: 'white' } }> <FontAwesomeIcon icon={ faArrowAltCircleRight } /> {text} </span>);
+const InsertPoint = (({ text }) => <span style={ { width: '100%', backgroundColor: 'orange', color: '#f9f9f9' } }> <FontAwesomeIcon icon={ faArrowAltCircleRight } /> {text} </span>);
 
 const DragHandle = sortableHandle(() => <span style={{ cursor: 'move'}}> <FontAwesomeIcon icon={ faGripLines } /> </span>);
 
@@ -54,7 +54,7 @@ const SortableItem = sortableElement(({
 
   const [customStyle, setStyle] = useState({ 
       ...sharedStyle,
-      backgroundColor: 'transaprent',
+      backgroundColor: '#f9f9f9',
     });
 
   const handleContextMenu = (event) =>{
@@ -135,7 +135,7 @@ const SortableItem = sortableElement(({
         onMouseLeave={()=>{
           setStyle({ 
           ...sharedStyle,
-          backgroundColor: 'lightgrey'
+          backgroundColor: '#f9f9f9'
         });
       }}
         onClick={handleContextMenu}
@@ -152,7 +152,7 @@ const SortableItem = sortableElement(({
       onMouseLeave={()=>{
         setStyle({ 
           ...sharedStyle,
-          backgroundColor: 'transparent'
+          backgroundColor: '#f9f9f9'
         });
         // setContextMenuVisibility(false);
       }}

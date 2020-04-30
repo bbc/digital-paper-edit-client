@@ -67,10 +67,7 @@ class PaperEdit extends Component {
 
   render() {
     return (
-      <Container style={ {
-        //  marginBottom: '5em',
-          backgroundColor: '#eee' } } fluid>
-        <br/>
+      <Container style={{ backgroundColor: '#eee'}} fluid>
         <Row>
           <Col xs={ 12 }  sm={ 8 } md={ 8 } ld={ 8 } xl={ 8 }>
             <CustomBreadcrumb

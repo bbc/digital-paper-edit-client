@@ -806,7 +806,10 @@ class ProgramScript extends Component {
   render() {
     return (
       <>
-        <Card style={{ backgroundColor:'#eee'}}>
+        <Card style={{ 
+          backgroundColor:'#eee',
+          boxShadow: '0 0 10px #ccc'
+          }}>
           <Card.Body style={{ padding: '1em',paddingTop: '0em',paddingBottom: '0.6em'}}>
             { !this.state.resetPreview ?
               <PreviewCanvas playlist={ this.state.playlist }
@@ -1031,14 +1034,15 @@ class ProgramScript extends Component {
 
           </Card.Body>
           <hr style={{margin: '0px'}}/>
-          <Card.Body style={{padding: '0px'
-          }}>
+          <Card.Body style={{padding: '0px'}}>
             <article
               style={ { 
                 height:'55vh', 
                 overflow: 'scroll', 
                 padding: '1em', 
-                backgroundColor:'#F8F8F8' } }
+                // backgroundColor:'#F8F8F8' 
+                backgroundColor:'#f9f9f9' 
+              } }
               onDoubleClick={ this.handleDoubleClickOnProgrammeScript }
             >
               { this.state.programmeScript ? <ProgrammeScript
