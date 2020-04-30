@@ -54,7 +54,8 @@ const SortableItem = sortableElement(({
 
   const [customStyle, setStyle] = useState({ 
       ...sharedStyle,
-      backgroundColor: '#f9f9f9',
+      // backgroundColor: '#f9f9f9',
+      backgroundColor: 'transparent'
     });
 
   const handleContextMenu = (event) =>{
