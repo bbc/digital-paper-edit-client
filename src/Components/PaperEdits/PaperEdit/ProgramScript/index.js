@@ -7,6 +7,7 @@ import Card from 'react-bootstrap/Card';
 import PreviewCanvas from './PreviewCanvas2/index.js';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 import Overlay from 'react-bootstrap/Overlay';
 import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -41,6 +42,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import timecodes from 'node-timecodes';
 import ProgrammeScript from './ProgrammeScript.js';
+import ExportMenuItem from './ExportMenuItem';
 import getDataFromUserWordsSelection from './get-data-from-user-selection.js';
 import { divideWordsSelectionsIntoParagraphs, isOneParagraph } from './divide-words-selections-into-paragraphs/index.js';
 import ApiWrapper from '../../../../ApiWrapper/index.js';
@@ -564,6 +566,19 @@ class ProgramScript extends Component {
     return `${ title }${ body.join('\n\n') }`;
   }
 
+  programmeScriptJsonToTextPaperCutsOnly = (edlsqJson) => {
+    const body = edlsqJson.events.map((event) => {
+       if (event.type === 'paper-cut') {
+        // need to escape ' otherwise Premiere.jsx chockes 
+        return `${ event.words.map((word) => {return word.text.replace(/'/,'\'');}).join(' ') }`;
+      }
+
+      return null;
+    });
+
+    return `${ body.filter((e)=>e!==null).join('\n\n') }`;
+  }
+
   handleExportJson = () => {
     const programmeScriptJson = this.getProgrammeScriptJson();
     const programmeScriptText = JSON.stringify(programmeScriptJson, null, 2);
@@ -598,7 +613,13 @@ class ProgramScript extends Component {
 
   handleExportTxt = () => {
     const programmeScriptJson = this.getProgrammeScriptJson();
-    const programmeScriptText = this.programmeScriptJsonToText (programmeScriptJson);
+    const programmeScriptText = this.programmeScriptJsonToText(programmeScriptJson);
+    downloadjs(programmeScriptText, `${ this.state.programmeScript.title }.txt`, 'text/plain');
+  }
+
+  handleExportTxtOnyPaperCuts = () => {
+    const programmeScriptJson = this.getProgrammeScriptJson();
+    const programmeScriptText = this.programmeScriptJsonToTextPaperCutsOnly(programmeScriptJson);
     downloadjs(programmeScriptText, `${ this.state.programmeScript.title }.txt`, 'text/plain');
   }
 
@@ -807,8 +828,8 @@ class ProgramScript extends Component {
     return (
       <>
         <Card style={{ 
-          backgroundColor:'#eee',
-          boxShadow: '0 0 10px #ccc'
+          // backgroundColor:'#eee',
+          // boxShadow: '0 0 10px #ccc'
           }}>
           <Card.Body style={{ padding: '1em',paddingTop: '0em',paddingBottom: '0.6em'}}>
             { !this.state.resetPreview ?
@@ -844,7 +865,8 @@ class ProgramScript extends Component {
                   Advanced selection - check this box to auto copy across transcript selections to insert point in programme script
                   </Tooltip>
                     }>
-                     <Button  variant="light" 
+                <Button  
+                variant="light" 
                 style={{cursor: 'default'}}>
                 <input
                 style={{cursor: 'pointer'}}
@@ -858,41 +880,27 @@ class ProgramScript extends Component {
                     >{'Auto copy selections'}</small>
                     </Button>
                 </OverlayTrigger>
-
-                <OverlayTrigger
-                placement={'top'}
-                delay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
-                overlay={
-                  <Tooltip >
-                  Add header, note, or voice over text to the programme script
-                  </Tooltip>
-                    }>
-                   <Dropdown>
-                  <Dropdown.Toggle variant="light">
-                    <FontAwesomeIcon icon={ faListUl } />
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item
+                <DropdownButton as={ButtonGroup} variant="light" title={  <FontAwesomeIcon icon={ faListUl } />}>
+                  <ExportMenuItem
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
                       onClick={ () => {this.handleAddTranscriptElementToProgrammeScript('title');} }
                       title="Add a title header element to the programme script"
-                    >
-                      <FontAwesomeIcon icon={ faHeading } /> Heading
-                    </Dropdown.Item>
-                    <Dropdown.Item
+                      text={<> <FontAwesomeIcon icon={ faHeading } /> Heading</>}
+                   /> 
+                  <ExportMenuItem
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
                       onClick={ () => {this.handleAddTranscriptElementToProgrammeScript('voice-over');} }
                       title="Add a title voice over element to the programme script"
-                    >
-                      <FontAwesomeIcon icon={ faMicrophoneAlt } /> Voice Over
-                    </Dropdown.Item>
-                    <Dropdown.Item
+                      text={<> <FontAwesomeIcon icon={ faMicrophoneAlt } /> Voice Over</>}
+                   /> 
+                  <ExportMenuItem
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
                       onClick={ () => {this.handleAddTranscriptElementToProgrammeScript('note');} }
                       title="Add a note element to the programme script"
-                    >
-                      <FontAwesomeIcon icon={ faStickyNote } /> Note
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                </OverlayTrigger>
+                      text={<><FontAwesomeIcon icon={ faStickyNote } /> Note</>}
+                   /> 
+                </DropdownButton>
+                
                 <OverlayTrigger
                 placement={'top'}
                 delay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
@@ -907,103 +915,98 @@ class ProgramScript extends Component {
                   <FontAwesomeIcon icon={ faSync } />
                 </Button>
                 </OverlayTrigger>
-                <OverlayTrigger
-                placement={'top'}
-                delay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
-                overlay={
-                  <Tooltip >
-              Export programme script, click to see options
-                  </Tooltip>
-                    }>
-                <Dropdown>
-                  <Dropdown.Toggle  variant="light">
-                    <FontAwesomeIcon icon={ faShare } /> 
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                  {(whichJsEnv() === 'cep')? (<>
-                    <Dropdown.Item
+
+                <DropdownButton as={ButtonGroup} variant="light" title={<FontAwesomeIcon icon={ faShare } /> }>
+                {(whichJsEnv() === 'cep')? (<>
+                    <ExportMenuItem 
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
                       onClick={ this.handleCepExportSequence }
                       title="export the programme script as a sequence in Adobe Premiere"
-                    >
-                    Premiere - Sequence <FontAwesomeIcon icon={ faInfoCircle } />
-                    </Dropdown.Item>
-                  </>): (<>
-                    <Dropdown.Item
-                      onClick={ this.handleExportEDL }
-                      title="export EDL, edit decision list, to import the programme script as a sequence in video editing software - Avid, Premiere, Davinci Resolve, for FCPX choose FCPX XML"
-                    >
-                    <FontAwesomeIcon icon={ faVideo } /> EDL - Video <FontAwesomeIcon icon={ faInfoCircle } />
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={ this.handleExportFCPX }
+                      text={<>Premiere - Sequence <FontAwesomeIcon icon={ faInfoCircle } /></>}
+                    />
+                    </>): (<>
+                    <ExportMenuItem 
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
+                      onClick={ this.handleExportEDL}
+                      title={"export EDL, edit decision list, to import the programme script as a sequence in video editing software - Avid, Premiere, Davinci Resolve, for FCPX choose FCPX XML"}
+                      text={<> <FontAwesomeIcon icon={ faVideo } /> EDL - Video <FontAwesomeIcon icon={ faInfoCircle } /></>}
+                    />
+                   <ExportMenuItem
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
                       title="export FCPX XML, to import the programme script as a sequence in Final Cut Pro X, video editing software"
-                    >
-                  <FontAwesomeIcon icon={ faVideo } /> FCPX <FontAwesomeIcon icon={ faInfoCircle } />
-                    </Dropdown.Item>
+                      onClick={ this.handleExportFCPX }
+                      text={<> <FontAwesomeIcon icon={ faVideo } /> FCPX <FontAwesomeIcon icon={ faInfoCircle } /></>}
+                   />
                     <Dropdown.Divider />
-                    <Dropdown.Item
+                    <ExportMenuItem
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
                       onClick={ this.handleExportADL }
                       title="export ADL, audio decision list, to import the programme script as a sequence in audio editing software such as SADiE"
-                    >
-                      <FontAwesomeIcon icon={ faHeadphones } /> ADL - Audio  <FontAwesomeIcon icon={ faInfoCircle } />
-                    </Dropdown.Item>
-                    <Dropdown.Item
+                      text={<> <FontAwesomeIcon icon={ faHeadphones } /> ADL - Audio  <FontAwesomeIcon icon={ faInfoCircle } /></>}
+                   />
+                    <ExportMenuItem
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
                       onClick={ this.handleExportXML }
-                      title="export XML, to import the programme script as a sequence into Adobe Premiere, Adobe Audition and Final Cut Pro 7"
-                    >
-                    <FontAwesomeIcon icon={ faHeadphones } /> XML - Audition <FontAwesomeIcon icon={ faInfoCircle } />
-                    </Dropdown.Item>
+                      title="export XML, audio decision list, to import the programme script as a sequence in audio editing software such as Audition"
+                      text={<>   <FontAwesomeIcon icon={ faHeadphones } /> XML - Audition <FontAwesomeIcon icon={ faInfoCircle } /></>}
+                   />
                     <Dropdown.Divider />
-                    <Dropdown.Item
+                    <ExportMenuItem
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
                       onClick={ this.handleExportTxt }
                       title="export Text, export the programme script as a text version"
-                    >
-                    <FontAwesomeIcon icon={ faFileAlt } /> Text File <FontAwesomeIcon icon={ faInfoCircle } />
-                    </Dropdown.Item>
-                    <Dropdown.Item
+                      text={<> <FontAwesomeIcon icon={ faFileAlt } /> Text File <FontAwesomeIcon icon={ faInfoCircle } /></>}
+                   />
+                    <ExportMenuItem
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
+                      onClick={ this.handleExportTxtOnyPaperCuts }
+                      title="export Text, export only the text selection in the programme script as a text version"
+                      text={<> <FontAwesomeIcon icon={ faFileAlt } /> Text File (only text selection) <FontAwesomeIcon icon={ faInfoCircle } /></>}
+                   />
+                    <ExportMenuItem
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
                       onClick={ this.handleExportDocx }
                       title="export docx, export the programme script as a word document"
-                    ><FontAwesomeIcon icon={ faFileWord } /> Word Document <FontAwesomeIcon icon={ faInfoCircle } />
-                    </Dropdown.Item>
-                    <Dropdown.Item
+                      text={<><FontAwesomeIcon icon={ faFileWord } /> Word Document <FontAwesomeIcon icon={ faInfoCircle } /></>}
+                   />
+                    <ExportMenuItem
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
                       onClick={ this.handleExportDocxWithClipReference }
                       title="export docx, export the programme script as a word document, with clip name and timecode references, for text selections"
-                    >
-                   <FontAwesomeIcon icon={ faFileWord } /> Word Doc (with ref) <FontAwesomeIcon icon={ faInfoCircle } />
-                    </Dropdown.Item>
+                      text={<><FontAwesomeIcon icon={ faFileWord } /> Word Doc (with ref) <FontAwesomeIcon icon={ faInfoCircle } /></>}
+                   />
+
+                    {whichJsEnv()==='electron'?  <>
                     <Dropdown.Divider />
-                    {whichJsEnv()==='electron'?
-                      <>
-                        <Dropdown.Item
-                          onClick={ this.handleExportAudioPreview }
-                          title="Export wav audio preview - Experimental feature, at the moment you cannot combine audio and video in the same export."
-                          >
-                          <FontAwesomeIcon icon={ faFileAudio } /> Audio (wav) <FontAwesomeIcon icon={ faFlask } /><FontAwesomeIcon icon={ faInfoCircle } />
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          onClick={ this.handleExportAudioPreviewWithVideoWaveform }
-                          title="Export audio preview as video with animated wave form - Experimental feature, at the moment you cannot combine audio and video in the same export."
-                          >
-                          <FontAwesomeIcon icon={ faFileAudio } /> Audio (mp4) video <FontAwesomeIcon icon={ faFlask } /><FontAwesomeIcon icon={ faInfoCircle } />
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          onClick={ this.handleExportVideoPreview }
-                          title="Export mp4 video preview - Experimental feature, at the moment you cannot combine audio and video in the same export."
-                        >
-                          <FontAwesomeIcon icon={ faFileVideo } /> Video (mp4) <FontAwesomeIcon icon={ faFlask } /> <FontAwesomeIcon icon={ faInfoCircle } />
-                        </Dropdown.Item>
-                        <Dropdown.Divider /> 
-                      </>: null   }
-                    <Dropdown.Item
+
+                    <ExportMenuItem
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
+                      onClick={ this.handleExportAudioPreview }
+                      title="Export wav audio preview - Experimental feature, at the moment you cannot combine audio and video in the same export."
+                      text={<><FontAwesomeIcon icon={ faFileAudio } /> Audio (wav) <FontAwesomeIcon icon={ faFlask } /><FontAwesomeIcon icon={ faInfoCircle } /></>}
+                   />
+                    <ExportMenuItem
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
+                      onClick={ this.handleExportAudioPreviewWithVideoWaveform }
+                      title="Export audio preview as video with animated wave form - Experimental feature, at the moment you cannot combine audio and video in the same export."
+                      text={<><FontAwesomeIcon icon={ faFileAudio } /> Audio (mp4) video <FontAwesomeIcon icon={ faFlask } /><FontAwesomeIcon icon={ faInfoCircle } /></>}
+                   />
+                    <ExportMenuItem
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
+                      onClick={ this.handleExportVideoPreview }
+                      title="Export mp4 video preview - Experimental feature, at the moment you cannot combine audio and video in the same export."
+                      text={<><FontAwesomeIcon icon={ faFileVideo } /> Video (mp4) <FontAwesomeIcon icon={ faFlask } /> <FontAwesomeIcon icon={ faInfoCircle } /></>}
+                   /> 
+                    </>: null   }
+                    <Dropdown.Divider />
+                    <ExportMenuItem
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
                       onClick={ this.handleExportJson }
                       title="export Json, export the programme script as a json file"
-                    >
-                    <FontAwesomeIcon icon={ faFileCode } /> Json <FontAwesomeIcon icon={ faInfoCircle } />
-                    </Dropdown.Item>
-                  </>)}
-                  </Dropdown.Menu>
-                </Dropdown>
-                </OverlayTrigger>
+                      text={<>  <FontAwesomeIcon icon={ faFileCode } /> Json <FontAwesomeIcon icon={ faInfoCircle } /></>}
+                   /> 
+                    </>)}
+                  </DropdownButton> 
                 <OverlayTrigger
                 placement={'top'}
                 // delay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
@@ -1040,8 +1043,7 @@ class ProgramScript extends Component {
                 height:'55vh', 
                 overflow: 'scroll', 
                 padding: '1em', 
-                // backgroundColor:'#F8F8F8' 
-                backgroundColor:'#f9f9f9' 
+                // backgroundColor:'#f9f9f9' 
               } }
               onDoubleClick={ this.handleDoubleClickOnProgrammeScript }
             >

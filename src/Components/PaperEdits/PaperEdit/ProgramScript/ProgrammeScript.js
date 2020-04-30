@@ -135,7 +135,8 @@ const SortableItem = sortableElement(({
         onMouseLeave={()=>{
           setStyle({ 
           ...sharedStyle,
-          backgroundColor: '#f9f9f9'
+           backgroundColor: 'transparent',
+            // backgroundColor: '#f9f9f9'
         });
       }}
         onClick={handleContextMenu}
@@ -152,7 +153,8 @@ const SortableItem = sortableElement(({
       onMouseLeave={()=>{
         setStyle({ 
           ...sharedStyle,
-          backgroundColor: '#f9f9f9'
+          backgroundColor: 'transparent'
+          //  backgroundColor: '#f9f9f9'
         });
         // setContextMenuVisibility(false);
       }}

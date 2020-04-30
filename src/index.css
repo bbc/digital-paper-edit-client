@@ -34,9 +34,7 @@ code {
 .btn-light {
   color: #212529;
   background-color: #e9ecef!important;
-  /* border: 1px solid #ced4da; */
   border-color: #ced4da!important;
-  /* border-color: #f8f9fa; */
 }
 /* .breadcrumb {
   margin-bottom: 1rem!important;

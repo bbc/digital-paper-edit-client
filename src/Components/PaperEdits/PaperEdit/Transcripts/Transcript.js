@@ -286,8 +286,9 @@ class Transcript extends Component {
           {`${ this.state.sentenceToSearchCSS } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
           {`${ this.state.sentenceToSearchCSSInHighlights } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
         </style>
-        <Card style={{backgroundColor: '#eee', 
-            boxShadow: '0 0 10px #ccc'
+        <Card style={{
+          // backgroundColor: '#eee', 
+            // boxShadow: '0 0 10px #ccc'
             }}>
           <Card.Body style={{backgroundColor:'black', padding: '0px'}}>
           {this.state.componentMounted &&   <video
@@ -371,10 +372,7 @@ class Transcript extends Component {
             style={{ 
               height: '62.5vh', 
               overflow: 'scroll', 
-            // backgroundColor: '#F8F8F8', 
-            backgroundColor: '#f9f9f9'
-
-            // boxShadow: '0 0 10px #ccc'
+            // backgroundColor: '#f9f9f9'
           } }
           >
             {highlights}
