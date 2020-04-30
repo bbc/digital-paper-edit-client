@@ -67,7 +67,9 @@ class PaperEdit extends Component {
 
   render() {
     return (
-      <Container style={ { marginBottom: '5em' } } fluid>
+      <Container style={ {
+        //  marginBottom: '5em',
+          backgroundColor: '#eee' } } fluid>
         <br/>
         <Row>
           <Col xs={ 12 }  sm={ 8 } md={ 8 } ld={ 8 } xl={ 8 }>
@@ -99,17 +101,15 @@ class PaperEdit extends Component {
             >
               <Button
                 onClick={ this.toggleTranscripts }
-                variant={ this.state.isTranscriptsShown ? 'secondary' : 'secondary' }
-      
-                // block
+                variant={ 'light' }
+                size="sm"
              >
                Transcripts <FontAwesomeIcon icon={ this.state.isTranscriptsShown ?faEye :faEyeSlash }/> 
               </Button>
               <Button
                 onClick={ this.toggleProgramScript }
-                variant={ this.state.isProgramScriptShown ? 'secondary' : 'secondary' }
-  
-                // block
+                variant={'light' }
+                size="sm"
              >
                  Program Script  <FontAwesomeIcon icon={ this.state.isProgramScriptShown ? faEye : faEyeSlash}/> 
               </Button>

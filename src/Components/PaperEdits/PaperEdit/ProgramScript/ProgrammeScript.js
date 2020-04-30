@@ -36,7 +36,7 @@ const sharedStyle = {
   width: '100%',
   marginTop: '0.75em',
   height: '0.1em',
-  backgroundColor: 'white',
+  backgroundColor: 'lightgrey',
 }
 
 const SortableItem = sortableElement(({ 
@@ -54,7 +54,7 @@ const SortableItem = sortableElement(({
 
   const [customStyle, setStyle] = useState({ 
       ...sharedStyle,
-      backgroundColor: 'white',
+      backgroundColor: 'transaprent',
     });
 
   const handleContextMenu = (event) =>{
@@ -92,29 +92,31 @@ const SortableItem = sortableElement(({
     </Row>
     <Row>
       <Col>
+      <Row>
     {isContextMenuVisible? 
-      <ButtonGroup size="sm" block aria-label="Basic example" style={{ cursor: 'pointer', width:'100%'}}>
-        <Button variant="secondary" 
+      <ButtonGroup size="sm" block style={{ cursor: 'pointer', width:'100%', border:'solid 0.06em lightgrey', paddingBottom: '0.01em'}}>
+        <Button variant="light" 
           onClick={()=>{setContextMenuVisibility(false);}} 
         ><FontAwesomeIcon icon={faTimes}/></Button>
-         <Button variant="secondary" 
+         <Button variant="light" 
           onClick={()=>{handleAddTranscriptSelectionToProgrammeScript(indexNumber); setContextMenuVisibility(false)}}
         ><FontAwesomeIcon icon={ faPaste } /> Paste Selection</Button>
-        <Button variant="secondary" 
+        <Button variant="light" 
           onClick={()=>{handleAddTranscriptElementToProgrammeScript('title',indexNumber); setContextMenuVisibility(false)}}
         ><FontAwesomeIcon icon={ faHeading } /> Heading</Button>
-        <Button variant="secondary"
+        <Button variant="light"
           onClick={()=>{handleAddTranscriptElementToProgrammeScript('voice-over',indexNumber); setContextMenuVisibility(false)}} 
         ><FontAwesomeIcon icon={ faMicrophoneAlt } />  Voice over</Button>
-        <Button variant="secondary"
+        <Button variant="light"
           onClick={()=>{handleAddTranscriptElementToProgrammeScript('note',indexNumber);  setContextMenuVisibility(false)}}  
         ><FontAwesomeIcon icon={ faStickyNote } /> Note</Button>
-           <Button variant="secondary"
+           <Button variant="light"
           onClick={()=>{handleChangeInsertPointPosition(indexNumber);  setContextMenuVisibility(false)}}  
           title={'move insert point'}
         >Move insert Point<FontAwesomeIcon icon={ faArrowAltCircleRight } /><FontAwesomeIcon icon={ faArrowAltCircleLeft } /></Button>
       </ButtonGroup> 
     : null }
+    </Row>
       </Col>
     </Row>
     <Row>
@@ -130,7 +132,7 @@ const SortableItem = sortableElement(({
         onMouseLeave={()=>{
           setStyle({ 
           ...sharedStyle,
-          backgroundColor: 'white'
+          backgroundColor: 'lightgrey'
         });
       }}
         onClick={handleContextMenu}
@@ -147,7 +149,7 @@ const SortableItem = sortableElement(({
       onMouseLeave={()=>{
         setStyle({ 
           ...sharedStyle,
-          backgroundColor: 'white'
+          backgroundColor: 'transparent'
         });
         // setContextMenuVisibility(false);
       }}

@@ -101,10 +101,6 @@ class SearchBar extends Component {
                aria-describedby="search"
              />
               <InputGroup.Append>
-                {/* <Button 
-                  variant="secondary"
-                  onClick={this.handleFilterResults}
-                > */}
                   <InputGroup.Text
                   style={{cursor: 'pointer'}}
                     onClick={this.handleFilterResults}

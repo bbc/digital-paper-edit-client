@@ -286,7 +286,7 @@ class Transcript extends Component {
           {`${ this.state.sentenceToSearchCSS } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
           {`${ this.state.sentenceToSearchCSSInHighlights } { background-color: ${ 'yellow' }; text-shadow: 0 0 0.01px black }`}
         </style>
-        <Card>
+        <Card style={{backgroundColor: '#eee'}}>
           <Card.Body style={{backgroundColor:'black', padding: '0px'}}>
           {this.state.componentMounted &&   <video
               src={ this.props.url }
@@ -309,7 +309,7 @@ class Transcript extends Component {
                   as={ ButtonGroup } 
                   style={ { width: '100%' } } >
                     <Button 
-                    variant="secondary"
+                    variant="light"
                      data-label-id={ 'default' } 
                       onClick={ this.handleCreateAnnotation } 
                     >
@@ -317,7 +317,7 @@ class Transcript extends Component {
                       {/* */}
                     </Button>
                     <Dropdown.Toggle split 
-                    variant="secondary" 
+                    variant="light" 
                     data-lable-id={ 0 }/>
                     <Dropdown.Menu onClick={ this.handleCreateAnnotation }>
                       {this.state.labelsOptions && this.state.labelsOptions.map((label) => {
@@ -337,7 +337,7 @@ class Transcript extends Component {
                     as={ ButtonGroup }
                     title={ <FontAwesomeIcon icon={ faCog }/> }
                     id="bg-nested-dropdown"
-                    variant='secondary'
+                    variant='light'
                   >
                     <LabelsList
                       isLabelsListOpen={ this.state.isLabelsListOpen }
@@ -365,7 +365,7 @@ class Transcript extends Component {
           <Card.Body
             onDoubleClick={ this.handleWordClick }
             onClick={ this.handleTimecodeClick }
-            style={ { height: '62.5vh', overflow: 'scroll' } }
+            style={ { height: '62.5vh', overflow: 'scroll', backgroundColor: '#F8F8F8' } }
           >
             {highlights}
 
