@@ -163,7 +163,6 @@ class Transcripts extends Component {
           <Nav.Link
             disabled={ transcript.status !== 'done' ? true : false }
             eventKey={ transcript.id }
-            // variant={'secondary'}
           >
             { transcript.status === 'in-progress' ? <FontAwesomeIcon icon={ faClock }/> : '' }
             { (transcript.status !=='done' && transcript.status !== 'in-progress' )|| transcript.status === 'error' ? <FontAwesomeIcon icon={ faExclamationTriangle }/> : '' }
@@ -283,7 +282,7 @@ class Transcripts extends Component {
           { !this.state.showAdvancedSearchViewSearchingAcrossTranscripts?  <>
                 <Button  
               onClick={this.handleShowAdvancedSearchViewSearchingAcrossTranscripts}
-              variant={"secondary"} 
+              variant={"light"} 
               block
               title={'Search across transcripts in this project'}
               size={'sm'}
