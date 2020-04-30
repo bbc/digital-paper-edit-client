@@ -838,9 +838,9 @@ class ProgramScript extends Component {
                />
               : null }
           </Card.Body>
-          <Card.Body style={{paddingTop: '0px',paddingBottom: '0.6em'}}>
+          <Card.Body style={{paddingTop: '0px', paddingBottom: '0.6em'}}>
             <Row noGutters>
-              <ButtonGroup block>
+              <ButtonGroup style={{ width: '100%'}} block>
               <OverlayTrigger
                 placement={'top'}
                 delay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
