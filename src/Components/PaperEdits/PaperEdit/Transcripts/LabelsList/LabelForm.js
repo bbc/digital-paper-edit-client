@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSyncAlt
-} from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import {
+//   faSyncAlt
+// } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { GithubPicker } from 'react-color';
-import { colorNamesList, randomColor } from './css-color-names.js';
+// import Row from 'react-bootstrap/Row';
+// import Col from 'react-bootstrap/Col';
+// import { GithubPicker } from 'react-color';
+// import { colorNamesList, randomColor } from './css-color-names.js';
 import chroma from 'chroma-js';
+import ColorOptionsFormGroup from './ColorOptionsFormGroup.js'
 
 class LabelForm extends Component {
   constructor(props, context) {
@@ -23,26 +24,31 @@ class LabelForm extends Component {
     };
   }
 
-  handleRandomiseColor =() => {
-    this.setState({ color: randomColor() });
-  }
+  // handleRandomiseColor =() => {
+  //   this.setState({ color: randomColor() });
+  // }
 
-  handleColorPickerChangeComplete = (color) => {
-    this.setState({ color: chroma(color.hex ).name() });
-  }
+  // handleColorPickerChangeComplete = (color) => {
+  //   this.setState({ color: chroma(color.hex ).name() });
+  // }
 
-  handleManualColorChange = (e) => {
-    if (e && e.target && e.target.value) {
-      const colorValue = e.target.value;
-      this.setState({ color: chroma.valid(colorValue) ? chroma(colorValue).name() : colorValue });
-    }
-    else if (e && e.target && e.target.value === '') {
-      this.setState({ color: '' });
-    }
-  }
+  // handleManualColorChange = (e) => {
+  //   if (e && e.target && e.target.value) {
+  //     const colorValue = e.target.value;
+  //     this.setState({ color: chroma.valid(colorValue) ? chroma(colorValue).name() : colorValue });
+  //   }
+  //   else if (e && e.target && e.target.value === '') {
+  //     this.setState({ color: '' });
+  //   }
+  // }
+
+  // TODO: not used?
+  // handleColorSelectChange = color => {
+  //   this.setState({ color: color.color });
+  // };
 
   handleColorSelectChange = color => {
-    this.setState({ color: color.color });
+    this.setState({ color: color });
   };
 
   handleSave = () => {
@@ -99,7 +105,12 @@ class LabelForm extends Component {
             </Form.Text>
           </Form.Group>
 
-          <Form.Group controlId="formGroupPassword">
+
+          <ColorOptionsFormGroup
+          color={this.props.color}
+          handleColorSelectChange={this.handleColorSelectChange}
+          />
+          {/* <Form.Group controlId="formGroupPassword">
             <Form.Label>Color</Form.Label>
             <Row>
               <Col xs={ 2 } sm={ 1 } md={ 1 } lg={ 1 } xl={ 1 }>
@@ -140,7 +151,7 @@ class LabelForm extends Component {
                 />
               </Col>
             </Row>
-          </Form.Group>
+          </Form.Group> */}
           <Button variant="primary" onClick={ this.handleSave } >
               Save
           </Button>

@@ -49,6 +49,8 @@ import ApiWrapper from '../../../../ApiWrapper/index.js';
 import whichJsEnv from '../../../../Util/which-js-env';
 import programmeScriptJsonToDocx from './programme-script-json-to-docx/index.js';
 import diffDateInMinutes from '../../../../Util/diff-dates-in-minutes';
+import ExportWaveForm from './ExportWaveForm';
+
 const TOOLTIP_DEPLAY_IN_MILLISECONDS = 3000;
 const defaultReelName = 'NA';
 const defaultFps = 25;
@@ -811,14 +813,15 @@ class ProgramScript extends Component {
     })
   }
 
-  handleExportAudioPreviewWithVideoWaveform = ()=>{
+  handleExportAudioPreviewWithVideoWaveform = ({waveFormMode, waveFormColor})=>{
     const sequence = this.getSequenceJsonForFfmpegRemix();
     const programmeScriptTitle = this.state.programmeScript.title;
     // timeNow -  eg "3-6-2020_5.41.35PM"
     const timeNow = new Date().toLocaleString().replace(/\//g,'-').replace(/,\ /g,'_').replace(/:/g,'.').replace(/\ /g,'');
     const fileName = `${programmeScriptTitle}_${timeNow}.mp4`;
     const waveForm = true;
-    ApiWrapper.exportAudio(sequence, fileName, waveForm).then((res)=>{
+    // const waveFormMode = 'cline';
+    ApiWrapper.exportAudio(sequence, fileName, waveForm, waveFormMode, waveFormColor).then((res)=>{
       console.log('exported', res)
     })
   }
@@ -828,7 +831,6 @@ class ProgramScript extends Component {
     const position = window.matchMedia('(max-width: 767px)').matches? true:false;
     return (
       <>
-      position: {JSON.stringify(position)}
         <Card style={{ 
           // backgroundColor:'#eee',
           // boxShadow: '0 0 10px #ccc'
@@ -979,26 +981,27 @@ class ProgramScript extends Component {
                    />
 
                     {whichJsEnv()==='electron'?  <>
+              
                     <Dropdown.Divider />
-
-                    <ExportMenuItem
-                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
-                      onClick={ this.handleExportAudioPreview }
-                      title="Export wav audio preview - Experimental feature, at the moment you cannot combine audio and video in the same export."
-                      text={<><FontAwesomeIcon icon={ faFileAudio } /> Audio (wav) <FontAwesomeIcon icon={ faFlask } /><FontAwesomeIcon icon={ faInfoCircle } /></>}
-                   />
-                    <ExportMenuItem
-                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
-                      onClick={ this.handleExportAudioPreviewWithVideoWaveform }
-                      title="Export audio preview as video with animated wave form - Experimental feature, at the moment you cannot combine audio and video in the same export."
-                      text={<><FontAwesomeIcon icon={ faFileAudio } /> Audio (mp4) video <FontAwesomeIcon icon={ faFlask } /><FontAwesomeIcon icon={ faInfoCircle } /></>}
-                   />
                     <ExportMenuItem
                       tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
                       onClick={ this.handleExportVideoPreview }
                       title="Export mp4 video preview - Experimental feature, at the moment you cannot combine audio and video in the same export."
                       text={<><FontAwesomeIcon icon={ faFileVideo } /> Video (mp4) <FontAwesomeIcon icon={ faFlask } /> <FontAwesomeIcon icon={ faInfoCircle } /></>}
                    /> 
+                    <ExportMenuItem
+                      tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
+                      onClick={ this.handleExportAudioPreview }
+                      title="Export wav audio preview - Experimental feature, at the moment you cannot combine audio and video in the same export."
+                      text={<><FontAwesomeIcon icon={ faFileAudio } /> Audio (wav) <FontAwesomeIcon icon={ faFlask } /><FontAwesomeIcon icon={ faInfoCircle } /></>}
+                   />
+                    <Dropdown.Divider />
+                    <ExportWaveForm 
+                      TOOLTIP_DEPLAY_IN_MILLISECONDS={TOOLTIP_DEPLAY_IN_MILLISECONDS}
+                      handleExportAudioPreviewWithVideoWaveform={this.handleExportAudioPreviewWithVideoWaveform}
+                      title="Export audio preview as video with animated wave form - Experimental feature, at the moment you cannot combine audio and video in the same export."
+                      text={<><FontAwesomeIcon icon={ faFileAudio } /> Animated Waveform (mp4)   <FontAwesomeIcon icon={ faFlask } /><FontAwesomeIcon icon={ faInfoCircle } /></>}
+                    />     
                     </>: null   }
                     <Dropdown.Divider />
                     <ExportMenuItem
