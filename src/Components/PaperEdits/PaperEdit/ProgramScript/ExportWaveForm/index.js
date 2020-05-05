@@ -67,10 +67,7 @@ function Example(props) {
                 <option value="line">line</option>
             </Form.Control>
          </Form.Group>
-
-
          <Image src={require(`./${waveFormMode}.gif`)} alt="loading..." fluid/>
-
           <ColorOptionsFormGroup
           color={waveFormColor}
           handleColorSelectChange={handleColorSelectChange}

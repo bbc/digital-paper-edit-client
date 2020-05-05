@@ -981,7 +981,6 @@ class ProgramScript extends Component {
                    />
 
                     {whichJsEnv()==='electron'?  <>
-              
                     <Dropdown.Divider />
                     <ExportMenuItem
                       tootlipDelay={TOOLTIP_DEPLAY_IN_MILLISECONDS}
