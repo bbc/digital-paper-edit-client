@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta name="theme-color" content="#000000" />
-    <!--
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="theme-color" content="#000000" />
+  <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -22,59 +20,61 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>%REACT_APP_NAME%</title>
-  </head>
-  <body>
-    <script  type="text/javascript">
-      if(window.process && window.process.versions.electron){
-        // Electron Wrapper needs to be on the electron render process
-        // if not, if instead it's added via the main process the app will hang
-        // at the moment this works, in production. 
-        // eg do react build, move the build folder in digital-paper-edit-electron repo
-        // and when you start npm run start:prod the app will work
-        // however it means that in development npm start:dev in digital-paper-edit-electron won't work. 
-        // because in development the electron-main.js looks for the app served by webpack, 
-        // in development the path below to load src/ElectronWrapper/index.js doesn't resolve as they are in two different repos
-        const { app } = require('electron').remote;
+  <title>%REACT_APP_NAME%</title>
+</head>
+
+<body>
+  <script type="text/javascript">
+    if (window.process && window.process.versions.electron) {
+      // Electron Wrapper needs to be on the electron render process
+      // if not, if instead it's added via the main process the app will hang
+      // at the moment this works, in production. 
+      // eg do react build, move the build folder in digital-paper-edit-electron repo
+      // and when you start npm run start:prod the app will work
+      // however it means that in development npm start:dev in digital-paper-edit-electron won't work. 
+      // because in development the electron-main.js looks for the app served by webpack, 
+      // in development the path below to load src/ElectronWrapper/index.js doesn't resolve as they are in two different repos
+      const { ipcRenderer } = require('electron');
+      const appPath = ipcRenderer.sendSync('synchronous-message-get-app-path', 'ping');
+      const path = require('path');
+
+      // changing path to simplify being able to load electron wrapper from this index.html file, 
+      // which will be deep in node_modules
+      window.process.chdir(appPath)
+      const ElectronWrapper = require(path.join(appPath, 'src', 'ElectronWrapper', 'index.js'));
+      window.ElectronWrapper = ElectronWrapper;
+    }
+
+    if (window.process && window.process.versions.cep) {
+
+      try {
+        console.log('__dirname', __dirname)
+        console.log('process.cwd()', process.cwd())
+        /////////////////////////
+        console.log('  process.chdir(__dirname);')
+        process.chdir(__dirname);
+        /////////////////////////
+        console.log('__dirname', __dirname)
+        console.log('process.cwd()', process.cwd())
+
         const path = require('path');
-        const appPath = app.getAppPath();
-        // changing path to simplify being able to load electron wrapper from this index.html file, 
-        // which will be deep in node_modules
-        window.process.chdir(appPath)
-        const ElectronWrapper = require(path.join(appPath,'src','ElectronWrapper','index.js'));
-        window.ElectronWrapper = ElectronWrapper;
+        const AdobeCEPWrapper = require(path.join(__dirname, 'src', 'AdobeCEPWrapper', 'index.js'));
+        window.AdobeCEPWrapper = AdobeCEPWrapper;
       }
-
-      if(window.process && window.process.versions.cep) {
-
-        try {
-            console.log('__dirname',__dirname)
-            console.log('process.cwd()',process.cwd())
-            /////////////////////////
-             console.log('  process.chdir(__dirname);')
-            process.chdir(__dirname);
-            /////////////////////////
-            console.log('__dirname',__dirname)
-            console.log('process.cwd()',process.cwd())
-            
-            const path = require('path');
-            const AdobeCEPWrapper = require(path.join(__dirname,'src','AdobeCEPWrapper','index.js'));
-            window.AdobeCEPWrapper = AdobeCEPWrapper;
-          }
-          catch (err) {
-            console.log('chdir: ' + err);
-          }
+      catch (err) {
+        console.log('chdir: ' + err);
       }
+    }
   </script>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <!--
       Load "env.js" script before the main JavaScript bundle.
       You can use it to define "runtime" environment variables.
       Please open this file for more details.
     -->
-    <script src="%PUBLIC_URL%/env.js"></script>
-    <!--
+  <script src="%PUBLIC_URL%/env.js"></script>
+  <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -84,5 +84,6 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  </body>
+</body>
+
 </html>
