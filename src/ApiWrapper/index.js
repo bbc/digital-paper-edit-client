@@ -26,14 +26,13 @@ export default (() => {
     // try {
     //   const { ipcRenderer } = require('electron');
     //   const appPath = ipcRenderer.sendSync('synchronous-message-get-app-path', 'ping');
-    const path = require('path');
-    console.log(window.appPath, 'window.AppPath', 'process.cwd()', process.cwd());
+    // const path = require('path');
+    // console.log(window.appPath, 'window.AppPath', 'process.cwd()', process.cwd());
     //   window.process.chdir(appPath);
-    const ElectronWrapper = require(path.join(process.cwd(), 'src', 'ElectronWrapper', 'index.js'));
-    // const ElectronWrapper = window.ElectronWrapper;
+    // const ElectronWrapper = require(path.join(window.appPath, 'src', 'ElectronWrapper', 'index.js'));
+    const ElectronWrapper = window.ElectronWrapper;
     const electronWrapper = new ElectronWrapper();
     Object.freeze(electronWrapper);
-
     return electronWrapper;
     // } catch (e) {
     //   console.error('api wrapper electron', e);
