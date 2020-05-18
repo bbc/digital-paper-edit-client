@@ -6,7 +6,7 @@ const jsENV = whichJsEnv();
 
 // dynamic export
 // https://medium.com/@WebReflection/javascript-dynamic-import-export-b0e8775a59d4
-export default ( () => {
+export default (() => {
   // await async dependencies
   // export the module
   if (jsENV === 'demo') {
@@ -23,11 +23,20 @@ export default ( () => {
     return apiWrapper;
   }
   if (jsENV === 'electron') {
-    const ElectronWrapper = window.ElectronWrapper;
-    const electronWrapper = new ElectronWrapper();
-    Object.freeze(electronWrapper);
+    try {
+      const { ipcRenderer } = require('electron');
+      const appPath = ipcRenderer.sendSync('synchronous-message-get-app-path', 'ping');
+      const path = require('path');
+      window.process.chdir(appPath);
+      const ElectronWrapper = require(path.join(appPath, 'src', 'ElectronWrapper', 'index.js'));
+      // const ElectronWrapper = window.ElectronWrapper;
+      const electronWrapper = new ElectronWrapper();
+      Object.freeze(electronWrapper);
 
-    return electronWrapper;
+      return electronWrapper;
+    } catch (e) {
+      console.error('api wrapper electron', e);
+    }
   }
   if (jsENV === 'cep') {
     const AdobeCEPWrapper = window.AdobeCEPWrapper;
