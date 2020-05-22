@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import path from 'path';
 // import './index.module.css';
 // import styles from './Transcript.module.css';
 // TODO: perhaps import TranscriptEditor on componentDidMount(?) to defer the load for later
 // https://facebook.github.io/create-react-app/docs/code-splitting
-import TranscriptEditor from 'slate-transcript-editor';
+// import TranscriptEditor from 'slate-transcript-editor';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -12,6 +12,8 @@ import { Redirect } from 'react-router-dom';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import ApiWrapper from '../../ApiWrapper/index.js';
 import CustomAlert from '../lib/CustomAlert/index.js';
+
+const TranscriptEditor = React.lazy(() => import('slate-transcript-editor'));
 
 class TranscriptCorrect extends Component {
   constructor(props) {
@@ -148,17 +150,19 @@ class TranscriptCorrect extends Component {
           </Row>
           {this.state.savedNotification}
           {this.state.transcriptJson !== null && (
-            <TranscriptEditor
-              transcriptData={this.state.transcriptJson} // Transcript json
-              mediaUrl={this.state.url} // string url to media file - audio or video
-              // showTitle={true}
-              isEditable={true} // se to true if you want to be able to edit the text
-              title={this.state.transcriptTitle}
-              mediaType={mediaType}
-              autoSaveContentType={'digitalpaperedit'}
-              handleSaveEditor={this.handleSave}
-              // handleAutoSaveChanges={ this.handleSave }
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+              <TranscriptEditor
+                transcriptData={this.state.transcriptJson} // Transcript json
+                mediaUrl={this.state.url} // string url to media file - audio or video
+                // showTitle={true}
+                isEditable={true} // se to true if you want to be able to edit the text
+                title={this.state.transcriptTitle}
+                mediaType={mediaType}
+                autoSaveContentType={'digitalpaperedit'}
+                handleSaveEditor={this.handleSave}
+                // handleAutoSaveChanges={ this.handleSave }
+              />
+            </Suspense>
           )}
         </Container>
       </>

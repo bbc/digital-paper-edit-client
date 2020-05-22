@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -7,11 +7,9 @@ import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
 import CustomBreadcrumb from '../../lib/CustomBreadcrumb/index.js';
-// import CustomFooter from '../../lib/CustomFooter/index.js';
-
-import Transcripts from './Transcripts/index.js';
-import ProgramScript from './ProgramScript/index.js';
 import ApiWrapper from '../../../ApiWrapper/index.js';
+const Transcripts = React.lazy(() => import('./Transcripts/index.js'));
+const ProgramScript = React.lazy(() => import('./ProgramScript/index.js'));
 
 class PaperEdit extends Component {
   constructor(props) {
@@ -131,15 +129,17 @@ class PaperEdit extends Component {
               <div className={['d-block', 'd-sm-none'].join(' ')}>
                 <br />
               </div>
-              {this.state.transcripts.length ? (
-                <Transcripts projectId={this.state.projectId} transcripts={this.state.transcripts} labelsOptions={this.state.labelsOptions} />
-              ) : (
-                <>
-                  <br />
-                  <br />
-                  <i>No Transcripts, create a transcript to get started</i>
-                </>
-              )}
+              <Suspense fallback={<div>Loading...</div>}>
+                {this.state.transcripts.length ? (
+                  <Transcripts projectId={this.state.projectId} transcripts={this.state.transcripts} labelsOptions={this.state.labelsOptions} />
+                ) : (
+                  <>
+                    <br />
+                    <br />
+                    {/* <i>No Transcripts, create a transcript to get started</i> */}
+                  </>
+                )}
+              </Suspense>
             </Col>
             <Col
               xs={{ span: 12, offset: 0 }}
@@ -161,7 +161,9 @@ class PaperEdit extends Component {
               }}
               style={{ display: this.state.isProgramScriptShown ? 'block' : 'none' }}
             >
-              <ProgramScript projectId={this.state.projectId} papereditId={this.state.papereditId} transcripts={this.state.transcripts} />
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProgramScript projectId={this.state.projectId} papereditId={this.state.papereditId} transcripts={this.state.transcripts} />
+              </Suspense>
             </Col>
           </Row>
         </Container>

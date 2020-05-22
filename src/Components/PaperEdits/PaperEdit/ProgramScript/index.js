@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import Row from 'react-bootstrap/Row';
 import cuid from 'cuid';
 import Card from 'react-bootstrap/Card';
@@ -35,7 +35,7 @@ import {
   faFlask,
 } from '@fortawesome/free-solid-svg-icons';
 import timecodes from 'node-timecodes';
-import ProgrammeScript from './ProgrammeScript.js';
+
 import ExportMenuItem from './ExportMenuItem';
 import getDataFromUserWordsSelection from './get-data-from-user-selection.js';
 import { divideWordsSelectionsIntoParagraphs, isOneParagraph } from './divide-words-selections-into-paragraphs/index.js';
@@ -43,6 +43,7 @@ import ApiWrapper from '../../../../ApiWrapper/index.js';
 import whichJsEnv from '../../../../Util/which-js-env';
 import programmeScriptJsonToDocx from './programme-script-json-to-docx/index.js';
 import ExportWaveForm from './ExportWaveForm';
+const ProgrammeScript = React.lazy(() => import('./ProgrammeScript.js'));
 
 const TOOLTIP_DEPLAY_IN_MILLISECONDS = 3000;
 const defaultReelName = 'NA';
@@ -1164,15 +1165,17 @@ class ProgramScript extends Component {
               onDoubleClick={this.handleDoubleClickOnProgrammeScript}
             >
               {this.state.programmeScript ? (
-                <ProgrammeScript
-                  programmeScriptElements={this.state.programmeScript.elements}
-                  handleProgrammeScriptOrderChange={this.handleProgrammeScriptOrderChange}
-                  handleDeleteProgrammeScriptElement={this.handleDeleteProgrammeScriptElement}
-                  handleEditProgrammeScriptElement={this.handleEditProgrammeScriptElement}
-                  handleAddTranscriptElementToProgrammeScript={this.handleAddTranscriptElementToProgrammeScript}
-                  handleAddTranscriptSelectionToProgrammeScriptTmpSave={this.handleAddTranscriptSelectionToProgrammeScriptTmpSave}
-                  handleChangeInsertPointPosition={this.handleChangeInsertPointPosition}
-                />
+                <Suspense fallback={<div>Loading...</div>}>
+                  <ProgrammeScript
+                    programmeScriptElements={this.state.programmeScript.elements}
+                    handleProgrammeScriptOrderChange={this.handleProgrammeScriptOrderChange}
+                    handleDeleteProgrammeScriptElement={this.handleDeleteProgrammeScriptElement}
+                    handleEditProgrammeScriptElement={this.handleEditProgrammeScriptElement}
+                    handleAddTranscriptElementToProgrammeScript={this.handleAddTranscriptElementToProgrammeScript}
+                    handleAddTranscriptSelectionToProgrammeScriptTmpSave={this.handleAddTranscriptSelectionToProgrammeScriptTmpSave}
+                    handleChangeInsertPointPosition={this.handleChangeInsertPointPosition}
+                  />
+                </Suspense>
               ) : null}
             </article>
           </Card.Body>
