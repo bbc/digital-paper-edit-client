@@ -35,6 +35,7 @@ import {
   faFlask,
 } from '@fortawesome/free-solid-svg-icons';
 import timecodes from 'node-timecodes';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import ExportMenuItem from './ExportMenuItem';
 import getDataFromUserWordsSelection from './get-data-from-user-selection.js';
@@ -1165,7 +1166,22 @@ class ProgramScript extends Component {
               onDoubleClick={this.handleDoubleClickOnProgrammeScript}
             >
               {this.state.programmeScript ? (
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense
+                  fallback={
+                    <>
+                      <Skeleton variant="text" />
+                      <Skeleton variant="text" />
+                      <Skeleton variant="text" />
+                      <Skeleton variant="text" />
+                      <Skeleton variant="text" />
+                      <Skeleton variant="text" />
+                      <Skeleton variant="text" />
+                      <Skeleton variant="text" />
+                      <Skeleton variant="text" />
+                      <Skeleton variant="text" />
+                    </>
+                  }
+                >
                   <ProgrammeScript
                     programmeScriptElements={this.state.programmeScript.elements}
                     handleProgrammeScriptOrderChange={this.handleProgrammeScriptOrderChange}

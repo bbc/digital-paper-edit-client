@@ -6,6 +6,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
+import Skeleton from '@material-ui/lab/Skeleton';
 import CustomBreadcrumb from '../../lib/CustomBreadcrumb/index.js';
 import ApiWrapper from '../../../ApiWrapper/index.js';
 const Transcripts = React.lazy(() => import('./Transcripts/index.js'));
@@ -129,14 +130,27 @@ class PaperEdit extends Component {
               <div className={['d-block', 'd-sm-none'].join(' ')}>
                 <br />
               </div>
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense
+                fallback={
+                  <Row>
+                    <Col xs={12} sm={3} md={3} lg={3} xl={3}>
+                      <Skeleton variant="rect" width={'100%'} height={634} />
+                    </Col>
+                    <Col xs={12} sm={9} md={9} lg={9} xl={9}>
+                      <Skeleton variant="rect" width={'100%'} height={634} />
+                    </Col>
+                  </Row>
+                }
+              >
                 {this.state.transcripts.length ? (
                   <Transcripts projectId={this.state.projectId} transcripts={this.state.transcripts} labelsOptions={this.state.labelsOptions} />
                 ) : (
                   <>
-                    <br />
-                    <br />
-                    {/* <i>No Transcripts, create a transcript to get started</i> */}
+                    <Row>
+                      <Col>
+                        <Skeleton variant="rect" width={'100%'} height={634} />
+                      </Col>
+                    </Row>
                   </>
                 )}
               </Suspense>
@@ -161,7 +175,34 @@ class PaperEdit extends Component {
               }}
               style={{ display: this.state.isProgramScriptShown ? 'block' : 'none' }}
             >
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense
+                fallback={
+                  <>
+                    <Row>
+                      <Skeleton variant="rect" width={'100%'} height={200} />
+                    </Row>
+                    <br />
+                    <Row>
+                      <Col>
+                        <Skeleton variant="rect" width={'100%'} height={30} />
+                      </Col>
+                      <Col>
+                        <Skeleton variant="rect" width={'100%'} height={30} />
+                      </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                      <Col>
+                        <Skeleton variant="rect" width={'100%'} height={30} />
+                      </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                      <Skeleton variant="rect" width={'100%'} height={300} />
+                    </Row>
+                  </>
+                }
+              >
                 <ProgramScript projectId={this.state.projectId} papereditId={this.state.papereditId} transcripts={this.state.transcripts} />
               </Suspense>
             </Col>

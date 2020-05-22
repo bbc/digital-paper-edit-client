@@ -12,6 +12,7 @@ import { Redirect } from 'react-router-dom';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
 import ApiWrapper from '../../ApiWrapper/index.js';
 import CustomAlert from '../lib/CustomAlert/index.js';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const TranscriptEditor = React.lazy(() => import('slate-transcript-editor'));
 
@@ -150,7 +151,23 @@ class TranscriptCorrect extends Component {
           </Row>
           {this.state.savedNotification}
           {this.state.transcriptJson !== null && (
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense
+              fallback={
+                <Container fluid>
+                  <Row>
+                    <Col xs={12} sm={3} md={3} lg={3} xl={3}>
+                      <Skeleton variant="rect" width={'100%'} height={100} />
+                    </Col>
+                    <Col xs={12} sm={8} md={8} lg={8} xl={8}>
+                      <Skeleton variant="rect" width={'100%'} height={600} />
+                    </Col>
+                    <Col xs={12} sm={1} md={1} lg={1} xl={1}>
+                      <Skeleton variant="rect" width={'100%'} height={350} />
+                    </Col>
+                  </Row>
+                </Container>
+              }
+            >
               <TranscriptEditor
                 transcriptData={this.state.transcriptJson} // Transcript json
                 mediaUrl={this.state.url} // string url to media file - audio or video

@@ -7,7 +7,9 @@ import 'bootstrap-css-only/css/bootstrap.css';
 
 import CustomAlert from './Components/lib/CustomAlert';
 import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
 import Alert from 'react-bootstrap/Alert';
+import Skeleton from '@material-ui/lab/Skeleton';
 const Projects = lazy(() => import('./Components/Projects/index.js'));
 const Project = lazy(() => import('./Components/Projects/Project.js'));
 const TranscriptCorrect = lazy(() => import('./Components/Transcripts/TranscriptCorrect.js'));
@@ -72,7 +74,20 @@ class App extends Component {
         {offlineWarning}
 
         <HashRouter>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <Container>
+                <br />
+                <Row>
+                  <Skeleton variant="rect" width={'100%'} height={50} />
+                </Row>
+                <br />
+                <Row>
+                  <Skeleton variant="rect" width={'100%'} height={600} />
+                </Row>
+              </Container>
+            }
+          >
             <Switch>
               <Route exact path="/" component={Projects} />
               <Route exact path="/projects" component={Projects} />

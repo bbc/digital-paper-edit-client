@@ -9,6 +9,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHighlighter, faCog } from '@fortawesome/free-solid-svg-icons';
+import Skeleton from '@material-ui/lab/Skeleton';
 import SearchBar from './SearchBar/index.js';
 import LabelsList from './LabelsList/index.js';
 import onlyCallOnce from '../../../../Util/only-call-once/index.js';
@@ -366,7 +367,22 @@ class Transcript extends Component {
               </Button>
             )} */}
 
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense
+              fallback={
+                <>
+                  <Skeleton variant="text" />
+                  <Skeleton variant="text" />
+                  <Skeleton variant="text" />
+                  <Skeleton variant="text" />
+                  <Skeleton variant="text" />
+                  <Skeleton variant="text" />
+                  <Skeleton variant="text" />
+                  <Skeleton variant="text" />
+                  <Skeleton variant="text" />
+                  <Skeleton variant="text" />
+                </>
+              }
+            >
               {this.props.transcript && (
                 <Paragraphs
                   labelsOptions={this.state.labelsOptions && this.state.labelsOptions}
