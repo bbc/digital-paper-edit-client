@@ -281,23 +281,23 @@ class Transcript extends Component {
           }
         >
           <Card.Body style={{ backgroundColor: 'black', padding: '0px' }}>
-            {/* {this.state.componentMounted && ( */}
-            <video
-              src={this.props.url}
-              ref={this.videoRef}
-              onTimeUpdate={e => {
-                this.setState({ currentTime: e.target.currentTime });
-              }}
-              style={{
-                width: '100%',
-                height: '10em',
-                marginTop: '0em',
-                backgroundColor: 'black',
-                boxShadow: 'none',
-              }}
-              controls
-            />
-            {/* )} */}
+            {this.state.componentMounted && (
+              <video
+                src={this.props.url}
+                ref={this.videoRef}
+                onTimeUpdate={e => {
+                  this.setState({ currentTime: e.target.currentTime });
+                }}
+                style={{
+                  width: '100%',
+                  height: '10em',
+                  marginTop: '0em',
+                  backgroundColor: 'black',
+                  boxShadow: 'none',
+                }}
+                controls
+              />
+            )}
           </Card.Body>
           {/* <Card.Body> */}
           <Card.Body style={{ paddingBottom: '0.5em', paddingTop: '0.5em' }}>
@@ -361,11 +361,11 @@ class Transcript extends Component {
           >
             {highlights}
 
-            {/* {this.props.transcript && !this.state.componentMounted && (
+            {this.props.transcript && !this.state.componentMounted && (
               <Button size="lg" variant="light" onClick={this.handleLoadTranscription} block>
                 Load transcription
               </Button>
-            )} */}
+            )}
 
             <Suspense
               fallback={
@@ -383,7 +383,7 @@ class Transcript extends Component {
                 </>
               }
             >
-              {this.props.transcript && (
+              {this.props.transcript && this.state.componentMounted && (
                 <Paragraphs
                   labelsOptions={this.state.labelsOptions && this.state.labelsOptions}
                   annotations={this.state.annotations ? this.state.annotations : []}
