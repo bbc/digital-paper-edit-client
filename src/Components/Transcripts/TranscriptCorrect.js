@@ -4,16 +4,13 @@ import path from 'path';
 // import styles from './Transcript.module.css';
 // TODO: perhaps import TranscriptEditor on componentDidMount(?) to defer the load for later
 // https://facebook.github.io/create-react-app/docs/code-splitting
-import  TranscriptEditor  from 'slate-transcript-editor';
+import TranscriptEditor from 'slate-transcript-editor';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import { Redirect } from 'react-router-dom';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb/index.js';
-// import CustomFooter from '../lib/CustomFooter/index.js';
 import ApiWrapper from '../../ApiWrapper/index.js';
-import CustomFooter from '../lib/CustomFooter/index.js';
 import CustomAlert from '../lib/CustomAlert/index.js';
 
 class TranscriptCorrect extends Component {
@@ -26,7 +23,7 @@ class TranscriptCorrect extends Component {
       url: null,
       projectTitle: '',
       transcriptTitle: '',
-      savedNotification: null
+      savedNotification: null,
     };
     this.transcriptEditorRef = React.createRef();
   }
@@ -35,115 +32,134 @@ class TranscriptCorrect extends Component {
     ApiWrapper.getTranscript(this.state.projectId, this.state.transcriptId)
       // TODO: add error handling
       .then(json => {
-        console.log('json',json)
+        console.log('json', json);
         this.setState({
           projectTitle: json.projectTitle,
           transcriptTitle: json.transcriptTitle,
           transcriptJson: json.transcript,
           url: json.url,
-          clipName: json.clipName
+          clipName: json.clipName,
         });
       });
-  }
+  };
 
-  handleSave = (autoSaveData) =>{
-    console.log('handleSave', autoSaveData)
+  handleSave = autoSaveData => {
+    console.log('handleSave', autoSaveData);
     const data = autoSaveData;
     data.title = this.state.transcriptTitle;
     data.transcriptTitle = this.state.transcriptTitle;
     const queryParamsOptions = false;
-    ApiWrapper.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, data).then((response) => {
-      console.log('ApiWrapper.updateTranscript', response );
-      if (response.ok) {
-      // show message or redirect
-        console.log('updated');
-        // More discrete auto save notification 
+    ApiWrapper.updateTranscript(this.state.projectId, this.state.transcriptId, queryParamsOptions, data)
+      .then(response => {
+        console.log('ApiWrapper.updateTranscript', response);
+        if (response.ok) {
+          // show message or redirect
+          console.log('updated');
+          // More discrete auto save notification
+          this.setState({
+            savedNotification: (
+              <small className={'text-success'}>
+                Transcript: <b>{this.state.transcriptTitle}</b> has been saved at <b>{new Date().toLocaleString()}</b>
+              </small>
+            ),
+          });
+        }
+      })
+      .catch(e => {
+        console.error('error saving transcript:: ', e);
         this.setState({
-        savedNotification:  <small className={'text-success'}>Transcript: <b>{this.state.transcriptTitle}</b> has been saved at <b>{(new Date()).toLocaleString()}</b></small>
+          savedNotification: (
+            <CustomAlert
+              dismissable={true}
+              variant={'danger'}
+              heading={'Error saving transcript'}
+              message={
+                <p>
+                  There was an error trying to save this transcript: <b>{this.state.transcriptTitle}</b>
+                </p>
+              }
+            />
+          ),
         });
-      }
-    }).catch((e) => {
-      console.error('error saving transcript:: ', e);
-      this.setState({
-        savedNotification: <CustomAlert
-          dismissable={ true }
-          variant={ 'danger' }
-          heading={ 'Error saving transcript' }
-          message={ <p>There was an error trying to save this transcript: <b>{this.state.transcriptTitle}</b></p> }
-        />
       });
-    });
-  }
+  };
 
   redirectToAnnotatePage = () => {
     // this.state.projectId this.state.transcriptId
     this.setState({
-      redirect: true
+      redirect: true,
     });
-  }
+  };
 
   renderRedirect = () => {
     if (this.state.redirect) {
-      return <Redirect to={ `/projects/${ this.state.projectId }/transcripts/${ this.state.newTranscriptId }/annotate` } />;
+      return <Redirect to={`/projects/${this.state.projectId}/transcripts/${this.state.newTranscriptId}/annotate`} />;
     }
-  }
+  };
 
   render() {
-    // Workaround to change layout of TranscriptEditor for audio files. 
+    // Workaround to change layout of TranscriptEditor for audio files.
     // For now only handling limited numnber of file extension that have more of a certainty of being audio
     // as opposed to more ambiguos extensions such as ogg or mp4 that could be either video or audio
     // there might be better ways to determine if a clip is audio or video, especially node/"server side" but
     // might also be more of a setup eg using ffprobe etc..
     let mediaType = 'video';
-    if(path.extname(this.state.clipName) ==='.wav' 
-      || path.extname(this.state.clipName) ==='.mp3' 
-      || path.extname(this.state.clipName) ==='.m4a' 
-      || path.extname(this.state.clipName) ==='.flac' 
-      || path.extname(this.state.clipName) ==='.aiff'){
-      mediaType = 'audio'
+    if (
+      path.extname(this.state.clipName) === '.wav' ||
+      path.extname(this.state.clipName) === '.mp3' ||
+      path.extname(this.state.clipName) === '.m4a' ||
+      path.extname(this.state.clipName) === '.flac' ||
+      path.extname(this.state.clipName) === '.aiff'
+    ) {
+      mediaType = 'audio';
     }
     return (
       <>
         {this.renderRedirect()}
-        <Container style={ { 
-          backgroundColor: '#eee' 
-        } } fluid>
-          <br/>
+        <Container
+          style={{
+            backgroundColor: '#eee',
+          }}
+          fluid
+        >
+          <br />
           <Row>
-            <Col sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 } style={{marginBottom: '0'}}>
+            <Col sm={12} md={12} ld={12} xl={12} style={{ marginBottom: '0' }}>
               <CustomBreadcrumb
-              backgroundColor={ 'transparent'}
-                items={ [ {
-                  name: 'Projects',
-                  link: '/projects'
-                },
-                {
-                  name: `Project: ${ this.state.projectTitle }`,
-                  link: `/projects/${ this.state.projectId }`
-                },
-                {
-                  name: 'Transcripts',
-                },
-                {
-                  name: `${ this.state.transcriptTitle }`
-                }
-                ] }
+                backgroundColor={'transparent'}
+                items={[
+                  {
+                    name: 'Projects',
+                    link: '/projects',
+                  },
+                  {
+                    name: `Project: ${this.state.projectTitle}`,
+                    link: `/projects/${this.state.projectId}`,
+                  },
+                  {
+                    name: 'Transcripts',
+                  },
+                  {
+                    name: `${this.state.transcriptTitle}`,
+                  },
+                ]}
               />
             </Col>
           </Row>
           {this.state.savedNotification}
-          {this.state.transcriptJson !== null &&
-          <TranscriptEditor
-            transcriptData={ this.state.transcriptJson }// Transcript json
-            mediaUrl={ this.state.url }// string url to media file - audio or video
-            // showTitle={true}
-            isEditable={ true }// se to true if you want to be able to edit the text
-            title={ this.state.transcriptTitle }
-            mediaType={ mediaType }
-            autoSaveContentType={'digitalpaperedit'}
-            handleSaveEditor={ this.handleSave }
-            // handleAutoSaveChanges={ this.handleSave }
-          />}
+          {this.state.transcriptJson !== null && (
+            <TranscriptEditor
+              transcriptData={this.state.transcriptJson} // Transcript json
+              mediaUrl={this.state.url} // string url to media file - audio or video
+              // showTitle={true}
+              isEditable={true} // se to true if you want to be able to edit the text
+              title={this.state.transcriptTitle}
+              mediaType={mediaType}
+              autoSaveContentType={'digitalpaperedit'}
+              handleSaveEditor={this.handleSave}
+              // handleAutoSaveChanges={ this.handleSave }
+            />
+          )}
         </Container>
       </>
     );

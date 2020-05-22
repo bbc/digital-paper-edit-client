@@ -52,7 +52,7 @@ export default (() => {
 
     // const path = require('path');
     // const AdobeCEPWrapper = require(path.join(__dirname, 'src', 'AdobeCEPWrapper', 'index.js'));
-    window.AdobeCEPWrapper = AdobeCEPWrapper;
+    // window.AdobeCEPWrapper = AdobeCEPWrapper;
 
     const AdobeCEPWrapper = window.AdobeCEPWrapper;
     const adobeCEPWrapper = new AdobeCEPWrapper();

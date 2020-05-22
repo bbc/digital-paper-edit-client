@@ -26,6 +26,9 @@
 <body>
   <script type="text/javascript">
     if (window.process && window.process.versions.electron) {
+      console.info('process.versions.node', process.versions.node);
+      console.info('process.versions.chrome', process.versions.chrome);
+      console.info('process.versions.electron', process.versions.electron);
       // Electron Wrapper needs to be on the electron render process
       // if not, if instead it's added via the main process the app will hang
       // at the moment this works, in production. 

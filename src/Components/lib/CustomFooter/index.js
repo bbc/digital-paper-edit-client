@@ -8,18 +8,11 @@ import { faFlask } from '@fortawesome/free-solid-svg-icons';
 
 function CustomFooter() {
   const footer = (
-    <Navbar
-      collapseOnSelect
-      expand={ 'md' }
-      bg="light"
-      variant="light"
-      fixed="bottom"
-      className="justify-content-center"
-    >
-      <FontAwesomeIcon icon={ faFlask } /> <small>
-        This is a prototype by {' '}
-        <a href={ process.env.REACT_APP_PROTOTYPE_BY_LINK } target="_blank" rel="noopener noreferrer">
-          {process.env.REACT_APP_PROTOTYPE_BY}
+    <Navbar collapseOnSelect expand={'md'} bg="light" variant="light" fixed="bottom" className="justify-content-center">
+      <small>
+        <a href={'https://www.autoedit.io'} target="_blank" rel="noopener noreferrer">
+          {' '}
+          autoEdit.io <FontAwesomeIcon icon={faFlask} />
         </a>
       </small>
     </Navbar>

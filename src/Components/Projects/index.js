@@ -7,7 +7,7 @@ import ItemFormModal from '../lib/ItemFormModal';
 import CustomBreadcrumb from '../lib/CustomBreadcrumb';
 import CustomFooter from '../lib/CustomFooter';
 import ApiWrapper from '../../ApiWrapper/index.js';
-import {HashRouter} from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import { faFolder } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 class Projects extends React.Component {
@@ -18,17 +18,17 @@ class Projects extends React.Component {
       isNewItemModalShow: false,
       title: '',
       description: '',
-      itemId: null
+      itemId: null,
     };
     this.handleDeleteItem = this.handleDeleteItem.bind(this);
   }
-  async componentDidMount () {
+  async componentDidMount() {
     try {
-    // TODO: do we need to add user id in request?
+      // TODO: do we need to add user id in request?
       const result = await ApiWrapper.getAllProjects();
 
       if (result) {
-      // add a display property for component cards search
+        // add a display property for component cards search
         const tmpList = result.map(project => {
           project.display = true;
 
@@ -40,15 +40,15 @@ class Projects extends React.Component {
       console.log('Error with ApiWrapper.getAllProjects', e);
     }
     // TODO: some error handling
-  };
+  }
 
   // The form works both for new/create and edit/update
-  handleSaveItem = (item) => {
+  handleSaveItem = item => {
     if (!item.id) {
       ApiWrapper.createProject(item).then(response => {
         if (response.status === 'ok') {
           // Server returns project with UID generated server side
-          const projects = [ ...this.state.items ];
+          const projects = [...this.state.items];
           // need to add display true attribute for search to the new project
           const newProject = response.project;
           newProject.display = true;
@@ -59,12 +59,11 @@ class Projects extends React.Component {
             // reset item form
             title: '',
             itemId: null,
-            description: ''
+            description: '',
           });
         }
       });
-    }
-    else {
+    } else {
       ApiWrapper.updateProject(item.id, item).then(response => {
         if (response.status === 'ok') {
           const project = response.project;
@@ -81,36 +80,36 @@ class Projects extends React.Component {
             // reset item form
             title: '',
             itemId: null,
-            description: ''
+            description: '',
           });
         }
       });
     }
-  }
+  };
 
   findItemById = (list, id) => {
-    const result = list.filter((p) => {
+    const result = list.filter(p => {
       return p.id === id;
     });
 
     return result[0];
-  }
+  };
 
-  handleEditItem = (itemId) => {
+  handleEditItem = itemId => {
     const item = this.findItemById(this.state.items, itemId);
     this.setState({
       title: item.title,
       itemId: item.id,
       description: item.description,
-      isNewItemModalShow: true
+      isNewItemModalShow: true,
     });
     console.log('edit item', item);
-  }
+  };
 
   async handleDeleteItem(itemId) {
     const result = await ApiWrapper.deleteProject(itemId);
     if (result.ok) {
-      const newItemsList = this.state.items.filter((p) => {
+      const newItemsList = this.state.items.filter(p => {
         return p.id !== itemId;
       });
       this.setState({ items: newItemsList });
@@ -119,13 +118,13 @@ class Projects extends React.Component {
     }
   }
 
-  showLinkPathToItem = (id) => {
-    return `/projects/${ id }`;
-  }
+  showLinkPathToItem = id => {
+    return `/projects/${id}`;
+  };
 
-  handleUpdateList = (list) => {
+  handleUpdateList = list => {
     this.setState({ items: list });
-  }
+  };
 
   handleShowCreateNewItemForm = () => {
     // return '/projects/new';
@@ -134,51 +133,54 @@ class Projects extends React.Component {
 
   handleCloseModal = () => {
     this.setState({
-      title:'',
+      title: '',
       itemId: null,
       description: '',
-      isNewItemModalShow: false
+      isNewItemModalShow: false,
     });
-  }
+  };
 
   render() {
-    return (<>
-    <HashRouter>
-      <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
-        <Row>
-          <Col sm={ 12 } md={ 12 } ld={ 12 } xl={ 12 }>
-            <CustomBreadcrumb items={ [
-              {
-                name: 'Projects'
-              }
-            ] } />
-          </Col>
-        </Row>
-        <ListPage
-          model={ 'Project' }
-          items={ this.state.items }
-          icon={ <FontAwesomeIcon icon={ faFolder } color="#007bff"/> }
-          handleShowCreateNewItemForm={ this.handleShowCreateNewItemForm }
-          deleteItem={ this.createNew }
-          editItem={ this.createNew }
-          handleEdit={ this.handleEditItem }
-          handleDelete={ this.handleDeleteItem }
-          showLinkPath={ this.showLinkPathToItem }
-          handleUpdateList={ this.handleUpdateList }
-        />
-        <ItemFormModal
-          title={ this.state.title }
-          description={ this.state.description }
-          id={ this.state.itemId }
-          modalTitle={ this.state.itemId ? 'Edit Project' : 'New Project' }
-          show={ this.state.isNewItemModalShow }
-          handleCloseModal={ this.handleCloseModal }
-          handleSaveForm={ this.handleSaveItem }
-        />
-      </Container>
-      {/* <CustomFooter/> */}
-      </HashRouter>
-    </>
+    return (
+      <>
+        <HashRouter>
+          <Container style={{ marginBottom: '5em', marginTop: '1em' }}>
+            <Row>
+              <Col sm={12} md={12} ld={12} xl={12}>
+                <CustomBreadcrumb
+                  items={[
+                    {
+                      name: 'Projects',
+                    },
+                  ]}
+                />
+              </Col>
+            </Row>
+            <ListPage
+              model={'Project'}
+              items={this.state.items}
+              icon={<FontAwesomeIcon icon={faFolder} color="#007bff" />}
+              handleShowCreateNewItemForm={this.handleShowCreateNewItemForm}
+              deleteItem={this.createNew}
+              editItem={this.createNew}
+              handleEdit={this.handleEditItem}
+              handleDelete={this.handleDeleteItem}
+              showLinkPath={this.showLinkPathToItem}
+              handleUpdateList={this.handleUpdateList}
+            />
+            <ItemFormModal
+              title={this.state.title}
+              description={this.state.description}
+              id={this.state.itemId}
+              modalTitle={this.state.itemId ? 'Edit Project' : 'New Project'}
+              show={this.state.isNewItemModalShow}
+              handleCloseModal={this.handleCloseModal}
+              handleSaveForm={this.handleSaveItem}
+            />
+          </Container>
+          <CustomFooter />
+        </HashRouter>
+      </>
     );
   }
 }

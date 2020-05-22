@@ -82,14 +82,14 @@ function groupWordsInParagraphsBySpeakers(words, segments) {
   const result = addWordsToSpeakersParagraphs(words, segments);
 
   return result;
-};
+}
 
-function addWordsToSpeakersParagraphs (words, segments) {
+function addWordsToSpeakersParagraphs(words, segments) {
   const results = [];
   let currentSegmentIndex = 0;
   let previousSegmentIndex = 0;
   let paragraph = { words: [], text: '', speaker: '' };
-  words.forEach((word) => {
+  words.forEach(word => {
     const currentSegment = findSegmentForWord(word, segments);
     // if a segment exists for the word
     if (currentSegment !== undefined) {
@@ -98,8 +98,7 @@ function addWordsToSpeakersParagraphs (words, segments) {
         paragraph.words.push(word);
         paragraph.text += word.text + ' ';
         paragraph.speaker = currentSegment.speaker;
-      }
-      else {
+      } else {
         previousSegmentIndex = currentSegmentIndex;
         paragraph.text.trim();
         results.push(paragraph);
@@ -116,24 +115,24 @@ function addWordsToSpeakersParagraphs (words, segments) {
 }
 
 /**
-* Helper functions
-*/
+ * Helper functions
+ */
 
 /**
-* given word start and end time attributes
-* looks for segment range that contains that word
-* if it doesn't find any it returns a segment with `UKN`
-* speaker attributes.
-* @param {object} word - word object
-* @param {array} segments - list of segments objects
-* @return {object} - a single segment whose range contains the word
-*/
+ * given word start and end time attributes
+ * looks for segment range that contains that word
+ * if it doesn't find any it returns a segment with `UKN`
+ * speaker attributes.
+ * @param {object} word - word object
+ * @param {array} segments - list of segments objects
+ * @return {object} - a single segment whose range contains the word
+ */
 function findSegmentForWord(word, segments) {
-
-  const tmpSegment = segments.find((seg) => {
-    if ((word.start >= seg.start) && (word.end <= seg.end)) {
+  const tmpSegment = segments.find(seg => {
+    if (word.start >= seg.start && word.end <= seg.end) {
       return seg;
     }
+    return null;
   });
 
   return tmpSegment;
