@@ -296,6 +296,7 @@ class Transcript extends Component {
                   boxShadow: 'none',
                 }}
                 controls
+                playsinline
               />
             )}
           </Card.Body>
