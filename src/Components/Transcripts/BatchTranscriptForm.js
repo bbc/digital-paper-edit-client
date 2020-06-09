@@ -4,9 +4,11 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import ApiWrapper from '../../ApiWrapper/index.js';
 import CustomAlert from '../lib/CustomAlert/index.js';
+import NoNeedToConvertNotice from '../lib/NoNeedToConvertNotice/index.js';
 import './index.module.css';
 import whichJsEnv from '../../Util/which-js-env';
-import path from 'path'; 
+
+import path from 'path';
 // setOriginalFetch(window.fetch);
 // window.fetch = progressBarFetch;
 
@@ -26,7 +28,7 @@ class BatchTranscriptForm extends Component {
       id: this.props.id,
       formData: null,
       adobeCepFilePath: null,
-      savedNotification: null
+      savedNotification: null,
     };
     // console.log(process.env);
   }
@@ -39,41 +41,40 @@ class BatchTranscriptForm extends Component {
     this.setState({ description: event.target.value });
   };
 
-  // This is used in Aobe CEP Panel integration only 
-  handleAdobeCepSetFilePath = ()=>{
-    window.__adobe_cep__.evalScript(`$._PPP.get_current_project_panel_selection_absolute_path()`,  (response)=>{
+  // This is used in Aobe CEP Panel integration only
+  handleAdobeCepSetFilePath = () => {
+    window.__adobe_cep__.evalScript(`$._PPP.get_current_project_panel_selection_absolute_path()`, response => {
       console.log('handleAdobeCepSetFilePath');
-      if(response !== ""){
+      if (response !== '') {
         console.log('handleAdobeCepSetFilePath', response);
-      //  const newFilePath = response;
-      //  fileName = path.basename(newFilePath);
-      // TODO: add some visual quee that this worked (eg alert box at top? or file name/path somewhere)
-       this.setState({
-         title: path.basename(response),
-         adobeCepFilePath: response
-       })
-     }
-     else{
-       // TODO: review logic for edge case
-       alert('select a clip')
-     }
-   })
-  }
+        //  const newFilePath = response;
+        //  fileName = path.basename(newFilePath);
+        // TODO: add some visual quee that this worked (eg alert box at top? or file name/path somewhere)
+        this.setState({
+          title: path.basename(response),
+          adobeCepFilePath: response,
+        });
+      } else {
+        // TODO: review logic for edge case
+        alert('select a clip');
+      }
+    });
+  };
   // https://codeburst.io/react-image-upload-with-kittens-cc96430eaece
   handleFileUpload = e => {
     const files = Array.from(e.target.files);
-    console.log('files',files)
+    console.log('files', files);
     const formData = new FormData();
-    files.forEach((file,index)=>{
+    files.forEach((file, index) => {
       formData.append(`file`, file);
       formData.append(`type`, file.type);
       if (file.path) {
         formData.append(`path`, file.path);
       }
-    })
+    });
     // const file = files[0];
     // more on formData https://thoughtbot.com/blog/ridiculously-simple-ajax-uploads-with-formdata
-   
+
     // formData.append('file', file);
     // formData.append('type', file.type);
     // in electron file upload provides a path to the file
@@ -94,11 +95,11 @@ class BatchTranscriptForm extends Component {
     const listOfFilesPath = formData.getAll('path');
     let data = {};
     if (whichJsEnv() === 'electron') {
-      listOfFilesPath.forEach((filePath)=>{
+      listOfFilesPath.forEach(filePath => {
         data = {
           title: path.basename(filePath),
           description: `${path.basename(filePath)}`,
-          path: filePath
+          path: filePath,
         };
 
         // if client run inside of electron
@@ -114,47 +115,46 @@ class BatchTranscriptForm extends Component {
                 uploading: false,
                 uploadCompleted: true,
                 redirect: true,
-                newTranscriptId: response.transcriptId
+                newTranscriptId: response.transcriptId,
               });
               this.props.handleSaveForm(response.transcript);
               // this.props.handleCloseModal();
-
-            }).catch((e) => {
+            })
+            .catch(e => {
               console.log('error:::: ', e);
               this.setState({
                 uploading: false,
                 redirect: false,
-                savedNotification: <CustomAlert
-                  dismissable={ true }
-                  variant={ 'danger' }
-                  heading={ 'Error could not contact the server' }
-                  message={ <p>There was an error trying to create this transcript on the server</p> }
-                />
+                savedNotification: (
+                  <CustomAlert
+                    dismissable={true}
+                    variant={'danger'}
+                    heading={'Error could not contact the server'}
+                    message={<p>There was an error trying to create this transcript on the server</p>}
+                  />
+                ),
               });
             });
-
-          } catch (e) {
-            console.error('error submitting:::', e);
-          }
-
-      })
-      
+        } catch (e) {
+          console.error('error submitting:::', e);
+        }
+      });
     }
-    if(whichJsEnv() === 'browser'){
+    if (whichJsEnv() === 'browser') {
       const formData = this.state.formData;
       const listOfFiles = formData.getAll('file');
       const listOfFileTypes = formData.getAll('type');
-      listOfFiles.forEach((individualFile,index)=>{
+      listOfFiles.forEach((individualFile, index) => {
         const individualFileFormData = new FormData();
         individualFileFormData.append('file', individualFile);
-        individualFileFormData.append('type',  listOfFileTypes[index]);
+        individualFileFormData.append('type', listOfFileTypes[index]);
         individualFileFormData.append('title', individualFile.name);
         individualFileFormData.append('description', '');
         // individualFileFormData.append('type', file.type);
-        const  data = {
+        const data = {
           title: individualFile.name,
           description: '',
-          // path: 
+          // path:
         };
 
         try {
@@ -166,33 +166,33 @@ class BatchTranscriptForm extends Component {
                 uploading: false,
                 uploadCompleted: true,
                 redirect: true,
-                newTranscriptId: response.transcriptId
+                newTranscriptId: response.transcriptId,
               });
               this.props.handleSaveForm(response.transcript);
               // this.props.handleCloseModal();
-    
-            }).catch((e) => {
+            })
+            .catch(e => {
               console.log('error:::: ', e);
               this.setState({
                 uploading: false,
                 redirect: false,
-                savedNotification: <CustomAlert
-                  dismissable={ true }
-                  variant={ 'danger' }
-                  heading={ 'Error could not contact the server' }
-                  message={ <p>There was an error trying to create this transcript on the server</p> }
-                />
+                savedNotification: (
+                  <CustomAlert
+                    dismissable={true}
+                    variant={'danger'}
+                    heading={'Error could not contact the server'}
+                    message={<p>There was an error trying to create this transcript on the server</p>}
+                  />
+                ),
               });
             });
-    
         } catch (e) {
           console.error('error submitting:::', e);
         }
-      
-      })
+      });
     }
     if (whichJsEnv() === 'cep') {
-      alert('not implemented in adobe CEP')
+      alert('not implemented in adobe CEP');
     }
   };
 
@@ -209,7 +209,6 @@ class BatchTranscriptForm extends Component {
       event.preventDefault();
       event.stopPropagation();
       this.sendRequest();
-
     }
   }
 
@@ -218,37 +217,22 @@ class BatchTranscriptForm extends Component {
       <>
         {this.state.savedNotification}
 
-        <Form
-          noValidate
-          validated={ this.state.validated }
-          onSubmit={ e => this.handleSubmit(e) }
-        >
+        {whichJsEnv() !== 'electron' && <NoNeedToConvertNotice />}
+
+        <Form noValidate validated={this.state.validated} onSubmit={e => this.handleSubmit(e)}>
           <Form.Group controlId="formTranscriptMediaFile">
-          <Form.Label>Select Files </Form.Label>
-            <Form.Control
-              required
-              type="file"
-              label="Upload"
-              accept="audio/*,video/*,.mxf"
-              multiple="multiple"
-              onChange={ this.handleFileUpload }
-            />
+            <Form.Label>Select Files </Form.Label>
+            <Form.Control required type="file" label="Upload" accept="audio/*,video/*,.mxf" multiple="multiple" onChange={this.handleFileUpload} />
+            <Form.Text className="text-muted">Select multiple audio or video file to transcribe.</Form.Text>
             <Form.Text className="text-muted">
-            Select multiple audio or video file to transcribe.
+              This allows you to batch transcribe multiple files, the transcript name will default to the clip name.
             </Form.Text>
+            <Form.Text className="text-muted">You can change the default transcript name after you've clicked save.</Form.Text>
             <Form.Text className="text-muted">
-            This allows you to batch transcribe multiple files, the transcript name will default to the clip name.
-            </Form.Text>
-            <Form.Text className="text-muted">
-            You can change the default transcript name after you've clicked save.
-            </Form.Text>
-            <Form.Text className="text-muted">
-            Use command <code>⌘</code> + click or  shift <code>⇧</code> + click to select multiple files.
+              Use command <code>⌘</code> + click or shift <code>⇧</code> + click to select multiple files.
             </Form.Text>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            <Form.Control.Feedback type="invalid">
-              Please chose a audio or video file to transcribe
-            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">Please chose a audio or video file to transcribe</Form.Control.Feedback>
           </Form.Group>
           <Modal.Footer>
             <Button variant="primary" type="submit">
@@ -256,7 +240,6 @@ class BatchTranscriptForm extends Component {
             </Button>
           </Modal.Footer>
         </Form>
-      
       </>
     );
   }

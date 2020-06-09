@@ -6,7 +6,8 @@ import ApiWrapper from '../../ApiWrapper/index.js';
 import CustomAlert from '../lib/CustomAlert/index.js';
 import './index.module.css';
 import whichJsEnv from '../../Util/which-js-env';
-import path from 'path'; 
+import path from 'path';
+import NoNeedToConvertNotice from '../lib/NoNeedToConvertNotice/index.js';
 // setOriginalFetch(window.fetch);
 // window.fetch = progressBarFetch;
 
@@ -26,7 +27,7 @@ class TranscriptForm extends Component {
       id: this.props.id,
       formData: null,
       adobeCepFilePath: null,
-      savedNotification: null
+      savedNotification: null,
     };
     // console.log(process.env);
   }
@@ -39,26 +40,25 @@ class TranscriptForm extends Component {
     this.setState({ description: event.target.value });
   };
 
-  // This is used in Aobe CEP Panel integration only 
-  handleAdobeCepSetFilePath = ()=>{
-    window.__adobe_cep__.evalScript(`$._PPP.get_current_project_panel_selection_absolute_path()`,  (response)=>{
+  // This is used in Aobe CEP Panel integration only
+  handleAdobeCepSetFilePath = () => {
+    window.__adobe_cep__.evalScript(`$._PPP.get_current_project_panel_selection_absolute_path()`, response => {
       console.log('handleAdobeCepSetFilePath');
-      if(response !== ""){
+      if (response !== '') {
         console.log('handleAdobeCepSetFilePath', response);
-      //  const newFilePath = response;
-      //  fileName = path.basename(newFilePath);
-      // TODO: add some visual quee that this worked (eg alert box at top? or file name/path somewhere)
-       this.setState({
-         title: path.basename(response),
-         adobeCepFilePath: response
-       })
-     }
-     else{
-       // TODO: review logic for edge case
-       alert('select a clip')
-     }
-   })
-  }
+        //  const newFilePath = response;
+        //  fileName = path.basename(newFilePath);
+        // TODO: add some visual quee that this worked (eg alert box at top? or file name/path somewhere)
+        this.setState({
+          title: path.basename(response),
+          adobeCepFilePath: response,
+        });
+      } else {
+        // TODO: review logic for edge case
+        alert('select a clip');
+      }
+    });
+  };
   // https://codeburst.io/react-image-upload-with-kittens-cc96430eaece
   handleFileUpload = e => {
     const files = Array.from(e.target.files);
@@ -83,7 +83,7 @@ class TranscriptForm extends Component {
     this.setState({ uploading: true });
 
     const formData = this.state.formData;
-    if(whichJsEnv() !== 'cep'){
+    if (whichJsEnv() !== 'cep') {
       formData.append('title', this.state.title);
       formData.append('description', this.state.description);
       console.log("formData.get('path')", formData.get('path'));
@@ -97,18 +97,16 @@ class TranscriptForm extends Component {
       data = {
         title: formData.get('title'),
         description: formData.get('description'),
-        path: formData.get('path')
+        path: formData.get('path'),
       };
     }
 
     if (whichJsEnv() === 'cep') {
-  
       data = {
         title: this.state.title,
         description: this.state.description,
-        path: this.state.adobeCepFilePath
+        path: this.state.adobeCepFilePath,
       };
-    
     }
     // TODO: do you need a try catch?
     try {
@@ -120,25 +118,26 @@ class TranscriptForm extends Component {
             uploading: false,
             uploadCompleted: true,
             redirect: true,
-            newTranscriptId: response.transcriptId
+            newTranscriptId: response.transcriptId,
           });
           this.props.handleSaveForm(response.transcript);
           // this.props.handleCloseModal();
-
-        }).catch((e) => {
+        })
+        .catch(e => {
           console.log('error:::: ', e);
           this.setState({
             uploading: false,
             redirect: false,
-            savedNotification: <CustomAlert
-              dismissable={ true }
-              variant={ 'danger' }
-              heading={ 'Error could not contact the server' }
-              message={ <p>There was an error trying to create this transcript on the server</p> }
-            />
+            savedNotification: (
+              <CustomAlert
+                dismissable={true}
+                variant={'danger'}
+                heading={'Error could not contact the server'}
+                message={<p>There was an error trying to create this transcript on the server</p>}
+              />
+            ),
           });
         });
-
     } catch (e) {
       console.error('error submitting:::', e);
     }
@@ -157,7 +156,6 @@ class TranscriptForm extends Component {
       event.preventDefault();
       event.stopPropagation();
       this.sendRequest();
-
     }
   }
 
@@ -166,54 +164,34 @@ class TranscriptForm extends Component {
       <>
         {this.state.savedNotification}
 
-        <Form
-          noValidate
-          validated={ this.state.validated }
-          onSubmit={ e => this.handleSubmit(e) }
-        >
-           { (whichJsEnv() === 'cep')?(
-              <>
-              <Button  variant="light" onClick={this.handleAdobeCepSetFilePath} block>Pick a file</Button>
+        {whichJsEnv() !== 'electron' && <NoNeedToConvertNotice />}
+
+        <Form noValidate validated={this.state.validated} onSubmit={e => this.handleSubmit(e)}>
+          {whichJsEnv() === 'cep' ? (
+            <>
+              <Button variant="light" onClick={this.handleAdobeCepSetFilePath} block>
+                Pick a file
+              </Button>
               <Form.Text className="text-muted">
-                Select an audio or video file to transcribe. Click on a file in the Adobe Premiere project browser window, and the click <code>pick a file</code> to select a file to transcribe. Then 
-                click <code>save</code> when you are ready to start the transcriptiion.
+                Select an audio or video file to transcribe. Click on a file in the Adobe Premiere project browser window, and the click{' '}
+                <code>pick a file</code> to select a file to transcribe. Then click <code>save</code> when you are ready to start the transcriptiion.
               </Form.Text>
             </>
-          ):(
+          ) : (
             <Form.Group controlId="formTranscriptMediaFile">
-            <Form.Control
-              required
-              type="file"
-              label="Upload"
-              accept="audio/*,video/*,.mxf"
-              onChange={ this.handleFileUpload }
-            />
-            <Form.Text className="text-muted">
-            Select an audio or video file to transcribe
-            </Form.Text>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            <Form.Control.Feedback type="invalid">
-              Please chose a audio or video file to transcribe
-            </Form.Control.Feedback>
-          </Form.Group>
+              <Form.Control required type="file" label="Upload" accept="audio/*,video/*,.mxf" onChange={this.handleFileUpload} />
+              <Form.Text className="text-muted">Select an audio or video file to transcribe</Form.Text>
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">Please chose a audio or video file to transcribe</Form.Control.Feedback>
+            </Form.Group>
           )}
-          
+
           <Form.Group controlId="formTranscriptTitle">
             <Form.Label>Title </Form.Label>
-            <Form.Control
-              required
-              type="text"
-              placeholder="Enter a transcript title"
-              value={ this.state.title }
-              onChange={ this.handleTitleChange }
-            />
-            <Form.Text className="text-muted">
-                Chose a title for your Transcript
-            </Form.Text>
+            <Form.Control required type="text" placeholder="Enter a transcript title" value={this.state.title} onChange={this.handleTitleChange} />
+            <Form.Text className="text-muted">Chose a title for your Transcript</Form.Text>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            <Form.Control.Feedback type="invalid">
-                Please chose a title for your transcript
-            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">Please chose a title for your transcript</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group controlId="formTranscriptDescription">
@@ -221,26 +199,20 @@ class TranscriptForm extends Component {
             <Form.Control
               type="text"
               placeholder="Enter a Transcript description"
-              value={ this.state.description }
-              onChange={ this.handleDescriptionChange }
+              value={this.state.description}
+              onChange={this.handleDescriptionChange}
             />
-            <Form.Text className="text-muted">
-                Chose an optional description for your Transcript
-            </Form.Text>
+            <Form.Text className="text-muted">Chose an optional description for your Transcript</Form.Text>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            <Form.Control.Feedback type="invalid">
-                Please chose a description for your transcript
-            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">Please chose a description for your transcript</Form.Control.Feedback>
           </Form.Group>
-         
-          
+
           <Modal.Footer>
             <Button variant="primary" type="submit">
               Save
             </Button>
           </Modal.Footer>
         </Form>
-      
       </>
     );
   }

@@ -6,7 +6,7 @@ class CustomAlert extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: true
+      show: true,
     };
   }
 
@@ -15,17 +15,10 @@ class CustomAlert extends React.Component {
   render() {
     if (this.state.show) {
       return (
-        <Alert
-          variant={ this.props.variant }
-          onClose={ this.handleDismiss }
-          dismissible
-        >
-          {this.props.heading ? (
-            <Alert.Heading>{this.props.heading}</Alert.Heading>
-          ) : (
-            ''
-          )}
+        <Alert variant={this.props.variant} onClose={this.handleDismiss} dismissible>
+          {this.props.heading ? <Alert.Heading>{this.props.heading}</Alert.Heading> : ''}
           {this.props.message}
+          {this.props.children}
         </Alert>
       );
     } else {
