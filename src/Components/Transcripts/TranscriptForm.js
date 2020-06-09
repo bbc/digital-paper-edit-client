@@ -164,7 +164,7 @@ class TranscriptForm extends Component {
       <>
         {this.state.savedNotification}
 
-        {whichJsEnv() !== 'electron' && <NoNeedToConvertNotice />}
+        {whichJsEnv() === 'electron' && <NoNeedToConvertNotice />}
 
         <Form noValidate validated={this.state.validated} onSubmit={e => this.handleSubmit(e)}>
           {whichJsEnv() === 'cep' ? (
