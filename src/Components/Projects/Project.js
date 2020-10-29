@@ -16,7 +16,7 @@ class Project extends React.Component {
       // for use in react-bootstrap tab component
       key: 'transcripts',
       projectId: this.props.match.params.projectId,
-      projectName: 'Projects Name',
+      projectName: '',
     };
   }
 
