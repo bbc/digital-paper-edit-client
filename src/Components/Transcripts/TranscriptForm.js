@@ -65,7 +65,7 @@ class TranscriptForm extends Component {
     const file = files[0];
     // more on formData https://thoughtbot.com/blog/ridiculously-simple-ajax-uploads-with-formdata
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', file, file.name);
     formData.append('type', file.type);
     // in electron file upload provides a path to the file
     if (file.path) {
@@ -208,7 +208,7 @@ class TranscriptForm extends Component {
           </Form.Group>
 
           <Modal.Footer>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" disabled={this.state.uploading}>
               Save
             </Button>
           </Modal.Footer>
