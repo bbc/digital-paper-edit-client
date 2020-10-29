@@ -179,7 +179,7 @@ class TranscriptForm extends Component {
             </>
           ) : (
             <Form.Group controlId="formTranscriptMediaFile">
-              <Form.Control required type="file" label="Upload" accept="audio/*,video/*,.mxf" onChange={this.handleFileUpload} />
+              <Form.Control required type="file" label="Upload" accept="audio/*,video/*,.mxf, audio/x-m4a" onChange={this.handleFileUpload} />
               <Form.Text className="text-muted">Select an audio or video file to transcribe</Form.Text>
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
               <Form.Control.Feedback type="invalid">Please chose a audio or video file to transcribe</Form.Control.Feedback>
