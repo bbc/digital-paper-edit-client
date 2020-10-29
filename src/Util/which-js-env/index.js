@@ -3,7 +3,7 @@
  * @returns - 'browser', 'electron', 'cep'. where cep stands for adobe CEP panel
  */
 function whichJsEnv() {
-// Is browser Eg client side app
+  // Is browser Eg client side app
   if (window.process === undefined) {
     // console.debug('In browser Environment');
     if (process.env.REACT_APP_NODE_ENV === 'demo') {
@@ -13,13 +13,12 @@ function whichJsEnv() {
     return 'browser';
   } else {
     if (window.process.versions.electron !== undefined) {
-        console.debug('In Electron Enviroment');
+      console.debug('In Electron Enviroment');
       //   console.info('In Electron v: ', window.process.versions.electron);
       //   console.info('Using chrome v: ', window.process.versions.chrome);
       return 'electron';
-    }
-    else if (window.process.versions.cep !== undefined) {
-        console.debug('In Adobe CEP Environment');
+    } else if (window.process.versions.cep !== undefined) {
+      console.debug('In Adobe CEP Environment');
       //   console.info('In Chromium v: ', window.process.versions.chromium);
       //   console.info('In CEP (Adobe Common Extensibility Platform ) v: ', window.process.versions.cep);
       //   console.info('adjusting current working directory for Adobe CEP');
@@ -34,8 +33,7 @@ function whichJsEnv() {
       //   console.log('chdir: ' + err);
       // }
       return 'cep';
-    }
-    else {
+    } else {
       console.error("couldn't determine the js environment");
 
       return undefined;
