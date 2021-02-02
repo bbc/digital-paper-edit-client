@@ -227,6 +227,7 @@ class Transcripts extends Component {
       return (
         <Tab.Pane key={transcript.id} eventKey={transcript.id}>
           <Transcript
+            status={transcript.status}
             projectId={this.props.projectId}
             transcriptId={transcript.id}
             labelsOptions={this.props.labelsOptions}
