@@ -118,7 +118,7 @@ class Projects extends React.Component {
     }
   }
 
-  showLinkPathToItem = id => {
+  showLinkPath = id => {
     return `/projects/${id}`;
   };
 
@@ -165,7 +165,7 @@ class Projects extends React.Component {
               editItem={this.createNew}
               handleEdit={this.handleEditItem}
               handleDelete={this.handleDeleteItem}
-              showLinkPath={this.showLinkPathToItem}
+              showLinkPath={this.showLinkPath}
               handleUpdateList={this.handleUpdateList}
             />
             <ItemFormModal

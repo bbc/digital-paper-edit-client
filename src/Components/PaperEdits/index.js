@@ -15,12 +15,12 @@ class PaperEdits extends Component {
       isNewItemModalShow: false,
       title: '',
       description: '',
-      itemId: null
+      itemId: null,
     };
     this.handleDeleteItem = this.handleDeleteItem.bind(this);
   }
 
-  async componentDidMount () {
+  async componentDidMount() {
     // TODO: do we need to add user id in request?
     const result = await ApiWrapper.getAllPaperEdits(this.state.projectId);
     if (result) {
@@ -33,16 +33,16 @@ class PaperEdits extends Component {
       this.setState({ items: tmpList });
     }
     // TODO: some error handling
-  };
+  }
 
   // TODO: handle save / update through API wrapper
   // // The form works both for new/create and edit/update
-  handleSaveItem = (item) => {
+  handleSaveItem = item => {
     if (!item.id) {
       ApiWrapper.createPaperEdit(this.state.projectId, item).then(response => {
         if (response.status === 'ok') {
           // Server returns project with UID generated server side
-          const items = [ ...this.state.items ];
+          const items = [...this.state.items];
           // need to add display true attribute for search to the new project
           const newPaperEdit = response.paperedit;
           newPaperEdit.display = true;
@@ -53,12 +53,11 @@ class PaperEdits extends Component {
             // reset item form
             title: '',
             itemId: null,
-            description: ''
+            description: '',
           });
         }
       });
-    }
-    else {
+    } else {
       ApiWrapper.updatePaperEdit(this.state.projectId, item.id, item).then(response => {
         if (response.status === 'ok') {
           const paperedit = response.paperedit;
@@ -66,7 +65,7 @@ class PaperEdits extends Component {
           paperedit.display = true;
           // // Server returns project with UID generated server side
           const { items } = this.state;
-          const newItemsList = [ ...items ];
+          const newItemsList = [...items];
           this.findItemById(items, item);
           const papereditIndex = items.findIndex(item => item.id === paperedit.id);
           newItemsList[papereditIndex] = paperedit;
@@ -76,36 +75,36 @@ class PaperEdits extends Component {
             // reset item form
             title: '',
             itemId: null,
-            description: ''
+            description: '',
           });
         }
       });
     }
-  }
+  };
 
   findItemById = (list, id) => {
-    const result = list.filter((p) => {
+    const result = list.filter(p => {
       return p.id === id;
     });
 
     return result[0];
-  }
+  };
 
-  handleEditItem = (itemId) => {
+  handleEditItem = itemId => {
     const item = this.findItemById(this.state.items, itemId);
     this.setState({
       title: item.title,
       itemId: item.id,
       description: item.description,
-      isNewItemModalShow: true
+      isNewItemModalShow: true,
     });
-  }
+  };
 
   // TODO:
   async handleDeleteItem(itemId) {
     const result = await ApiWrapper.deletePaperEdit(this.state.projectId, itemId);
     if (result.ok) {
-      const newItemsList = this.state.items.filter((p) => {
+      const newItemsList = this.state.items.filter(p => {
         return p.id !== itemId;
       });
       this.setState({ items: newItemsList });
@@ -114,13 +113,13 @@ class PaperEdits extends Component {
     }
   }
 
-  showLinkPathToItem = (id) => {
-    return `/projects/${ this.state.projectId }/paperedits/${ id }`;
-  }
+  showLinkPath = id => {
+    return `projects/${this.state.projectId}/paperedits/${id}`;
+  };
 
-  handleUpdateList = (list) => {
+  handleUpdateList = list => {
     this.setState({ items: list });
-  }
+  };
 
   handleShowCreateNewItemForm = () => {
     // return '/projects/new';
@@ -129,37 +128,37 @@ class PaperEdits extends Component {
 
   handleCloseModal = () => {
     this.setState({
-      title:'',
+      title: '',
       itemId: null,
       description: '',
-      isNewItemModalShow: false
+      isNewItemModalShow: false,
     });
-  }
+  };
 
   render() {
     return (
       <>
-        <Container style={ { marginBottom: '5em', marginTop: '1em' } }>
+        <Container style={{ marginBottom: '5em', marginTop: '1em' }}>
           <ListPage
-            model={ 'Paper Edit' }
-            items={ this.state.items }
-            icon={ <FontAwesomeIcon icon={ faColumns } color="#007bff"/> }
-            handleShowCreateNewItemForm={ this.handleShowCreateNewItemForm }
+            model={'Paper Edit'}
+            items={this.state.items}
+            icon={<FontAwesomeIcon icon={faColumns} color="#007bff" />}
+            handleShowCreateNewItemForm={this.handleShowCreateNewItemForm}
             // deleteItem={ this.createNew }
             // editItem={ this.createNew }
-            handleEdit={ this.handleEditItem }
-            handleDelete={ this.handleDeleteItem }
-            showLinkPath={ this.showLinkPathToItem }
-            handleUpdateList={ this.handleUpdateList }
+            handleEdit={this.handleEditItem}
+            handleDelete={this.handleDeleteItem}
+            showLinkPath={this.showLinkPath}
+            handleUpdateList={this.handleUpdateList}
           />
           <ItemFormModal
-            title={ this.state.title }
-            description={ this.state.description }
-            id={ this.state.itemId }
-            modalTitle={ this.state.itemId ? 'Edit Paper Edit' : 'New Paper Edit' }
-            show={ this.state.isNewItemModalShow }
-            handleCloseModal={ this.handleCloseModal }
-            handleSaveForm={ this.handleSaveItem }
+            title={this.state.title}
+            description={this.state.description}
+            id={this.state.itemId}
+            modalTitle={this.state.itemId ? 'Edit Paper Edit' : 'New Paper Edit'}
+            show={this.state.isNewItemModalShow}
+            handleCloseModal={this.handleCloseModal}
+            handleSaveForm={this.handleSaveItem}
           />
         </Container>
       </>
