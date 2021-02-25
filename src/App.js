@@ -15,6 +15,11 @@ const Project = lazy(() => import('./Components/Projects/Project.js'));
 const TranscriptCorrect = lazy(() => import('./Components/Transcripts/TranscriptCorrect.js'));
 const PaperEdit = lazy(() => import('./Components/PaperEdits/PaperEdit'));
 
+// import Projects from './Components/Projects/index.js';
+// import Project from './Components/Projects/Project.js';
+// import TranscriptCorrect from './Components/Transcripts/TranscriptCorrect.js';
+// import PaperEdit from './Components/PaperEdits/PaperEdit';
+
 const demoWarningMessage = (
   <>
     <p>

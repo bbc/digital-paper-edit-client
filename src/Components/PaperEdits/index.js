@@ -114,7 +114,7 @@ class PaperEdits extends Component {
   }
 
   showLinkPath = id => {
-    return `projects/${this.state.projectId}/paperedits/${id}`;
+    return `/projects/${this.state.projectId}/paperedits/${id}`;
   };
 
   handleUpdateList = list => {
