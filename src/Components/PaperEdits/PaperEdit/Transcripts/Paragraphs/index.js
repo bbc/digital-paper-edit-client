@@ -8,8 +8,8 @@ import AnnotationOverlayTrigger from './AnnotationOverlayTrigger.js';
 import computeParagraphDisplayPreference from './compute-paragraph-display-preference.js';
 import addAnnotationsToWordsInParagraphs from './add-annotations-to-words-in-paragraphs.js';
 // import removePunctuation from '../../../../../Util/remove-punctuation.js';
-const removePunctuation = (string) => {
-  return string.replace(/\.|\?|!|,|;/, '').toLowerCase() ;
+const removePunctuation = string => {
+  return string.replace(/\.|\?|!|,|;/, '').toLowerCase();
 };
 
 class Paragraphs extends Component {
@@ -50,10 +50,7 @@ class Paragraphs extends Component {
     // console.log('this.props.transcriptJson.words', this.props.transcriptJson.words);
     // console.log('this.props.transcriptJson.paragraphs', this.props.transcriptJson.paragraphs);
 
-    const paragraphsWithWordsSpeakerText = groupWordsInParagraphsBySpeakers(
-      this.props.transcriptJson.words,
-      this.props.transcriptJson.paragraphs
-    );
+    const paragraphsWithWordsSpeakerText = groupWordsInParagraphsBySpeakers(this.props.transcriptJson.words, this.props.transcriptJson.paragraphs);
     // console.log('paragraphsWithWordsSpeakerText', paragraphsWithWordsSpeakerText);
 
     const paragraphWithWordsSpeakersAndAnnotations = addAnnotationsToWordsInParagraphs(paragraphsWithWordsSpeakerText, this.props.annotations);
@@ -69,22 +66,28 @@ class Paragraphs extends Component {
       if (this.props.selectedOptionSpeakerSearch.length !== 0) {
         // checks speaker against list of speakers in search,
         // TODO: Downcase comparison or use speaker ID?
-        if (this.props.selectedOptionSpeakerSearch.find((spk) => {return spk.label === paragraph.speaker; })) {
+        if (
+          this.props.selectedOptionSpeakerSearch.find(spk => {
+            return spk.label === paragraph.speaker;
+          })
+        ) {
           isSpeakerSearch = true;
         }
-      }
-      else {
+      } else {
         isSpeakerSearch = true;
       }
 
       let isLabelSearch = false;
       if (this.props.selectedOptionLabelSearch.length !== 0) {
         // checks label against list of speakers in search,
-        if (this.props.selectedOptionLabelSearch.find((lb) => {return lb.id === annotationInCurrentParagraph.labelId; })) {
+        if (
+          this.props.selectedOptionLabelSearch.find(lb => {
+            return lb.id === annotationInCurrentParagraph.labelId;
+          })
+        ) {
           isLabelSearch = true;
         }
-      }
-      else {
+      } else {
         isLabelSearch = true;
       }
       paragraphDisplayPreference = computeParagraphDisplayPreference(isTextSearch, isSpeakerSearch, isLabelSearch);
@@ -94,30 +97,33 @@ class Paragraphs extends Component {
        */
       wordsElements = paragraph.words.map((word, index) => {
         let result;
-        const wordEl = (<Word
-          transcriptId={ this.props.transcriptId }
-          speaker={ paragraph.speaker }
-          key={ 'key--' + index }
-          word={ word }
-          handleKeyDownWords={ e => {
-            return e.key === 'Enter' ? this.props.handleWordClick(e) : null;
-          } }
-        />);
+        const wordEl = (
+          <Word
+            transcriptId={this.props.transcriptId}
+            speaker={paragraph.speaker}
+            key={'key--' + index}
+            word={word}
+            handleKeyDownWords={e => {
+              return e.key === 'Enter' ? this.props.handleWordClick(e) : null;
+            }}
+          />
+        );
 
         if (word.annotation) {
           // const { annotation } = word;
-          result = <AnnotationOverlayTrigger
-            key={ 'key----' + index }
-            words={ wordEl }
-            labelsOptions={ this.props.labelsOptions }
-            annotationLabelId={ word.annotation.labelId }
-            annotationId={ word.annotation.id }
-            annotationNote={ word.annotation.note }
-            handleDeleteAnnotation={ this.props.handleDeleteAnnotation }
-            handleEditAnnotation={ this.props.handleEditAnnotation }
-          />;
-        }
-        else {
+          result = (
+            <AnnotationOverlayTrigger
+              key={'key----' + index}
+              words={wordEl}
+              labelsOptions={this.props.labelsOptions}
+              annotationLabelId={word.annotation.labelId}
+              annotationId={word.annotation.id}
+              annotationNote={word.annotation.note}
+              handleDeleteAnnotation={this.props.handleDeleteAnnotation}
+              handleEditAnnotation={this.props.handleEditAnnotation}
+            />
+          );
+        } else {
           result = wordEl;
         }
 
@@ -129,27 +135,22 @@ class Paragraphs extends Component {
        */
       return (
         <Paragraph
-          showParagraphsMatchingSearch={ this.props.showParagraphsMatchingSearch }
-          paragraphDisplayPreference={ paragraphDisplayPreference }
-          key={ 'key------' + index }
-          paragraphTextWithoutPunctuation={ paragraphTextWithoutPunctuation }
-          speakerName={ paragraph.speaker }
-          paragraph={ paragraph.words }
-          handleKeyDownTimecodes={ e => {
+          showParagraphsMatchingSearch={this.props.showParagraphsMatchingSearch}
+          paragraphDisplayPreference={paragraphDisplayPreference}
+          key={'key------' + index}
+          paragraphTextWithoutPunctuation={paragraphTextWithoutPunctuation}
+          speakerName={paragraph.speaker}
+          paragraph={paragraph.words}
+          handleKeyDownTimecodes={e => {
             return e.key === 'Enter' ? this.props.handleTimecodeClick(e) : null;
-          } }
-          wordsElements={ wordsElements }
+          }}
+          wordsElements={wordsElements}
         />
       );
     });
 
-    return (
-      <>
-        {textResult}
-      </>
-    );
+    return <>{textResult}</>;
   }
-
 }
 
 export default Paragraphs;
