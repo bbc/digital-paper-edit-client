@@ -19,7 +19,7 @@
     "downloadjs": "^1.4.7",
     "edl_composer": "^1.0.3",
     "express": "^4.17.1",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.0",
     "randomcolor": "^0.5.4",
     "react-bootstrap": "^1.0.0-beta.14",
     "react-color": "^2.17.1",
